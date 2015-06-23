@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 4.4
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD_Ctrl_GraphWindow", "SD_Ctrl_GraphWindow\SD_Ctrl_GraphWindow.csproj", "{74EB86CF-CED0-48EA-8A9D-C78B239B2570}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ctrl_GraphWindow", "Ctrl_GraphWindow\Ctrl_GraphWindow.csproj", "{23726D07-E40C-42E4-B676-24837B2D8896}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74EB86CF-CED0-48EA-8A9D-C78B239B2570}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74EB86CF-CED0-48EA-8A9D-C78B239B2570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74EB86CF-CED0-48EA-8A9D-C78B239B2570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74EB86CF-CED0-48EA-8A9D-C78B239B2570}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23726D07-E40C-42E4-B676-24837B2D8896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23726D07-E40C-42E4-B676-24837B2D8896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23726D07-E40C-42E4-B676-24837B2D8896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23726D07-E40C-42E4-B676-24837B2D8896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal

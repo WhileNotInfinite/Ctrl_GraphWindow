@@ -1,0 +1,1406 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<title>Ctrl_GraphWindow user guide- Table of Contents</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.6.2.573">
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/silver-theme/jquery-ui-1.8.12.custom.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/dynatree/chm/ui.dynatree.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="css/toc.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#tabs .ui-widget-header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.dynatree.min.js"></script>
+	<script type="text/javascript" src="js/hndjsse.js"></script>
+	<script type="text/javascript">
+	
+		window.bSearchDataLoaded = false;
+		var sHelpIdToActivate = '';
+	
+		$(document).ready(function()
+		{
+			var sAnchorName = '';
+			try { sAnchorName = top.location.href.substring(top.location.href.lastIndexOf("#") + 1, top.location.href.length); }
+			catch(err) { sAnchorName = ''; }
+			var nSelectedTab = 0;
+			if (sAnchorName == '_index') nSelectedTab = 1
+			else if (sAnchorName == '_search') nSelectedTab = 2;			
+			$("#tabs").tabs({
+				selected: nSelectedTab,
+				select: function(event, ui) { HideKwPopup(); }
+			});
+			
+			// Toc
+			if ($("#tab-toc").length) {
+				$("#tab-toc").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#tab-keywords").length && $("#tab-keywords").dynatree && $("#tab-keywords").dynatree("getTree") && $("#tab-keywords").dynatree("getTree").activateKey)
+							$("#tab-keywords").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-toc").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				// Select the active help id
+				if (sHelpIdToActivate != '') $("#tab-toc").dynatree("getTree").activateKey(sHelpIdToActivate);
+			}
+			
+			// Keywords
+			
+			if ($("#tab-keywords").length) {
+				$("#tab-keywords").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onClick: function(node, event){
+						HideKwPopup();
+						if (node.data && node.data.click)
+						{
+							var aRefList = null;
+							eval('aRefList=' + node.data.click);
+							if (ShowKwPopup(node.li, aRefList))
+							{
+								if ($("#tab-toc") && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").activateKey)
+									$("#tab-toc").dynatree("getTree").activateKey(null);
+								if(node.data.href && node.data.href != '#'){
+									window.open(node.data.href, node.data.target);
+								}
+							}
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-keywords").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				}
+			
+			// Load search data
+			(function() {
+				var se = document.createElement('script'); se.type = 'text/javascript'; se.async = true;
+				se.src = 'js/hndsd.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(se, s);
+			})();
+		});
+		
+		$('body').click(function() {
+			HideKwPopup();
+		});
+		
+		function SelectTocItem(sHelpId)
+		{
+			if ($("#tab-toc").length && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").getNodeByKey) {
+				$("#tab-toc").dynatree("getTree").getNodeByKey(sHelpId).activateSilently();
+			}
+			else {
+				sHelpIdToActivate = sHelpId;
+			}
+		}
+		
+		function HideKwPopup()
+		{
+			if($("#popupMenu")) $("#popupMenu").remove();
+		}
+		
+		function ShowKwPopup(oSender, aLinks)
+		{
+			HideKwPopup();
+			if (!aLinks || !aLinks.length || aLinks.length == 0) return false
+			else if (aLinks.length == 1) return true
+			else
+			{
+				var oParentDiv = document.createElement("DIV");
+				oParentDiv.id = "popupMenu";
+				var oLink = null;
+				// Close button
+				oLink = document.createElement("SPAN");
+				oLink.className = "close-button";
+				oLink.innerHTML = "X";
+				oLink.href = "#";
+				oLink.onclick = HideKwPopup;
+				oParentDiv.appendChild(oLink);
+				// Items
+				for (var nCnt=0; nCnt<aLinks.length; nCnt++)
+				{
+					oLink = document.createElement("A");
+					oLink.innerHTML = aLinks[nCnt][0];
+					oLink.href = aLinks[nCnt][1];
+					oLink.target = "FrameMain";
+					oLink.onclick = HideKwPopup;
+					oParentDiv.appendChild(oLink);
+				}
+				document.body.appendChild(oParentDiv);
+				var pos = $(oSender).offset(); 
+				var height = $(oSender).height();
+				$(oParentDiv).css({
+					"left": (pos.left+20) + "px",
+					"top": (pos.top + height + 5) + "px"
+				});
+				$(oParentDiv).show();
+				return false;
+			}
+		}
+		
+		function PerformSearch()
+		{
+			if (!window.bSearchDataLoaded) {
+				$("#search_results").html("Search engine data hasn't been fully loaded yet or an error occurred while loading it. This usually happens when documentation is browsed locally.");
+				return;
+			}
+			sValue = $("#search_value").val();
+			$("#search_results").html('Searching...');
+			var oSearchEngine = new HndJsSe;
+			oSearchEngine.ParseInput(sValue);			
+			oSearchEngine.PerformSearch();
+			if (!oSearchEngine.aResults || !oSearchEngine.aResults.length)
+			{
+				$("#search_results").html('No results found.');
+			}
+			else
+			{
+				$("#search_results").html('<div id="search_results_content"></div>');
+				var oUl = $("#search_results_content").append("<ul id='lr'></ul>").find("ul");
+				for (var nCnt = 0; nCnt < oSearchEngine.aResults.length; nCnt++)
+				{
+					if (oSearchEngine.aResults[nCnt][0] < aTl.length)
+					{
+						oUl.append("<li><a href='" + aTl[oSearchEngine.aResults[nCnt][0]][0] + "?search=" + escape(sValue) + "' target='FrameMain'>" + unescape(aTl[oSearchEngine.aResults[nCnt][0]][1]) + "</a></li>");
+					}
+				}
+				// Tree
+				$("#search_results_content").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#search_results_content") && $("#search_results_content").dynatree && $("#search_results_content").dynatree("getTree") && $("#search_results_content").dynatree("getTree").activateKey)
+							$("#search_results_content").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+			}
+		}
+	</script>
+</head>
+
+<body>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tab-toc">Contents</a></li>
+			<li><a href="#tab-keywords">Index</a></li>
+			<li><a href="#tab-search">Search</a></li>
+			</ul>
+		<div id="tab-toc">
+			<ul id="toc" class="">
+
+				<li class="folder" id="Ctrl_GraphWindow" data="">
+							<a
+							href="Ctrl_GraphWindow.html"
+							target="FrameMain">
+								Ctrl_GraphWindow</a>
+
+				<ul><li class="" id="Analysiswindowpresntation" data="">
+							<a
+							href="Analysiswindowpresntation.html"
+							target="FrameMain">
+								Analysis window presntation</a>
+
+				</li><li class="" id="Analysiswindowtoolbar" data="">
+							<a
+							href="Analysiswindowtoolbar.html"
+							target="FrameMain">
+								Analysis window tool bar</a>
+
+				</li><li class="" id="Analysiswindowshortcutkeys" data="">
+							<a
+							href="Analysiswindowshortcutkeys.html"
+							target="FrameMain">
+								Analysis window shortcut keys</a>
+
+				</li><li class="" id="Datafile" data="">
+							<a
+							href="Datafile.html"
+							target="FrameMain">
+								Data file</a>
+
+				</li><li class="folder" id="Analysisfunctions" data="">
+							<a
+							href="Analysisfunctions.html"
+							target="FrameMain">
+								Analysis functions</a>
+
+				<ul><li class="" id="Maincursor" data="">
+							<a
+							href="Maincursor.html"
+							target="FrameMain">
+								Main cursor</a>
+
+				</li><li class="" id="Referencecursor" data="">
+							<a
+							href="Referencecursor.html"
+							target="FrameMain">
+								Reference cursor</a>
+
+				</li><li class="" id="Zoom" data="">
+							<a
+							href="Zoom.html"
+							target="FrameMain">
+								Zoom</a>
+
+				</li><li class="" id="Statistics" data="">
+							<a
+							href="Statistics.html"
+							target="FrameMain">
+								Statistics</a>
+
+				</li><li class="" id="Legend" data="">
+							<a
+							href="Legend.html"
+							target="FrameMain">
+								Legend</a>
+
+				</li><li class="" id="Snapshot" data="">
+							<a
+							href="Snapshot.html"
+							target="FrameMain">
+								Snapshot</a>
+
+				</li><li class="" id="Print" data="">
+							<a
+							href="Print.html"
+							target="FrameMain">
+								Print</a>
+
+				</li></ul></li><li class="folder" id="Graphwindowsettings" data="">
+							<a
+							href="Graphwindowsettings.html"
+							target="FrameMain">
+								Graph window settings</a>
+
+				<ul><li class="" id="Channellist" data="">
+							<a
+							href="Channellist.html"
+							target="FrameMain">
+								Channel list</a>
+
+				</li><li class="" id="Graphiclayout" data="">
+							<a
+							href="Graphiclayout.html"
+							target="FrameMain">
+								Graphic layout</a>
+
+				</li><li class="folder" id="Graphicwindowconfiguration" data="">
+							<a
+							href="Graphicwindowconfiguration.html"
+							target="FrameMain">
+								Graphic window configuration</a>
+
+				<ul><li class="" id="Genericseriesproperties" data="">
+							<a
+							href="Genericseriesproperties.html"
+							target="FrameMain">
+								Generic series properties</a>
+
+				</li><li class="" id="Generalproperties" data="">
+							<a
+							href="Generalproperties.html"
+							target="FrameMain">
+								General properties</a>
+
+				</li><li class="" id="Graphicgridsproperties" data="">
+							<a
+							href="Graphicgridsproperties.html"
+							target="FrameMain">
+								Graphic grids properties</a>
+
+				</li><li class="" id="Abscisseproperties" data="">
+							<a
+							href="Abscisseproperties.html"
+							target="FrameMain">
+								Abscisse properties</a>
+
+				</li><li class="" id="Cursorsproperties" data="">
+							<a
+							href="Cursorsproperties.html"
+							target="FrameMain">
+								Cursors properties</a>
+
+				</li></ul></li><li class="folder" id="Graphicseriedetailedconfiguratio" data="">
+							<a
+							href="Graphicseriedetailedconfiguratio.html"
+							target="FrameMain">
+								Graphic serie detailed configuration window</a>
+
+				<ul><li class="" id="Seriegeneralproperties" data="">
+							<a
+							href="Seriegeneralproperties.html"
+							target="FrameMain">
+								Serie general properties</a>
+
+				</li><li class="" id="Serieformat" data="">
+							<a
+							href="Serieformat.html"
+							target="FrameMain">
+								Serie format</a>
+
+				</li><li class="" id="SerieYAxis" data="">
+							<a
+							href="SerieYAxis.html"
+							target="FrameMain">
+								Serie Y Axis</a>
+
+				</li><li class="" id="Seriecustomgrid" data="">
+							<a
+							href="Seriecustomgrid.html"
+							target="FrameMain">
+								Serie custom grid</a>
+
+				</li><li class="" id="Seriereferencelines" data="">
+							<a
+							href="Seriereferencelines.html"
+							target="FrameMain">
+								Serie reference lines</a>
+
+				</li></ul></li><li class="folder" id="Appendix" data="">
+							<a
+							href="Appendix.html"
+							target="FrameMain">
+								Appendix</a>
+
+				<ul><li class="" id="Linestyles" data="">
+							<a
+							href="Linestyles.html"
+							target="FrameMain">
+								Line styles</a>
+
+				</li></ul></li></ul></li></ul></li></ul>
+		</div>
+		
+		<div id="tab-keywords">
+			<ul id="keywords">
+
+				<li class="folder" data="click:'[[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Graphicwindowconfiguration.html"
+								target="FrameMain"
+								onClick="[['Graphic window configuration','Graphicwindowconfiguration.html'],['General properties','Generalproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								General</a>
+
+				<ul><li class="file" data="click:'[[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Genericseriesproperties.html"
+								target="FrameMain"
+								onClick="[['Generic series properties','Genericseriesproperties.html'],['Serie format','Serieformat.html']]"
+								>
+								auto</a>
+
+				</li><li class="file" data="click:'[[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Serieformat.html"
+								target="FrameMain"
+								onClick="[['Serie format','Serieformat.html']]"
+								>
+								binary</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html']]"
+								>
+								comment</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html']]"
+								>
+								configuration</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Statistics\',\'Statistics.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Statistics','Statistics.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								copy</a>
+
+				</li><li class="file" data="click:'[[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Genericseriesproperties.html"
+								target="FrameMain"
+								onClick="[['Generic series properties','Genericseriesproperties.html'],['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								custom</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								cut</a>
+
+				</li><li class="file" data="click:'[[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Serieformat.html"
+								target="FrameMain"
+								onClick="[['Serie format','Serieformat.html']]"
+								>
+								decimal</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								delete</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html']]"
+								>
+								description</a>
+
+				</li><li class="file" data="click:'[[\'Graphic serie detailed configuration window\',\'Graphicseriedetailedconfiguratio.html\']]'">
+							<a
+								href="Graphicseriedetailedconfiguratio.html"
+								target="FrameMain"
+								onClick="[['Graphic serie detailed configuration window','Graphicseriedetailedconfiguratio.html']]"
+								>
+								detail</a>
+
+				</li><li class="file" data="click:'[[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href="Genericseriesproperties.html"
+								target="FrameMain"
+								onClick="[['Generic series properties','Genericseriesproperties.html']]"
+								>
+								details</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Snapshot\',\'Snapshot.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Snapshot','Snapshot.html']]"
+								>
+								Export</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'Snapshot\',\'Snapshot.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html'],['','.html'],['','.html'],['','.html'],['Snapshot','Snapshot.html'],['Graphic window configuration','Graphicwindowconfiguration.html']]"
+								>
+								file</a>
+
+				</li><li class="file" data="click:'[[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Serieformat.html"
+								target="FrameMain"
+								onClick="[['Serie format','Serieformat.html']]"
+								>
+								format</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Serie format\',\'Serieformat.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Serie format','Serieformat.html'],['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								grid</a>
+
+				</li><li class="file" data="click:'[[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Serieformat.html"
+								target="FrameMain"
+								onClick="[['Serie format','Serieformat.html']]"
+								>
+								hexa</a>
+
+				</li><li class="file" data="click:'[[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Serieformat.html"
+								target="FrameMain"
+								onClick="[['Serie format','Serieformat.html']]"
+								>
+								hexadecimal</a>
+
+				</li><li class="file" data="click:'[[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Legend.html"
+								target="FrameMain"
+								onClick="[['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html'],['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								hidden</a>
+
+				</li><li class="file" data="click:'[[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Legend.html"
+								target="FrameMain"
+								onClick="[['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html'],['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								hide</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html']]"
+								>
+								import</a>
+
+				</li><li class="file" data="click:'[[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Legend.html"
+								target="FrameMain"
+								onClick="[['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								label</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html']]"
+								>
+								library</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								max</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								maximum</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								min</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								minmum</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Zoom\',\'Zoom.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Zoom','Zoom.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html']]"
+								>
+								mode</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html'],['','.html'],['','.html'],['','.html'],['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								name</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								new</a>
+
+				</li><li class="file" data="click:'[]'">
+							<a
+								href="#"
+								target="FrameMain"
+								onClick="[]"
+								>
+								node</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html'],['Graphic window configuration','Graphicwindowconfiguration.html']]"
+								>
+								open</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								past</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Graph window settings\',\'Graphwindowsettings.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Graphic serie detailed configuration window\',\'Graphicseriedetailedconfiguratio.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html'],['','.html'],['Analysis window presntation','Analysiswindowpresntation.html'],['Graph window settings','Graphwindowsettings.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html'],['General properties','Generalproperties.html'],['Cursors properties','Cursorsproperties.html'],['Graphic serie detailed configuration window','Graphicseriedetailedconfiguratio.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								properties</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html'],['Graphic window configuration','Graphicwindowconfiguration.html']]"
+								>
+								save</a>
+
+				</li><li class="file" data="click:'[[\'Graph window settings\',\'Graphwindowsettings.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Graphic serie detailed configuration window\',\'Graphicseriedetailedconfiguratio.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Graphwindowsettings.html"
+								target="FrameMain"
+								onClick="[['Graph window settings','Graphwindowsettings.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html'],['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Cursors properties','Cursorsproperties.html'],['Graphic serie detailed configuration window','Graphicseriedetailedconfiguratio.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								settings</a>
+
+				</li><li class="file" data="click:'[[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\']]'">
+							<a
+								href="Legend.html"
+								target="FrameMain"
+								onClick="[['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html'],['Graphic grids properties','Graphicgridsproperties.html']]"
+								>
+								show</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Legend','Legend.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								statistics</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\'],[\'\',\'.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html'],['','.html'],['','.html']]"
+								>
+								treeview</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Cursors properties\',\'Cursorsproperties.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Cursors properties','Cursorsproperties.html']]"
+								>
+								type</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								unit</a>
+
+				</li><li class="file" data="click:'[[\'\',\'.html\'],[\'\',\'.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href=".html"
+								target="FrameMain"
+								onClick="[['','.html'],['','.html'],['Generic series properties','Genericseriesproperties.html'],['Serie format','Serieformat.html']]"
+								>
+								value</a>
+
+				</li><li class="file" data="click:'[[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Legend.html"
+								target="FrameMain"
+								onClick="[['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html'],['General properties','Generalproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								visible</a>
+
+				</li></ul></li><li class="folder" data="click:'[[\'Ctrl_GraphWindow\',\'Ctrl_GraphWindow.html\'],[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Analysis window shortcut keys\',\'Analysiswindowshortcutkeys.html\'],[\'Analysis functions\',\'Analysisfunctions.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Zoom\',\'Zoom.html\'],[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\'],[\'Snapshot\',\'Snapshot.html\'],[\'Print\',\'Print.html\'],[\'Graph window settings\',\'Graphwindowsettings.html\'],[\'Channel list\',\'Channellist.html\'],[\'Graphic layout\',\'Graphiclayout.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Graphic serie detailed configuration window\',\'Graphicseriedetailedconfiguratio.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie format\',\'Serieformat.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Ctrl_GraphWindow.html"
+								target="FrameMain"
+								onClick="[['Ctrl_GraphWindow','Ctrl_GraphWindow.html'],['Analysis window presntation','Analysiswindowpresntation.html'],['Analysis window tool bar','Analysiswindowtoolbar.html'],['Analysis window shortcut keys','Analysiswindowshortcutkeys.html'],['Analysis functions','Analysisfunctions.html'],['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Zoom','Zoom.html'],['Statistics','Statistics.html'],['Legend','Legend.html'],['Snapshot','Snapshot.html'],['Print','Print.html'],['Graph window settings','Graphwindowsettings.html'],['Channel list','Channellist.html'],['Graphic layout','Graphiclayout.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Graphic serie detailed configuration window','Graphicseriedetailedconfiguratio.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie format','Serieformat.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								Graphic</a>
+
+				<ul><li class="file" data="click:'[[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Graphicwindowconfiguration.html"
+								target="FrameMain"
+								onClick="[['Graphic window configuration','Graphicwindowconfiguration.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								abscisse</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html']]"
+								>
+								absolute</a>
+
+				</li><li class="file" data="click:'[[\'Ctrl_GraphWindow\',\'Ctrl_GraphWindow.html\'],[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Analysis functions\',\'Analysisfunctions.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Zoom\',\'Zoom.html\'],[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\']]'">
+							<a
+								href="Ctrl_GraphWindow.html"
+								target="FrameMain"
+								onClick="[['Ctrl_GraphWindow','Ctrl_GraphWindow.html'],['Analysis window presntation','Analysiswindowpresntation.html'],['Analysis functions','Analysisfunctions.html'],['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Zoom','Zoom.html'],['Statistics','Statistics.html'],['Legend','Legend.html']]"
+								>
+								analysis</a>
+
+				</li><li class="file" data="click:'[[\'Zoom\',\'Zoom.html\'],[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\'],[\'Snapshot\',\'Snapshot.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\']]'">
+							<a
+								href="Zoom.html"
+								target="FrameMain"
+								onClick="[['Zoom','Zoom.html'],['Statistics','Statistics.html'],['Legend','Legend.html'],['Snapshot','Snapshot.html'],['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html']]"
+								>
+								area</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Legend','Legend.html']]"
+								>
+								average</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Legend','Legend.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								avg</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Zoom\',\'Zoom.html\'],[\'Graphic layout\',\'Graphiclayout.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Zoom','Zoom.html'],['Graphic layout','Graphiclayout.html'],['Generic series properties','Genericseriesproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Serie Y Axis','SerieYAxis.html']]"
+								>
+								axis</a>
+
+				</li><li class="file" data="click:'[[\'General properties\',\'Generalproperties.html\']]'">
+							<a
+								href="Generalproperties.html"
+								target="FrameMain"
+								onClick="[['General properties','Generalproperties.html']]"
+								>
+								backcolor</a>
+
+				</li><li class="file" data="click:'[[\'Zoom\',\'Zoom.html\']]'">
+							<a
+								href="Zoom.html"
+								target="FrameMain"
+								onClick="[['Zoom','Zoom.html']]"
+								>
+								bar</a>
+
+				</li><li class="file" data="click:'[[\'Snapshot\',\'Snapshot.html\']]'">
+							<a
+								href="Snapshot.html"
+								target="FrameMain"
+								onClick="[['Snapshot','Snapshot.html']]"
+								>
+								bmp</a>
+
+				</li><li class="file" data="click:'[[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Seriegeneralproperties.html"
+								target="FrameMain"
+								onClick="[['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								bottom</a>
+
+				</li><li class="file" data="click:'[[\'Zoom\',\'Zoom.html\'],[\'Statistics\',\'Statistics.html\']]'">
+							<a
+								href="Zoom.html"
+								target="FrameMain"
+								onClick="[['Zoom','Zoom.html'],['Statistics','Statistics.html']]"
+								>
+								box</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Zoom\',\'Zoom.html\'],[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\'],[\'Channel list\',\'Channellist.html\'],[\'Graphic layout\',\'Graphiclayout.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie format\',\'Serieformat.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Analysiswindowpresntation.html"
+								target="FrameMain"
+								onClick="[['Analysis window presntation','Analysiswindowpresntation.html'],['Reference cursor','Referencecursor.html'],['Zoom','Zoom.html'],['Statistics','Statistics.html'],['Legend','Legend.html'],['Channel list','Channellist.html'],['Graphic layout','Graphiclayout.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie format','Serieformat.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								channel</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Legend\',\'Legend.html\'],[\'Channel list\',\'Channellist.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\']]'">
+							<a
+								href="Analysiswindowpresntation.html"
+								target="FrameMain"
+								onClick="[['Analysis window presntation','Analysiswindowpresntation.html'],['Analysis window tool bar','Analysiswindowtoolbar.html'],['Legend','Legend.html'],['Channel list','Channellist.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html'],['Abscisse properties','Abscisseproperties.html']]"
+								>
+								channel list</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								circle</a>
+
+				</li><li class="file" data="click:'[[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Generalproperties.html"
+								target="FrameMain"
+								onClick="[['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								color</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Cursors properties\',\'Cursorsproperties.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Cursors properties','Cursorsproperties.html']]"
+								>
+								coordinates</a>
+
+				</li><li class="file" data="click:'[[\'Print\',\'Print.html\']]'">
+							<a
+								href="Print.html"
+								target="FrameMain"
+								onClick="[['Print','Print.html']]"
+								>
+								copies</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								cross</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Cursors properties\',\'Cursorsproperties.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Cursors properties','Cursorsproperties.html']]"
+								>
+								cursor</a>
+
+				</li><li class="file" data="click:'[[\'Graphic layout\',\'Graphiclayout.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href="Graphiclayout.html"
+								target="FrameMain"
+								onClick="[['Graphic layout','Graphiclayout.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								custom</a>
+
+				</li><li class="file" data="click:'[[\'Ctrl_GraphWindow\',\'Ctrl_GraphWindow.html\'],[\'Statistics\',\'Statistics.html\'],[\'Legend\',\'Legend.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href="Ctrl_GraphWindow.html"
+								target="FrameMain"
+								onClick="[['Ctrl_GraphWindow','Ctrl_GraphWindow.html'],['Statistics','Statistics.html'],['Legend','Legend.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								data</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html']]"
+								>
+								deviation</a>
+
+				</li><li class="file" data="click:'[[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Seriegeneralproperties.html"
+								target="FrameMain"
+								onClick="[['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								diamond</a>
+
+				</li><li class="file" data="click:'[[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Seriecustomgrid.html"
+								target="FrameMain"
+								onClick="[['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								division</a>
+
+				</li><li class="file" data="click:'[[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Serieformat.html"
+								target="FrameMain"
+								onClick="[['Serie format','Serieformat.html']]"
+								>
+								enum</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Zoom\',\'Zoom.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Zoom','Zoom.html']]"
+								>
+								factor</a>
+
+				</li><li class="file" data="click:'[[\'General properties\',\'Generalproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Generalproperties.html"
+								target="FrameMain"
+								onClick="[['General properties','Generalproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								font</a>
+
+				</li><li class="file" data="click:'[[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\']]'">
+							<a
+								href="Generalproperties.html"
+								target="FrameMain"
+								onClick="[['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html']]"
+								>
+								frame</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Statistics\',\'Statistics.html\'],[\'Print\',\'Print.html\'],[\'Snapshot\',\'Snapshot.html\'],[\'Graphic layout\',\'Graphiclayout.html\'],[\'Channel list\',\'Channellist.html\'],[\'Graph window settings\',\'Graphwindowsettings.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Analysiswindowpresntation.html"
+								target="FrameMain"
+								onClick="[['Analysis window presntation','Analysiswindowpresntation.html'],['Statistics','Statistics.html'],['Print','Print.html'],['Snapshot','Snapshot.html'],['Graphic layout','Graphiclayout.html'],['Channel list','Channellist.html'],['Graph window settings','Graphwindowsettings.html'],['Generic series properties','Genericseriesproperties.html'],['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								graphic window</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Cursors properties\',\'Cursorsproperties.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Cursors properties','Cursorsproperties.html']]"
+								>
+								graticule</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								horizontal</a>
+
+				</li><li class="file" data="click:'[[\'Snapshot\',\'Snapshot.html\']]'">
+							<a
+								href="Snapshot.html"
+								target="FrameMain"
+								onClick="[['Snapshot','Snapshot.html']]"
+								>
+								image</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window shortcut keys\',\'Analysiswindowshortcutkeys.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Legend\',\'Legend.html\']]'">
+							<a
+								href="Analysiswindowshortcutkeys.html"
+								target="FrameMain"
+								onClick="[['Analysis window shortcut keys','Analysiswindowshortcutkeys.html'],['Main cursor','Maincursor.html'],['Legend','Legend.html']]"
+								>
+								key</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window shortcut keys\',\'Analysiswindowshortcutkeys.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Legend\',\'Legend.html\']]'">
+							<a
+								href="Analysiswindowshortcutkeys.html"
+								target="FrameMain"
+								onClick="[['Analysis window shortcut keys','Analysiswindowshortcutkeys.html'],['Main cursor','Maincursor.html'],['Legend','Legend.html']]"
+								>
+								keyboard</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Graphic layout\',\'Graphiclayout.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Graphic layout','Graphiclayout.html']]"
+								>
+								layout</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Legend\',\'Legend.html\'],[\'Snapshot\',\'Snapshot.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie format\',\'Serieformat.html\']]'">
+							<a
+								href="Analysiswindowpresntation.html"
+								target="FrameMain"
+								onClick="[['Analysis window presntation','Analysiswindowpresntation.html'],['Analysis window tool bar','Analysiswindowtoolbar.html'],['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Legend','Legend.html'],['Snapshot','Snapshot.html'],['General properties','Generalproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie format','Serieformat.html']]"
+								>
+								legend</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Graphic serie detailed configuration window\',\'Graphicseriedetailedconfiguratio.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Generic series properties','Genericseriesproperties.html'],['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Graphic serie detailed configuration window','Graphicseriedetailedconfiguratio.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								line</a>
+
+				</li><li class="file" data="click:'[[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Line styles\',\'Linestyles.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Graphicgridsproperties.html"
+								target="FrameMain"
+								onClick="[['Graphic grids properties','Graphicgridsproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Line styles','Linestyles.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								linestyle</a>
+
+				</li><li class="file" data="click:'[[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Cursorsproperties.html"
+								target="FrameMain"
+								onClick="[['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								location</a>
+
+				</li><li class="file" data="click:'[[\'Zoom\',\'Zoom.html\']]'">
+							<a
+								href="Zoom.html"
+								target="FrameMain"
+								onClick="[['Zoom','Zoom.html']]"
+								>
+								magnitude</a>
+
+				</li><li class="file" data="click:'[[\'Print\',\'Print.html\']]'">
+							<a
+								href="Print.html"
+								target="FrameMain"
+								onClick="[['Print','Print.html']]"
+								>
+								margin</a>
+
+				</li><li class="file" data="click:'[[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Seriegeneralproperties.html"
+								target="FrameMain"
+								onClick="[['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								mark</a>
+
+				</li><li class="file" data="click:'[[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Seriegeneralproperties.html"
+								target="FrameMain"
+								onClick="[['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								marker</a>
+
+				</li><li class="file" data="click:'[[\'Print\',\'Print.html\']]'">
+							<a
+								href="Print.html"
+								target="FrameMain"
+								onClick="[['Print','Print.html']]"
+								>
+								orientation</a>
+
+				</li><li class="file" data="click:'[[\'Graphic layout\',\'Graphiclayout.html\']]'">
+							<a
+								href="Graphiclayout.html"
+								target="FrameMain"
+								onClick="[['Graphic layout','Graphiclayout.html']]"
+								>
+								overlay</a>
+
+				</li><li class="file" data="click:'[[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href="Genericseriesproperties.html"
+								target="FrameMain"
+								onClick="[['Generic series properties','Genericseriesproperties.html']]"
+								>
+								overscaling</a>
+
+				</li><li class="file" data="click:'[[\'Print\',\'Print.html\']]'">
+							<a
+								href="Print.html"
+								target="FrameMain"
+								onClick="[['Print','Print.html']]"
+								>
+								page</a>
+
+				</li><li class="file" data="click:'[[\'Graphic layout\',\'Graphiclayout.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href="Graphiclayout.html"
+								target="FrameMain"
+								onClick="[['Graphic layout','Graphiclayout.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								parallel</a>
+
+				</li><li class="file" data="click:'[[\'Snapshot\',\'Snapshot.html\']]'">
+							<a
+								href="Snapshot.html"
+								target="FrameMain"
+								onClick="[['Snapshot','Snapshot.html']]"
+								>
+								picture</a>
+
+				</li><li class="file" data="click:'[[\'Reference cursor\',\'Referencecursor.html\'],[\'Main cursor\',\'Maincursor.html\']]'">
+							<a
+								href="Referencecursor.html"
+								target="FrameMain"
+								onClick="[['Reference cursor','Referencecursor.html'],['Main cursor','Maincursor.html']]"
+								>
+								point</a>
+
+				</li><li class="file" data="click:'[[\'Print\',\'Print.html\']]'">
+							<a
+								href="Print.html"
+								target="FrameMain"
+								onClick="[['Print','Print.html']]"
+								>
+								preview</a>
+
+				</li><li class="file" data="click:'[[\'Graphic grids properties\',\'Graphicgridsproperties.html\']]'">
+							<a
+								href="Graphicgridsproperties.html"
+								target="FrameMain"
+								onClick="[['Graphic grids properties','Graphicgridsproperties.html']]"
+								>
+								primary</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Print\',\'Print.html\'],[\'Snapshot\',\'Snapshot.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Print','Print.html'],['Snapshot','Snapshot.html']]"
+								>
+								print</a>
+
+				</li><li class="file" data="click:'[[\'Print\',\'Print.html\']]'">
+							<a
+								href="Print.html"
+								target="FrameMain"
+								onClick="[['Print','Print.html']]"
+								>
+								printer</a>
+
+				</li><li class="file" data="click:'[[\'Ctrl_GraphWindow\',\'Ctrl_GraphWindow.html\']]'">
+							<a
+								href="Ctrl_GraphWindow.html"
+								target="FrameMain"
+								onClick="[['Ctrl_GraphWindow','Ctrl_GraphWindow.html']]"
+								>
+								record</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Reference cursor\',\'Referencecursor.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Reference cursor','Referencecursor.html']]"
+								>
+								reference cursor</a>
+
+				</li><li class="file" data="click:'[[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Genericseriesproperties.html"
+								target="FrameMain"
+								onClick="[['Generic series properties','Genericseriesproperties.html'],['Abscisse properties','Abscisseproperties.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								reference line</a>
+
+				</li><li class="file" data="click:'[[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Seriegeneralproperties.html"
+								target="FrameMain"
+								onClick="[['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								round</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html'],['Generic series properties','Genericseriesproperties.html']]"
+								>
+								sample</a>
+
+				</li><li class="file" data="click:'[[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Genericseriesproperties.html"
+								target="FrameMain"
+								onClick="[['Generic series properties','Genericseriesproperties.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								scale</a>
+
+				</li><li class="file" data="click:'[[\'Graphic grids properties\',\'Graphicgridsproperties.html\']]'">
+							<a
+								href="Graphicgridsproperties.html"
+								target="FrameMain"
+								onClick="[['Graphic grids properties','Graphicgridsproperties.html']]"
+								>
+								secondary</a>
+
+				</li><li class="file" data="click:'[[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Graphic serie detailed configuration window\',\'Graphicseriedetailedconfiguratio.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie format\',\'Serieformat.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Graphicwindowconfiguration.html"
+								target="FrameMain"
+								onClick="[['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html'],['Graphic serie detailed configuration window','Graphicseriedetailedconfiguratio.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie format','Serieformat.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								serie</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window shortcut keys\',\'Analysiswindowshortcutkeys.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Zoom\',\'Zoom.html\']]'">
+							<a
+								href="Analysiswindowshortcutkeys.html"
+								target="FrameMain"
+								onClick="[['Analysis window shortcut keys','Analysiswindowshortcutkeys.html'],['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Zoom','Zoom.html']]"
+								>
+								shortcut</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Snapshot\',\'Snapshot.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Snapshot','Snapshot.html']]"
+								>
+								snapshot</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								square</a>
+
+				</li><li class="file" data="click:'[[\'Statistics\',\'Statistics.html\']]'">
+							<a
+								href="Statistics.html"
+								target="FrameMain"
+								onClick="[['Statistics','Statistics.html']]"
+								>
+								std dev</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Legend\',\'Legend.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Main cursor','Maincursor.html'],['Legend','Legend.html'],['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								step</a>
+
+				</li><li class="file" data="click:'[[\'Abscisse properties\',\'Abscisseproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Abscisseproperties.html"
+								target="FrameMain"
+								onClick="[['Abscisse properties','Abscisseproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								style</a>
+
+				</li><li class="file" data="click:'[[\'General properties\',\'Generalproperties.html\']]'">
+							<a
+								href="Generalproperties.html"
+								target="FrameMain"
+								onClick="[['General properties','Generalproperties.html']]"
+								>
+								subsampling</a>
+
+				</li><li class="file" data="click:'[[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Seriegeneralproperties.html"
+								target="FrameMain"
+								onClick="[['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								top</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window presntation\',\'Analysiswindowpresntation.html\'],[\'Main cursor\',\'Maincursor.html\'],[\'Statistics\',\'Statistics.html\'],[\'Channel list\',\'Channellist.html\'],[\'Graphic layout\',\'Graphiclayout.html\'],[\'Graphic window configuration\',\'Graphicwindowconfiguration.html\'],[\'Generic series properties\',\'Genericseriesproperties.html\'],[\'Graphic serie detailed configuration window\',\'Graphicseriedetailedconfiguratio.html\'],[\'Serie general properties\',\'Seriegeneralproperties.html\'],[\'Serie format\',\'Serieformat.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Analysiswindowpresntation.html"
+								target="FrameMain"
+								onClick="[['Analysis window presntation','Analysiswindowpresntation.html'],['Main cursor','Maincursor.html'],['Statistics','Statistics.html'],['Channel list','Channellist.html'],['Graphic layout','Graphiclayout.html'],['Graphic window configuration','Graphicwindowconfiguration.html'],['Generic series properties','Genericseriesproperties.html'],['Graphic serie detailed configuration window','Graphicseriedetailedconfiguratio.html'],['Serie general properties','Seriegeneralproperties.html'],['Serie format','Serieformat.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								trace</a>
+
+				</li><li class="file" data="click:'[[\'Serie general properties\',\'Seriegeneralproperties.html\']]'">
+							<a
+								href="Seriegeneralproperties.html"
+								target="FrameMain"
+								onClick="[['Serie general properties','Seriegeneralproperties.html']]"
+								>
+								triangle</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\'],[\'Serie reference lines\',\'Seriereferencelines.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie custom grid','Seriecustomgrid.html'],['Serie reference lines','Seriereferencelines.html']]"
+								>
+								vertical</a>
+
+				</li><li class="file" data="click:'[[\'General properties\',\'Generalproperties.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Generalproperties.html"
+								target="FrameMain"
+								onClick="[['General properties','Generalproperties.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								width</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Zoom\',\'Zoom.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Zoom','Zoom.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								X</a>
+
+				</li><li class="file" data="click:'[[\'Main cursor\',\'Maincursor.html\'],[\'Reference cursor\',\'Referencecursor.html\'],[\'Zoom\',\'Zoom.html\'],[\'Graphic layout\',\'Graphiclayout.html\'],[\'Graphic grids properties\',\'Graphicgridsproperties.html\'],[\'Cursors properties\',\'Cursorsproperties.html\'],[\'Serie Y Axis\',\'SerieYAxis.html\'],[\'Serie custom grid\',\'Seriecustomgrid.html\']]'">
+							<a
+								href="Maincursor.html"
+								target="FrameMain"
+								onClick="[['Main cursor','Maincursor.html'],['Reference cursor','Referencecursor.html'],['Zoom','Zoom.html'],['Graphic layout','Graphiclayout.html'],['Graphic grids properties','Graphicgridsproperties.html'],['Cursors properties','Cursorsproperties.html'],['Serie Y Axis','SerieYAxis.html'],['Serie custom grid','Seriecustomgrid.html']]"
+								>
+								Y</a>
+
+				</li><li class="file" data="click:'[[\'Analysis window tool bar\',\'Analysiswindowtoolbar.html\'],[\'Zoom\',\'Zoom.html\'],[\'Statistics\',\'Statistics.html\']]'">
+							<a
+								href="Analysiswindowtoolbar.html"
+								target="FrameMain"
+								onClick="[['Analysis window tool bar','Analysiswindowtoolbar.html'],['Zoom','Zoom.html'],['Statistics','Statistics.html']]"
+								>
+								zoom</a>
+
+				</li></ul></li></ul>
+		</div>
+		
+		<div id="tab-search">
+			<form onsubmit="PerformSearch(); return false;">
+				<label for="search_value">Search:</label>
+				<input id="search_value" name="search_value"></input>
+				<input type="submit" value="Search"/>
+			</form>
+			<div id="search_results"></div>
+		</div>
+		
+		</div>
+    
+</body>
+
+</html>
+

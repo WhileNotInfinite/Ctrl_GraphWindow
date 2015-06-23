@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{23726D07-E40C-42E4-B676-24837B2D8896}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Ctrl_GraphWindow</RootNamespace>
+    <AssemblyName>Ctrl_GraphWindow</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <DocumentationFile>bin\Debug\Ctrl_GraphWindow.xml</DocumentationFile>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <SourceAnalysisOverrideSettingsFile>d:\users\vbrault\AppData\Roaming\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Demo_Dbg' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Demo' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug_NoLicense' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\GraphWindowData.cs" />
+    <Compile Include="Classes\GraphWindowProperties.cs" />
+    <Compile Include="Controls\Ctrl_GW_ChannelList.cs" />
+    <Compile Include="Controls\Ctrl_GW_ChannelList.Designer.cs">
+      <DependentUpon>Ctrl_GW_ChannelList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Ctrl_GW_ContextualChannelList.cs" />
+    <Compile Include="Controls\Ctrl_GW_ReferenceLines.cs" />
+    <Compile Include="Controls\Ctrl_GW_ReferenceLines.Designer.cs">
+      <DependentUpon>Ctrl_GW_ReferenceLines.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GW_SelectablePictureBox.cs" />
+    <Compile Include="Ctrl_WaveForm.cs" />
+    <Compile Include="Ctrl_WaveForm.Designer.cs">
+      <DependentUpon>Ctrl_WaveForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_FlyingChannelList.cs" />
+    <Compile Include="Forms\Frm_FlyingChannelList.Designer.cs">
+      <DependentUpon>Frm_FlyingChannelList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_GraphPrinting.cs" />
+    <Compile Include="Forms\Frm_GraphPrinting.Designer.cs">
+      <DependentUpon>Frm_GraphPrinting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_GraphPropertiesEdtion.cs" />
+    <Compile Include="Forms\Frm_GraphPropertiesEdtion.Designer.cs">
+      <DependentUpon>Frm_GraphPropertiesEdtion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_GraphSerieDetailedProperties.cs" />
+    <Compile Include="Forms\Frm_GraphSerieDetailedProperties.Designer.cs">
+      <DependentUpon>Frm_GraphSerieDetailedProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_GraphSeriesStatistics.cs" />
+    <Compile Include="Forms\Frm_GraphSeriesStatistics.Designer.cs">
+      <DependentUpon>Frm_GraphSeriesStatistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Icones.Designer.cs">
+      <DependentUpon>Icones.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes" />
+    <Folder Include="Forms" />
+    <Folder Include="Controls" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Ctrl_GW_ChannelList.resx">
+      <DependentUpon>Ctrl_GW_ChannelList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Ctrl_GW_ReferenceLines.resx">
+      <DependentUpon>Ctrl_GW_ReferenceLines.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ctrl_WaveForm.resx">
+      <DependentUpon>Ctrl_WaveForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_FlyingChannelList.resx">
+      <DependentUpon>Frm_FlyingChannelList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_GraphPrinting.resx">
+      <DependentUpon>Frm_GraphPrinting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_GraphPropertiesEdtion.resx">
+      <DependentUpon>Frm_GraphPropertiesEdtion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_GraphSerieDetailedProperties.resx">
+      <DependentUpon>Frm_GraphSerieDetailedProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_GraphSeriesStatistics.resx">
+      <DependentUpon>Frm_GraphSeriesStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icones.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Icones.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ctrl_GraphWindow Release note.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TODO.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
