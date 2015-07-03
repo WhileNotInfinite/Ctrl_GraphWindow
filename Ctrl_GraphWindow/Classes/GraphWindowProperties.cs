@@ -266,6 +266,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Structure of an enumeration value
     /// </summary>
+    [Serializable]
     public struct GraphSerieEnumValue
     {
         /// <summary>
@@ -282,6 +283,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Sample data conversion to screen coordinates components
     /// </summary>
+    [Serializable]
     public struct GW_SampleCoordConversion
     {
         /// <summary>
@@ -329,6 +331,7 @@ namespace Ctrl_GraphWindow
     /// <remarks>
     /// This class features a base 'Font' class and implement two methodes for the font properties XML node writing and reading
     /// </remarks>
+    [Serializable]
     public class GW_Font
     {
         #region Private constants
@@ -644,6 +647,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic line properties class
     /// </summary>
+    [Serializable]
     public class GraphLineProperties
     {
         #region Private constants
@@ -829,6 +833,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Grahic serie reference line properties class
     /// </summary>
+    [Serializable]
     public class GraphReferenceLine
     {
         #region Public members
@@ -1023,6 +1028,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Grahic serie output value format properties class
     /// </summary>
+    [Serializable]
     public class GraphSerieValueFormat
     {
         #region Private constants
@@ -1245,6 +1251,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Grahic serie marker properties class
     /// </summary>
+    [Serializable]
     public class GraphSerieMarkProperties
     {
         #region Public members
@@ -1312,6 +1319,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Grahic serie user grid properties class
     /// </summary>
+    [Serializable]
     public class GraphSerieUserGrid
     {
         #region Private constants
@@ -1526,6 +1534,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic serie Y axis properties class
     /// </summary>
+    [Serializable]
     public class GraphSerieAxis
     {
         #region Private constants
@@ -1637,6 +1646,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic frame properties class
     /// </summary>
+    [Serializable]
     public class GraphFrameProperties
     {
         #region Public members
@@ -1684,6 +1694,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic grids properties class
     /// </summary>
+    [Serializable]
     public class GraphGridProperties
     {
         #region Public members
@@ -1761,6 +1772,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic cursor properties class
     /// </summary>
+    [Serializable]
     public class GraphCursorProperties
     {
     	#region Public members
@@ -1947,6 +1959,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic abscisse axis class
     /// </summary>
+    [Serializable]
     public class GraphAbscisseAxis : GraphSerieAxis
     {
         #region Public members
@@ -2015,6 +2028,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic legend properties class
     /// </summary>
+    [Serializable]
     public class GraphLegendProperties
     {
         #region Public members
@@ -2087,6 +2101,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic serie properties class
     /// </summary>
+    [Serializable]
     public class GraphSerieProperties
     {
         #region Public members
@@ -2279,6 +2294,7 @@ namespace Ctrl_GraphWindow
     /// <summary>
     /// Graphic window properties class
     /// </summary>
+    [Serializable]
     public class GraphWindowProperties
     {
     	#region Public members
