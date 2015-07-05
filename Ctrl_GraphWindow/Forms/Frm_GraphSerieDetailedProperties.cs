@@ -1435,7 +1435,7 @@ namespace Ctrl_GraphWindow
             Grid_Enums.Rows.Add();
             DataGridViewRow oRow = Grid_Enums.Rows[Grid_Enums.Rows.Count - 1];
 
-            oRow.Cells[0].Value = Grid_Enums.Rows.Count.ToString();
+            oRow.Cells[0].Value = (Grid_Enums.Rows.Count - 1).ToString();
             oRow.Cells[1].Value = "Text_" + Grid_Enums.Rows.Count.ToString();
         }
 
