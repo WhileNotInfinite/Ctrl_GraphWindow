@@ -55,52 +55,7 @@
       <Strikeout>False</Strikeout>
       <Underline>False</Underline>
     </AbscisseFont>
-    <ReferenceLines>
-      <ReferenceLine KeyId="1">
-        <Visible>True</Visible>
-        <ReferenceMode>Custom</ReferenceMode>
-        <ReferenceLineStyle>
-          <Visible>True</Visible>
-          <Width>1</Width>
-          <Color>-16711936</Color>
-          <LineStyle>DashDot</LineStyle>
-        </ReferenceLineStyle>
-        <ReferenceValue>10</ReferenceValue>
-        <ReferenceValuePosition>Top</ReferenceValuePosition>
-        <ReferenceTitle>10 sec</ReferenceTitle>
-        <ReferenceTitlePosition>Invisible</ReferenceTitlePosition>
-        <ReferenceValueFont>
-          <Name>Arial</Name>
-          <Size>8</Size>
-          <Bold>False</Bold>
-          <Italic>False</Italic>
-          <Strikeout>False</Strikeout>
-          <Underline>False</Underline>
-        </ReferenceValueFont>
-      </ReferenceLine>
-      <ReferenceLine KeyId="2">
-        <Visible>True</Visible>
-        <ReferenceMode>Custom</ReferenceMode>
-        <ReferenceLineStyle>
-          <Visible>True</Visible>
-          <Width>1</Width>
-          <Color>-65536</Color>
-          <LineStyle>DashDot</LineStyle>
-        </ReferenceLineStyle>
-        <ReferenceValue>20</ReferenceValue>
-        <ReferenceValuePosition>Invisible</ReferenceValuePosition>
-        <ReferenceTitle>20 sec</ReferenceTitle>
-        <ReferenceTitlePosition>Top</ReferenceTitlePosition>
-        <ReferenceValueFont>
-          <Name>Arial</Name>
-          <Size>8</Size>
-          <Bold>False</Bold>
-          <Italic>False</Italic>
-          <Strikeout>False</Strikeout>
-          <Underline>False</Underline>
-        </ReferenceValueFont>
-      </ReferenceLine>
-    </ReferenceLines>
+    <ReferenceLines />
   </AbscisseAxis>
   <LegendProperties>
     <Visible>True</Visible>
@@ -164,8 +119,7 @@
     <SerieProperties KeyId="12">
       <Name>Sinus</Name>
       <Label>Sinus</Label>
-      <Unit>
-      </Unit>
+      <Unit>nn</Unit>
       <Visible>True</Visible>
       <Top>100</Top>
       <Bottom>60</Bottom>

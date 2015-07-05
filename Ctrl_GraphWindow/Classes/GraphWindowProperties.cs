@@ -2261,6 +2261,427 @@ namespace Ctrl_GraphWindow
             return (oClone);
         }
         
+        /// <summary>
+        /// Return the XML node of the current GraphSerieProperties object
+        /// </summary>
+        /// <param name="oXDoc">XML document in which the graph serie properties XML node will be created</param>
+        /// <param name="NodeName">Name of the XML node to create</param>
+        /// <returns>XML node of the current GraphSerieProperties object</returns>
+        public XmlElement Write_PropertiesXmlNode(XmlDocument oXDoc, string NodeName)
+        {
+        	if (!(oXDoc == null))
+        	{
+        		XmlElement xProp = null;
+        		
+        		XmlElement xSerie = oXDoc.CreateElement(NodeName);
+                
+                //Identification Key
+                XmlAttribute xAtrSerieKey = oXDoc.CreateAttribute("KeyId");
+                xAtrSerieKey.Value = this.KeyId.ToString();
+                xSerie.Attributes.Append(xAtrSerieKey);
+
+                //General properties
+                xProp = oXDoc.CreateElement("Name");
+                xProp.InnerText = this.Name;
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Label");
+                xProp.InnerText = this.Label;
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Unit");
+                xProp.InnerText = this.Unit;
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Visible");
+                xProp.InnerText = this.Visible.ToString();
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Top");
+                xProp.InnerText = this.Top.ToString();
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Bottom");
+                xProp.InnerText = this.Bottom.ToString();
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Min");
+                xProp.InnerText = this.Min.ToString();
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Max");
+                xProp.InnerText = this.Max.ToString();
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("ScalingMode");
+                xProp.InnerText = this.ScalingMode.ToString();
+                xSerie.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("DrawingMode");
+                xProp.InnerText = this.DrawingMode.ToString();
+                xSerie.AppendChild(xProp);
+
+                //Value format
+                XmlElement xFormat = oXDoc.CreateElement("ValueFormat");
+                xSerie.AppendChild(xFormat);
+
+                    xProp = oXDoc.CreateElement("Format");
+                    xProp.InnerText = this.ValueFormat.Format.ToString();
+                    xFormat.AppendChild(xProp);
+
+                    xProp = oXDoc.CreateElement("Decimals");
+                    xProp.InnerText = this.ValueFormat.Decimals.ToString();
+                    xFormat.AppendChild(xProp);
+
+                    XmlElement xEnums = oXDoc.CreateElement("Enumerations");
+                    xFormat.AppendChild(xEnums);
+
+                    foreach (GraphSerieEnumValue sEnum in this.ValueFormat.Enums)
+                    {
+                        XmlElement xEnumDef = oXDoc.CreateElement("Enum");
+                        xEnums.AppendChild(xEnumDef);
+
+                            xProp = oXDoc.CreateElement("Value");
+                            xProp.InnerText = sEnum.Value.ToString();
+                            xEnumDef.AppendChild(xProp);
+
+                            xProp = oXDoc.CreateElement("Text");
+                            xProp.InnerText = sEnum.Text;
+                            xEnumDef.AppendChild(xProp);
+                    }
+
+                //Trace line
+                XmlElement xTrace = this.Trace.Create_GraphLineXmlNode(oXDoc, "Trace");
+                xSerie.AppendChild(xTrace);
+
+                //Markers
+                XmlElement xMarker = oXDoc.CreateElement("Markers");
+                xSerie.AppendChild(xMarker);
+
+                    xProp = oXDoc.CreateElement("Visible");
+                    xProp.InnerText = this.Markers.Visible.ToString();
+                    xMarker.AppendChild(xProp);
+
+                    xProp = oXDoc.CreateElement("Style");
+                    xProp.InnerText = this.Markers.Style.ToString();
+                    xMarker.AppendChild(xProp);
+
+                    xProp = oXDoc.CreateElement("Size");
+                    xProp.InnerText = this.Markers.Size.ToString();
+                    xMarker.AppendChild(xProp);
+
+                    xProp = oXDoc.CreateElement("InteriorEmpty");
+                    xProp.InnerText = this.Markers.InteriorEmpty.ToString();
+                    xMarker.AppendChild(xProp);
+
+                    xProp = oXDoc.CreateElement("MarkColor");
+                    xProp.InnerText = this.Markers.MarkColor.ToArgb().ToString();
+                    xMarker.AppendChild(xProp);
+
+                //YAxis
+                XmlElement xAxis = oXDoc.CreateElement("YAxis");
+                xSerie.AppendChild(xAxis);
+
+                    xProp = oXDoc.CreateElement("Visible");
+                    xProp.InnerText = this.YAxis.Visible.ToString();
+                    xAxis.AppendChild(xProp);
+
+                    XmlElement xAxisLine = this.YAxis.AxisLineStyle.Create_GraphLineXmlNode(oXDoc, "AxisLineStyle");
+                    xAxis.AppendChild(xAxisLine);
+
+                    xProp = oXDoc.CreateElement("AxisValuesVisible");
+                    xProp.InnerText = this.YAxis.AxisValuesVisible.ToString();
+                    xAxis.AppendChild(xProp);
+                    
+                    xProp = oXDoc.CreateElement("AxisTitleVisible");
+                    xProp.InnerText = this.YAxis.AxisTitleVisible.ToString();
+                    xAxis.AppendChild(xProp);
+
+                    XmlElement xAxisFont = this.YAxis.AxisValuesFont.Create_FontXmlNode(oXDoc, "AxisFont");
+                    xAxis.AppendChild(xAxisFont);
+
+                //User grid
+                XmlElement xGridLineStyle = null;
+                XmlElement xGridValues = null;
+
+
+                XmlElement xUserGrid = oXDoc.CreateElement("SerieUserGrid");
+                xSerie.AppendChild(xUserGrid);
+
+                    xProp = oXDoc.CreateElement("Visible");
+                    xProp.InnerText = this.UserGrid.Visible.ToString();
+                    xUserGrid.AppendChild(xProp);
+
+                    //Vertical user grid
+                    XmlElement xVGrid = oXDoc.CreateElement("VerticalUserGrid");
+                    xUserGrid.AppendChild(xVGrid);
+
+                        xProp = oXDoc.CreateElement("GridMode");
+                        xProp.InnerText = this.UserGrid.VerticalGridMode.ToString();
+                        xVGrid.AppendChild(xProp);
+
+                        xGridLineStyle = this.UserGrid.VerticalLinesStyle.Create_GraphLineXmlNode(oXDoc, "GridStyle");
+                        xVGrid.AppendChild(xGridLineStyle);
+
+                        xProp = oXDoc.CreateElement("GridDivisionCount");
+                        xProp.InnerText = this.UserGrid.VerticalDivisionCount.ToString();
+                        xVGrid.AppendChild(xProp);
+
+                        xGridValues = oXDoc.CreateElement("GridCustomValues");
+                        xVGrid.AppendChild(xGridValues);
+
+                        foreach(double Val in this.UserGrid.VerticalCustomValues)
+                        {
+                            xProp = oXDoc.CreateElement("CustomValue");
+                            xProp.InnerText = Val.ToString();
+                            xGridValues.AppendChild(xProp);
+                        }
+
+                        xProp = oXDoc.CreateElement("GridValuesVisible");
+                        xProp.InnerText = this.UserGrid.VerticalGridValuesVisible.ToString();
+                        xVGrid.AppendChild(xProp);
+
+                        XmlElement xVertGridFont = this.UserGrid.VerticalGridValueFont.Create_FontXmlNode(oXDoc, "GridFont");
+                        xVGrid.AppendChild(xVertGridFont);
+
+                    //Horizontal user grid
+                    XmlElement xHGrid = oXDoc.CreateElement("HorizontalUserGrid");
+                    xUserGrid.AppendChild(xHGrid);
+
+                        xProp = oXDoc.CreateElement("GridMode");
+                        xProp.InnerText = this.UserGrid.HorizontalGridMode.ToString();
+                        xHGrid.AppendChild(xProp);
+
+                        xGridLineStyle = this.UserGrid.HorizontalLinesStyle.Create_GraphLineXmlNode(oXDoc, "GridStyle");
+                        xHGrid.AppendChild(xGridLineStyle);
+
+                        xProp = oXDoc.CreateElement("GridDivisionCount");
+                        xProp.InnerText = this.UserGrid.HorizontalDivisionCount.ToString();
+                        xHGrid.AppendChild(xProp);
+
+                        xGridValues = oXDoc.CreateElement("GridCustomValues");
+                        xHGrid.AppendChild(xGridValues);
+
+                        foreach (double Val in this.UserGrid.HorizontalCustomValues)
+                        {
+                            xProp = oXDoc.CreateElement("CustomValue");
+                            xProp.InnerText = Val.ToString();
+                            xGridValues.AppendChild(xProp);
+                        }
+
+                        xProp = oXDoc.CreateElement("GridValuesVisible");
+                        xProp.InnerText = this.UserGrid.HorizontalGridValuesVisible.ToString();
+                        xHGrid.AppendChild(xProp);
+
+                        XmlElement xHorzGridFont = this.UserGrid.HorizontalGridValueFont.Create_FontXmlNode(oXDoc, "GridFont");
+                        xHGrid.AppendChild(xHorzGridFont);
+
+                //Reference lines
+                XmlElement xRefLines = oXDoc.CreateElement("SerieReferenceLines");
+                xSerie.AppendChild(xRefLines);
+
+                foreach (GraphReferenceLine oRefLine in this.ReferenceLines)
+                {
+                    XmlElement xLine = oRefLine.Create_ReferenceLineXmlNode(oXDoc, "ReferenceLine");
+                    xRefLines.AppendChild(xLine);
+                }
+        		
+        		return (xSerie);
+        	}
+        	
+        	return (null);
+        }
+        
+        /// <summary>
+        /// Read a GraphSerieProperties XML node
+        /// </summary>
+        /// <param name="xSerie">XML node to read</param>
+        /// <returns>>Node reading error flag: True = No Error / False = Error</returns>
+        public bool Read_PropertiesXmlNode(XmlNode xSerie)
+        {
+        	try
+        	{
+        		XmlNode xProp = null;
+        		
+        		//Identification Key
+                this.KeyId = int.Parse(xSerie.Attributes["KeyId"].Value);
+                
+                //General properties
+                xProp = xSerie.SelectSingleNode("Name");
+                this.Name = xProp.InnerText;
+
+                xProp = xSerie.SelectSingleNode("Label");
+                this.Label = xProp.InnerText;
+
+                xProp = xSerie.SelectSingleNode("Unit");
+                this.Unit = xProp.InnerText;
+
+                xProp = xSerie.SelectSingleNode("Visible");
+                this.Visible = bool.Parse(xProp.InnerText);
+
+                xProp = xSerie.SelectSingleNode("Top");
+                this.Top = int.Parse(xProp.InnerText);
+
+                xProp = xSerie.SelectSingleNode("Bottom");
+                this.Bottom = int.Parse(xProp.InnerText);
+
+                xProp = xSerie.SelectSingleNode("Min");
+                this.Min = double.Parse(xProp.InnerText);
+
+                xProp = xSerie.SelectSingleNode("Max");
+                this.Max = double.Parse(xProp.InnerText);
+
+                xProp = xSerie.SelectSingleNode("ScalingMode");
+                this.ScalingMode = (GraphSerieScaleModes)Enum.Parse(typeof(GraphSerieScaleModes), xProp.InnerText);
+
+                xProp = xSerie.SelectSingleNode("DrawingMode");
+                this.DrawingMode = (GraphSerieDrawingModes)Enum.Parse(typeof(GraphSerieDrawingModes), xProp.InnerText);
+
+                //Value format
+                XmlNode xFormat = xSerie.SelectSingleNode("ValueFormat");
+
+                    xProp = xFormat.SelectSingleNode("Format");
+                    this.ValueFormat.Format = (GraphSerieLegendFormats)Enum.Parse(typeof(GraphSerieLegendFormats), xProp.InnerText);
+
+                    xProp = xFormat.SelectSingleNode("Decimals");
+                    this.ValueFormat.Decimals = int.Parse(xProp.InnerText);
+
+                    XmlNode xEnums = xFormat.SelectSingleNode("Enumerations");
+                    this.ValueFormat.Enums = new List<GraphSerieEnumValue>();
+
+                    foreach (XmlNode xEnumDef in xEnums.ChildNodes)
+                    {
+                        GraphSerieEnumValue sEnum = new GraphSerieEnumValue();
+
+                        xProp = xEnumDef.SelectSingleNode("Value");
+                        sEnum.Value = int.Parse(xProp.InnerText);
+
+                        xProp = xEnumDef.SelectSingleNode("Text");
+                        sEnum.Text = xProp.InnerText;
+
+                        this.ValueFormat.Enums.Add(sEnum);
+                    }
+
+                //Trace line
+                XmlNode xTrace = xSerie.SelectSingleNode("Trace");
+                this.Trace.Read_GraphLineXmlNode(xTrace);
+
+                //Markers
+                XmlNode xMarker = xSerie.SelectSingleNode("Markers");
+
+                    xProp = xMarker.SelectSingleNode("Visible");
+                    this.Markers.Visible = bool.Parse(xProp.InnerText);
+
+                    xProp = xMarker.SelectSingleNode("Style");
+                    this.Markers.Style = (GraphSerieMarkerStyles)Enum.Parse(typeof(GraphSerieMarkerStyles), xProp.InnerText);
+
+                    xProp = xMarker.SelectSingleNode("Size");
+                    this.Markers.Size = int.Parse(xProp.InnerText);
+
+                    xProp = xMarker.SelectSingleNode("InteriorEmpty");
+                    this.Markers.InteriorEmpty = bool.Parse(xProp.InnerText);
+
+                    xProp = xMarker.SelectSingleNode("MarkColor");
+                    this.Markers.MarkColor = Color.FromArgb(int.Parse(xProp.InnerText));
+
+                //YAxis
+                XmlNode xAxis = xSerie.SelectSingleNode("YAxis");
+
+                    xProp = xAxis.SelectSingleNode("Visible");
+                    this.YAxis.Visible = bool.Parse(xProp.InnerText);
+
+                    XmlNode xAxisLine = xAxis.SelectSingleNode("AxisLineStyle");
+                    this.YAxis.AxisLineStyle.Read_GraphLineXmlNode(xAxisLine);
+
+                    xProp = xAxis.SelectSingleNode("AxisValuesVisible");
+                    this.YAxis.AxisValuesVisible = bool.Parse(xProp.InnerText);
+                    
+                    xProp = xAxis.SelectSingleNode("AxisTitleVisible");
+                    this.YAxis.AxisTitleVisible = bool.Parse(xProp.InnerText);
+
+                    XmlNode xAxisFont = xAxis.SelectSingleNode("AxisFont");
+                    this.YAxis.AxisValuesFont.Read_FontXmlNode(xAxisFont);
+
+                //User grid
+                XmlNode xGridLineStyle = null;
+                XmlNode xGridValues = null;
+
+                XmlNode xUserGrid = xSerie.SelectSingleNode("SerieUserGrid");
+
+                    xProp = xUserGrid.SelectSingleNode("Visible");
+                    this.UserGrid.Visible = bool.Parse(xProp.InnerText);
+
+                    //Vertical user grid
+                    XmlNode xVGrid = xUserGrid.SelectSingleNode("VerticalUserGrid");
+
+                        xProp = xVGrid.SelectSingleNode("GridMode");
+                        this.UserGrid.VerticalGridMode = (GraphSerieUserGridModes)Enum.Parse(typeof(GraphSerieUserGridModes), xProp.InnerText);
+
+                        xGridLineStyle = xVGrid.SelectSingleNode("GridStyle");
+                        this.UserGrid.VerticalLinesStyle.Read_GraphLineXmlNode(xGridLineStyle);
+
+                        xProp = xVGrid.SelectSingleNode("GridDivisionCount");
+                        this.UserGrid.VerticalDivisionCount = int.Parse(xProp.InnerText);
+
+                        xGridValues = xVGrid.SelectSingleNode("GridCustomValues");
+                        this.UserGrid.VerticalCustomValues = new List<double>();
+
+                        foreach(XmlNode xVal in xGridValues.ChildNodes)
+                        {
+                            this.UserGrid.VerticalCustomValues.Add(double.Parse(xVal.InnerText));
+                        }
+
+                        xProp = xVGrid.SelectSingleNode("GridValuesVisible");
+                        this.UserGrid.VerticalGridValuesVisible = bool.Parse(xProp.InnerText);
+
+                        XmlNode xVertGridFont = xAxis.SelectSingleNode("GridFont");
+                        this.UserGrid.VerticalGridValueFont.Read_FontXmlNode(xVertGridFont);
+
+                    //Horizontal user grid
+                    XmlNode xHGrid = xUserGrid.SelectSingleNode("HorizontalUserGrid");
+
+                        xProp = xHGrid.SelectSingleNode("GridMode");
+                        this.UserGrid.HorizontalGridMode = (GraphSerieUserGridModes)Enum.Parse(typeof(GraphSerieUserGridModes), xProp.InnerText);
+
+                        xGridLineStyle = xHGrid.SelectSingleNode("GridStyle");
+                        this.UserGrid.HorizontalLinesStyle.Read_GraphLineXmlNode(xGridLineStyle);
+
+                        xProp = xHGrid.SelectSingleNode("GridDivisionCount");
+                        this.UserGrid.HorizontalDivisionCount = int.Parse(xProp.InnerText);
+
+                        xGridValues = xHGrid.SelectSingleNode("GridCustomValues");
+                        this.UserGrid.HorizontalCustomValues = new List<double>();
+
+                        foreach (XmlNode xVal in xGridValues.ChildNodes)
+                        {
+                            this.UserGrid.HorizontalCustomValues.Add(double.Parse(xVal.InnerText));
+                        }
+
+                        xProp = xHGrid.SelectSingleNode("GridValuesVisible");
+                        this.UserGrid.HorizontalGridValuesVisible = bool.Parse(xProp.InnerText);
+
+                        XmlNode xHorzGridFont = xAxis.SelectSingleNode("GridFont");
+                        this.UserGrid.HorizontalGridValueFont.Read_FontXmlNode(xHorzGridFont);
+
+                    //Reference lines
+                    XmlNode xRefLines = xSerie.SelectSingleNode("SerieReferenceLines");
+                    this.ReferenceLines = new List<GraphReferenceLine>();
+
+                    foreach (XmlNode xLine in xRefLines.ChildNodes)
+                    {
+                        GraphReferenceLine oRefLine = new GraphReferenceLine();
+                        oRefLine.Read_GraphLineXmlNode(xLine);
+                        this.ReferenceLines.Add(oRefLine);
+                    }
+        	}
+        	catch
+        	{
+        		return (false);
+        	}
+        	
+        	return (true);
+        }
+        
         #region Reference lines
 
         /// <summary>
@@ -2452,7 +2873,7 @@ namespace Ctrl_GraphWindow
         /// <summary>
         /// Return the XML node of the current GraphWindowProperties object
         /// </summary>
-        /// <param name="oXDoc">XML document in which the graph window properties will be created</param>
+        /// <param name="oXDoc">XML document in which the graph window properties XML node will be created</param>
         /// <param name="NodeName">Name of the XML node to create</param>
         /// <returns>XML node of the current GraphWindowProperties object</returns>
         public XmlElement Create_PropertiesXmlNode(XmlDocument oXDoc, string NodeName)
@@ -2464,17 +2885,6 @@ namespace Ctrl_GraphWindow
                 //Graph window properties root node creation
                 XmlElement xGraphProps = oXDoc.CreateElement(NodeName);
 				
-                /*
-                if (!(oXDoc.HasChildNodes)) //Node creation for graph window properties file
-                {
-                    oXDoc.AppendChild(xGraphProps);
-                }
-                else //Graph window properties node is embedded into an another document
-                {
-                    oXDoc.FirstChild.AppendChild(xGraphProps);
-                }
-                */
-
                 //Graph window back color
                 XmlElement xBackColor = oXDoc.CreateElement("GraphBackColor");
                 xBackColor.InnerText = WindowBackColor.ToArgb().ToString();
@@ -2602,219 +3012,7 @@ namespace Ctrl_GraphWindow
 
                 foreach (GraphSerieProperties oSerie in SeriesProperties)
                 {
-                    XmlElement xSerie = oXDoc.CreateElement("SerieProperties");
-                    xSeriesProps.AppendChild(xSerie);
-
-                    //Identification Key
-                    XmlAttribute xAtrSerieKey = oXDoc.CreateAttribute("KeyId");
-                    xAtrSerieKey.Value = oSerie.KeyId.ToString();
-                    xSerie.Attributes.Append(xAtrSerieKey);
-
-                    //General properties
-                    xProp = oXDoc.CreateElement("Name");
-                    xProp.InnerText = oSerie.Name;
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Label");
-                    xProp.InnerText = oSerie.Label;
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Unit");
-                    xProp.InnerText = oSerie.Unit;
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Visible");
-                    xProp.InnerText = oSerie.Visible.ToString();
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Top");
-                    xProp.InnerText = oSerie.Top.ToString();
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Bottom");
-                    xProp.InnerText = oSerie.Bottom.ToString();
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Min");
-                    xProp.InnerText = oSerie.Min.ToString();
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Max");
-                    xProp.InnerText = oSerie.Max.ToString();
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("ScalingMode");
-                    xProp.InnerText = oSerie.ScalingMode.ToString();
-                    xSerie.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("DrawingMode");
-                    xProp.InnerText = oSerie.DrawingMode.ToString();
-                    xSerie.AppendChild(xProp);
-
-                    //Value format
-                    XmlElement xFormat = oXDoc.CreateElement("ValueFormat");
-                    xSerie.AppendChild(xFormat);
-
-                        xProp = oXDoc.CreateElement("Format");
-                        xProp.InnerText = oSerie.ValueFormat.Format.ToString();
-                        xFormat.AppendChild(xProp);
-
-                        xProp = oXDoc.CreateElement("Decimals");
-                        xProp.InnerText = oSerie.ValueFormat.Decimals.ToString();
-                        xFormat.AppendChild(xProp);
-
-                        XmlElement xEnums = oXDoc.CreateElement("Enumerations");
-                        xFormat.AppendChild(xEnums);
-
-                        foreach (GraphSerieEnumValue sEnum in oSerie.ValueFormat.Enums)
-                        {
-                            XmlElement xEnumDef = oXDoc.CreateElement("Enum");
-                            xEnums.AppendChild(xEnumDef);
-
-                                xProp = oXDoc.CreateElement("Value");
-                                xProp.InnerText = sEnum.Value.ToString();
-                                xEnumDef.AppendChild(xProp);
-
-                                xProp = oXDoc.CreateElement("Text");
-                                xProp.InnerText = sEnum.Text;
-                                xEnumDef.AppendChild(xProp);
-                        }
-
-                    //Trace line
-                    XmlElement xTrace = oSerie.Trace.Create_GraphLineXmlNode(oXDoc, "Trace");
-                    xSerie.AppendChild(xTrace);
-
-                    //Markers
-                    XmlElement xMarker = oXDoc.CreateElement("Markers");
-                    xSerie.AppendChild(xMarker);
-
-                        xProp = oXDoc.CreateElement("Visible");
-                        xProp.InnerText = oSerie.Markers.Visible.ToString();
-                        xMarker.AppendChild(xProp);
-
-                        xProp = oXDoc.CreateElement("Style");
-                        xProp.InnerText = oSerie.Markers.Style.ToString();
-                        xMarker.AppendChild(xProp);
-
-                        xProp = oXDoc.CreateElement("Size");
-                        xProp.InnerText = oSerie.Markers.Size.ToString();
-                        xMarker.AppendChild(xProp);
-
-                        xProp = oXDoc.CreateElement("InteriorEmpty");
-                        xProp.InnerText = oSerie.Markers.InteriorEmpty.ToString();
-                        xMarker.AppendChild(xProp);
-
-                        xProp = oXDoc.CreateElement("MarkColor");
-                        xProp.InnerText = oSerie.Markers.MarkColor.ToArgb().ToString();
-                        xMarker.AppendChild(xProp);
-
-                    //YAxis
-                    XmlElement xAxis = oXDoc.CreateElement("YAxis");
-                    xSerie.AppendChild(xAxis);
-
-                        xProp = oXDoc.CreateElement("Visible");
-                        xProp.InnerText = oSerie.YAxis.Visible.ToString();
-                        xAxis.AppendChild(xProp);
-
-                        XmlElement xAxisLine = oSerie.YAxis.AxisLineStyle.Create_GraphLineXmlNode(oXDoc, "AxisLineStyle");
-                        xAxis.AppendChild(xAxisLine);
-
-                        xProp = oXDoc.CreateElement("AxisValuesVisible");
-                        xProp.InnerText = oSerie.YAxis.AxisValuesVisible.ToString();
-                        xAxis.AppendChild(xProp);
-                        
-                        xProp = oXDoc.CreateElement("AxisTitleVisible");
-                        xProp.InnerText = oSerie.YAxis.AxisTitleVisible.ToString();
-                        xAxis.AppendChild(xProp);
-
-                        XmlElement xAxisFont = oSerie.YAxis.AxisValuesFont.Create_FontXmlNode(oXDoc, "AxisFont");
-                        xAxis.AppendChild(xAxisFont);
-
-                    //User grid
-                    XmlElement xGridLineStyle = null;
-                    XmlElement xGridValues = null;
-
-
-                    XmlElement xUserGrid = oXDoc.CreateElement("SerieUserGrid");
-                    xSerie.AppendChild(xUserGrid);
-
-                        xProp = oXDoc.CreateElement("Visible");
-                        xProp.InnerText = oSerie.UserGrid.Visible.ToString();
-                        xUserGrid.AppendChild(xProp);
-
-                        //Vertical user grid
-                        XmlElement xVGrid = oXDoc.CreateElement("VerticalUserGrid");
-                        xUserGrid.AppendChild(xVGrid);
-
-                            xProp = oXDoc.CreateElement("GridMode");
-                            xProp.InnerText = oSerie.UserGrid.VerticalGridMode.ToString();
-                            xVGrid.AppendChild(xProp);
-
-                            xGridLineStyle = oSerie.UserGrid.VerticalLinesStyle.Create_GraphLineXmlNode(oXDoc, "GridStyle");
-                            xVGrid.AppendChild(xGridLineStyle);
-
-                            xProp = oXDoc.CreateElement("GridDivisionCount");
-                            xProp.InnerText = oSerie.UserGrid.VerticalDivisionCount.ToString();
-                            xVGrid.AppendChild(xProp);
-
-                            xGridValues = oXDoc.CreateElement("GridCustomValues");
-                            xVGrid.AppendChild(xGridValues);
-
-                            foreach(double Val in oSerie.UserGrid.VerticalCustomValues)
-                            {
-                                xProp = oXDoc.CreateElement("CustomValue");
-                                xProp.InnerText = Val.ToString();
-                                xGridValues.AppendChild(xProp);
-                            }
-
-                            xProp = oXDoc.CreateElement("GridValuesVisible");
-                            xProp.InnerText = oSerie.UserGrid.VerticalGridValuesVisible.ToString();
-                            xVGrid.AppendChild(xProp);
-
-                            XmlElement xVertGridFont = oSerie.UserGrid.VerticalGridValueFont.Create_FontXmlNode(oXDoc, "GridFont");
-                            xVGrid.AppendChild(xVertGridFont);
-
-                        //Horizontal user grid
-                        XmlElement xHGrid = oXDoc.CreateElement("HorizontalUserGrid");
-                        xUserGrid.AppendChild(xHGrid);
-
-                            xProp = oXDoc.CreateElement("GridMode");
-                            xProp.InnerText = oSerie.UserGrid.HorizontalGridMode.ToString();
-                            xHGrid.AppendChild(xProp);
-
-                            xGridLineStyle = oSerie.UserGrid.HorizontalLinesStyle.Create_GraphLineXmlNode(oXDoc, "GridStyle");
-                            xHGrid.AppendChild(xGridLineStyle);
-
-                            xProp = oXDoc.CreateElement("GridDivisionCount");
-                            xProp.InnerText = oSerie.UserGrid.HorizontalDivisionCount.ToString();
-                            xHGrid.AppendChild(xProp);
-
-                            xGridValues = oXDoc.CreateElement("GridCustomValues");
-                            xHGrid.AppendChild(xGridValues);
-
-                            foreach (double Val in oSerie.UserGrid.HorizontalCustomValues)
-                            {
-                                xProp = oXDoc.CreateElement("CustomValue");
-                                xProp.InnerText = Val.ToString();
-                                xGridValues.AppendChild(xProp);
-                            }
-
-                            xProp = oXDoc.CreateElement("GridValuesVisible");
-                            xProp.InnerText = oSerie.UserGrid.HorizontalGridValuesVisible.ToString();
-                            xHGrid.AppendChild(xProp);
-
-                            XmlElement xHorzGridFont = oSerie.UserGrid.HorizontalGridValueFont.Create_FontXmlNode(oXDoc, "GridFont");
-                            xHGrid.AppendChild(xHorzGridFont);
-
-                    //Reference lines
-                    XmlElement xRefLines = oXDoc.CreateElement("SerieReferenceLines");
-                    xSerie.AppendChild(xRefLines);
-
-                    foreach (GraphReferenceLine oRefLine in oSerie.ReferenceLines)
-                    {
-                        XmlElement xLine = oRefLine.Create_ReferenceLineXmlNode(oXDoc, "ReferenceLine");
-                        xRefLines.AppendChild(xLine);
-                    }
+                	xSeriesProps.AppendChild(oSerie.Write_PropertiesXmlNode(oXDoc,"SerieProperties"));
                 }
 
                 bModified = false;
@@ -2962,183 +3160,19 @@ namespace Ctrl_GraphWindow
                 {
                     GraphSerieProperties oSerie = new GraphSerieProperties();
 
-                    //Identification Key
-                    oSerie.KeyId = int.Parse(xSerie.Attributes["KeyId"].Value);
-                    
-                    if (oSerie.KeyId >= NextSerieKeyId) NextSerieKeyId = oSerie.KeyId + 1;
-                    
-                    SerieColorIndex++;
-                    if (SerieColorIndex > 15) SerieColorIndex = 0;
-                    
-                    //General properties
-                    xProp = xSerie.SelectSingleNode("Name");
-                    oSerie.Name = xProp.InnerText;
-
-                    xProp = xSerie.SelectSingleNode("Label");
-                    oSerie.Label = xProp.InnerText;
-
-                    xProp = xSerie.SelectSingleNode("Unit");
-                    oSerie.Unit = xProp.InnerText;
-
-                    xProp = xSerie.SelectSingleNode("Visible");
-                    oSerie.Visible = bool.Parse(xProp.InnerText);
-
-                    xProp = xSerie.SelectSingleNode("Top");
-                    oSerie.Top = int.Parse(xProp.InnerText);
-
-                    xProp = xSerie.SelectSingleNode("Bottom");
-                    oSerie.Bottom = int.Parse(xProp.InnerText);
-
-                    xProp = xSerie.SelectSingleNode("Min");
-                    oSerie.Min = double.Parse(xProp.InnerText);
-
-                    xProp = xSerie.SelectSingleNode("Max");
-                    oSerie.Max = double.Parse(xProp.InnerText);
-
-                    xProp = xSerie.SelectSingleNode("ScalingMode");
-                    oSerie.ScalingMode = (GraphSerieScaleModes)Enum.Parse(typeof(GraphSerieScaleModes), xProp.InnerText);
-
-                    xProp = xSerie.SelectSingleNode("DrawingMode");
-                    oSerie.DrawingMode = (GraphSerieDrawingModes)Enum.Parse(typeof(GraphSerieDrawingModes), xProp.InnerText);
-
-                    //Value format
-                    XmlNode xFormat = xSerie.SelectSingleNode("ValueFormat");
-
-                        xProp = xFormat.SelectSingleNode("Format");
-                        oSerie.ValueFormat.Format = (GraphSerieLegendFormats)Enum.Parse(typeof(GraphSerieLegendFormats), xProp.InnerText);
-
-                        xProp = xFormat.SelectSingleNode("Decimals");
-                        oSerie.ValueFormat.Decimals = int.Parse(xProp.InnerText);
-
-                        XmlNode xEnums = xFormat.SelectSingleNode("Enumerations");
-                        oSerie.ValueFormat.Enums = new List<GraphSerieEnumValue>();
-
-                        foreach (XmlNode xEnumDef in xEnums.ChildNodes)
-                        {
-                            GraphSerieEnumValue sEnum = new GraphSerieEnumValue();
-
-                            xProp = xEnumDef.SelectSingleNode("Value");
-                            sEnum.Value = int.Parse(xProp.InnerText);
-
-                            xProp = xEnumDef.SelectSingleNode("Text");
-                            sEnum.Text = xProp.InnerText;
-
-                            oSerie.ValueFormat.Enums.Add(sEnum);
-                        }
-
-                    //Trace line
-                    XmlNode xTrace = xSerie.SelectSingleNode("Trace");
-                    oSerie.Trace.Read_GraphLineXmlNode(xTrace);
-
-                    //Markers
-                    XmlNode xMarker = xSerie.SelectSingleNode("Markers");
-
-                        xProp = xMarker.SelectSingleNode("Visible");
-                        oSerie.Markers.Visible = bool.Parse(xProp.InnerText);
-
-                        xProp = xMarker.SelectSingleNode("Style");
-                        oSerie.Markers.Style = (GraphSerieMarkerStyles)Enum.Parse(typeof(GraphSerieMarkerStyles), xProp.InnerText);
-
-                        xProp = xMarker.SelectSingleNode("Size");
-                        oSerie.Markers.Size = int.Parse(xProp.InnerText);
-
-                        xProp = xMarker.SelectSingleNode("InteriorEmpty");
-                        oSerie.Markers.InteriorEmpty = bool.Parse(xProp.InnerText);
-
-                        xProp = xMarker.SelectSingleNode("MarkColor");
-                        oSerie.Markers.MarkColor = Color.FromArgb(int.Parse(xProp.InnerText));
-
-                    //YAxis
-                    XmlNode xAxis = xSerie.SelectSingleNode("YAxis");
-
-                        xProp = xAxis.SelectSingleNode("Visible");
-                        oSerie.YAxis.Visible = bool.Parse(xProp.InnerText);
-
-                        XmlNode xAxisLine = xAxis.SelectSingleNode("AxisLineStyle");
-                        oSerie.YAxis.AxisLineStyle.Read_GraphLineXmlNode(xAxisLine);
-
-                        xProp = xAxis.SelectSingleNode("AxisValuesVisible");
-                        oSerie.YAxis.AxisValuesVisible = bool.Parse(xProp.InnerText);
-                        
-                        xProp = xAxis.SelectSingleNode("AxisTitleVisible");
-                        oSerie.YAxis.AxisTitleVisible = bool.Parse(xProp.InnerText);
-
-                        XmlNode xAxisFont = xAxis.SelectSingleNode("AxisFont");
-                        oSerie.YAxis.AxisValuesFont.Read_FontXmlNode(xAxisFont);
-
-                    //User grid
-                    XmlNode xGridLineStyle = null;
-                    XmlNode xGridValues = null;
-
-                    XmlNode xUserGrid = xSerie.SelectSingleNode("SerieUserGrid");
-
-                        xProp = xUserGrid.SelectSingleNode("Visible");
-                        oSerie.UserGrid.Visible = bool.Parse(xProp.InnerText);
-
-                        //Vertical user grid
-                        XmlNode xVGrid = xUserGrid.SelectSingleNode("VerticalUserGrid");
-
-                            xProp = xVGrid.SelectSingleNode("GridMode");
-                            oSerie.UserGrid.VerticalGridMode = (GraphSerieUserGridModes)Enum.Parse(typeof(GraphSerieUserGridModes), xProp.InnerText);
-
-                            xGridLineStyle = xVGrid.SelectSingleNode("GridStyle");
-                            oSerie.UserGrid.VerticalLinesStyle.Read_GraphLineXmlNode(xGridLineStyle);
-
-                            xProp = xVGrid.SelectSingleNode("GridDivisionCount");
-                            oSerie.UserGrid.VerticalDivisionCount = int.Parse(xProp.InnerText);
-
-                            xGridValues = xVGrid.SelectSingleNode("GridCustomValues");
-                            oSerie.UserGrid.VerticalCustomValues = new List<double>();
-
-                            foreach(XmlNode xVal in xGridValues.ChildNodes)
-                            {
-                                oSerie.UserGrid.VerticalCustomValues.Add(double.Parse(xVal.InnerText));
-                            }
-
-                            xProp = xVGrid.SelectSingleNode("GridValuesVisible");
-                            oSerie.UserGrid.VerticalGridValuesVisible = bool.Parse(xProp.InnerText);
-
-                            XmlNode xVertGridFont = xAxis.SelectSingleNode("GridFont");
-                            oSerie.UserGrid.VerticalGridValueFont.Read_FontXmlNode(xVertGridFont);
-
-                        //Horizontal user grid
-                        XmlNode xHGrid = xUserGrid.SelectSingleNode("HorizontalUserGrid");
-
-                            xProp = xHGrid.SelectSingleNode("GridMode");
-                            oSerie.UserGrid.HorizontalGridMode = (GraphSerieUserGridModes)Enum.Parse(typeof(GraphSerieUserGridModes), xProp.InnerText);
-
-                            xGridLineStyle = xHGrid.SelectSingleNode("GridStyle");
-                            oSerie.UserGrid.HorizontalLinesStyle.Read_GraphLineXmlNode(xGridLineStyle);
-
-                            xProp = xHGrid.SelectSingleNode("GridDivisionCount");
-                            oSerie.UserGrid.HorizontalDivisionCount = int.Parse(xProp.InnerText);
-
-                            xGridValues = xHGrid.SelectSingleNode("GridCustomValues");
-                            oSerie.UserGrid.HorizontalCustomValues = new List<double>();
-
-                            foreach (XmlNode xVal in xGridValues.ChildNodes)
-                            {
-                                oSerie.UserGrid.HorizontalCustomValues.Add(double.Parse(xVal.InnerText));
-                            }
-
-                            xProp = xHGrid.SelectSingleNode("GridValuesVisible");
-                            oSerie.UserGrid.HorizontalGridValuesVisible = bool.Parse(xProp.InnerText);
-
-                            XmlNode xHorzGridFont = xAxis.SelectSingleNode("GridFont");
-                            oSerie.UserGrid.HorizontalGridValueFont.Read_FontXmlNode(xHorzGridFont);
-
-                        //Reference lines
-                        XmlNode xRefLines = xSerie.SelectSingleNode("SerieReferenceLines");
-                        oSerie.ReferenceLines = new List<GraphReferenceLine>();
-
-                        foreach (XmlNode xLine in xRefLines.ChildNodes)
-                        {
-                            GraphReferenceLine oRefLine = new GraphReferenceLine();
-                            oRefLine.Read_GraphLineXmlNode(xLine);
-                            oSerie.ReferenceLines.Add(oRefLine);
-                        }
-
-                    SeriesProperties.Add(oSerie);
+                    if (oSerie.Read_PropertiesXmlNode(xSerie))
+                    {
+                    	if (oSerie.KeyId >= NextSerieKeyId) NextSerieKeyId = oSerie.KeyId + 1;
+                
+		                SerieColorIndex++;
+		                if (SerieColorIndex > 15) SerieColorIndex = 0;
+                    	
+                    	SeriesProperties.Add(oSerie);
+                    }
+                    else
+                    {
+                    	return (false);
+                    }
                 }
 
                 bModified = false;
