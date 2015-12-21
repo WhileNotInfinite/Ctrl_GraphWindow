@@ -45,11 +45,39 @@ namespace Ctrl_GraphWindow
 	    	/// <summary>Number of serie sample values between starting and ending points</summary>
 	    	public int SampleCount;
 	    }
-    
+
+    /// <summary>
+    /// Graphic channel data sample structure
+    /// </summary>
+    public struct SerieSample
+    {
+        /// <summary> Time value of the sample </summary>
+        public double SampleTime;
+
+        /// <summary> Data value of the sample </summary>
+        public double SampleValue;
+    }
+
     #endregion
-    
+
+    #region Enums
+
+    /// <summary>
+    /// Graph window data sampling mode
+    /// </summary>
+    public enum SamplingMode
+    {
+        /// <summary> Single sampling rate for all data channels </summary>
+        SingleRate = 0,
+
+        /// <summary> Each data channel has its own sampling rate </summary>
+        MultipleRates = 1,
+    }
+
+    #endregion
+
     #region Sub classes
-    
+
     /// <summary>
     /// Graph window data channel class
     /// </summary>
@@ -63,9 +91,14 @@ namespace Ctrl_GraphWindow
         public string Name;
 
         /// <summary>
-        /// Data channel values
+        /// Data channel values for SingleRate sampling mode
         /// </summary>
         public List<double> Values;
+
+        /// <summary>
+        /// Data channel samples for MultipleRates sampling mode
+        /// </summary>
+        public List<SerieSample> Samples;
 
         /// <summary>
         /// Minimum value of the channel
@@ -93,6 +126,7 @@ namespace Ctrl_GraphWindow
         {
             Name = "";
             Values = new List<double>();
+            Samples = null;
             Min = 0;
             Max = 0;
         }
@@ -105,10 +139,60 @@ namespace Ctrl_GraphWindow
         {
             Name = ChannelName;
             Values = new List<double>();
+            Samples = null;
             Min = 0;
             Max = 0;
         }
 
+        /// <summary>
+        /// Constructor including the sampling mode of the data channel to create
+        /// </summary>
+        /// <param name="SampleMode">Sampling mode of the data channel</param>
+        public GW_DataChannel(SamplingMode SampleMode)
+        {
+            Name = "";
+            Min = 0;
+            Max = 0;
+
+            InitChannelValues(SampleMode);
+        }
+
+        /// <summary>
+        /// Constructor including name and  sampling mode of the data channel to create
+        /// </summary>
+        /// <param name="ChannelName">Channel name</param>
+        /// <param name="SampleMode">Sampling mode of the data channel</param>
+        public GW_DataChannel(string ChannelName, SamplingMode SampleMode)
+        {
+            Name = ChannelName;
+            Min = 0;
+            Max = 0;
+
+            InitChannelValues(SampleMode);
+        }
+
+        #endregion
+
+        #region Private methodes
+        
+        private void InitChannelValues(SamplingMode eSampleMode)
+        {
+            switch (eSampleMode)
+            {
+                case SamplingMode.SingleRate:
+
+                    Values = new List<double>();
+                    Samples = null;
+                    break;
+
+                case SamplingMode.MultipleRates:
+
+                    Values = null;
+                    Samples = new List<SerieSample>();
+                    break;
+            }
+        }
+        
         #endregion
 
         #region Public methodes
@@ -117,21 +201,57 @@ namespace Ctrl_GraphWindow
         /// Add a value into the channel values collection and update min, max and average values
         /// </summary>
         /// <param name="Value">Value to add into the values collection</param>
-        public void Add_ChannelValue(double Value)
+        public void Add_ChannelValue(object Value)
         {
-            Values.Add(Value);
+            double DataValue = 0; ;
+            int ValCnt = 0;
 
-            if (Values.Count > 1)
+            if (Value.GetType().Equals(typeof(double)))
             {
-                if (Value < Min) Min = Value;
-                if (Value > Max) Max = Value;
-                Avg = ((Avg * (Values.Count - 1)) + Value) / Values.Count;
+                DataValue = (double)Value;
+                Values.Add(DataValue);
+
+                ValCnt = Values.Count;
+            }
+            else if (Value.GetType().Equals(typeof(SerieSample)))
+            {
+                SerieSample sSample = (SerieSample)Value;
+
+                if (Samples.Count == 0) //Data channel values list is empty yet
+                {
+                    Samples.Add(sSample);
+                }
+                else //Data channel values list contains some samples already
+                {
+                    if (Samples[Samples.Count - 1].SampleTime < sSample.SampleTime) //Is new sample time posterior to previous sample ?
+                    {
+                        Samples.Add(sSample);
+                    }
+                    else //No sample adding abort
+                    {
+                        return;
+                    }
+                }
+                DataValue = sSample.SampleValue;
+                ValCnt = Samples.Count;
             }
             else
             {
-                Min = Value;
-                Max = Value;
-                Avg = Value;
+                return;
+            }
+
+            //Serie statistics updating
+            if (ValCnt > 1)
+            {
+                if (DataValue < Min) Min = DataValue;
+                if (DataValue > Max) Max = DataValue;
+                Avg = ((Avg * (ValCnt - 1)) + DataValue) / ValCnt;
+            }
+            else
+            {
+                Min = DataValue;
+                Max = DataValue;
+                Avg = DataValue;
             }
         }
 
@@ -145,7 +265,129 @@ namespace Ctrl_GraphWindow
     /// </summary>
     public class GW_DataFile
     {
+        #region Properties
+
+        /// <summary>
+        /// Maximum number of samples contained in a data channel
+        /// </summary>
+        public int MaxSampleCount
+        {
+            get
+            {
+                if (DataSamplingMode == SamplingMode.SingleRate)
+                {
+                    return (Time.Values.Count);
+                }
+                else
+                {
+                    int Count = 0;
+
+                    foreach (GW_DataChannel oChan in Channels)
+                    {
+                        if (oChan.Samples.Count > Count)
+                        {
+                            Count = oChan.Samples.Count;
+                        }
+                    }
+
+                    return (Count);
+                }
+            }
+
+            private set
+            {
+
+            }
+        }
+        
+        /// <summary>
+        /// Lowest sample time value of the data file
+        /// </summary>
+        public double SampleTimeMin
+        {
+            get
+            {
+                if(DataSamplingMode== SamplingMode.SingleRate)
+                {
+                    return (Time.Values[0]);
+                }
+                else
+                {
+                    if (Channels.Count > 0)
+                    {
+                        double TimeMin = Channels[0].Samples[0].SampleTime;
+
+                        for (int iChan = 1; iChan < Channels.Count; iChan++)
+                        {
+                            if (Channels[iChan].Samples[0].SampleTime < TimeMin)
+                            {
+                                TimeMin = Channels[iChan].Samples[0].SampleTime;
+                            }
+                        }
+
+                        return (TimeMin);
+                    }
+                    else
+                    {
+                        return (double.NaN);
+                    }
+                }
+            }
+
+            private set
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Highest sample time value of the data file
+        /// </summary>
+        public double SampleTimeMax
+        {
+            get
+            {
+                if (DataSamplingMode == SamplingMode.SingleRate)
+                {
+                    return (Time.Values[Time.Values.Count - 1]);
+                }
+                else
+                {
+                    if (Channels.Count > 0)
+                    {
+                        double TimeMax = Channels[0].Samples[Channels[0].Samples.Count - 1].SampleTime;
+
+                        for (int iChan = 1; iChan < Channels.Count; iChan++)
+                        {
+                            if (Channels[iChan].Samples[Channels[iChan].Samples.Count - 1].SampleTime > TimeMax)
+                            {
+                                TimeMax = Channels[iChan].Samples[Channels[iChan].Samples.Count - 1].SampleTime;
+                            }
+                        }
+
+                        return (TimeMax);
+                    }
+                    else
+                    {
+                        return (double.NaN);
+                    }
+                }
+            }
+
+            private set
+            {
+
+            }
+        }
+
+        #endregion
+
         #region Public members
+
+        /// <summary>
+        /// Data file sampling mode
+        /// </summary>
+        public SamplingMode DataSamplingMode;
 
         /// <summary>
         /// Time vector of the data file
@@ -174,6 +416,7 @@ namespace Ctrl_GraphWindow
         /// </summary>
         public GW_DataFile()
         {
+            DataSamplingMode = SamplingMode.SingleRate;
             Time = new GW_DataChannel("Time");
             Channels = new List<GW_DataChannel>();
             

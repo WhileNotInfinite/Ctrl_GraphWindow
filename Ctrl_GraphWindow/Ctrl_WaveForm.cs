@@ -597,6 +597,10 @@ namespace Ctrl_GraphWindow
         private int FrameTopPoint;
         private int FrameBottomPoint;
 
+        private int nSampleCount;
+        private int nMarkCount;
+        private double DblSampleStep;
+
         private int SeriesVisibleCount;
         private int[] AbscisseCoords;
 
@@ -812,7 +816,7 @@ namespace Ctrl_GraphWindow
 		{
 			if (!(TSDdB_parallelToolStripMenuItem.Checked))
 			{
-				Change_GraphLayout(GraphicWindowLayoutModes.Paralel);
+				Change_GraphLayout(GraphicWindowLayoutModes.Parallel);
 			}
 		}
 		
@@ -1486,7 +1490,7 @@ namespace Ctrl_GraphWindow
         				
         				if (bEditGraphicConfigurationEnable)
         				{
-        					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Paralel;
+        					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Parallel;
         					Init_GraphWindow();
         				}
         				
@@ -1699,7 +1703,7 @@ namespace Ctrl_GraphWindow
 		{
 			if (!(Layout_parallelToolStripMenuItem.Checked))
 			{
-				Change_GraphLayout(GraphicWindowLayoutModes.Paralel);
+				Change_GraphLayout(GraphicWindowLayoutModes.Parallel);
 			}
 		}
 		
@@ -2385,7 +2389,7 @@ namespace Ctrl_GraphWindow
 
             if (!(DataFile == null))
             {
-            	if (DataFile.Time.Values.Count < 2)
+            	if (DataFile.MaxSampleCount < 2)
             	{
             		return;
             	}
@@ -2443,12 +2447,32 @@ namespace Ctrl_GraphWindow
             {
                 if (Properties.AbscisseAxis.TimeMode) //Graphic window in time mode
                 {
-                    oWholeAbcsisseChannel = WholeDataFile.Time;
-                	oAbcsisseChannel = DataFile.Time;
-                    Set_AbcisseCordConversion(DataFile.Time);
+                    if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
+                    {
+                        oWholeAbcsisseChannel = WholeDataFile.Time;
+                        oAbcsisseChannel = DataFile.Time;
+                        Set_AbcisseCordConversion(DataFile.Time);
+                    }
+                    else
+                    {
+                        Properties.AbscisseAxis.CoordConversion.Min = DataFile.SampleTimeMin;
+                        Properties.AbscisseAxis.CoordConversion.Max = DataFile.SampleTimeMax;
+
+                        if (!(double.IsNaN(Properties.AbscisseAxis.CoordConversion.Min) || double.IsNaN(Properties.AbscisseAxis.CoordConversion.Max)))
+                        {
+                            Set_AbcisseCoordConversion_MultipleRatesSampling(Properties.AbscisseAxis.CoordConversion.Min,
+                                                                             Properties.AbscisseAxis.CoordConversion.Max);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
                 }
                 else //Graphic window in XY mode
                 {
+                    //TODO: Treat the case of multiple rates sampling mode
+
                     GW_DataChannel oTmpChan = DataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
 
                     if (!(oTmpChan == null))
@@ -2478,7 +2502,7 @@ namespace Ctrl_GraphWindow
                     }
                 }
                 
-                oAbcisseValFormat.Set_ValueRange(oAbcsisseChannel.Max - oAbcsisseChannel.Min);
+                oAbcisseValFormat.Set_ValueRange(Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min);
                 
                 //Update reference cursor X position
                 if (!(PtRefCursorPos.IsEmpty))
@@ -2630,7 +2654,10 @@ namespace Ctrl_GraphWindow
                     oAbscisse.StartPos = FrameLeftPoint;
                     oAbscisse.EndPos = FrameRightPoint;
 
-                    AxisGraduation[] Graduations = oAbscisse.Get_AxisGraduations(FrameWidth, 0,  oAbcsisseChannel.Min, oAbcsisseChannel.Max, oAbcisseValFormat, true);
+                    AxisGraduation[] Graduations = oAbscisse.Get_AxisGraduations(FrameWidth, 0,
+                                                                                 Properties.AbscisseAxis.CoordConversion.Min,
+                                                                                 Properties.AbscisseAxis.CoordConversion.Max, 
+                                                                                 oAbcisseValFormat, true);
 
                     int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
 
@@ -2866,38 +2893,14 @@ namespace Ctrl_GraphWindow
                 
                 if (SeriesVisibleCount > 0)
                 {
-                    int iSampleStart = 0;
-                    int iSampleEnd = DataFile.Time.Values.Count;
-                    int nSampleCount = iSampleEnd;
-                    int nMarkCount = nSampleCount;
-                    int iSampleStep = 1;
                     
-                    bDataPlotted = true;
+                    //Sub sampling
+                    if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
+                    {
+                        Compute_SubSampling(oAbcsisseChannel.Values.Count);
+                    }
 
-                    if (Properties.bSubSamplingEnabled && (oAbcsisseChannel.Values.Count > Properties.nGraphicSampleMax)) //Sub sampling
-                    {
-                        iSampleStep = (int)(oAbcsisseChannel.Values.Count / Properties.nGraphicSampleMax);
-                        iSampleEnd = iSampleStart + iSampleStep * Properties.nGraphicSampleMax;
-                        nSampleCount = Properties.nGraphicSampleMax;
-                        
-                        if (iSampleEnd < oAbcsisseChannel.Values.Count) //If the remainder of oAbcsisseChannel.Values.Count / Properties.nGraphicSampleMax is not zero
-                        {
-                        	iSampleStep++;
-                        	iSampleEnd = oAbcsisseChannel.Values.Count;
-                        	nSampleCount = (int)(oAbcsisseChannel.Values.Count / iSampleStep);
-                        	
-                        	if (!((nSampleCount * iSampleStep) == oAbcsisseChannel.Values.Count))
-                        	{
-                        		nSampleCount++;
-                        	}
-                        }
-                    }
-                    
-                    nMarkCount =  nSampleCount / 2;
-                    if (!((nMarkCount * 2) == nSampleCount)) //If nSampleCount is impair (363)
-                    {
-                    	nMarkCount++;
-                    }
+                    bDataPlotted = true;
 
                     foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
                     {
@@ -2912,11 +2915,18 @@ namespace Ctrl_GraphWindow
                         		{
                         			if (IsDoubleValidValue(oSerieProps.CoordConversion.Gain) && IsDoubleValidValue(oSerieProps.CoordConversion.Zero))
                         			{
-                        				//Trace points coords init
+                                        //Sub sampling
+                                        if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
+                                        {
+                                            Compute_SubSampling(oSerieData.Samples.Count);
+                                        }
+                                        
+                                        //Trace points coords init
                         				List<Point[]> SerieCoords = new List<Point[]>();
                         				List<Point> PartialSerieCoords = new List<Point>();
                         				int nVisiblePointCnt = 0;
-                        				
+                                        double DblSampleIndex = 0;
+
                         				//Marks objects init
                         				#region Markers init
                         				
@@ -2930,40 +2940,70 @@ namespace Ctrl_GraphWindow
                         				{
                         					SerieMarksCoords = new List<object>();
                         				}
-                        				
-                        				#endregion
 
-                        				for (int iSample = iSampleStart; iSample < iSampleEnd; iSample += iSampleStep)
-                        				{
-                        					//Trace points coords computation                        					
-                        					Int32 TmpVal = (Int32)SATURA((oSerieData.Values[iSample]
-                        					                              * oSerieProps.CoordConversion.Gain
-                        					                              + oSerieProps.CoordConversion.Zero),
-                        					                             -100, FrameHeight + 100);
-                        					
-                        					bool bPointValid = true;
-                        					
-                        					//SeriePoints[iPoint] = new Point(AbscisseCoords[iSample], TmpVal);
-                        					Point PtSample = new Point(AbscisseCoords[iSample], TmpVal);
-                        					
-                        					if ((PtSample.Y < oSerieProps.CoordConversion.Top || PtSample.Y > oSerieProps.CoordConversion.Bottom)
-                        					    && (!(Properties.bAllowOverScaling || bYZoom)))
-                        					{
-                        						bPointValid = false;
-                        						
-                        						//Serie's samples set adding to sample set collection
-                        						if (PartialSerieCoords.Count > 1) //Minimum 2 points to trace a line
-                        						{
-                        							SerieCoords.Add(PartialSerieCoords.ToArray());
-                        						}
-                        						
-                        						PartialSerieCoords = new List<Point>();
-                        					}
-                        					else
-                        					{
-                        						nVisiblePointCnt++;
-                        						PartialSerieCoords.Add(PtSample);
-                        					}
+                                        #endregion
+
+                                        for (int iSample = 0; iSample < nSampleCount; iSample++)
+                                        {
+                                            int iSampleIndex = (int)DblSampleIndex;
+                                            DblSampleIndex += DblSampleStep;
+
+                                            //Trace points coords computation 
+                                            Point PtSample = Point.Empty;
+                                            bool bPointValid = true;
+
+                                            switch (DataFile.DataSamplingMode)
+                                            {
+                                                case SamplingMode.SingleRate:
+
+                                                    {
+                                                        int TmpY = (int)SATURA((oSerieData.Values[iSampleIndex]
+                                                                        * oSerieProps.CoordConversion.Gain
+                                                                        + oSerieProps.CoordConversion.Zero),
+                                                                        -100, FrameHeight + 100);
+
+                                                        PtSample = new Point(AbscisseCoords[iSampleIndex], TmpY);
+                                                    }
+                                                    break;
+
+                                                case SamplingMode.MultipleRates:
+
+                                                    {
+                                                        int TmpX = (int)SATURA((oSerieData.Samples[iSampleIndex].SampleTime
+                                                                                * Properties.AbscisseAxis.CoordConversion.Gain
+                                                                                + Properties.AbscisseAxis.CoordConversion.Zero),
+                                                                                -100, FrameWidth + 100);
+
+                                                        int TmpY = (int)SATURA((oSerieData.Samples[iSampleIndex].SampleValue
+                                                                                * oSerieProps.CoordConversion.Gain 
+                                                                                + oSerieProps.CoordConversion.Zero),
+                                                                                -100, FrameHeight + 100);
+
+                                                        PtSample = new Point(TmpX, TmpY);
+                                                    }
+
+                                                    break;
+                                            }
+
+                                            if ((PtSample.X < 0 && PtSample.X > FrameWidth)
+                                                && ((PtSample.Y < oSerieProps.CoordConversion.Top || PtSample.Y > oSerieProps.CoordConversion.Bottom)
+                                                    && (!(Properties.bAllowOverScaling || bYZoom))))
+                                            {
+                                                bPointValid = false;
+
+                                                //Serie's samples set adding to sample set collection
+                                                if (PartialSerieCoords.Count > 1) //Minimum 2 points to trace a line
+                                                {
+                                                    SerieCoords.Add(PartialSerieCoords.ToArray());
+                                                }
+
+                                                PartialSerieCoords = new List<Point>();
+                                            }
+                                            else
+                                            {
+                                                nVisiblePointCnt++;
+                                                PartialSerieCoords.Add(PtSample);
+                                            }
                         					
                         					//Marks objects computation
                         					#region Markers points definition
@@ -3700,7 +3740,14 @@ namespace Ctrl_GraphWindow
                     			
                     			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
                     			{
-                    				SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
+                                    if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
+                                    {
+                                        SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
+                                    }
+                                    else
+                                    {
+                                        SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Samples[0].SampleValue));
+                                    }
                     			}
 
                     			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
@@ -3757,16 +3804,49 @@ namespace Ctrl_GraphWindow
 #endif
         }
 
+        private void Compute_SubSampling(int SampleCount)
+        {
+            nSampleCount = SampleCount;
+            DblSampleStep = 1;
+            nMarkCount = SampleCount / 2;
+
+            if (Properties.bSubSamplingEnabled && (SampleCount > Properties.nGraphicSampleMax))
+            {
+                DblSampleStep = (double)SampleCount / (double)Properties.nGraphicSampleMax;
+                nSampleCount = Properties.nGraphicSampleMax;
+
+                nMarkCount = nSampleCount / 2;
+                if ((nMarkCount % 2) != 0) nMarkCount++; //If nSampleCount is odd (363)
+            }
+        }
+
         private void Set_AbcisseCordConversion(GW_DataChannel oAbcisse)
         {
         	Properties.AbscisseAxis.CoordConversion.Gain = (double)((double)(FrameWidth) / (oAbcisse.Max - oAbcisse.Min));
             Properties.AbscisseAxis.CoordConversion.Zero = (double)((double)(FrameWidth) - Properties.AbscisseAxis.CoordConversion.Gain * oAbcisse.Max);
+
+            Properties.AbscisseAxis.CoordConversion.Min = oAbcisse.Min;
+            Properties.AbscisseAxis.CoordConversion.Max = oAbcisse.Max;
 
             AbscisseCoords = new int[oAbcisse.Values.Count];
 
             for (int i = 0; i < oAbcisse.Values.Count; i++)
             {
                 AbscisseCoords[i] = (int)(oAbcisse.Values[i] * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
+            }
+        }
+
+        private void Set_AbcisseCoordConversion_MultipleRatesSampling(double TimeMin, double TimeMax)
+        {
+            if (!(double.IsNaN(TimeMin) || double.IsNaN(TimeMax)))
+            {
+                Properties.AbscisseAxis.CoordConversion.Gain = (double)((double)(FrameWidth) / (TimeMax - TimeMin));
+                Properties.AbscisseAxis.CoordConversion.Zero = (double)((double)(FrameWidth) - Properties.AbscisseAxis.CoordConversion.Gain * TimeMax);
+            }
+            else
+            {
+                Properties.AbscisseAxis.CoordConversion.Gain = double.NaN;
+                Properties.AbscisseAxis.CoordConversion.Zero = double.NaN;
             }
         }
         
@@ -3819,7 +3899,7 @@ namespace Ctrl_GraphWindow
         				oProp.CoordConversion.Bottom = FrameHeight;
         				break;
 
-        			case GraphicWindowLayoutModes.Paralel:
+        			case GraphicWindowLayoutModes.Parallel:
 
         				int SerieSpace = (int)((FrameHeight) / SeriesVisibleCount);
         				oProp.CoordConversion.Top = (int)(SerieSpace * iPlot);
@@ -5980,7 +6060,7 @@ namespace Ctrl_GraphWindow
         			
         			break;
         			
-        		case GraphicWindowLayoutModes.Paralel:
+        		case GraphicWindowLayoutModes.Parallel:
         			
         			//Context_PicGraph_Options items update
         			Layout_overlayToolStripMenuItem.Checked = false;
@@ -6971,8 +7051,8 @@ namespace Ctrl_GraphWindow
 		
         private double Get_AbscisseValueAtPostion(int Position)
         {
-        	double a = (oAbcsisseChannel.Max - oAbcsisseChannel.Min) / (FrameWidth);
-    		double b = oAbcsisseChannel.Max - a * FrameWidth;
+            double a = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / (FrameWidth);
+    		double b = Properties.AbscisseAxis.CoordConversion.Max - a * FrameWidth;
     		
     		return((double)Position * a + b);
         }
@@ -7048,10 +7128,10 @@ namespace Ctrl_GraphWindow
         /// <summary>
         /// Set the GW_DataFile object containing the data to plot
         /// </summary>
-        /// <param name="oDataFile">GW_DataFile object containing the data to plot</param>
-        public void Set_DataFile(GW_DataFile oDataFile)
+        /// <param name="oNewDataFile">GW_DataFile object containing the data to plot</param>
+        public void Set_DataFile(GW_DataFile oNewDataFile)
         {
-        	WholeDataFile = oDataFile;
+        	WholeDataFile = oNewDataFile;
         	DataFile = WholeDataFile;
         	SeriesReferenceCoordConversion = null;
         	Fill_ChannelList();

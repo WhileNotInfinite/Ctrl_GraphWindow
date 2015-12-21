@@ -167,7 +167,7 @@ namespace Ctrl_GraphWindow
         Overlay = 0,
 
         ///<summary>Series paralel to each other</summary>
-        Paralel = 1,
+        Parallel = 1,
 
         ///<summary>Custom serie arrangement into the graphic</summary>
         Custom = 2,
