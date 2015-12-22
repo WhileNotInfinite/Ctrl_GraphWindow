@@ -4722,7 +4722,7 @@ namespace Ctrl_GraphWindow
         	else //Main cursor unvisible
         	{
         		ZoomCenter = new Ctrl_WaveForm.GraphicCoordinates();
-        		ZoomCenter.Abs = oAbcsisseChannel.Min + ((oAbcsisseChannel.Max - oAbcsisseChannel.Min) / 2);
+        		ZoomCenter.Abs = Properties.AbscisseAxis.CoordConversion.Min + ((Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 2);
         	}
         	
         	if (!(ZoomCenter == null))
@@ -4733,50 +4733,37 @@ namespace Ctrl_GraphWindow
         		{
         			if (Properties.AbscisseAxis.TimeMode)
         			{
-        				int ZoomCenterSampleId = DataFile.Get_SampleIndexAtTime(ZoomCenter.Abs);
-        				
-        				if (!(ZoomCenterSampleId == -1))
-        				{
-        					if (ZoomCenterSampleId == 0)
-        					{
-        						XZoomRange = oAbcsisseChannel.Values[2] - oAbcsisseChannel.Values[0];
-        					}
-        					else if (ZoomCenterSampleId ==  oAbcsisseChannel.Values.Count - 1)
-        					{
-        						XZoomRange = oAbcsisseChannel.Values[ZoomCenterSampleId] - oAbcsisseChannel.Values[ZoomCenterSampleId - 2];
-        					}
-        					else
-        					{
-        						XZoomRange = oAbcsisseChannel.Values[ZoomCenterSampleId + 1] - oAbcsisseChannel.Values[ZoomCenterSampleId - 1];
-        					}
-        				}
-        				else
-        				{
-        					return (false);
-        				}
+                        if (WholeDataFile.StepTimeMin > 0)
+                        {
+                            XZoomRange = WholeDataFile.StepTimeMin * 3; //Show at least 3 samples
+                        }
+                        else
+                        {
+                            return (false);
+                        }
         			}
         			else
         			{
-        				XZoomRange = (oAbcsisseChannel.Max - oAbcsisseChannel.Min) / 100; //1% of the full value range
+        				XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 100; //1% of the full value range
         			}
         		}
         		else
         		{
-        			XZoomRange = (oAbcsisseChannel.Max - oAbcsisseChannel.Min) / ((double) ZoomFactors[ZoomFactorIndex]);
+        			XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / ((double) ZoomFactors[ZoomFactorIndex]);
         		}
         		
         		if (XZoomRange > 0)
         		{
         			ZoomX1 = ZoomCenter.Abs - (XZoomRange / 2);
-        			if (ZoomX1 < oAbcsisseChannel.Min)
+        			if (ZoomX1 < Properties.AbscisseAxis.CoordConversion.Min)
         			{
-        				ZoomX1 = oAbcsisseChannel.Min;
+        				ZoomX1 = Properties.AbscisseAxis.CoordConversion.Min;
         			}
         			
         			ZoomX2 = ZoomX1 + XZoomRange;
-        			if (ZoomX2 > oAbcsisseChannel.Max)
+        			if (ZoomX2 > Properties.AbscisseAxis.CoordConversion.Max)
         			{
-        				ZoomX2 = oAbcsisseChannel.Max;
+        				ZoomX2 = Properties.AbscisseAxis.CoordConversion.Max;
         			}
         			
         			if (!(ZoomX1 == ZoomX2))
@@ -4888,9 +4875,8 @@ namespace Ctrl_GraphWindow
         
         private bool Zoom_X_Minus()
         {
-        	if (!(oAbcsisseChannel.Min == oWholeAbcsisseChannel.Min && oAbcsisseChannel.Max == oWholeAbcsisseChannel.Max))
+            if (!(Properties.AbscisseAxis.CoordConversion.Min == WholeDataFile.SampleTimeMin && Properties.AbscisseAxis.CoordConversion.Max == WholeDataFile.SampleTimeMax))
         	{
-        		
         		GraphicCoordinates ZoomCenter = null;
         		double XZoomRange, ZoomX1, ZoomX2;
         		
@@ -4901,29 +4887,28 @@ namespace Ctrl_GraphWindow
         		else //Main cursor unvisible
         		{
         			ZoomCenter = new Ctrl_WaveForm.GraphicCoordinates();
-        			ZoomCenter.Abs = oAbcsisseChannel.Min + ((oAbcsisseChannel.Max - oAbcsisseChannel.Min) / 2);
+        			ZoomCenter.Abs = Properties.AbscisseAxis.CoordConversion.Min + ((Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 2);
         		}
         		
         		if (!(ZoomCenter == null))
         		{
-        			XZoomRange = (oAbcsisseChannel.Max - oAbcsisseChannel.Min) * ((double) ZoomFactors[ZoomFactorIndex]);
+        			XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) * ((double) ZoomFactors[ZoomFactorIndex]);
         			
         			ZoomX1 = ZoomCenter.Abs - (XZoomRange / 2);
-        			if (ZoomX1 < oWholeAbcsisseChannel.Min)
+        			if (ZoomX1 < WholeDataFile.SampleTimeMin)
         			{
-        				ZoomX1 = oWholeAbcsisseChannel.Min;
+        				ZoomX1 = WholeDataFile.SampleTimeMin;
         			}
         			
         			ZoomX2 = ZoomX1 + XZoomRange;
-        			if (ZoomX2 > oWholeAbcsisseChannel.Max)
+        			if (ZoomX2 > WholeDataFile.SampleTimeMax)
         			{
-        				ZoomX2 = oWholeAbcsisseChannel.Max;
+        				ZoomX2 = WholeDataFile.SampleTimeMax;
         			}
         			
         			if (Set_DataFile_BetweenAbsPoint (ZoomX1, ZoomX2))
         			{
-        				
-        				if (ZoomX1 == oWholeAbcsisseChannel.Min && ZoomX2 == oWholeAbcsisseChannel.Max)
+        				if (ZoomX1 == WholeDataFile.SampleTimeMin && ZoomX2 == WholeDataFile.SampleTimeMax)
 	        			{
 	        				bXZoom = false;
 	        			}
@@ -4991,11 +4976,11 @@ namespace Ctrl_GraphWindow
         
         private void Plot_DataAtXZoomBarPosition()
         {
-        	double StartRangeRatio = (double)(Cmd_ZoomXPosition.Left - FrameLeftPoint) / (double)FrameWidth;
-        	double X1 = oWholeAbcsisseChannel.Min + ((oWholeAbcsisseChannel.Max - oWholeAbcsisseChannel.Min) * StartRangeRatio);
+            double StartRangeRatio = (double)(Cmd_ZoomXPosition.Left - FrameLeftPoint) / (double)FrameWidth;
+        	double X1 = WholeDataFile.SampleTimeMin + ((WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) * StartRangeRatio);
         	
         	double VisibleRangeRatio = (double)Cmd_ZoomXPosition.Width / (double)FrameWidth;
-        	double X2 = X1 + ((oWholeAbcsisseChannel.Max - oWholeAbcsisseChannel.Min) * VisibleRangeRatio);
+        	double X2 = X1 + ((WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) * VisibleRangeRatio);
         	
         	if (Set_DataFile_BetweenAbsPoint(X1, X2))
         	{
@@ -5151,16 +5136,70 @@ namespace Ctrl_GraphWindow
         	
         	return(Stats.ToArray());
         }
-        
+
         private bool Set_DataFile_BetweenAbsPoint(double X1, double X2)
         {
-        	GW_DataFile TpmDataFile = new GW_DataFile();
+            switch(DataFile.DataSamplingMode)
+            {
+                case SamplingMode.SingleRate:
+
+                    return (Set_DataFile_BetweenAbsPoint_SingleRateSampling(X1, X2));
+
+                case SamplingMode.MultipleRates:
+
+                    return (Set_DataFile_BetweenAbsPoint_MultipleRatesSampling(X1, X2));
+            }
+
+            return (false);
+        }
+
+        private bool Set_DataFile_BetweenAbsPoint_MultipleRatesSampling(double X1, double X2)
+        {
+            GW_DataFile TmpDataFile = new GW_DataFile();
+            TmpDataFile.DataSamplingMode = SamplingMode.MultipleRates;
+
+            foreach (GW_DataChannel oWholeDataChan in WholeDataFile.Channels)
+            {
+                int iSampleX1 = oWholeDataChan.Get_SampleTimeIndex(X1);
+                int iSampleX2 = oWholeDataChan.Get_SampleTimeIndex(X2);
+
+                if(iSampleX2==-1)
+                {
+                    iSampleX2 = oWholeDataChan.Samples.Count - 1;
+                }
+
+                if (iSampleX1 != -1 && iSampleX2 != -1)
+                {
+                    GW_DataChannel oDataChan = new GW_DataChannel(oWholeDataChan.Name, SamplingMode.MultipleRates);
+                    oDataChan.Samples = oWholeDataChan.Samples.GetRange(iSampleX1, (iSampleX2 - iSampleX1));
+
+                    if (oDataChan.Samples.Count > 1)
+                    {
+                        oDataChan.ProcessChannelStatistic();
+                        TmpDataFile.Channels.Add(oDataChan);
+                    }
+                }
+            }
+
+            if(TmpDataFile.Channels.Count>0)
+            {
+                bXZoom = true;
+                DataFile = TmpDataFile;
+                return (true);
+            }
+
+            return (false);
+        }
+
+        private bool Set_DataFile_BetweenAbsPoint_SingleRateSampling(double X1, double X2)
+        {
+        	GW_DataFile TmpDataFile = new GW_DataFile();
         	
         	for (int iSample = 0; iSample < oWholeAbcsisseChannel.Values.Count; iSample++)
         	{
         		if (oWholeAbcsisseChannel.Values[iSample] >= X1 && oWholeAbcsisseChannel.Values[iSample] <= X2)
         		{
-        			TpmDataFile.Time.Add_ChannelValue(WholeDataFile.Time.Values[iSample]);
+        			TmpDataFile.Time.Add_ChannelValue(WholeDataFile.Time.Values[iSample]);
         			
         			foreach (GW_DataChannel oDataChan in DataFile.Channels)
         			{
@@ -5169,15 +5208,15 @@ namespace Ctrl_GraphWindow
         				
         				if (!(oWholeChan == null))
         				{
-	        				if (TpmDataFile.DataChannelExists(oDataChan.Name))
+	        				if (TmpDataFile.DataChannelExists(oDataChan.Name))
 	        				{
-	        					oChan = TpmDataFile.Get_DataChannel(oDataChan.Name);
+	        					oChan = TmpDataFile.Get_DataChannel(oDataChan.Name);
 	        				}
 	        				else
 	        				{
 	        					oChan = new GW_DataChannel();
 	        					oChan.Name = oDataChan.Name;
-	        					TpmDataFile.Channels.Add(oChan);
+	        					TmpDataFile.Channels.Add(oChan);
 	        				}
 	        				
 	        				if (!(oChan == null))
@@ -5189,9 +5228,9 @@ namespace Ctrl_GraphWindow
         		}
         	}
         	
-        	if (TpmDataFile.Channels.Count > 0)
+        	if (TmpDataFile.Channels.Count > 0)
         	{
-        		if (TpmDataFile.Channels[0].Values.Count > 1)
+        		if (TmpDataFile.Channels[0].Values.Count > 1)
         		{
         			//In case of uneven values repartition zoom magnitude may be lost
         			//X = [00, 10, 11, 12, 25, 26, 30]
@@ -5199,12 +5238,12 @@ namespace Ctrl_GraphWindow
         			//Then zoom magnitude is forced
         			if (Properties.AbscisseAxis.TimeMode)
         			{
-        				TpmDataFile.Time.Min = X1;
-        				TpmDataFile.Time.Max = X2;
+        				TmpDataFile.Time.Min = X1;
+        				TmpDataFile.Time.Max = X2;
         			}
         			else
         			{
-        				GW_DataChannel oAbsTmp = TpmDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
+        				GW_DataChannel oAbsTmp = TmpDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
         				
         				if (!(oAbsTmp == null))
         				{
@@ -5214,7 +5253,7 @@ namespace Ctrl_GraphWindow
         			}
         			
         			bXZoom = true;
-        			DataFile = TpmDataFile;
+        			DataFile = TmpDataFile;
         			return(true);
         		}
         	}
@@ -5238,8 +5277,9 @@ namespace Ctrl_GraphWindow
         	}
         	
         	GW_DataFile TmpDataFile = new GW_DataFile();
-        	
-        	TmpDataFile.Time = ReferenceDataFile.Time;
+            TmpDataFile.DataSamplingMode = ReferenceDataFile.DataSamplingMode;
+
+            if (ReferenceDataFile.DataSamplingMode == SamplingMode.SingleRate) TmpDataFile.Time = ReferenceDataFile.Time;
         	
         	foreach (GraphSerieProperties oProp in Properties.SeriesProperties)
         	{	
@@ -5267,14 +5307,30 @@ namespace Ctrl_GraphWindow
         					    || (BottomPosition > sRefCoordConv.Value.Top && BottomPosition <= sRefCoordConv.Value.Bottom)
         					    || (TopPosition < sRefCoordConv.Value.Top && BottomPosition > sRefCoordConv.Value.Bottom))
         					{
-        						GW_DataChannel oChanData =  new GW_DataChannel();
+
+                                GW_DataChannel oChanData = null;
+
+                                if (ReferenceDataFile.DataSamplingMode == SamplingMode.MultipleRates)
+                                {
+                                    oChanData = new GW_DataChannel(SamplingMode.MultipleRates);
+
+                                    oChanData.Name = oRefChanData.Name;
+                                    oChanData.Samples = oRefChanData.Samples;
+                                    oChanData.Avg = oRefChanData.Avg;
+                                    oChanData.Min = oRefChanData.Min;
+                                    oChanData.Max = oRefChanData.Max;
+                                }
+                                else
+                                {
+                                    oChanData = new GW_DataChannel();
+
+                                    oChanData.Name = oRefChanData.Name;
+                                    oChanData.Values = oRefChanData.Values;
+                                    oChanData.Avg = oRefChanData.Avg;
+                                    oChanData.Min = oRefChanData.Min;
+                                    oChanData.Max = oRefChanData.Max;
+                                }
         						
-        						oChanData.Name = oRefChanData.Name;
-        						oChanData.Values = oRefChanData.Values;
-        						oChanData.Avg = oRefChanData.Avg;
-        						oChanData.Min = oRefChanData.Min;
-        						oChanData.Max = oRefChanData.Max;
-        						        						
         						double ValGain = (sRefCoordConv.Value.Max - sRefCoordConv.Value.Min) / (sRefCoordConv.Value.Top - sRefCoordConv.Value.Bottom);
         						double ValOffset = sRefCoordConv.Value.Max - ValGain * sRefCoordConv.Value.Top;
         						
@@ -5322,7 +5378,18 @@ namespace Ctrl_GraphWindow
         	
         	if (TmpDataFile.Channels.Count > 0)
         	{
-        		if (TmpDataFile.Channels[0].Values.Count > 1)
+                bool bDataPresent = false;
+
+                if(TmpDataFile.DataSamplingMode == SamplingMode.MultipleRates)
+                {
+                    bDataPresent = (TmpDataFile.MaxSampleCount > 1);
+                }
+                else
+                {
+                    bDataPresent = (TmpDataFile.Channels[0].Values.Count > 1);
+                }
+
+                if (bDataPresent)
         		{
         			if (!Properties.AbscisseAxis.TimeMode)
         			{
@@ -5336,7 +5403,7 @@ namespace Ctrl_GraphWindow
         			
         			if (bXZoom && !bZoomIn)
         			{
-        				if (!Set_DataFile_BetweenAbsPoint(oAbcsisseChannel.Min, oAbcsisseChannel.Max))
+        				if (!Set_DataFile_BetweenAbsPoint(Properties.AbscisseAxis.CoordConversion.Min, Properties.AbscisseAxis.CoordConversion.Max))
         				{
         					return(false);
         				}
@@ -5373,12 +5440,22 @@ namespace Ctrl_GraphWindow
         {
         	if (bXZoom)
         	{
-        		double VisibleRangeRatio = (oWholeAbcsisseChannel.Max - oWholeAbcsisseChannel.Min) / (oAbcsisseChannel.Max - oAbcsisseChannel.Min);
+                double VisibleRangeRatio = 0;
+                double StartRangeRatio = 0;
+
+                if (DataFile.DataSamplingMode== SamplingMode.MultipleRates)
+                {
+                    VisibleRangeRatio = (WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) / (DataFile.SampleTimeMax - DataFile.SampleTimeMin);
+                    StartRangeRatio = DataFile.SampleTimeMin / (WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin);
+                }
+                else
+                {
+                    VisibleRangeRatio = (oWholeAbcsisseChannel.Max - oWholeAbcsisseChannel.Min) / (oAbcsisseChannel.Max - oAbcsisseChannel.Min);
+                    StartRangeRatio = oAbcsisseChannel.Min / (oWholeAbcsisseChannel.Max - oWholeAbcsisseChannel.Min);
+                }
+
         		Cmd_ZoomXPosition.Width = (int)(FrameWidth / VisibleRangeRatio);
-        		
-        		double StartRangeRatio = oAbcsisseChannel.Min / (oWholeAbcsisseChannel.Max - oWholeAbcsisseChannel.Min);
         		Cmd_ZoomXPosition.Left = FrameLeftPoint + (int)(FrameWidth * StartRangeRatio);
-        		
         		Cmd_ZoomXPosition.Visible = true;
         	}
         	else

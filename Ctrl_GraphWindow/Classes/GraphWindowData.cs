@@ -117,6 +117,22 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Internal members
+
+        /// <summary>
+        /// Data channel sample time min
+        /// </summary>
+        /// <remarks>Applicable only for multiple sampling rate data file</remarks>
+        internal double ChannelStepTimeMin;
+
+        /// <summary>
+        /// Data channel sample time max
+        /// </summary>
+        /// <remarks>Applicable only for multiple sampling rate data file</remarks>
+        internal double ChannelStepTimeMax;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -129,6 +145,9 @@ namespace Ctrl_GraphWindow
             Samples = null;
             Min = 0;
             Max = 0;
+            Avg = 0;
+            ChannelStepTimeMin = 0;
+            ChannelStepTimeMax = 0;
         }
 
         /// <summary>
@@ -142,6 +161,9 @@ namespace Ctrl_GraphWindow
             Samples = null;
             Min = 0;
             Max = 0;
+            Avg = 0;
+            ChannelStepTimeMin = 0;
+            ChannelStepTimeMax = 0;
         }
 
         /// <summary>
@@ -153,6 +175,9 @@ namespace Ctrl_GraphWindow
             Name = "";
             Min = 0;
             Max = 0;
+            Avg = 0;
+            ChannelStepTimeMin = 0;
+            ChannelStepTimeMax = 0;
 
             InitChannelValues(SampleMode);
         }
@@ -167,6 +192,9 @@ namespace Ctrl_GraphWindow
             Name = ChannelName;
             Min = 0;
             Max = 0;
+            Avg = 0;
+            ChannelStepTimeMin = 0;
+            ChannelStepTimeMax = 0;
 
             InitChannelValues(SampleMode);
         }
@@ -193,6 +221,34 @@ namespace Ctrl_GraphWindow
             }
         }
         
+        private void ProcessValuesStatistics()
+        {
+            Min = Values[0];
+            Max = Values[0];
+            Avg = Values[0];
+
+            for (int iValue=1; iValue<Values.Count; iValue++)
+            {
+                if (Values[iValue] < Min) Min = Values[iValue];
+                if (Values[iValue] > Max) Max = Values[iValue];
+                Avg = ((Avg * iValue) + Values[iValue]) / (iValue + 1);
+            }
+        }
+
+        private void ProcessSamplesStatistics()
+        {
+            Min = Samples[0].SampleValue;
+            Max = Samples[0].SampleValue;
+            Avg = Samples[0].SampleValue;
+
+            for (int iSample = 1; iSample < Samples.Count; iSample++)
+            {
+                if (Samples[iSample].SampleValue < Min) Min = Samples[iSample].SampleValue;
+                if (Samples[iSample].SampleValue > Max) Max = Samples[iSample].SampleValue;
+                Avg = ((Avg * iSample) + Samples[iSample].SampleValue) / (iSample + 1);
+            }
+        }
+
         #endregion
 
         #region Public methodes
@@ -226,12 +282,26 @@ namespace Ctrl_GraphWindow
                     if (Samples[Samples.Count - 1].SampleTime < sSample.SampleTime) //Is new sample time posterior to previous sample ?
                     {
                         Samples.Add(sSample);
+
+                        double SampleTime = sSample.SampleTime - Samples[Samples.Count - 2].SampleTime;
+
+                        if (Samples.Count == 2)
+                        {
+                            ChannelStepTimeMin = SampleTime;
+                            ChannelStepTimeMax = SampleTime;
+                        }
+                        else
+                        {
+                            if (SampleTime < ChannelStepTimeMin) ChannelStepTimeMin = SampleTime;
+                            if (SampleTime > ChannelStepTimeMax) ChannelStepTimeMax = SampleTime;
+                        }
                     }
                     else //No sample adding abort
                     {
                         return;
                     }
                 }
+
                 DataValue = sSample.SampleValue;
                 ValCnt = Samples.Count;
             }
@@ -252,6 +322,54 @@ namespace Ctrl_GraphWindow
                 Min = DataValue;
                 Max = DataValue;
                 Avg = DataValue;
+            }
+        }
+
+        /// <summary>
+        /// Return the sample index corresponding to the time value given as argument
+        /// </summary>
+        /// <param name="TimeValue">Sample time to search</param>
+        /// <returns>Index of the sample time</returns>
+        /// <remarks>Return -1 if the sample time is not found
+        /// Works only for time sampled data channel (multiple sampling rates data file)</remarks>
+        public int Get_SampleTimeIndex(double TimeValue)
+        {
+            if (Samples != null)
+            {
+                for (int iSample = 0; iSample < Samples.Count; iSample++)
+                {
+                    if (Samples[iSample].SampleTime >= TimeValue)
+                    {
+                        if (Samples[iSample].SampleTime == TimeValue)
+                        {
+                            return (iSample);
+                        }
+                        else
+                        {
+                            if (iSample != 0)
+                            {
+                                return (iSample - 1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (-1);
+        }
+
+        /// <summary>
+        /// Process statistics of the current data channel
+        /// </summary>
+        public void ProcessChannelStatistic()
+        {
+            if(Samples!=null)
+            {
+                ProcessSamplesStatistics();
+            }
+            else
+            {
+                ProcessValuesStatistics();
             }
         }
 
@@ -380,6 +498,92 @@ namespace Ctrl_GraphWindow
             }
         }
 
+        /// <summary>
+        /// Mininimum step time of the file
+        /// </summary>
+        public double StepTimeMin
+        {
+            get
+            {
+                if (DataSamplingMode == SamplingMode.SingleRate)
+                {
+                    return (mStepTimeMin);
+                }
+                else
+                {
+                    if(Channels.Count>0)
+                    {
+                        double StepTime = Channels[0].ChannelStepTimeMin;
+                        
+                        for(int iChan=0; iChan<Channels.Count;iChan++)
+                        {
+                            if(Channels[iChan].ChannelStepTimeMin<StepTime)
+                            {
+                                StepTime = Channels[iChan].ChannelStepTimeMin;
+                            }
+                        }
+
+                        return (StepTime);
+                    }
+                    else
+                    {
+                        return (0);
+                    }
+                }
+            }
+
+            set
+            {
+                if(DataSamplingMode == SamplingMode.SingleRate)
+                {
+                    mStepTimeMin = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Maximum step time of the file
+        /// </summary>
+        public double StepTimeMax
+        {
+            get
+            {
+                if (DataSamplingMode == SamplingMode.SingleRate)
+                {
+                    return (mStepTimeMax);
+                }
+                else
+                {
+                    if (Channels.Count > 0)
+                    {
+                        double StepTime = Channels[0].ChannelStepTimeMax;
+
+                        for (int iChan = 0; iChan < Channels.Count; iChan++)
+                        {
+                            if (Channels[iChan].ChannelStepTimeMax > StepTime)
+                            {
+                                StepTime = Channels[iChan].ChannelStepTimeMax;
+                            }
+                        }
+
+                        return (StepTime);
+                    }
+                    else
+                    {
+                        return (0);
+                    }
+                }
+            }
+
+            set
+            {
+                if (DataSamplingMode == SamplingMode.SingleRate)
+                {
+                    mStepTimeMax = value;
+                }
+            }
+        }
+
         #endregion
 
         #region Public members
@@ -398,16 +602,14 @@ namespace Ctrl_GraphWindow
         /// Data channels collection of the data file
         /// </summary>
         public List<GW_DataChannel> Channels;
-        
-        /// <summary>
-        /// Mininimum step time of the file
-        /// </summary>
-        public double StepTimeMin;
-        
-         /// <summary>
-        /// Maximum step time of the file
-        /// </summary>
-        public double StepTimeMax;
+       
+        #endregion
+
+        #region Private members
+
+        private double mStepTimeMin;
+
+        private double mStepTimeMax;
 
         #endregion
 
