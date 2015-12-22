@@ -43,18 +43,31 @@ namespace Ctrl_GraphWindow
 			{
 				Grid_Statistics.Columns[iCol].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 			}
-			
-			if (Statistics.Length > 0)
-			{
-				Show_Statistics();
-				
-				this.Height = Statistics.Length * Grid_Statistics.Rows[0].Height + Grid_Statistics.ColumnHeadersHeight + 35;
-			}
 		}
-		
-		#region Private methodes
-		
-		private void Show_Statistics()
+
+        #region Control events
+
+        private void Frm_GraphSeriesStatistics_Load(object sender, EventArgs e)
+        {
+            if (Statistics.Length > 0)
+            {
+                Show_Statistics();
+
+                this.Height = ((Statistics.Length + 1) * Grid_Statistics.Rows[0].Height) + Grid_Statistics.ColumnHeadersHeight + 35;
+                
+            }
+        }
+
+        private void Frm_GraphSeriesStatistics_Deactivate(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
+        #region Private methodes
+
+        private void Show_Statistics()
 		{
 			foreach (SerieStatistics oStat in Statistics)
 			{
@@ -106,7 +119,9 @@ namespace Ctrl_GraphWindow
 				oRow.Cells[8].Style.ForeColor = oStat.SerieColor;
 			}
 		}
-		
-		#endregion
-	}
+
+        #endregion
+
+        
+    }
 }

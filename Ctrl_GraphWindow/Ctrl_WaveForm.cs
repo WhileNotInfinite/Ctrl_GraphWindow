@@ -5070,63 +5070,124 @@ namespace Ctrl_GraphWindow
         				
         				sSerieStats.Title = oSerieProp.Label;
         				sSerieStats.SerieColor = oSerieProp.Trace.LineColor;
-        				
-        				for (int i = 0; i < oAbcsisseChannel.Values.Count; i++)
-        				{
-        					if (oAbcsisseChannel.Values[i] >= X1 && oAbcsisseChannel.Values[i] <= X2)
-        					{
-        						//Min & max
-        						if (!(sSerieStats.SampleCount == 0))
-        						{
-        							if (oSerieData.Values[i] < sSerieStats.Min)
-        							{
-        								sSerieStats.Min = oSerieData.Values[i];
-        								sSerieStats.MinX = oAbcsisseChannel.Values[i];
-        							}
-        							
-        							if (oSerieData.Values[i] > sSerieStats.Max)
-        							{
-        								sSerieStats.Max = oSerieData.Values[i];
-        								sSerieStats.MaxX = oAbcsisseChannel.Values[i];
-        							}
-        						}
-        						else
-        						{
-        							sSerieStats.Min = oSerieData.Values[i];
-        							sSerieStats.Max = oSerieData.Values[i];
-        							
-        							sSerieStats.MinX = oAbcsisseChannel.Values[i];
-        							sSerieStats.MaxX = oAbcsisseChannel.Values[i];
-        						}
-        						
-        						//Avg & AvgAbs
-        						sSerieStats.Avg += oSerieData.Values[i];
-        						sSerieStats.AvgAbs += Math.Abs(oSerieData.Values[i]);
-        						
-        						//Sample count
-        						sSerieStats.SampleCount ++;
-        					}
-        				}
-        				
-        				//Final Avg & AvgAbs computation
-        				sSerieStats.Avg /= sSerieStats.SampleCount;
-        				sSerieStats.AvgAbs /= sSerieStats.SampleCount;
-        				
-        				//StdDev computation
-        				double SumSquare = 0;
-        				double AvgSquare = 0;
-        				
-        				for (int i = 0; i < oAbcsisseChannel.Values.Count; i++)
-        				{
-        					if (oAbcsisseChannel.Values[i] >= X1 && oAbcsisseChannel.Values[i] <= X2)
-        					{
-        						double diff = sSerieStats.Avg - oSerieData.Values[i];
-        						SumSquare += Math.Pow(diff, 2);
-        					}
-        				}
-        				
-        				AvgSquare = SumSquare / sSerieStats.SampleCount;
-        				sSerieStats.StdDev = Math.Sqrt(AvgSquare);
+
+                        if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
+                        {
+                            int iSampleX1 = oSerieData.Get_SampleTimeIndex(X1);
+                            int iSampleX2 = oSerieData.Get_SampleTimeIndex(X2) + 1;
+
+                            if(iSampleX2==0)
+                            {
+                                iSampleX2 = oSerieData.Samples.Count;
+                            }
+
+                            if (iSampleX1 != -1 && iSampleX2 != -1)
+                            {
+                                for (int iSample = iSampleX1; iSample < iSampleX2; iSample++)
+                                {
+                                    //Min & max
+                                    if (iSample != iSampleX1)
+                                    {
+                                        if(oSerieData.Samples[iSample].SampleValue<sSerieStats.Min)
+                                        {
+                                            sSerieStats.Min = oSerieData.Samples[iSample].SampleValue;
+                                            sSerieStats.MinX = oSerieData.Samples[iSample].SampleTime;
+                                        }
+
+                                        if (oSerieData.Samples[iSample].SampleValue > sSerieStats.Max)
+                                        {
+                                            sSerieStats.Max = oSerieData.Samples[iSample].SampleValue;
+                                            sSerieStats.MaxX = oSerieData.Samples[iSample].SampleTime;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        sSerieStats.Min = oSerieData.Samples[iSample].SampleValue;
+                                        sSerieStats.Max = oSerieData.Samples[iSample].SampleValue;
+
+                                        sSerieStats.MinX = oSerieData.Samples[iSample].SampleTime;
+                                        sSerieStats.MaxX = oSerieData.Samples[iSample].SampleTime;
+                                    }
+
+                                    //Avg & AvgAbs
+                                    sSerieStats.Avg += oSerieData.Samples[iSample].SampleValue;
+                                    sSerieStats.AvgAbs += Math.Abs(oSerieData.Samples[iSample].SampleValue);
+
+                                    //Sample count
+                                    sSerieStats.SampleCount++;
+
+                                    //Final Avg & AvgAbs computation
+                                    sSerieStats.Avg /= sSerieStats.SampleCount;
+                                    sSerieStats.AvgAbs /= sSerieStats.SampleCount;
+                                }
+
+                                //StdDev computation
+                                double SumSquare = 0;
+
+                                for (int iSample = iSampleX1; iSample < iSampleX2; iSample++)
+                                {
+                                    SumSquare += Math.Pow((sSerieStats.Avg - oSerieData.Samples[iSample].SampleValue), 2);
+                                }
+
+                                sSerieStats.StdDev = Math.Sqrt(SumSquare / sSerieStats.SampleCount);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < oAbcsisseChannel.Values.Count; i++)
+                            {
+                                if (oAbcsisseChannel.Values[i] >= X1 && oAbcsisseChannel.Values[i] <= X2)
+                                {
+                                    //Min & max
+                                    if (!(sSerieStats.SampleCount == 0))
+                                    {
+                                        if (oSerieData.Values[i] < sSerieStats.Min)
+                                        {
+                                            sSerieStats.Min = oSerieData.Values[i];
+                                            sSerieStats.MinX = oAbcsisseChannel.Values[i];
+                                        }
+
+                                        if (oSerieData.Values[i] > sSerieStats.Max)
+                                        {
+                                            sSerieStats.Max = oSerieData.Values[i];
+                                            sSerieStats.MaxX = oAbcsisseChannel.Values[i];
+                                        }
+                                    }
+                                    else
+                                    {
+                                        sSerieStats.Min = oSerieData.Values[i];
+                                        sSerieStats.Max = oSerieData.Values[i];
+
+                                        sSerieStats.MinX = oAbcsisseChannel.Values[i];
+                                        sSerieStats.MaxX = oAbcsisseChannel.Values[i];
+                                    }
+
+                                    //Avg & AvgAbs
+                                    sSerieStats.Avg += oSerieData.Values[i];
+                                    sSerieStats.AvgAbs += Math.Abs(oSerieData.Values[i]);
+
+                                    //Sample count
+                                    sSerieStats.SampleCount++;
+                                }
+                            }
+
+                            //Final Avg & AvgAbs computation
+                            sSerieStats.Avg /= sSerieStats.SampleCount;
+                            sSerieStats.AvgAbs /= sSerieStats.SampleCount;
+
+                            //StdDev computation
+                            double SumSquare = 0;
+
+                            for (int i = 0; i < oAbcsisseChannel.Values.Count; i++)
+                            {
+                                if (oAbcsisseChannel.Values[i] >= X1 && oAbcsisseChannel.Values[i] <= X2)
+                                {
+                                    SumSquare += Math.Pow((sSerieStats.Avg - oSerieData.Values[i]), 2);
+                                }
+                            }
+
+                            sSerieStats.StdDev = Math.Sqrt(SumSquare / sSerieStats.SampleCount);
+                        }
         				
         				//Add serie statitics into the list
         				Stats.Add(sSerieStats);
