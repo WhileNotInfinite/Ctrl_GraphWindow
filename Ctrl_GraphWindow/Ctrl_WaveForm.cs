@@ -2507,7 +2507,14 @@ namespace Ctrl_GraphWindow
                 //Update reference cursor X position
                 if (!(PtRefCursorPos.IsEmpty))
                 {
-                	PtRefCursorPos.X = (int)(RefCursorCoordinates.Abs * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
+                    if (Properties.ReferenceCursor.Mode == GraphicCursorMode.VerticalLine)
+                    {
+                        PtRefCursorPos.X = (int)(RefCursorCoordinates.Abs * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
+                    }
+                    else
+                    {
+                        PtRefCursorPos.X = 0;
+                    }
                 }
             }
 
@@ -4371,48 +4378,82 @@ namespace Ctrl_GraphWindow
         	{
         		RefCursorCoordinates = new Ctrl_WaveForm.GraphicCoordinates();
         		
-        		
         		if (!(Properties.ReferenceCursor.Mode.Equals(GraphicCursorMode.HorizontalLine)))
         		{
         			//Abscisse value
         			RefCursorCoordinates.Abs = Get_AbscisseValueAtPostion(PtRefCursorPos.X);
-        			
-        			//Ordinate values
-        			int iSample = DataFile.Get_SampleIndexAtTime(RefCursorCoordinates.Abs);
-        			
-        			if (!(iSample == -1))
-        			{
-        				List<SerieValueAtPoint> TmpOrds = new List<Ctrl_WaveForm.SerieValueAtPoint>();
-        				
-        				foreach (GraphSerieProperties oSerieProp in Properties.SeriesProperties)
-        				{
-        					if (oSerieProp.Visible && (oSerieProp.Trace.Visible || oSerieProp.Markers.Visible))
-        					{
-        						GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProp.Name);
-        						
-        						if (!(oSerieData == null))
-        						{
-        							SerieValueAtPoint Ord = new Ctrl_WaveForm.SerieValueAtPoint();
-        							
-        							Ord.SerieColor = oSerieProp.Trace.LineColor;
-        							Ord.SerieKeyId = oSerieProp.KeyId;
-        							Ord.SerieName = oSerieProp.Name;
-        							Ord.SerieDblValue = oSerieData.Values[iSample];
-        							
-        							TmpOrds.Add(Ord);
-        						}
-        					}
-        				}
-        				
-        				if (TmpOrds.Count > 0)
-        				{
-        					RefCursorCoordinates.Ords = TmpOrds.ToArray();
-        				}
-        				else
-        				{
-        					RefCursorCoordinates.Ords = null;
-        				}
-        			}
+
+                    //Ordinate values
+                    List<SerieValueAtPoint> TmpOrds = new List<Ctrl_WaveForm.SerieValueAtPoint>();
+
+                    switch (DataFile.DataSamplingMode)
+                    {
+                        case SamplingMode.SingleRate:
+
+                            {
+                                int iSample = DataFile.Get_SampleIndexAtTime(RefCursorCoordinates.Abs);
+
+                                if (!(iSample == -1))
+                                {
+                                    foreach (GraphSerieProperties oSerieProp in Properties.SeriesProperties)
+                                    {
+                                        if (oSerieProp.Visible && (oSerieProp.Trace.Visible || oSerieProp.Markers.Visible))
+                                        {
+                                            GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProp.Name);
+
+                                            if (!(oSerieData == null))
+                                            {
+                                                SerieValueAtPoint Ord = new Ctrl_WaveForm.SerieValueAtPoint();
+
+                                                Ord.SerieColor = oSerieProp.Trace.LineColor;
+                                                Ord.SerieKeyId = oSerieProp.KeyId;
+                                                Ord.SerieName = oSerieProp.Name;
+                                                Ord.SerieDblValue = oSerieData.Values[iSample];
+
+                                                TmpOrds.Add(Ord);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            break;
+
+                        case SamplingMode.MultipleRates:
+
+                            {
+                                foreach (GraphSerieProperties oSerieProp in Properties.SeriesProperties)
+                                {
+                                    if (oSerieProp.Visible && (oSerieProp.Trace.Visible || oSerieProp.Markers.Visible))
+                                    {
+                                        double SerieValue = DataFile.Get_ChannelValueAtTime(oSerieProp.Name, RefCursorCoordinates.Abs);
+
+                                        if(!(double.IsNaN(SerieValue)))
+                                        {
+                                            SerieValueAtPoint Ord = new Ctrl_WaveForm.SerieValueAtPoint();
+
+                                            Ord.SerieColor = oSerieProp.Trace.LineColor;
+                                            Ord.SerieKeyId = oSerieProp.KeyId;
+                                            Ord.SerieName = oSerieProp.Name;
+                                            Ord.SerieDblValue = SerieValue;
+
+                                            TmpOrds.Add(Ord);
+                                        }
+                                    }
+                                }
+                            }
+
+                            break;
+                    }
+
+                    if (TmpOrds.Count > 0)
+                    {
+                        RefCursorCoordinates.Ords = TmpOrds.ToArray();
+                    }
+                    else
+                    {
+                        RefCursorCoordinates.Ords = null;
+                    }
         		}
         		else
         		{
