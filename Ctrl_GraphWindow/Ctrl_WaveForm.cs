@@ -5522,8 +5522,45 @@ namespace Ctrl_GraphWindow
                 }
             }
         }
-        
+
         private void UpDate_LegendValues(double AbscisseValue)
+        {
+            switch(DataFile.DataSamplingMode)
+            {
+                case SamplingMode.SingleRate:
+
+                    UpDate_LegendValues_SingleRateSampling(AbscisseValue);
+                    break;
+
+                case SamplingMode.MultipleRates:
+
+                    UpDate_LegendValues_MultipleRatesSampling(AbscisseValue);
+                    break;
+            }
+        }
+
+        private void UpDate_LegendValues_MultipleRatesSampling(double AbscisseValue)
+        {
+            for (int iLegendItem = 0; iLegendItem < LV_Legend.Items.Count; iLegendItem++)
+            {
+                ListViewItem LvIt = LV_Legend.Items[iLegendItem];
+                GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey((int)LvIt.Tag);
+
+                if (!(oSerieProp == null))
+                {
+                    double SerieValue = DataFile.Get_ChannelValueAtTime(oSerieProp.Name, AbscisseValue);
+
+                    if (!(double.IsNaN(SerieValue)))
+                    {
+                        Set_LegendItemValues(LvIt, SerieValue, AbscisseValue, oSerieProp);
+                    }
+                }
+            }
+
+            LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
+
+        private void UpDate_LegendValues_SingleRateSampling(double AbscisseValue)
         {
         	int TimeSampleIndex = DataFile.Get_SampleIndexAtTime(AbscisseValue);
         	
@@ -5540,82 +5577,7 @@ namespace Ctrl_GraphWindow
         				
         				if (!(SerieValue == double.NaN))
         				{
-        					//Main cursor value
-        					if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-        					{
-        						LvIt.SubItems[LegendColIds.CurrentValueColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(SerieValue);
-        					}
-        					
-        					//Reference cursor values
-        					if (!(RefCursorCoordinates == null))
-        					{
-        						SerieValueAtPoint RefCursorOrd = new Ctrl_WaveForm.SerieValueAtPoint();
-        						
-        						if (RefCursorCoordinates.Get_OrdinateValue(oSerieProp.KeyId, out RefCursorOrd))
-        						{
-	        						if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
-	        						{
-	        							if (LvIt.SubItems.Count <= LegendColIds.RefCursorValueColumn)
-	        							{
-	        								LvIt.SubItems.Add(oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue));
-	        							}
-	        							else
-	        							{
-	        								LvIt.SubItems[LegendColIds.RefCursorValueColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue);
-	        							}
-	        						}
-	        						
-	        						if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
-	        						{
-	        							double Diff = RefCursorOrd.SerieDblValue - SerieValue;
-	        							
-	        							if (LvIt.SubItems.Count <= LegendColIds.RefCursorDiffColumn)
-	        							{
-	        								LvIt.SubItems.Add(oSerieProp.ValueFormat.Get_ValueFormatted(Diff));
-	        							}
-	        							else
-	        							{
-	        								LvIt.SubItems[LegendColIds.RefCursorDiffColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(Diff);
-	        							}
-	        						}
-	        						
-	        						if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
-	        						{
-	        							double DiffPerc = Math.Round(((RefCursorOrd.SerieDblValue - SerieValue) * 100 ) / RefCursorOrd.SerieDblValue, 2);
-	        							
-	        							if (LvIt.SubItems.Count <= LegendColIds.RefCursorDiffPercColumn)
-	        							{
-	        								LvIt.SubItems.Add(DiffPerc.ToString());
-	        							}
-	        							else
-	        							{
-	        								LvIt.SubItems[LegendColIds.RefCursorDiffPercColumn].Text = DiffPerc.ToString();
-	        							}
-	        						}
-	        						
-	        						if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
-	        						{
-	        							if (!(RefCursorCoordinates.Abs.Equals(double.NaN)))
-	        							{
-	        								double Grad = double.NaN;
-	        								
-	        								if (!((RefCursorCoordinates.Abs - AbscisseValue) == 0))
-	        								{
-	        									Grad = Math.Round((RefCursorOrd.SerieDblValue - SerieValue) / (RefCursorCoordinates.Abs - AbscisseValue), 3);
-	        								}
-	        								
-	        								if (LvIt.SubItems.Count <= LegendColIds.RefCursorGradientColumn)
-	        								{
-	        									LvIt.SubItems.Add(Grad.ToString());
-	        								}
-	        								else
-	        								{
-	        									LvIt.SubItems[LegendColIds.RefCursorGradientColumn].Text = Grad.ToString();
-	        								}
-	        							}
-	        						}
-        						}
-        					} //
+                            Set_LegendItemValues(LvIt, SerieValue, AbscisseValue, oSerieProp);
         				}
         			}
         		}
@@ -5624,6 +5586,86 @@ namespace Ctrl_GraphWindow
         	}
         }
         
+        private void Set_LegendItemValues(ListViewItem LegendItem, double ItemValue, double AbscisseValue, GraphSerieProperties oSerieProp)
+        {
+            //Main cursor value
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
+            {
+                LegendItem.SubItems[LegendColIds.CurrentValueColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(ItemValue);
+            }
+
+            //Reference cursor values
+            if (!(RefCursorCoordinates == null))
+            {
+                SerieValueAtPoint RefCursorOrd = new Ctrl_WaveForm.SerieValueAtPoint();
+
+                if (RefCursorCoordinates.Get_OrdinateValue(oSerieProp.KeyId, out RefCursorOrd))
+                {
+                    if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
+                    {
+                        if (LegendItem.SubItems.Count <= LegendColIds.RefCursorValueColumn)
+                        {
+                            LegendItem.SubItems.Add(oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue));
+                        }
+                        else
+                        {
+                            LegendItem.SubItems[LegendColIds.RefCursorValueColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue);
+                        }
+
+                        if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
+                        {
+                            double Diff = RefCursorOrd.SerieDblValue - ItemValue;
+
+                            if (LegendItem.SubItems.Count <= LegendColIds.RefCursorDiffColumn)
+                            {
+                                LegendItem.SubItems.Add(oSerieProp.ValueFormat.Get_ValueFormatted(Diff));
+                            }
+                            else
+                            {
+                                LegendItem.SubItems[LegendColIds.RefCursorDiffColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(Diff);
+                            }
+                        }
+
+                        if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
+                        {
+                            double DiffPerc = Math.Round(((RefCursorOrd.SerieDblValue - ItemValue) * 100) / RefCursorOrd.SerieDblValue, 2);
+
+                            if (LegendItem.SubItems.Count <= LegendColIds.RefCursorDiffPercColumn)
+                            {
+                                LegendItem.SubItems.Add(DiffPerc.ToString());
+                            }
+                            else
+                            {
+                                LegendItem.SubItems[LegendColIds.RefCursorDiffPercColumn].Text = DiffPerc.ToString();
+                            }
+                        }
+
+                        if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
+                        {
+                            if (!(RefCursorCoordinates.Abs.Equals(double.NaN)))
+                            {
+                                double Grad = double.NaN;
+
+                                if (!((RefCursorCoordinates.Abs - AbscisseValue) == 0))
+                                {
+                                    Grad = Math.Round((RefCursorOrd.SerieDblValue - ItemValue) / (RefCursorCoordinates.Abs - AbscisseValue), 3);
+                                }
+
+                                if (LegendItem.SubItems.Count <= LegendColIds.RefCursorGradientColumn)
+                                {
+                                    LegendItem.SubItems.Add(Grad.ToString());
+                                }
+                                else
+                                {
+                                    LegendItem.SubItems[LegendColIds.RefCursorGradientColumn].Text = Grad.ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private void UpDate_LegendValues_XY(GraphicCoordinates LegendValue)
         {
         	if (!(LegendValue == null))

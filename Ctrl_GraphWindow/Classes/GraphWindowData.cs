@@ -567,29 +567,33 @@ namespace Ctrl_GraphWindow
         /// </summary>
         /// <param name="TimeVal">Time value to search</param>
         /// <returns>Index of the time sample corresponding to the time value given as argument</returns>
-        /// <remarks>Return -1 if the time value is not found</remarks>
+        /// <remarks>Return -1 if the time value is not found
+        /// Works only for single sampling rate data file</remarks>
         public int Get_SampleIndexAtTime(double TimeVal)
         {
-        	for (int iSample = 0; iSample < Time.Values.Count; iSample++)
-        	{
-        		if (Time.Values[iSample] > TimeVal)
-        		{
-        			if (!(iSample == 0))
-        			{
-        				return(iSample - 1);
-        			}
-        			else
-        			{
-        				return(-1);
-        			}
-        		}
-        	}
-        	
+            if (DataSamplingMode == SamplingMode.SingleRate)
+            {
+                for (int iSample = 0; iSample < Time.Values.Count; iSample++)
+                {
+                    if (Time.Values[iSample] > TimeVal)
+                    {
+                        if (!(iSample == 0))
+                        {
+                            return (iSample - 1);
+                        }
+                        else
+                        {
+                            return (-1);
+                        }
+                    }
+                }
+            }
+
         	return(-1);
         }
-        
+
         /// <summary>
-        /// Return the sample value at the index given as argument of the channel given as argument
+        /// Return the sample value of the channel given as argument at the sample index given as argument
         /// </summary>
         /// <param name="ChannelName">Name of the channel to search</param>
         /// <param name="SampleIndex">Index of sample</param>
@@ -598,16 +602,82 @@ namespace Ctrl_GraphWindow
         public double Get_ChannelValueAtIndex(string ChannelName, int SampleIndex)
         {
         	GW_DataChannel oChan = Get_DataChannel(ChannelName);
-        	
-        	if (!(oChan == null))
-        	{
-        		if (SampleIndex >= 0 && SampleIndex < oChan.Values.Count)
-        		{
-        			return(oChan.Values[SampleIndex]);
-        		}
+
+            if (!(oChan == null))
+            {
+                switch (DataSamplingMode)
+                {
+                    case SamplingMode.SingleRate:
+
+                        if (SampleIndex >= 0 && SampleIndex < oChan.Values.Count)
+                        {
+                            return (oChan.Values[SampleIndex]);
+                        }
+
+                        break;
+
+                    case SamplingMode.MultipleRates:
+
+                        if(SampleIndex>=0 && SampleIndex < oChan.Samples.Count)
+                        {
+                            return (oChan.Samples[SampleIndex].SampleValue);
+                        }
+
+                        break;
+                }
         	}
         	
         	return(double.NaN);
+        }
+
+        /// <summary>
+        /// Return the sample value of the channel given as argument at the time value given as argument 
+        /// </summary>
+        /// <param name="ChannelName">Name of the channel to search</param>
+        /// <param name="TimeValue">Time value to search</param>
+        /// <returns>Channel value at the time</returns>
+        /// <remarks>Return NaN if the channel is not found or if the time value doesn't exist</remarks>
+        public double Get_ChannelValueAtTime(string ChannelName, double TimeValue)
+        {
+            GW_DataChannel oChan = Get_DataChannel(ChannelName);
+
+            if (!(oChan == null))
+            {
+                switch(DataSamplingMode)
+                {
+                    case SamplingMode.SingleRate:
+
+                        {
+                            int TimeIndex = Get_SampleIndexAtTime(TimeValue);
+
+                            if (TimeIndex >= 0 && TimeIndex < oChan.Values.Count)
+                            {
+                                return (oChan.Values[TimeIndex]);
+                            }
+                        }
+
+                        break;
+
+                    case SamplingMode.MultipleRates:
+
+                        {
+                            for (int iTime=0; iTime<oChan.Samples.Count; iTime++)
+                            {
+                                if (oChan.Samples[iTime].SampleTime > TimeValue)
+                                {
+                                    if (!(iTime==0))
+                                    {
+                                        return (oChan.Samples[iTime - 1].SampleValue);
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                }
+            }
+
+            return (double.NaN);
         }
 
         #endregion
