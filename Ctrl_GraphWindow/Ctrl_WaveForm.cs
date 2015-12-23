@@ -2375,6 +2375,11 @@ namespace Ctrl_GraphWindow
         
         private void Init_GraphWindow()
         {
+            if (Pic_GraphFrame.Width == 0 || Pic_GraphFrame.Height == 0)
+            {
+                return;
+            }
+
             this.SuspendLayout();
             
             //Zoom cursor buttons
