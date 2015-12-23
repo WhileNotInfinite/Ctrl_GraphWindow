@@ -413,6 +413,7 @@ namespace Ctrl_GraphWindow
             set
             {
                 TSB_LoadData.Visible = value;
+                toolStripSeparator1.Visible = TSB_LoadData.Visible;
             }
         }
 
@@ -433,11 +434,11 @@ namespace Ctrl_GraphWindow
 
                 TSB_GraphProperties.Visible = value;
                 TSDdB_GraphLayoutMode.Visible = value;
-                toolStripSeparator2.Visible = value;
+                toolStripSeparator5.Visible = bEditGraphicConfigurationEnable && (TSB_LoadData.Visible || bChannelListEnabled || bLegendEnabled);
 
                 graphLayoutToolStripMenuItem.Visible = value;
                 propertiesToolStripMenuItem.Visible = value;
-                toolStripMenuItem7.Visible = value;
+                toolStripMenuItem1.Visible = bEditGraphicConfigurationEnable && (bZoomEnabled || bZoomEnabled);
             }
         }
 
@@ -459,11 +460,11 @@ namespace Ctrl_GraphWindow
                 TSDdB_MainGraphCursor.Visible = value;
                 TSDdB_CursorStep.Visible = value;
                 TSDB_RefCursor.Visible = value;
-                toolStripSeparator4.Visible = value;
+                toolStripSeparator2.Visible = bCursorEnabled && (TSB_LoadData.Visible || bChannelListEnabled || bLegendEnabled || bEditGraphicConfigurationEnable);
 
                 cursorToolStripMenuItem.Visible = value;
                 ReferenceCursorToolStripMenuItem.Visible = value;
-                toolStripMenuItem1.Visible = value;
+                toolStripSeparator3.Visible = bCursorEnabled && bZoomEnabled;
             }
         }
 
@@ -486,7 +487,7 @@ namespace Ctrl_GraphWindow
                 TSDdB_ZoomFactor.Visible = value;
                 TSB_ZoomPlus.Visible = value;
                 TSB_ZoomMinus.Visible = value;
-                toolStripSeparator6.Visible = value;
+                toolStripSeparator4.Visible = bZoomEnabled && (TSB_LoadData.Visible || bChannelListEnabled || bLegendEnabled|| bEditGraphicConfigurationEnable || bCursorEnabled);
 
                 ZoomPlustoolStripMenuItem.Visible = value;
                 ZoomMinustoolStripMenuItem.Visible = value;
@@ -494,7 +495,7 @@ namespace Ctrl_GraphWindow
                 ZoomMaxtoolStripMenuItem.Visible = value;
                 ZoomModetoolStripMenuItem.Visible = value;
                 ZoomFactortoolStripMenuItem.Visible = value;
-                toolStripSeparator3.Visible = value;
+                toolStripSeparator3.Visible = true;
             }
         }
 
@@ -515,7 +516,7 @@ namespace Ctrl_GraphWindow
 
                 splitContainer1.Panel1Collapsed = !value;
                 TSB_ShowHide_ChannelList.Visible = value;
-                toolStripSeparator5.Visible = ChannelListEnabled | bLegendEnabled;
+                toolStripSeparator1.Visible = TSB_LoadData.Visible && (ChannelListEnabled || bLegendEnabled);
             }
         }
 
@@ -524,6 +525,7 @@ namespace Ctrl_GraphWindow
         /// </summary>
         [Category("Behavior"), Browsable(true), Description("Determines whether graphic legend and its functions are enabled")]
         public bool LegendEnabled
+
         {
             get
             {
@@ -536,7 +538,7 @@ namespace Ctrl_GraphWindow
 
                 splitContainer2.Panel2Collapsed = !value;
                 TSB_ShowHide_Legend.Visible = value;
-                toolStripSeparator5.Visible = ChannelListEnabled | LegendEnabled;
+                toolStripSeparator1.Visible = TSB_LoadData.Visible && (ChannelListEnabled || bLegendEnabled);
             }
         }
 
@@ -556,7 +558,10 @@ namespace Ctrl_GraphWindow
                 bSnapShotEnabled = value;
 
                 TSB_Snapshot.Visible = value;
+                toolStripSeparator6.Visible = (bSnapShotEnabled || bPrintEnabled) && (TSB_LoadData.Visible || bChannelListEnabled || bLegendEnabled || bEditGraphicConfigurationEnable || bCursorEnabled || bZoomEnabled);
+
                 snapshotToolStripMenuItem.Visible = value;
+                toolStripMenuItem7.Visible = (bSnapShotEnabled || bPrintEnabled) && (bZoomEnabled || bCursorEnabled || bEditGraphicConfigurationEnable);
             }
         }
 
@@ -576,7 +581,10 @@ namespace Ctrl_GraphWindow
                 bPrintEnabled = value;
 
                 TSB_Print.Visible = value;
+                toolStripSeparator6.Visible = (bSnapShotEnabled || bPrintEnabled) && (TSB_LoadData.Visible || bChannelListEnabled || bLegendEnabled || bEditGraphicConfigurationEnable || bCursorEnabled || bZoomEnabled);
+
                 printToolStripMenuItem.Visible = value;
+                toolStripMenuItem7.Visible = (bSnapShotEnabled || bPrintEnabled) && (bZoomEnabled || bCursorEnabled || bEditGraphicConfigurationEnable);
             }
         }
 
