@@ -588,6 +588,23 @@ namespace Ctrl_GraphWindow
             }
         }
 
+        /// <summary>
+        /// Keyboard shortcuts enabled properties
+        /// </summary>
+        [Category("Behavior"), Browsable(true), Description("Determines whether keyboard shortcuts are enabled")]
+        public bool ShortcutKeysEnabled
+        {
+            get
+            {
+                return (bShortcutKeysEnabled);
+            }
+
+            set
+            {
+                bShortcutKeysEnabled = value;
+            }
+        }
+
         #endregion
 
         #region Private members
@@ -649,7 +666,7 @@ namespace Ctrl_GraphWindow
         private bool bLegendEnabled;
         private bool bSnapShotEnabled;
         private bool bPrintEnabled;
-        
+        private bool bShortcutKeysEnabled;
         #endregion
         
 #if DEBUG
@@ -732,7 +749,8 @@ namespace Ctrl_GraphWindow
             bLegendEnabled =  true;
             bSnapShotEnabled =  true;
             bPrintEnabled =  true;
-            
+            bShortcutKeysEnabled = true;
+
             //Toolbar ShortCut keys
             TSDdB_zoomXToolStripMenuItem.ShortcutKeyDisplayString = "[X]";
             TSDdB_zoomYToolStripMenuItem.ShortcutKeyDisplayString = "[Y]";
@@ -1352,7 +1370,7 @@ namespace Ctrl_GraphWindow
         
         private void Pic_GraphicPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
 		{
-        	if (bDataPlotted)
+        	if (bDataPlotted && bShortcutKeysEnabled)
         	{
         		switch (e.KeyCode)
         		{
