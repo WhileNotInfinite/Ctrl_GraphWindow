@@ -7473,6 +7473,19 @@ namespace Ctrl_GraphWindow
         	}
         }
         
+        /// <summary>
+        /// Draw the main cursor at abscisse value given as argument
+        /// </summary>
+        /// <param name="AbscisseValue">Abscisse value to draw the cursor at</param>
+        public void Set_MainCursorAtAbscisse(double AbscisseValue)
+        {
+            if(bDataPlotted)
+            {
+                int PtX = (int)(AbscisseValue * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
+                Draw_Cursor(new Point(PtX, 0));
+            }
+        }
+
         #endregion
         
         #endregion
