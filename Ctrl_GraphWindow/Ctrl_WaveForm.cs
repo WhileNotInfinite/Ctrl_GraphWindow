@@ -607,6 +607,27 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Main curor abscisse value
+        /// </summary>
+        /// <remarks>Is NaN when cursor is not visible</remarks>
+        public double MainCursorAbscisse
+        {
+            get
+            {
+                return (mMainCursorAbscisse);
+            }
+
+            private set
+            {
+
+            }
+        }
+
+        #endregion
+
         #region Private members
 
         private bool bDataPlotted;
@@ -668,7 +689,13 @@ namespace Ctrl_GraphWindow
         private bool bPrintEnabled;
         private bool bShortcutKeysEnabled;
         #endregion
-        
+
+        #region Control feedback to host application members
+
+        private double mMainCursorAbscisse;
+
+        #endregion
+
 #if DEBUG
 
         private int GraphPlotCount;
@@ -750,6 +777,9 @@ namespace Ctrl_GraphWindow
             bSnapShotEnabled =  true;
             bPrintEnabled =  true;
             bShortcutKeysEnabled = true;
+
+            //Control feedback to host application members init
+            mMainCursorAbscisse = double.NaN;
 
             //Toolbar ShortCut keys
             TSDdB_zoomXToolStripMenuItem.ShortcutKeyDisplayString = "[X]";
@@ -2381,7 +2411,10 @@ namespace Ctrl_GraphWindow
             }
 
             this.SuspendLayout();
-            
+
+            //Control feedback to host application members init
+            mMainCursorAbscisse = double.NaN;
+
             //Zoom cursor buttons
             Cmd_ZoomXPosition.BackColor = Color.FromArgb(Properties.WindowBackColor.ToArgb() ^ 0xffffff); //Background color inversion
             Cmd_ZoomXPosition.FlatAppearance.MouseDownBackColor = Cmd_ZoomXPosition.BackColor;
@@ -4090,8 +4123,9 @@ namespace Ctrl_GraphWindow
 	        		case GraphicCursorObject.CursorMain:
 	        			
 	        			oCursor = Properties.Cursor;
-	        			
-	        			if (!(PtRefCursorPos.IsEmpty))
+                        mMainCursorAbscisse = double.NaN;
+
+                        if (!(PtRefCursorPos.IsEmpty))
 	        			{
 	        				Draw_Cursor(PtRefCursorPos,Properties.ReferenceCursor);
 	        			}
@@ -4126,7 +4160,8 @@ namespace Ctrl_GraphWindow
     			int CursorX = MouseLocation.X;
     			int CursorY = MouseLocation.Y;
     			GraphicCoordinates CursorCoord = GetPointGraphCoordinates(MouseLocation);
-        		
+                if (CurrentGraphCursor == GraphicCursorObject.CursorMain) mMainCursorAbscisse = CursorCoord.Abs;
+
         		Graphics g = null;
         		
         		if (GraphicsTarget == null) //Cursor drawing in the graphic picture box
