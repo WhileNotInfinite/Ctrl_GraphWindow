@@ -380,6 +380,17 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Public events
+
+        /// <summary>
+        /// PreviewKeyDown event to be handled by host application
+        /// </summary>
+        /// <remarks>Fired on PreviewKeyDown internal event of the control</remarks>
+        [Category("Key"), Browsable(true), Description("Occurs when a key is pressed while the focus is on this control")]
+        public event EventHandler<PreviewKeyDownEventArgs> ControlPreviewKeyDown;
+
+        #endregion
+
         #region Public control designer properties
 
         /// <summary>
@@ -1620,7 +1631,9 @@ namespace Ctrl_GraphWindow
         				break;
         		}
         	}
-		}
+
+            OnControlPreviewKeyDown(e);
+        }
         
         private void Pic_GraphicDragEnter(object sender, DragEventArgs e)
 		{
@@ -7383,15 +7396,34 @@ namespace Ctrl_GraphWindow
         		return(null);
         	}
         }
-        
+
         #endregion
 
         #endregion
+
+        #region Events handling methods
         
+        /// <summary>
+        /// UserControlKey down event firing method
+        /// </summary>
+        /// <param name="e">Key data</param>
+        protected virtual void OnControlPreviewKeyDown(PreviewKeyDownEventArgs e)
+        {
+            EventHandler<PreviewKeyDownEventArgs> Handler = ControlPreviewKeyDown;
+
+            if(Handler != null)
+            {
+                Handler(this, e);
+            }
+
+        }
+
+        #endregion
+
         #region Public methodes
-		
+
         #region Graphic methodes
-        
+
         /// <summary>
         /// Refresh the graphic window
         /// </summary>
