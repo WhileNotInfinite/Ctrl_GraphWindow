@@ -144,7 +144,10 @@ namespace Ctrl_GraphWindow
             
             Cmb_CursorOrdValLocation.Items.Clear();
             Cmb_CursorOrdValLocation.Items.AddRange(Enum.GetNames(typeof(ScreenPositions)));
-            
+
+            Cmb_CursorTitleLocation.Items.Clear();
+            Cmb_CursorTitleLocation.Items.AddRange(Enum.GetNames(typeof(ScreenPositions)));
+
             string[] RefCursorModes = {
             							GraphicCursorMode.None.ToString(),
             							GraphicCursorMode.VerticalLine.ToString(),
@@ -1092,8 +1095,20 @@ namespace Ctrl_GraphWindow
         				Txt_CursorValFontSize.Enabled = false;
                         Lbl_CursorValueForecolor.Enabled = false;
                         Pic_CursorValueForecolor.Enabled = false;
-        				
-        				break;
+
+                        Lbl_CursorTitle.Enabled = false;
+                        Txt_CursorTitle.Enabled = false;
+                        Lbl_CursorTitleFont.Enabled = false;
+                        Txt_CursorTitleFont.Enabled = false;
+                        Cmd_CursorTitleFont.Enabled = false;
+                        Lbl_CursorTitleFontSize.Enabled = false;
+                        Txt_CursorTitleFontSize.Enabled = false;
+                        Lbl_CursorTitleForecolor.Enabled = false;
+                        Pic_CursorTitleForecolor.Enabled = false;
+                        Lbl_CursorTitleLocation.Enabled = false;
+                        Cmb_CursorTitleLocation.Enabled = false;
+
+                        break;
         				
         			case GraphicCursorMode.Cross:
         				
@@ -1135,8 +1150,20 @@ namespace Ctrl_GraphWindow
                             Lbl_CursorValueForecolor.Enabled = false;
                             Pic_CursorValueForecolor.Enabled = false;
                         }
-        				
-        				break;
+
+                        Lbl_CursorTitle.Enabled = true;
+                        Txt_CursorTitle.Enabled = true;
+                        Lbl_CursorTitleFont.Enabled = true;
+                        Txt_CursorTitleFont.Enabled = true;
+                        Cmd_CursorTitleFont.Enabled = true;
+                        Lbl_CursorTitleFontSize.Enabled = true;
+                        Txt_CursorTitleFontSize.Enabled = true;
+                        Lbl_CursorTitleForecolor.Enabled = true;
+                        Pic_CursorTitleForecolor.Enabled = true;
+                        Lbl_CursorTitleLocation.Enabled = true;
+                        Cmb_CursorTitleLocation.Enabled = true;
+
+                        break;
         				
         			case GraphicCursorMode.Graticule:
         				
@@ -1165,6 +1192,18 @@ namespace Ctrl_GraphWindow
         				Txt_CursorValFontSize.Enabled = false;
                         Lbl_CursorValueForecolor.Enabled = false;
                         Pic_CursorValueForecolor.Enabled = false;
+
+                        Lbl_CursorTitle.Enabled = false;
+                        Txt_CursorTitle.Enabled = false;
+                        Lbl_CursorTitleFont.Enabled = false;
+                        Txt_CursorTitleFont.Enabled = false;
+                        Cmd_CursorTitleFont.Enabled = false;
+                        Lbl_CursorTitleFontSize.Enabled = false;
+                        Txt_CursorTitleFontSize.Enabled = false;
+                        Lbl_CursorTitleForecolor.Enabled = false;
+                        Pic_CursorTitleForecolor.Enabled = false;
+                        Lbl_CursorTitleLocation.Enabled = false;
+                        Cmb_CursorTitleLocation.Enabled = false;
 
                         break;
         				
@@ -1208,8 +1247,20 @@ namespace Ctrl_GraphWindow
                             Lbl_CursorValueForecolor.Enabled = false;
                             Pic_CursorValueForecolor.Enabled = false;
                         }
-        				
-        				break;
+
+                        Lbl_CursorTitle.Enabled = true;
+                        Txt_CursorTitle.Enabled = true;
+                        Lbl_CursorTitleFont.Enabled = true;
+                        Txt_CursorTitleFont.Enabled = true;
+                        Cmd_CursorTitleFont.Enabled = true;
+                        Lbl_CursorTitleFontSize.Enabled = true;
+                        Txt_CursorTitleFontSize.Enabled = true;
+                        Lbl_CursorTitleForecolor.Enabled = true;
+                        Pic_CursorTitleForecolor.Enabled = true;
+                        Lbl_CursorTitleLocation.Enabled = true;
+                        Cmb_CursorTitleLocation.Enabled = true;
+
+                        break;
         				
         			case GraphicCursorMode.None:
         				
@@ -1238,6 +1289,18 @@ namespace Ctrl_GraphWindow
         				Txt_CursorValFontSize.Enabled = false;
                         Lbl_CursorValueForecolor.Enabled = false;
                         Pic_CursorValueForecolor.Enabled = false;
+
+                        Lbl_CursorTitle.Enabled = false;
+                        Txt_CursorTitle.Enabled = false;
+                        Lbl_CursorTitleFont.Enabled = false;
+                        Txt_CursorTitleFont.Enabled = false;
+                        Cmd_CursorTitleFont.Enabled = false;
+                        Lbl_CursorTitleFontSize.Enabled = false;
+                        Txt_CursorTitleFontSize.Enabled = false;
+                        Lbl_CursorTitleForecolor.Enabled = false;
+                        Pic_CursorTitleForecolor.Enabled = false;
+                        Lbl_CursorTitleLocation.Enabled = false;
+                        Cmb_CursorTitleLocation.Enabled = false;
 
                         break;
         				
@@ -1268,6 +1331,18 @@ namespace Ctrl_GraphWindow
         				Txt_CursorValFontSize.Enabled = false;
                         Lbl_CursorValueForecolor.Enabled = false;
                         Pic_CursorValueForecolor.Enabled = false;
+
+                        Lbl_CursorTitle.Enabled = false;
+                        Txt_CursorTitle.Enabled = false;
+                        Lbl_CursorTitleFont.Enabled = false;
+                        Txt_CursorTitleFont.Enabled = false;
+                        Cmd_CursorTitleFont.Enabled = false;
+                        Lbl_CursorTitleFontSize.Enabled = false;
+                        Txt_CursorTitleFontSize.Enabled = false;
+                        Lbl_CursorTitleForecolor.Enabled = false;
+                        Pic_CursorTitleForecolor.Enabled = false;
+                        Lbl_CursorTitleLocation.Enabled = false;
+                        Cmb_CursorTitleLocation.Enabled = false;
 
                         break;
         				
@@ -1311,8 +1386,20 @@ namespace Ctrl_GraphWindow
                             Lbl_CursorValueForecolor.Enabled = false;
                             Pic_CursorValueForecolor.Enabled = false;
                         }
-        				
-        				break;
+
+                        Lbl_CursorTitle.Enabled = true;
+                        Txt_CursorTitle.Enabled = true;
+                        Lbl_CursorTitleFont.Enabled = true;
+                        Txt_CursorTitleFont.Enabled = true;
+                        Cmd_CursorTitleFont.Enabled = true;
+                        Lbl_CursorTitleFontSize.Enabled = true;
+                        Txt_CursorTitleFontSize.Enabled = true;
+                        Lbl_CursorTitleForecolor.Enabled = true;
+                        Pic_CursorTitleForecolor.Enabled = true;
+                        Lbl_CursorTitleLocation.Enabled = true;
+                        Cmb_CursorTitleLocation.Enabled = true;
+
+                        break;
         		}
         	}
         	else
@@ -1394,6 +1481,24 @@ namespace Ctrl_GraphWindow
             if (Dlg_Color.ShowDialog().Equals(DialogResult.OK))
             {
                 Pic_CursorValueForecolor.BackColor = Dlg_Color.Color;
+            }
+        }
+
+        private void Cmd_CursorTitleFont_Click(object sender, EventArgs e)
+        {
+            if (Dlg_Font.ShowDialog().Equals(DialogResult.OK))
+            {
+                Txt_CursorTitleFont.Text = Dlg_Font.Font.Name;
+                Txt_CursorTitleFont.Font = Dlg_Font.Font;
+                Txt_CursorTitleFontSize.Text = Dlg_Font.Font.Size.ToString();
+            }
+        }
+
+        private void Pic_CursorTitleForecolor_DoubleClick(object sender, EventArgs e)
+        {
+            if (Dlg_Color.ShowDialog().Equals(DialogResult.OK))
+            {
+                Pic_CursorTitleForecolor.BackColor = Dlg_Color.Color;
             }
         }
 
@@ -1726,7 +1831,14 @@ namespace Ctrl_GraphWindow
             {
                 Pic_CursorValueForecolor.BackColor = GraphProperties.Cursor.CursorValueForeColor;
             }
-            
+
+            Txt_CursorTitle.Text = GraphProperties.Cursor.CursorTitle;
+            Txt_CursorTitleFont.Font = GraphProperties.Cursor.CursorTitleFont.oFont;
+            Txt_CursorTitleFont.Text = GraphProperties.Cursor.CursorTitleFont.oFont.Name;
+            Txt_CursorTitleFontSize.Text = GraphProperties.Cursor.CursorTitleFont.oFont.Size.ToString();
+            Pic_CursorTitleForecolor.BackColor = GraphProperties.Cursor.CursorTitleForeColor;
+            Cmb_CursorTitleLocation.SelectedItem = GraphProperties.Cursor.CursorTitlePosition.ToString();
+
             //Reference cursor
             Cmb_RefCursorMode.SelectedItem = GraphProperties.ReferenceCursor.Mode.ToString();
             
@@ -2070,6 +2182,24 @@ namespace Ctrl_GraphWindow
                 {
                     TmpProp.Cursor.CursorValueForeColor = Pic_CursorValueForecolor.BackColor;
                 }
+
+                TmpProp.Cursor.CursorTitle = Txt_CursorTitle.Text;
+
+                TmpProp.Cursor.CursorTitleFont = new GW_Font(Txt_CursorTitleFont.Font.Name,
+                                                             Txt_CursorTitleFont.Font.Size,
+                                                             Txt_CursorTitleFont.Font.Bold,
+                                                             Txt_CursorTitleFont.Font.Italic,
+                                                             true,
+                                                             Txt_CursorTitleFont.Font.Strikeout,
+                                                             Txt_CursorTitleFont.Font.Underline);
+
+                TmpProp.Cursor.CursorTitleForeColor = Pic_CursorTitleForecolor.BackColor;
+
+                if (!(Enum.TryParse(Cmb_CursorTitleLocation.Text, out TmpProp.Cursor.CursorTitlePosition)))
+                {
+                    MessageBox.Show("Cursor title location is invalid !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return (false);
+                }
             }
             
             //Reference cursor
@@ -2250,6 +2380,11 @@ namespace Ctrl_GraphWindow
             	
             	GraphProperties.Cursor.CursorValueFont = TmpProp.Cursor.CursorValueFont.Get_Clone();
                 GraphProperties.Cursor.CursorValueForeColor = TmpProp.Cursor.CursorValueForeColor;
+
+                GraphProperties.Cursor.CursorTitle = TmpProp.Cursor.CursorTitle;
+                GraphProperties.Cursor.CursorTitleFont = TmpProp.Cursor.CursorTitleFont.Get_Clone();
+                GraphProperties.Cursor.CursorTitleForeColor = TmpProp.Cursor.CursorTitleForeColor;
+                GraphProperties.Cursor.CursorTitlePosition = TmpProp.Cursor.CursorTitlePosition;
             }
             
             //Reference cursor

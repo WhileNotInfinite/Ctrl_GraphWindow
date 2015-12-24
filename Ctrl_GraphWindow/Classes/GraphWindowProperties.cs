@@ -1822,7 +1822,27 @@ namespace Ctrl_GraphWindow
     	/// </summary>
     	/// <remarks>Used only for 'Graticule', 'Square' and 'Circle' modes</remarks>
     	public int CursorSize;
-    	
+
+        /// <summary>
+        /// Cursor title
+        /// </summary>
+        public string CursorTitle;
+
+        /// <summary>
+        /// Cursor title font
+        /// </summary>
+        public GW_Font CursorTitleFont;
+
+        /// <summary>
+        /// Cursor title forecolor
+        /// </summary>
+        public Color CursorTitleForeColor;
+
+        /// <summary>
+        /// Cursor title display postion
+        /// </summary>
+        public ScreenPositions CursorTitlePosition;
+
     	#endregion
     	
     	/// <summary>
@@ -1848,6 +1868,11 @@ namespace Ctrl_GraphWindow
             OrdinateValuesPosition = ScreenPositions.Right;
     		
     		CursorSize = 2;
+
+            CursorTitle = "";
+            CursorTitleFont = CursorValueFont.Get_Clone();
+            CursorTitleForeColor = Color.White;
+            CursorTitlePosition = ScreenPositions.Bottom;
     	}
     	
     	#region Public methodes
@@ -1869,6 +1894,10 @@ namespace Ctrl_GraphWindow
     		oClone.ShowCursorOrdinatesValue = ShowCursorOrdinatesValue;
     		oClone.OrdinateValuesPosition = OrdinateValuesPosition;
     		oClone.CursorSize = CursorSize;
+            oClone.CursorTitle = CursorTitle;
+            oClone.CursorTitleFont = CursorTitleFont.Get_Clone();
+            oClone.CursorTitleForeColor = CursorTitleForeColor;
+            oClone.CursorTitlePosition = CursorTitlePosition;
     		
     		return(oClone);
     	}
@@ -1917,8 +1946,23 @@ namespace Ctrl_GraphWindow
             	xProp = oXDoc.CreateElement("CursorSize");
             	xProp.InnerText = CursorSize.ToString();
             	xCursor.AppendChild(xProp);
-            	
-        	return(xCursor);
+
+                xProp = oXDoc.CreateElement("CursorTitle");
+                xProp.InnerText = CursorTitle;
+                xCursor.AppendChild(xProp);
+
+                xProp = CursorTitleFont.Create_FontXmlNode(oXDoc, "CursorTitleFont");
+                xCursor.AppendChild(xProp);
+
+                xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorTitleForecolor");
+                xProp.InnerText = CursorTitleForeColor.ToArgb().ToString();
+                xCursor.AppendChild(xProp);
+
+                xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorTitlePosition");
+                xProp.InnerText = CursorTitlePosition.ToString();
+                xCursor.AppendChild(xProp);
+
+            return (xCursor);
     	}
     	
     	/// <summary>
@@ -1974,8 +2018,24 @@ namespace Ctrl_GraphWindow
     			
     			xProp = xCursor.SelectSingleNode("CursorSize");
     			CursorSize = int.Parse(xProp.InnerText);
-    		}
-    		catch
+
+                xProp = xCursor.SelectSingleNode("CursorTitle");
+
+                if (!(xProp==null)) //New feature of release 2.0.0.0
+                {
+                    CursorTitle = xProp.InnerText;
+
+                    xProp = xCursor.SelectSingleNode("CursorTitleFont");
+                    CursorTitleFont.Read_FontXmlNode(xProp);
+
+                    xProp = xCursor.SelectSingleNode("CursorTitleForecolor");
+                    CursorTitleForeColor = Color.FromArgb(int.Parse(xProp.InnerText));
+
+                    xProp = xCursor.SelectSingleNode("CursorTitlePosition");
+                    CursorTitlePosition = (ScreenPositions)Enum.Parse(typeof(ScreenPositions), xProp.InnerText);
+                }
+            }
+            catch
     		{
     			return(false);
     		}

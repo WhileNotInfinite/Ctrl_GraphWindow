@@ -206,6 +206,17 @@
             this.Img_ContextChanList = new System.Windows.Forms.ImageList(this.components);
             this.Pic_CursorValueForecolor = new System.Windows.Forms.PictureBox();
             this.Lbl_CursorValueForecolor = new System.Windows.Forms.Label();
+            this.Pic_CursorTitleForecolor = new System.Windows.Forms.PictureBox();
+            this.Lbl_CursorTitleForecolor = new System.Windows.Forms.Label();
+            this.Cmd_CursorTitleFont = new System.Windows.Forms.Button();
+            this.Txt_CursorTitleFontSize = new System.Windows.Forms.TextBox();
+            this.Lbl_CursorTitleFontSize = new System.Windows.Forms.Label();
+            this.Txt_CursorTitleFont = new System.Windows.Forms.TextBox();
+            this.Lbl_CursorTitleFont = new System.Windows.Forms.Label();
+            this.Lbl_CursorTitle = new System.Windows.Forms.Label();
+            this.Txt_CursorTitle = new System.Windows.Forms.TextBox();
+            this.Cmb_CursorTitleLocation = new System.Windows.Forms.ComboBox();
+            this.Lbl_CursorTitleLocation = new System.Windows.Forms.Label();
             this.Ctrl_AbcisseRefLines = new Ctrl_GraphWindow.Ctrl_ReferenceLines();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -235,6 +246,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Pic_CursorLineColor)).BeginInit();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Pic_CursorValueForecolor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_CursorTitleForecolor)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -1410,7 +1422,7 @@
             this.groupBox6.Controls.Add(this.Lbl_RefCursorLineStyle);
             this.groupBox6.Controls.Add(this.Cmb_RefCursorMode);
             this.groupBox6.Controls.Add(this.Lbl_RefCursorMode);
-            this.groupBox6.Location = new System.Drawing.Point(5, 157);
+            this.groupBox6.Location = new System.Drawing.Point(5, 207);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(794, 148);
             this.groupBox6.TabIndex = 1;
@@ -1450,7 +1462,7 @@
             // 
             this.Cmd_RefCursorValFont.Enabled = false;
             this.Cmd_RefCursorValFont.Image = global::Ctrl_GraphWindow.Icones.font_icone_6304_16;
-            this.Cmd_RefCursorValFont.Location = new System.Drawing.Point(187, 102);
+            this.Cmd_RefCursorValFont.Location = new System.Drawing.Point(217, 104);
             this.Cmd_RefCursorValFont.Name = "Cmd_RefCursorValFont";
             this.Cmd_RefCursorValFont.Size = new System.Drawing.Size(23, 23);
             this.Cmd_RefCursorValFont.TabIndex = 26;
@@ -1460,7 +1472,7 @@
             // Txt_RefCursorValFontSize
             // 
             this.Txt_RefCursorValFontSize.Enabled = false;
-            this.Txt_RefCursorValFontSize.Location = new System.Drawing.Point(249, 104);
+            this.Txt_RefCursorValFontSize.Location = new System.Drawing.Point(282, 104);
             this.Txt_RefCursorValFontSize.Name = "Txt_RefCursorValFontSize";
             this.Txt_RefCursorValFontSize.ReadOnly = true;
             this.Txt_RefCursorValFontSize.Size = new System.Drawing.Size(44, 20);
@@ -1470,7 +1482,7 @@
             // 
             this.Lbl_RefCursorValFontSize.AutoSize = true;
             this.Lbl_RefCursorValFontSize.Enabled = false;
-            this.Lbl_RefCursorValFontSize.Location = new System.Drawing.Point(216, 107);
+            this.Lbl_RefCursorValFontSize.Location = new System.Drawing.Point(246, 107);
             this.Lbl_RefCursorValFontSize.Name = "Lbl_RefCursorValFontSize";
             this.Lbl_RefCursorValFontSize.Size = new System.Drawing.Size(27, 13);
             this.Lbl_RefCursorValFontSize.TabIndex = 24;
@@ -1479,7 +1491,7 @@
             // Txt_RefCursorValFont
             // 
             this.Txt_RefCursorValFont.Enabled = false;
-            this.Txt_RefCursorValFont.Location = new System.Drawing.Point(75, 104);
+            this.Txt_RefCursorValFont.Location = new System.Drawing.Point(105, 104);
             this.Txt_RefCursorValFont.Name = "Txt_RefCursorValFont";
             this.Txt_RefCursorValFont.ReadOnly = true;
             this.Txt_RefCursorValFont.Size = new System.Drawing.Size(106, 20);
@@ -1489,11 +1501,11 @@
             // 
             this.Lbl_RefCursorValFont.AutoSize = true;
             this.Lbl_RefCursorValFont.Enabled = false;
-            this.Lbl_RefCursorValFont.Location = new System.Drawing.Point(18, 107);
+            this.Lbl_RefCursorValFont.Location = new System.Drawing.Point(14, 107);
             this.Lbl_RefCursorValFont.Name = "Lbl_RefCursorValFont";
-            this.Lbl_RefCursorValFont.Size = new System.Drawing.Size(28, 13);
+            this.Lbl_RefCursorValFont.Size = new System.Drawing.Size(87, 13);
             this.Lbl_RefCursorValFont.TabIndex = 22;
-            this.Lbl_RefCursorValFont.Text = "Font";
+            this.Lbl_RefCursorValFont.Text = "Cursor value font";
             // 
             // Cmb_RefCursorAbsValLocation
             // 
@@ -1603,6 +1615,17 @@
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.Cmb_CursorTitleLocation);
+            this.groupBox4.Controls.Add(this.Lbl_CursorTitleLocation);
+            this.groupBox4.Controls.Add(this.Txt_CursorTitle);
+            this.groupBox4.Controls.Add(this.Lbl_CursorTitle);
+            this.groupBox4.Controls.Add(this.Pic_CursorTitleForecolor);
+            this.groupBox4.Controls.Add(this.Lbl_CursorTitleForecolor);
+            this.groupBox4.Controls.Add(this.Cmd_CursorTitleFont);
+            this.groupBox4.Controls.Add(this.Txt_CursorTitleFontSize);
+            this.groupBox4.Controls.Add(this.Lbl_CursorTitleFontSize);
+            this.groupBox4.Controls.Add(this.Txt_CursorTitleFont);
+            this.groupBox4.Controls.Add(this.Lbl_CursorTitleFont);
             this.groupBox4.Controls.Add(this.Pic_CursorValueForecolor);
             this.groupBox4.Controls.Add(this.Lbl_CursorValueForecolor);
             this.groupBox4.Controls.Add(this.Cmd_CursorValFont);
@@ -1628,7 +1651,7 @@
             this.groupBox4.Controls.Add(this.Lbl_MainCursorMode);
             this.groupBox4.Location = new System.Drawing.Point(5, 3);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(794, 148);
+            this.groupBox4.Size = new System.Drawing.Size(794, 198);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Main cursor";
@@ -1637,7 +1660,7 @@
             // 
             this.Cmd_CursorValFont.Enabled = false;
             this.Cmd_CursorValFont.Image = global::Ctrl_GraphWindow.Icones.font_icone_6304_16;
-            this.Cmd_CursorValFont.Location = new System.Drawing.Point(187, 102);
+            this.Cmd_CursorValFont.Location = new System.Drawing.Point(217, 101);
             this.Cmd_CursorValFont.Name = "Cmd_CursorValFont";
             this.Cmd_CursorValFont.Size = new System.Drawing.Size(23, 23);
             this.Cmd_CursorValFont.TabIndex = 26;
@@ -1647,7 +1670,7 @@
             // Txt_CursorValFontSize
             // 
             this.Txt_CursorValFontSize.Enabled = false;
-            this.Txt_CursorValFontSize.Location = new System.Drawing.Point(249, 104);
+            this.Txt_CursorValFontSize.Location = new System.Drawing.Point(282, 104);
             this.Txt_CursorValFontSize.Name = "Txt_CursorValFontSize";
             this.Txt_CursorValFontSize.ReadOnly = true;
             this.Txt_CursorValFontSize.Size = new System.Drawing.Size(44, 20);
@@ -1657,7 +1680,7 @@
             // 
             this.Lbl_CursorValFontSize.AutoSize = true;
             this.Lbl_CursorValFontSize.Enabled = false;
-            this.Lbl_CursorValFontSize.Location = new System.Drawing.Point(216, 107);
+            this.Lbl_CursorValFontSize.Location = new System.Drawing.Point(246, 107);
             this.Lbl_CursorValFontSize.Name = "Lbl_CursorValFontSize";
             this.Lbl_CursorValFontSize.Size = new System.Drawing.Size(27, 13);
             this.Lbl_CursorValFontSize.TabIndex = 24;
@@ -1666,7 +1689,7 @@
             // Txt_CursorValFont
             // 
             this.Txt_CursorValFont.Enabled = false;
-            this.Txt_CursorValFont.Location = new System.Drawing.Point(75, 104);
+            this.Txt_CursorValFont.Location = new System.Drawing.Point(105, 103);
             this.Txt_CursorValFont.Name = "Txt_CursorValFont";
             this.Txt_CursorValFont.ReadOnly = true;
             this.Txt_CursorValFont.Size = new System.Drawing.Size(106, 20);
@@ -1676,11 +1699,11 @@
             // 
             this.Lbl_CursorValFont.AutoSize = true;
             this.Lbl_CursorValFont.Enabled = false;
-            this.Lbl_CursorValFont.Location = new System.Drawing.Point(18, 107);
+            this.Lbl_CursorValFont.Location = new System.Drawing.Point(14, 106);
             this.Lbl_CursorValFont.Name = "Lbl_CursorValFont";
-            this.Lbl_CursorValFont.Size = new System.Drawing.Size(28, 13);
+            this.Lbl_CursorValFont.Size = new System.Drawing.Size(87, 13);
             this.Lbl_CursorValFont.TabIndex = 22;
-            this.Lbl_CursorValFont.Text = "Font";
+            this.Lbl_CursorValFont.Text = "Cursor value font";
             // 
             // Txt_CursorSize
             // 
@@ -2028,11 +2051,117 @@
             // 
             this.Lbl_CursorValueForecolor.AutoSize = true;
             this.Lbl_CursorValueForecolor.Enabled = false;
-            this.Lbl_CursorValueForecolor.Location = new System.Drawing.Point(299, 107);
+            this.Lbl_CursorValueForecolor.Location = new System.Drawing.Point(332, 107);
             this.Lbl_CursorValueForecolor.Name = "Lbl_CursorValueForecolor";
             this.Lbl_CursorValueForecolor.Size = new System.Drawing.Size(51, 13);
             this.Lbl_CursorValueForecolor.TabIndex = 27;
             this.Lbl_CursorValueForecolor.Text = "Forecolor";
+            // 
+            // Pic_CursorTitleForecolor
+            // 
+            this.Pic_CursorTitleForecolor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Pic_CursorTitleForecolor.Enabled = false;
+            this.Pic_CursorTitleForecolor.Location = new System.Drawing.Point(389, 167);
+            this.Pic_CursorTitleForecolor.Name = "Pic_CursorTitleForecolor";
+            this.Pic_CursorTitleForecolor.Size = new System.Drawing.Size(20, 20);
+            this.Pic_CursorTitleForecolor.TabIndex = 35;
+            this.Pic_CursorTitleForecolor.TabStop = false;
+            this.Pic_CursorTitleForecolor.DoubleClick += new System.EventHandler(this.Pic_CursorTitleForecolor_DoubleClick);
+            // 
+            // Lbl_CursorTitleForecolor
+            // 
+            this.Lbl_CursorTitleForecolor.AutoSize = true;
+            this.Lbl_CursorTitleForecolor.Enabled = false;
+            this.Lbl_CursorTitleForecolor.Location = new System.Drawing.Point(332, 170);
+            this.Lbl_CursorTitleForecolor.Name = "Lbl_CursorTitleForecolor";
+            this.Lbl_CursorTitleForecolor.Size = new System.Drawing.Size(51, 13);
+            this.Lbl_CursorTitleForecolor.TabIndex = 34;
+            this.Lbl_CursorTitleForecolor.Text = "Forecolor";
+            // 
+            // Cmd_CursorTitleFont
+            // 
+            this.Cmd_CursorTitleFont.Enabled = false;
+            this.Cmd_CursorTitleFont.Image = global::Ctrl_GraphWindow.Icones.font_icone_6304_16;
+            this.Cmd_CursorTitleFont.Location = new System.Drawing.Point(217, 164);
+            this.Cmd_CursorTitleFont.Name = "Cmd_CursorTitleFont";
+            this.Cmd_CursorTitleFont.Size = new System.Drawing.Size(23, 23);
+            this.Cmd_CursorTitleFont.TabIndex = 33;
+            this.Cmd_CursorTitleFont.UseVisualStyleBackColor = true;
+            this.Cmd_CursorTitleFont.Click += new System.EventHandler(this.Cmd_CursorTitleFont_Click);
+            // 
+            // Txt_CursorTitleFontSize
+            // 
+            this.Txt_CursorTitleFontSize.Enabled = false;
+            this.Txt_CursorTitleFontSize.Location = new System.Drawing.Point(282, 167);
+            this.Txt_CursorTitleFontSize.Name = "Txt_CursorTitleFontSize";
+            this.Txt_CursorTitleFontSize.ReadOnly = true;
+            this.Txt_CursorTitleFontSize.Size = new System.Drawing.Size(44, 20);
+            this.Txt_CursorTitleFontSize.TabIndex = 32;
+            // 
+            // Lbl_CursorTitleFontSize
+            // 
+            this.Lbl_CursorTitleFontSize.AutoSize = true;
+            this.Lbl_CursorTitleFontSize.Enabled = false;
+            this.Lbl_CursorTitleFontSize.Location = new System.Drawing.Point(246, 170);
+            this.Lbl_CursorTitleFontSize.Name = "Lbl_CursorTitleFontSize";
+            this.Lbl_CursorTitleFontSize.Size = new System.Drawing.Size(27, 13);
+            this.Lbl_CursorTitleFontSize.TabIndex = 31;
+            this.Lbl_CursorTitleFontSize.Text = "Size";
+            // 
+            // Txt_CursorTitleFont
+            // 
+            this.Txt_CursorTitleFont.Enabled = false;
+            this.Txt_CursorTitleFont.Location = new System.Drawing.Point(105, 166);
+            this.Txt_CursorTitleFont.Name = "Txt_CursorTitleFont";
+            this.Txt_CursorTitleFont.ReadOnly = true;
+            this.Txt_CursorTitleFont.Size = new System.Drawing.Size(106, 20);
+            this.Txt_CursorTitleFont.TabIndex = 30;
+            // 
+            // Lbl_CursorTitleFont
+            // 
+            this.Lbl_CursorTitleFont.AutoSize = true;
+            this.Lbl_CursorTitleFont.Enabled = false;
+            this.Lbl_CursorTitleFont.Location = new System.Drawing.Point(14, 169);
+            this.Lbl_CursorTitleFont.Name = "Lbl_CursorTitleFont";
+            this.Lbl_CursorTitleFont.Size = new System.Drawing.Size(77, 13);
+            this.Lbl_CursorTitleFont.TabIndex = 29;
+            this.Lbl_CursorTitleFont.Text = "Cursor title font";
+            // 
+            // Lbl_CursorTitle
+            // 
+            this.Lbl_CursorTitle.AutoSize = true;
+            this.Lbl_CursorTitle.Enabled = false;
+            this.Lbl_CursorTitle.Location = new System.Drawing.Point(14, 144);
+            this.Lbl_CursorTitle.Name = "Lbl_CursorTitle";
+            this.Lbl_CursorTitle.Size = new System.Drawing.Size(56, 13);
+            this.Lbl_CursorTitle.TabIndex = 36;
+            this.Lbl_CursorTitle.Text = "Cursor title";
+            // 
+            // Txt_CursorTitle
+            // 
+            this.Txt_CursorTitle.Enabled = false;
+            this.Txt_CursorTitle.Location = new System.Drawing.Point(105, 141);
+            this.Txt_CursorTitle.Name = "Txt_CursorTitle";
+            this.Txt_CursorTitle.Size = new System.Drawing.Size(304, 20);
+            this.Txt_CursorTitle.TabIndex = 37;
+            // 
+            // Cmb_CursorTitleLocation
+            // 
+            this.Cmb_CursorTitleLocation.Enabled = false;
+            this.Cmb_CursorTitleLocation.FormattingEnabled = true;
+            this.Cmb_CursorTitleLocation.Location = new System.Drawing.Point(495, 141);
+            this.Cmb_CursorTitleLocation.Name = "Cmb_CursorTitleLocation";
+            this.Cmb_CursorTitleLocation.Size = new System.Drawing.Size(106, 21);
+            this.Cmb_CursorTitleLocation.TabIndex = 39;
+            // 
+            // Lbl_CursorTitleLocation
+            // 
+            this.Lbl_CursorTitleLocation.Enabled = false;
+            this.Lbl_CursorTitleLocation.Location = new System.Drawing.Point(415, 144);
+            this.Lbl_CursorTitleLocation.Name = "Lbl_CursorTitleLocation";
+            this.Lbl_CursorTitleLocation.Size = new System.Drawing.Size(80, 19);
+            this.Lbl_CursorTitleLocation.TabIndex = 38;
+            this.Lbl_CursorTitleLocation.Text = "Title location";
             // 
             // Ctrl_AbcisseRefLines
             // 
@@ -2092,6 +2221,7 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Pic_CursorValueForecolor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_CursorTitleForecolor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2276,5 +2406,16 @@
         private System.Windows.Forms.Label Lbl_LegendFont;
         private System.Windows.Forms.PictureBox Pic_CursorValueForecolor;
         private System.Windows.Forms.Label Lbl_CursorValueForecolor;
+        private System.Windows.Forms.TextBox Txt_CursorTitle;
+        private System.Windows.Forms.Label Lbl_CursorTitle;
+        private System.Windows.Forms.PictureBox Pic_CursorTitleForecolor;
+        private System.Windows.Forms.Label Lbl_CursorTitleForecolor;
+        private System.Windows.Forms.Button Cmd_CursorTitleFont;
+        private System.Windows.Forms.TextBox Txt_CursorTitleFontSize;
+        private System.Windows.Forms.Label Lbl_CursorTitleFontSize;
+        private System.Windows.Forms.TextBox Txt_CursorTitleFont;
+        private System.Windows.Forms.Label Lbl_CursorTitleFont;
+        private System.Windows.Forms.ComboBox Cmb_CursorTitleLocation;
+        private System.Windows.Forms.Label Lbl_CursorTitleLocation;
     }
 }

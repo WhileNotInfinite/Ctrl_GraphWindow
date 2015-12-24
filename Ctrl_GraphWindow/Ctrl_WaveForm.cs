@@ -4352,7 +4352,108 @@ namespace Ctrl_GraphWindow
 						}
     				}
     			}
-    			
+
+                //Cursor title
+                if (oCursor.Equals(Properties.Cursor))
+                {
+                    if ((!(oCursor.CursorTitle.Equals("") || oCursor.CursorTitlePosition== ScreenPositions.Invisible)) 
+                        && (oCursor.Mode == GraphicCursorMode.Cross || oCursor.Mode == GraphicCursorMode.VerticalLine || oCursor.Mode == GraphicCursorMode.HorizontalLine))
+                    {
+                        PointF PtTitle = new PointF();
+                        SizeF TitleStringSize = g.MeasureString(oCursor.CursorTitle, oCursor.CursorTitleFont.oFont);
+
+                        if (oCursor.Mode == GraphicCursorMode.HorizontalLine)
+                        {
+                            if (CursorY < FrameTopPoint + FrameHeight / 2)
+                            {
+                                PtTitle.Y = (float)(CursorY + CURSOR_TEXT_TOP_OFFSET);
+                            }
+                            else
+                            {
+                                PtTitle.Y = (float)(CursorY - CURSOR_TEXT_TOP_OFFSET) - TitleStringSize.Height;
+                            }
+
+                            ScreenPositions eTitleLocation;
+                            if(oCursor.CursorTitlePosition== ScreenPositions.Top)
+                            {
+                                eTitleLocation = ScreenPositions.Left;
+                            }
+                            else if (oCursor.CursorTitlePosition== ScreenPositions.Bottom)
+                            {
+                                eTitleLocation = ScreenPositions.Right;
+                            }
+                            else
+                            {
+                                eTitleLocation = oCursor.CursorTitlePosition;
+                            }
+
+                            switch(eTitleLocation)
+                            {
+                                case ScreenPositions.Left:
+
+                                    PtTitle.X = (float)(CURSOR_TEXT_LEFT_OFFSET);
+                                    break;
+
+                                case ScreenPositions.Right:
+
+                                    PtTitle.X = (float)(FrameWidth - CURSOR_TEXT_LEFT_OFFSET) - TitleStringSize.Width;
+                                    break;
+
+                                default: //Center
+
+                                    PtTitle.X = ((float)(FrameWidth) / 2) - (TitleStringSize.Width / 2);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (CursorX < FrameWidth / 2)
+                            {
+                                PtTitle.X = (float)(CursorX + CURSOR_TEXT_LEFT_OFFSET);
+                            }
+                            else
+                            {
+                                PtTitle.X = (float)(CursorX - CURSOR_TEXT_LEFT_OFFSET) - TitleStringSize.Width;
+                            }
+
+                            ScreenPositions eTitleLocation;
+                            if (oCursor.CursorTitlePosition == ScreenPositions.Left)
+                            {
+                                eTitleLocation = ScreenPositions.Top;
+                            }
+                            else if (oCursor.CursorTitlePosition == ScreenPositions.Right)
+                            {
+                                eTitleLocation = ScreenPositions.Bottom;
+                            }
+                            else
+                            {
+                                eTitleLocation = oCursor.CursorTitlePosition;
+                            }
+
+                            switch(eTitleLocation)
+                            {
+                                case ScreenPositions.Top:
+
+                                    PtTitle.Y = (float)(CURSOR_TEXT_TOP_OFFSET);
+                                    break;
+
+                                case ScreenPositions.Bottom:
+
+                                    PtTitle.Y = (float)(FrameHeight - CURSOR_TEXT_TOP_OFFSET) - TitleStringSize.Height;
+                                    break;
+
+                                default: //Center
+
+                                    PtTitle.Y = ((float)FrameHeight / 2) - (TitleStringSize.Height / 2);
+                                    break;
+                            }
+                        }
+
+                        b = new SolidBrush(oCursor.CursorTitleForeColor);
+                        g.DrawString(oCursor.CursorTitle, oCursor.CursorTitleFont.oFont, b, PtTitle);
+                    }
+                }
+
     			p.Dispose();
 				if (GraphicsTarget == null) g.Dispose(); //Do not dispose of g is the target isn't the default target (Pic_Graphic), otherwise target becomes null for the function caller as well...
 				if (!(b == null)) b.Dispose();
