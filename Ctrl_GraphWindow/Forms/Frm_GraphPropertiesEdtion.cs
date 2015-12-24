@@ -1090,6 +1090,8 @@ namespace Ctrl_GraphWindow
         				Cmd_CursorValFont.Enabled = false;
         				Lbl_CursorValFontSize.Enabled = false;
         				Txt_CursorValFontSize.Enabled = false;
+                        Lbl_CursorValueForecolor.Enabled = false;
+                        Pic_CursorValueForecolor.Enabled = false;
         				
         				break;
         				
@@ -1120,7 +1122,9 @@ namespace Ctrl_GraphWindow
 	        				Cmd_CursorValFont.Enabled = true;
 	        				Lbl_CursorValFontSize.Enabled = true;
 	        				Txt_CursorValFontSize.Enabled = true;
-        				}
+                            Lbl_CursorValueForecolor.Enabled = true;
+                            Pic_CursorValueForecolor.Enabled = true;
+                        }
         				else
         				{
         					Lbl_CursorValFont.Enabled = false;
@@ -1128,7 +1132,9 @@ namespace Ctrl_GraphWindow
 	        				Cmd_CursorValFont.Enabled = false;
 	        				Lbl_CursorValFontSize.Enabled = false;
 	        				Txt_CursorValFontSize.Enabled = false;
-        				}
+                            Lbl_CursorValueForecolor.Enabled = false;
+                            Pic_CursorValueForecolor.Enabled = false;
+                        }
         				
         				break;
         				
@@ -1157,8 +1163,10 @@ namespace Ctrl_GraphWindow
         				Cmd_CursorValFont.Enabled = false;
         				Lbl_CursorValFontSize.Enabled = false;
         				Txt_CursorValFontSize.Enabled = false;
-        				
-        				break;
+                        Lbl_CursorValueForecolor.Enabled = false;
+                        Pic_CursorValueForecolor.Enabled = false;
+
+                        break;
         				
         			case GraphicCursorMode.HorizontalLine:
         				
@@ -1187,7 +1195,9 @@ namespace Ctrl_GraphWindow
 	        				Cmd_CursorValFont.Enabled = true;
 	        				Lbl_CursorValFontSize.Enabled = true;
 	        				Txt_CursorValFontSize.Enabled = true;
-        				}
+                            Lbl_CursorValueForecolor.Enabled = true;
+                            Pic_CursorValueForecolor.Enabled = true;
+                        }
         				else
         				{
         					Lbl_CursorValFont.Enabled = false;
@@ -1195,7 +1205,9 @@ namespace Ctrl_GraphWindow
 	        				Cmd_CursorValFont.Enabled = false;
 	        				Lbl_CursorValFontSize.Enabled = false;
 	        				Txt_CursorValFontSize.Enabled = false;
-        				}
+                            Lbl_CursorValueForecolor.Enabled = false;
+                            Pic_CursorValueForecolor.Enabled = false;
+                        }
         				
         				break;
         				
@@ -1224,8 +1236,10 @@ namespace Ctrl_GraphWindow
         				Cmd_CursorValFont.Enabled = false;
         				Lbl_CursorValFontSize.Enabled = false;
         				Txt_CursorValFontSize.Enabled = false;
-        				
-        				break;
+                        Lbl_CursorValueForecolor.Enabled = false;
+                        Pic_CursorValueForecolor.Enabled = false;
+
+                        break;
         				
         			case GraphicCursorMode.Square:
         				
@@ -1252,8 +1266,10 @@ namespace Ctrl_GraphWindow
         				Cmd_CursorValFont.Enabled = false;
         				Lbl_CursorValFontSize.Enabled = false;
         				Txt_CursorValFontSize.Enabled = false;
-        				
-        				break;
+                        Lbl_CursorValueForecolor.Enabled = false;
+                        Pic_CursorValueForecolor.Enabled = false;
+
+                        break;
         				
         			case GraphicCursorMode.VerticalLine:
         				
@@ -1282,7 +1298,9 @@ namespace Ctrl_GraphWindow
 	        				Cmd_CursorValFont.Enabled = true;
 	        				Lbl_CursorValFontSize.Enabled = true;
 	        				Txt_CursorValFontSize.Enabled = true;
-        				}
+                            Lbl_CursorValueForecolor.Enabled = true;
+                            Pic_CursorValueForecolor.Enabled = true;
+                        }
         				else
         				{
         					Lbl_CursorValFont.Enabled = false;
@@ -1290,7 +1308,9 @@ namespace Ctrl_GraphWindow
 	        				Cmd_CursorValFont.Enabled = false;
 	        				Lbl_CursorValFontSize.Enabled = false;
 	        				Txt_CursorValFontSize.Enabled = false;
-        				}
+                            Lbl_CursorValueForecolor.Enabled = false;
+                            Pic_CursorValueForecolor.Enabled = false;
+                        }
         				
         				break;
         		}
@@ -1330,6 +1350,8 @@ namespace Ctrl_GraphWindow
 			Cmd_CursorValFont.Enabled = bFontEnabled;
 			Lbl_CursorValFontSize.Enabled = bFontEnabled;
 			Txt_CursorValFontSize.Enabled = bFontEnabled;
+            Lbl_CursorValueForecolor.Enabled = bFontEnabled;
+            Pic_CursorValueForecolor.Enabled = bFontEnabled;
         }
         
         private void Chk_CursorOrdValVisibleCheckedChanged(object sender, EventArgs e)
@@ -1353,6 +1375,8 @@ namespace Ctrl_GraphWindow
 			Cmd_CursorValFont.Enabled = bFontEnabled;
 			Lbl_CursorValFontSize.Enabled = bFontEnabled;
 			Txt_CursorValFontSize.Enabled = bFontEnabled;
+            Lbl_CursorValueForecolor.Enabled = bFontEnabled;
+            Pic_CursorValueForecolor.Enabled = bFontEnabled;
         }
         
         private void Cmd_CursorValFontClick(object sender, EventArgs e)
@@ -1364,11 +1388,19 @@ namespace Ctrl_GraphWindow
         		Txt_CursorValFontSize.Text = Dlg_Font.Font.Size.ToString();
         	}
         }
-        
+
+        private void Pic_CursorValueForecolor_DoubleClick(object sender, EventArgs e)
+        {
+            if (Dlg_Color.ShowDialog().Equals(DialogResult.OK))
+            {
+                Pic_CursorValueForecolor.BackColor = Dlg_Color.Color;
+            }
+        }
+
         #endregion
-        
+
         #region Reference cursor
-        
+
         private void Cmb_RefCursorModeSelectedIndexChanged(object sender, EventArgs e)
         {
         	GraphicCursorMode eCursorMode = GraphicCursorMode.None;
@@ -1685,6 +1717,15 @@ namespace Ctrl_GraphWindow
             Txt_CursorValFont.Font = GraphProperties.Cursor.CursorValueFont.oFont;
             Txt_CursorValFont.Text = GraphProperties.Cursor.CursorValueFont.oFont.Name;
             Txt_CursorValFontSize.Text = GraphProperties.Cursor.CursorValueFont.oFont.Size.ToString();
+
+            if (GraphProperties.Cursor.CursorValueForeColor == Color.Empty)
+            {
+                Pic_CursorValueForecolor.BackColor = SystemColors.Control;
+            }
+            else
+            {
+                Pic_CursorValueForecolor.BackColor = GraphProperties.Cursor.CursorValueForeColor;
+            }
             
             //Reference cursor
             Cmb_RefCursorMode.SelectedItem = GraphProperties.ReferenceCursor.Mode.ToString();
@@ -2020,6 +2061,15 @@ namespace Ctrl_GraphWindow
                                                              true, 
                                                              Txt_CursorValFont.Font.Strikeout, 
                                                              Txt_CursorValFont.Font.Underline);
+
+                if (Pic_CursorValueForecolor.BackColor == SystemColors.Control)
+                {
+                    TmpProp.Cursor.CursorValueForeColor = Color.Empty;
+                }
+                else
+                {
+                    TmpProp.Cursor.CursorValueForeColor = Pic_CursorValueForecolor.BackColor;
+                }
             }
             
             //Reference cursor
@@ -2199,6 +2249,7 @@ namespace Ctrl_GraphWindow
             	GraphProperties.Cursor.OrdinateValuesPosition = TmpProp.Cursor.OrdinateValuesPosition;
             	
             	GraphProperties.Cursor.CursorValueFont = TmpProp.Cursor.CursorValueFont.Get_Clone();
+                GraphProperties.Cursor.CursorValueForeColor = TmpProp.Cursor.CursorValueForeColor;
             }
             
             //Reference cursor

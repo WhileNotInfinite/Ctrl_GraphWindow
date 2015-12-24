@@ -1791,7 +1791,12 @@ namespace Ctrl_GraphWindow
     	/// Cursor value font
     	/// </summary>
     	public GW_Font CursorValueFont;
-    	
+
+        /// <summary>
+        /// Cursor value forecolor
+        /// </summary>
+        public Color CursorValueForeColor;
+
     	/// <summary>
     	/// Cursor abscisse value displayed flag
     	/// </summary>
@@ -1834,8 +1839,9 @@ namespace Ctrl_GraphWindow
     		Style.Visible = true;
     		
     		CursorValueFont = new GW_Font("Arial", 8, false, false, true, false, false);
-    		
-    		ShowCursorAbscisseValue = true;
+            CursorValueForeColor = Color.Empty; //Default => Same as serie trace color
+
+            ShowCursorAbscisseValue = true;
             AbscisseValuePostion = ScreenPositions.Top;
     		
     		ShowCursorOrdinatesValue = true;
@@ -1857,6 +1863,7 @@ namespace Ctrl_GraphWindow
     		oClone.Mode = Mode;
     		oClone.Style =  Style.Get_Clone();
     		oClone.CursorValueFont =  CursorValueFont.Get_Clone();
+            oClone.CursorValueForeColor = CursorValueForeColor;
     		oClone.ShowCursorAbscisseValue = ShowCursorAbscisseValue;
     		oClone.AbscisseValuePostion = AbscisseValuePostion;
     		oClone.ShowCursorOrdinatesValue = ShowCursorOrdinatesValue;
@@ -1887,6 +1894,10 @@ namespace Ctrl_GraphWindow
             	xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorValueFont");
             	xCursor.AppendChild(xProp);
             	
+                xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorValueForecolor");
+                xProp.InnerText = CursorValueForeColor.ToArgb().ToString();
+                xCursor.AppendChild(xProp);
+
             	xProp = oXDoc.CreateElement("CursorAbsValVisible");
             	xProp.InnerText = ShowCursorAbscisseValue.ToString();
             	xCursor.AppendChild(xProp);
@@ -1929,8 +1940,27 @@ namespace Ctrl_GraphWindow
     			
     			xProp = xCursor.SelectSingleNode("CursorValueFont");
     			CursorValueFont.Read_FontXmlNode(xProp);
-    			
-    			xProp = xCursor.SelectSingleNode("CursorAbsValVisible");
+
+                xProp = xCursor.SelectSingleNode("CursorValueForecolor");
+                if(!(xProp==null)) //New feature of release 2.0.0.0
+                {
+                    int iColor = int.Parse(xProp.InnerText);
+
+                    if(iColor!=0)
+                    {
+                        CursorValueForeColor = Color.FromArgb(iColor);
+                    }
+                    else
+                    {
+                        CursorValueForeColor = Color.Empty; //Default value
+                    }
+                }
+                else
+                {
+                    CursorValueForeColor = Color.Empty; //Default value
+                }
+
+                xProp = xCursor.SelectSingleNode("CursorAbsValVisible");
     			ShowCursorAbscisseValue = bool.Parse(xProp.InnerText);
     			
     			xProp = xCursor.SelectSingleNode("CursorAbsValPosition");

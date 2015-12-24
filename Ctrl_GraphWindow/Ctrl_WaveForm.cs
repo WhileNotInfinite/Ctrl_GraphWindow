@@ -4278,7 +4278,14 @@ namespace Ctrl_GraphWindow
 					}
 					else
 					{
-						b = new SolidBrush(AbsCursorValue.SerieColor);
+                        if (oCursor.CursorValueForeColor == Color.Empty)
+                        {
+                            b = new SolidBrush(AbsCursorValue.SerieColor);
+                        }
+                        else
+                        {
+                            b = new SolidBrush(oCursor.CursorValueForeColor);
+                        }
 					}
 					
 					g.DrawString(AbsCursorValue.SerieName + AbsCursorValue.SerieValue, 
@@ -4330,8 +4337,16 @@ namespace Ctrl_GraphWindow
 							
 							foreach (SerieValueAtPoint sCursorVal in CursorCoord.Ords)
 							{
-								b = new SolidBrush(sCursorVal.SerieColor);
-								g.DrawString(sCursorVal.SerieName + ": " + sCursorVal.SerieValue, oCursor.CursorValueFont.oFont, b, PtOrdCursorVal);
+                                if (oCursor.CursorValueForeColor == Color.Empty)
+                                {
+                                    b = new SolidBrush(sCursorVal.SerieColor);
+                                }
+                                else
+                                {
+                                    b = new SolidBrush(oCursor.CursorValueForeColor);
+                                }
+
+                                g.DrawString(sCursorVal.SerieName + ": " + sCursorVal.SerieValue, oCursor.CursorValueFont.oFont, b, PtOrdCursorVal);
 								PtOrdCursorVal.Y += PtOrdCursorValInc;
 							}
 						}
