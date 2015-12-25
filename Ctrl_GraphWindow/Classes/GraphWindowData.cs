@@ -386,6 +386,12 @@ namespace Ctrl_GraphWindow
         #region Properties
 
         /// <summary>
+        /// Depth of the time buffer in second for real time graphic
+        /// </summary>
+        /// <remarks>Set -1 for infinite time buffer</remarks>
+        public int TimeBufferSize { get; set; }
+
+        /// <summary>
         /// Maximum number of samples contained in a data channel
         /// </summary>
         public int MaxSampleCount
@@ -621,7 +627,8 @@ namespace Ctrl_GraphWindow
             DataSamplingMode = SamplingMode.SingleRate;
             Time = new GW_DataChannel("Time");
             Channels = new List<GW_DataChannel>();
-            
+            TimeBufferSize = -1;
+
             StepTimeMin = 0;
             StepTimeMax = 0;
         }
@@ -880,6 +887,42 @@ namespace Ctrl_GraphWindow
             }
 
             return (double.NaN);
+        }
+
+        /// <summary>
+        /// Process the FIFO time buffer
+        /// </summary>
+        public void FIFO_TimeBuffer()
+        {
+            if (TimeBufferSize != -1)
+            {
+                if (DataSamplingMode == SamplingMode.MultipleRates)
+                {
+                    foreach(GW_DataChannel oChan in Channels)
+                    {
+                        SerieSample sLastSample = oChan.Samples[oChan.Samples.Count - 1];
+
+                        while (sLastSample.SampleTime - oChan.Samples[0].SampleTime > TimeBufferSize)
+                        {
+                            oChan.Samples.RemoveAt(0);
+                        }
+                    }
+                }
+                else
+                {
+                    double LastSampleTime = Time.Values[Time.Values.Count - 1];
+
+                    while (LastSampleTime - Time.Values[0] > TimeBufferSize)
+                    {
+                        Time.Values.RemoveAt(0);
+
+                        foreach(GW_DataChannel oChan in Channels)
+                        {
+                            oChan.Values.RemoveAt(0);
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

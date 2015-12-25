@@ -2466,14 +2466,9 @@ namespace Ctrl_GraphWindow
 
             if (!(DataFile == null))
             {
-            	if (DataFile.MaxSampleCount < 2)
-            	{
-            		return;
-            	}
-            	
             	SeriesVisibleCount = Get_PlottedChannelCount();
 
-                if (SeriesVisibleCount > 0)
+                if (SeriesVisibleCount > 0 && DataFile.MaxSampleCount > 2)
                 {
                     int iSeriePloted = 0;
                     oYAxis.AxisTable = new List<GraphAxisGroup>();
@@ -2522,60 +2517,63 @@ namespace Ctrl_GraphWindow
             //Abscisse coords definition
             if (!(DataFile == null))
             {
-                if (Properties.AbscisseAxis.TimeMode) //Graphic window in time mode
+                if (SeriesVisibleCount > 0 && DataFile.MaxSampleCount > 2)
                 {
-                    if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
+                    if (Properties.AbscisseAxis.TimeMode) //Graphic window in time mode
                     {
-                        oWholeAbcsisseChannel = WholeDataFile.Time;
-                        oAbcsisseChannel = DataFile.Time;
-                        Set_AbcisseCordConversion(DataFile.Time);
-                    }
-                    else
-                    {
-                        Properties.AbscisseAxis.CoordConversion.Min = DataFile.SampleTimeMin;
-                        Properties.AbscisseAxis.CoordConversion.Max = DataFile.SampleTimeMax;
-
-                        if (!(double.IsNaN(Properties.AbscisseAxis.CoordConversion.Min) || double.IsNaN(Properties.AbscisseAxis.CoordConversion.Max)))
+                        if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
                         {
-                            Set_AbcisseCoordConversion_MultipleRatesSampling(Properties.AbscisseAxis.CoordConversion.Min,
-                                                                             Properties.AbscisseAxis.CoordConversion.Max);
+                            oWholeAbcsisseChannel = WholeDataFile.Time;
+                            oAbcsisseChannel = DataFile.Time;
+                            Set_AbcisseCordConversion(DataFile.Time);
                         }
                         else
                         {
-                            return;
+                            Properties.AbscisseAxis.CoordConversion.Min = DataFile.SampleTimeMin;
+                            Properties.AbscisseAxis.CoordConversion.Max = DataFile.SampleTimeMax;
+
+                            if (!(double.IsNaN(Properties.AbscisseAxis.CoordConversion.Min) || double.IsNaN(Properties.AbscisseAxis.CoordConversion.Max)))
+                            {
+                                Set_AbcisseCoordConversion_MultipleRatesSampling(Properties.AbscisseAxis.CoordConversion.Min,
+                                                                                 Properties.AbscisseAxis.CoordConversion.Max);
+                            }
+                            else
+                            {
+                                return;
+                            }
                         }
                     }
-                }
-                else //Graphic window in XY mode
-                {
-                    //TODO: Treat the case of multiple rates sampling mode
-
-                    GW_DataChannel oTmpChan = DataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
-
-                    if (!(oTmpChan == null))
+                    else //Graphic window in XY mode
                     {
-                    	if (oTmpChan.Min != oTmpChan.Max)
-                    	{
-	                    	oWholeAbcsisseChannel = WholeDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
-	                        
-	                    	oAbcsisseChannel = new GW_DataChannel(oTmpChan.Name);
-	                        
-	                        oAbcsisseChannel.Values = oTmpChan.Values;
-	                        oAbcsisseChannel.Min = oTmpChan.Min;
-	                        oAbcsisseChannel.Max = oTmpChan.Max;
-	                        oAbcsisseChannel.Avg = oTmpChan.Avg;
-	
-	                        Set_AbcisseCordConversion(oAbcsisseChannel);
-                    	}
-                    	else
-                    	{
-                    		return;
-                    	}
-                    }
-                    else
-                    {
-                        MessageBox.Show("The abcisse channel " + Properties.AbscisseAxis.AbscisseChannelName + " is missing !", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
+                        //TODO: Treat the case of multiple rates sampling mode
+
+                        GW_DataChannel oTmpChan = DataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
+
+                        if (!(oTmpChan == null))
+                        {
+                            if (oTmpChan.Min != oTmpChan.Max)
+                            {
+                                oWholeAbcsisseChannel = WholeDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
+
+                                oAbcsisseChannel = new GW_DataChannel(oTmpChan.Name);
+
+                                oAbcsisseChannel.Values = oTmpChan.Values;
+                                oAbcsisseChannel.Min = oTmpChan.Min;
+                                oAbcsisseChannel.Max = oTmpChan.Max;
+                                oAbcsisseChannel.Avg = oTmpChan.Avg;
+
+                                Set_AbcisseCordConversion(oAbcsisseChannel);
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("The abcisse channel " + Properties.AbscisseAxis.AbscisseChannelName + " is missing !", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
                     }
                 }
                 
@@ -2727,7 +2725,7 @@ namespace Ctrl_GraphWindow
             	//Abscisse axis
                 #region Abscisse axis
 
-                if(Properties.AbscisseAxis.Visible)
+                if(Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
                 {
                     Pen p = new Pen(Properties.AbscisseAxis.AxisLineStyle.LineColor, (float)Properties.AbscisseAxis.AxisLineStyle.LineWidth);
                     p.DashStyle = Properties.AbscisseAxis.AxisLineStyle.LineStyle;
@@ -2977,7 +2975,6 @@ namespace Ctrl_GraphWindow
                 
                 if (SeriesVisibleCount > 0)
                 {
-                    
                     //Sub sampling
                     if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
                     {
