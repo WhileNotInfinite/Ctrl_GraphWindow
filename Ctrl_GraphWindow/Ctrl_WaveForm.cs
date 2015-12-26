@@ -349,6 +349,13 @@ namespace Ctrl_GraphWindow
 	    	Down = 4,
 	    }
 	    
+        private enum GraphicRealTimeStatus
+        {
+            Running = 0,
+            Broken  = 1,
+            Stopped = 2,
+        }
+
 	    #endregion
 	    
 		#region Privates constants
@@ -425,6 +432,35 @@ namespace Ctrl_GraphWindow
             {
                 TSB_LoadData.Visible = value;
                 toolStripSeparator1.Visible = TSB_LoadData.Visible;
+            }
+        }
+
+        /// <summary>
+        /// Real time graphic flag
+        /// </summary>
+        [Category("Behavior"), Browsable(true), Description("Determines whether the graphic is used as a real time data display")]
+        public bool RealTimeGraphic
+        {
+            get
+            {
+                return (bRealTimeGraphic);
+            }
+
+            set
+            {
+                bRealTimeGraphic = value;
+
+                TSB_RT_Play.Visible = bRealTimeGraphic;
+                TSB_RT_Break.Visible = bRealTimeGraphic;
+                TSB_RT_Stop.Visible = bRealTimeGraphic;
+                toolStripSeparator7.Visible = bRealTimeGraphic && (TSB_LoadData.Visible || bChannelListEnabled || bLegendEnabled ||
+                    bEditGraphicConfigurationEnable || bCursorEnabled || bZoomEnabled || bPrintEnabled || bSnapShotEnabled);
+
+                RT_PlaytoolStripMenuItem.Visible = bRealTimeGraphic;
+                RT_BreaktoolStripMenuItem.Visible = bRealTimeGraphic;
+                RT_StoptoolStripMenuItem.Visible = bRealTimeGraphic;
+                toolStripSeparator8.Visible = bRealTimeGraphic && (bZoomEnabled || bCursorEnabled || bPrintEnabled || bSnapShotEnabled);
+
             }
         }
 
@@ -688,9 +724,12 @@ namespace Ctrl_GraphWindow
         private int RefZoomYLowerBound;
         
         private Point PtZoomBarMouseDown;
-        
+
+        private GraphicRealTimeStatus mRTStatus;
+
         #region Control designer options members
-        
+
+        private bool bRealTimeGraphic;
         private bool bEditGraphicConfigurationEnable;
         private bool bCursorEnabled;
         private bool bZoomEnabled;
@@ -714,6 +753,65 @@ namespace Ctrl_GraphWindow
         private double AvgPlotTime;
 
 #endif
+
+        #endregion
+
+        #region Private properties
+
+        private GraphicRealTimeStatus RTStatus
+        {
+            get
+            {
+                return (mRTStatus);
+            }
+
+            set
+            {
+                mRTStatus = value;
+
+                if (bRealTimeGraphic)
+                {
+                    switch (mRTStatus)
+                    {
+                        case GraphicRealTimeStatus.Running:
+
+                            TSB_RT_Play.Visible = false;
+                            TSB_RT_Break.Visible = true;
+                            TSB_RT_Stop.Visible = true;
+
+                            RT_PlaytoolStripMenuItem.Visible = false;
+                            RT_BreaktoolStripMenuItem.Visible = true;
+                            RT_StoptoolStripMenuItem.Visible = true;
+
+                            break;
+
+                        case GraphicRealTimeStatus.Broken:
+
+                            TSB_RT_Play.Visible = true;
+                            TSB_RT_Break.Visible = false;
+                            TSB_RT_Stop.Visible = true;
+
+                            RT_PlaytoolStripMenuItem.Visible = true;
+                            RT_BreaktoolStripMenuItem.Visible = false;
+                            RT_StoptoolStripMenuItem.Visible = true;
+
+                            break;
+
+                        case GraphicRealTimeStatus.Stopped:
+
+                            TSB_RT_Play.Visible = true;
+                            TSB_RT_Break.Visible = false;
+                            TSB_RT_Stop.Visible = false;
+
+                            RT_PlaytoolStripMenuItem.Visible = true;
+                            RT_BreaktoolStripMenuItem.Visible = false;
+                            RT_StoptoolStripMenuItem.Visible = false;
+
+                            break;
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -774,10 +872,11 @@ namespace Ctrl_GraphWindow
             
             Pic_GraphFrame.Controls.Add(Cmd_ZoomYPosition);
             Cmd_ZoomYPosition.Left = Pic_GraphFrame.Width - 10;
-            
+
             PtZoomBarMouseDown = Point.Empty;
-            
+
             //Control designer options members init
+            RealTimeGraphic = false;
             ToolBarVisible = true;
             OpenFileVisible = true;
             bEditGraphicConfigurationEnable = true;
@@ -844,8 +943,17 @@ namespace Ctrl_GraphWindow
             AvgPlotTime = 0;
 #endif
 		}
-		
-		#region Control events
+
+        #region Control events
+
+        #region Control
+
+        private void Ctrl_WaveForm_Load(object sender, EventArgs e)
+        {
+            RTStatus = GraphicRealTimeStatus.Running;
+        }
+
+        #endregion
 
         #region Toolbar
 
@@ -1205,14 +1313,45 @@ namespace Ctrl_GraphWindow
         private void TSB_Replot_Click(object sender, EventArgs e)
         {
 #if DEBUG
-            Init_GraphWindow();
+            DateTime Tic = DateTime.Now;
+
+            Refresh_Graphic();
+
+            //Plot statistics computation
+            LastPlotTime = DateTime.Now.Subtract(Tic).TotalMilliseconds;
+
+            if (LastPlotTime > 0)
+            {
+                AvgPlotTime = ((AvgPlotTime * GraphPlotCount) + LastPlotTime) / (GraphPlotCount + 1);
+                GraphPlotCount++;
+
+                TSL_PlotCount.Text = "Plots: " + GraphPlotCount.ToString();
+                TSL_PlotAvg.Text = "Avg: " + Math.Round(AvgPlotTime, 3).ToString() + " ms";
+            }
+
+            TSL_PlotLast.Text = "Last: " + Math.Round(LastPlotTime, 3).ToString() + " ms";
 #endif
         }
 
+        private void TSB_RT_Play_Click(object sender, EventArgs e)
+        {
+            Start_RealTimeTrace();
+        }
+
+        private void TSB_RT_Break_Click(object sender, EventArgs e)
+        {
+            Break_RealTimeTrace();
+        }
+
+        private void TSB_RT_Stop_Click(object sender, EventArgs e)
+        {
+            Stop_RealTimeTrace();
+        }
+
         #endregion
-		
+
         #region Pic_GraphFrame
-        
+
         private void Pic_GraphFrameSizeChanged(object sender, EventArgs e)
 		{
         	Init_GraphWindow();
@@ -1644,11 +1783,26 @@ namespace Ctrl_GraphWindow
 		{
         	Drop_Series(e);
 		}
-        
+
         #endregion
-        
+
         #region Context_PicGraph_Options
-        
+
+        private void RT_PlaytoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Start_RealTimeTrace();
+        }
+
+        private void RT_BreaktoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Break_RealTimeTrace();
+        }
+
+        private void RT_StoptoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stop_RealTimeTrace();
+        }
+
         private void ZoomPlustoolStripMenuItemClick(object sender, EventArgs e)
 		{
         	ZoomPlus();
@@ -2607,11 +2761,7 @@ namespace Ctrl_GraphWindow
         }
 
         private void Plot_Series()
-        {
-#if DEBUG
-            DateTime Tic = DateTime.Now;
-#endif
-			
+        {			
 			Image FrameImage = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
 			Image GraphImage = new Bitmap(Pic_Graphic.Width, Pic_Graphic.Height);
 
@@ -3867,22 +4017,6 @@ namespace Ctrl_GraphWindow
             
             g.Dispose();
             gFrame.Dispose();
-            
-                        
-#if DEBUG
-            //Plot statistics computation
-            LastPlotTime = DateTime.Now.Subtract(Tic).TotalMilliseconds;
-
-            if(LastPlotTime>0)
-            {
-                AvgPlotTime = ((AvgPlotTime * GraphPlotCount) + LastPlotTime) / (GraphPlotCount + 1);
-                GraphPlotCount++;
-
-                TSL_PlotCount.Text = "Plots: " + GraphPlotCount.ToString();
-                TSL_PlotLast.Text = "Last: " + Math.Round(LastPlotTime, 3).ToString() + " ms";
-                TSL_PlotAvg.Text = "Avg: " + Math.Round(AvgPlotTime, 3).ToString() + " ms";
-            }
-#endif
         }
 
         private void Compute_SubSampling(int SampleCount)
@@ -7422,9 +7556,33 @@ namespace Ctrl_GraphWindow
         	//SnapShot.Save(Dlg_Save_Snapshot.FileName);
         	//SnapShot.Dispose();
         }
-        
+
         #endregion
+
+        #region Real time graphic control
         
+        private void Start_RealTimeTrace()
+        {
+            if(RTStatus== GraphicRealTimeStatus.Broken)
+            {
+                Properties = new GraphWindowProperties();
+            }
+
+            RTStatus = GraphicRealTimeStatus.Running;
+        }
+
+        private void Break_RealTimeTrace()
+        {
+            RTStatus = GraphicRealTimeStatus.Broken;
+        }
+
+        private void Stop_RealTimeTrace()
+        {
+            RTStatus = GraphicRealTimeStatus.Stopped;
+        }
+
+        #endregion
+
         #region Tools
 
         private int RoundClosest(int Value, int Divider)
@@ -7542,8 +7700,11 @@ namespace Ctrl_GraphWindow
         /// </summary>
         public void Refresh_Graphic()
         {
-            bDataPlotted = false;
-        	Init_GraphWindow();
+            if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
+            {
+                bDataPlotted = false;
+                Init_GraphWindow();
+            }
         }
 
         /// <summary>
@@ -7600,7 +7761,7 @@ namespace Ctrl_GraphWindow
         }
 
         #endregion
-        
+
         #endregion
-	}
+    }
 }
