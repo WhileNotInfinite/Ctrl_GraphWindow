@@ -14,6 +14,7 @@ using System.Drawing.Drawing2D;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -249,12 +250,22 @@ namespace Ctrl_GraphWindow
 	
 	        #endregion
 	    }
-	
-	    #endregion
-		
-	    #region Graphic classes
-	    
-	    private class GraphicCoordinates
+
+        #endregion
+
+        #region Graphic classes
+
+        private class GraphicUpdateRequest
+        {
+            public bool UpdateRequested { get; set; }
+
+            public GraphicUpdateRequest(bool Init)
+            {
+                UpdateRequested = Init;
+            }
+        }
+
+        private class GraphicCoordinates
 	    {
 	    	#region public members
 	    	
@@ -395,6 +406,14 @@ namespace Ctrl_GraphWindow
         /// <remarks>Fired on PreviewKeyDown internal event of the control</remarks>
         [Category("Key"), Browsable(true), Description("Occurs when a key is pressed while the focus is on this control")]
         public event EventHandler<PreviewKeyDownEventArgs> ControlPreviewKeyDown;
+
+        #endregion
+
+        #region Private delegates
+
+        private delegate void GraphicPicturePostTracingDelegateHandler();
+
+        private delegate void Pic_GraphicSetupDelegateHandler(Rectangle PicGraphicRectangle);
 
         #endregion
 
@@ -677,8 +696,17 @@ namespace Ctrl_GraphWindow
 
         #region Private members
 
+        private Thread GraphPictureMaker;
+        private GraphicUpdateRequest oGraphicUpdateRequest;
+
+        private GraphicPicturePostTracingDelegateHandler GraphicPicturePostTracingDelegate;
+        private Pic_GraphicSetupDelegateHandler Pic_GraphicSetupDelegate;
+
         private bool bDataPlotted;
-        
+
+        private Image FrameImage;
+        private Image GraphImage;
+
         private GW_DataFile WholeDataFile;
         private GW_DataFile DataFile;
         private List<SerieCoordConversion> SeriesReferenceCoordConversion;
@@ -833,10 +861,13 @@ namespace Ctrl_GraphWindow
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
-			bDataPlotted =  false;
-			
-			Properties = new GraphWindowProperties();
+
+            bDataPlotted = false;
+
+            FrameImage = null;
+            GraphImage = null;
+
+            Properties = new GraphWindowProperties();
 			WholeDataFile = null;
             DataFile = null;
             SeriesReferenceCoordConversion = null;
@@ -942,7 +973,22 @@ namespace Ctrl_GraphWindow
             LastPlotTime = 0;
             AvgPlotTime = 0;
 #endif
-		}
+
+            //Launch graphic tracing thread
+
+            /*
+                We are using a class here, not a simple 'bool' in order to lock the ressource
+                since the lock(){} statement works only with reference types (wrapped) 
+                not with value types such as 'bool'
+            */
+            oGraphicUpdateRequest = new GraphicUpdateRequest(false);
+
+            GraphicPicturePostTracingDelegate = new GraphicPicturePostTracingDelegateHandler(GraphicPicturePostTracingTask);
+            Pic_GraphicSetupDelegate = new Pic_GraphicSetupDelegateHandler(Pic_GraphicSetupTask);
+
+            GraphPictureMaker = new Thread(new ThreadStart(GraphTracingThreadTask));
+            GraphPictureMaker.IsBackground = true; //This to automatically close the thread on host application closing
+        }
 
         #region Control events
 
@@ -951,6 +997,8 @@ namespace Ctrl_GraphWindow
         private void Ctrl_WaveForm_Load(object sender, EventArgs e)
         {
             RTStatus = GraphicRealTimeStatus.Running;
+
+            GraphPictureMaker.Start();
         }
 
         #endregion
@@ -1309,29 +1357,6 @@ namespace Ctrl_GraphWindow
 		{
 			Print_Graphic();
 		}
-		
-        private void TSB_Replot_Click(object sender, EventArgs e)
-        {
-#if DEBUG
-            DateTime Tic = DateTime.Now;
-
-            Refresh_Graphic();
-
-            //Plot statistics computation
-            LastPlotTime = DateTime.Now.Subtract(Tic).TotalMilliseconds;
-
-            if (LastPlotTime > 0)
-            {
-                AvgPlotTime = ((AvgPlotTime * GraphPlotCount) + LastPlotTime) / (GraphPlotCount + 1);
-                GraphPlotCount++;
-
-                TSL_PlotCount.Text = "Plots: " + GraphPlotCount.ToString();
-                TSL_PlotAvg.Text = "Avg: " + Math.Round(AvgPlotTime, 3).ToString() + " ms";
-            }
-
-            TSL_PlotLast.Text = "Last: " + Math.Round(LastPlotTime, 3).ToString() + " ms";
-#endif
-        }
 
         private void TSB_RT_Play_Click(object sender, EventArgs e)
         {
@@ -1348,14 +1373,21 @@ namespace Ctrl_GraphWindow
             Stop_RealTimeTrace();
         }
 
+        private void TSB_Replot_Click(object sender, EventArgs e)
+        {
+#if DEBUG
+            Refresh_Graphic();
+#endif
+        }
+
         #endregion
 
         #region Pic_GraphFrame
 
         private void Pic_GraphFrameSizeChanged(object sender, EventArgs e)
 		{
-        	Init_GraphWindow();
-		}
+            oGraphicUpdateRequest.UpdateRequested = true;
+        }
         
         private void Pic_GraphFrameDragEnter(object sender, DragEventArgs e)
 		{
@@ -1687,8 +1719,8 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Overlay;
-        					Init_GraphWindow();
-        				}
+                            oGraphicUpdateRequest.UpdateRequested = true;
+                        }
         				
         				break;
         				
@@ -1697,8 +1729,8 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Parallel;
-        					Init_GraphWindow();
-        				}
+                            oGraphicUpdateRequest.UpdateRequested = true;
+                        }
         				
         				break;
         				
@@ -1707,8 +1739,8 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Custom;
-        					Init_GraphWindow();
-        				}
+                            oGraphicUpdateRequest.UpdateRequested = true;
+                        }
         				
         				break;
         				
@@ -2561,23 +2593,79 @@ namespace Ctrl_GraphWindow
 			LV_Legend.GridLines = !LV_Legend.GridLines;
 			Properties.LegendProperties.LegendGridLinesVisible = LV_Legend.GridLines;
 		}
-        
+
         #endregion
-        
+
         #endregion
-        
+
         #region Private methodes
-		
+
+        #region Threaded method and callback
+
+        private void GraphTracingThreadTask()
+        {
+            while (true)
+            {
+                lock(oGraphicUpdateRequest)
+                {
+                    if (oGraphicUpdateRequest.UpdateRequested)
+                    {
+#if DEBUG
+                        DateTime Tic = DateTime.Now;
+#endif
+                        bDataPlotted = false;
+                        Init_GraphWindow();
+
+                        oGraphicUpdateRequest.UpdateRequested = false;
+                        this.Invoke(this.GraphicPicturePostTracingDelegate);
+
+#if DEBUG
+                        //Plot statistics computation
+                        LastPlotTime = DateTime.Now.Subtract(Tic).TotalMilliseconds;
+#endif
+                    }
+                }
+            }
+        }
+
+        private void Pic_GraphicSetupTask(Rectangle PicGraphicRectangle)
+        {
+            Pic_Graphic.Location = PicGraphicRectangle.Location;
+            Pic_Graphic.Size = PicGraphicRectangle.Size;
+        }
+
+        private void GraphicPicturePostTracingTask()
+        {
+            Pic_GraphFrame.Image = FrameImage;
+            Pic_Graphic.Image = GraphImage;
+
+            Set_ZoomBars();
+            Set_Options_Controls();
+
+#if DEBUG
+            if (LastPlotTime > 0)
+            {
+                AvgPlotTime = ((AvgPlotTime * GraphPlotCount) + LastPlotTime) / (GraphPlotCount + 1);
+                GraphPlotCount++;
+
+                TSL_PlotCount.Text = "Plots: " + GraphPlotCount.ToString();
+                TSL_PlotAvg.Text = "Avg: " + Math.Round(AvgPlotTime, 3).ToString() + " ms";
+            }
+
+            TSL_PlotLast.Text = "Last: " + Math.Round(LastPlotTime, 3).ToString() + " ms";
+#endif
+        }
+
+        #endregion
+
         #region Graphic plotting functions
-        
+
         private void Init_GraphWindow()
         {
             if (Pic_GraphFrame.Width == 0 || Pic_GraphFrame.Height == 0)
             {
                 return;
             }
-
-            this.SuspendLayout();
 
             //Control feedback to host application members init
             mMainCursorAbscisse = double.NaN;
@@ -2661,12 +2749,13 @@ namespace Ctrl_GraphWindow
             //Graphic frame corners points definition
             FrameLeftPoint = Pic_GraphFrame.Width - GRAPH_FRAME_WIDTH_OFFSET - FrameWidth; //Pic_Graphic.Width - GRAPH_FRAME_WIDTH_OFFSET - FrameWidth;
             FrameRightPoint = FrameLeftPoint + FrameWidth;
-            
+
             //Set Pic_Graphic size and position
-            Pic_Graphic.Width = FrameWidth;
-            Pic_Graphic.Height = FrameHeight;
-            Pic_Graphic.Left = FrameLeftPoint;
-            Pic_Graphic.Top = FrameTopPoint;
+            this.BeginInvoke(this.Pic_GraphicSetupDelegate,
+                             new object[] { new Rectangle(FrameLeftPoint,
+                                                          FrameTopPoint,
+                                                          FrameWidth,
+                                                          FrameHeight) });
             
             //Abscisse coords definition
             if (!(DataFile == null))
@@ -2750,20 +2839,15 @@ namespace Ctrl_GraphWindow
             //Series
             Plot_Series();
             
-            Set_ZoomBars();
-            Set_Options_Controls();
-            
             PtCursorPos = Point.Empty;            
             CursorPosMouseDown = Point.Empty;
             CursorPosMouseUp = Point.Empty;
-            
-            this.ResumeLayout();
         }
 
         private void Plot_Series()
         {			
-			Image FrameImage = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
-			Image GraphImage = new Bitmap(Pic_Graphic.Width, Pic_Graphic.Height);
+			FrameImage = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
+		    GraphImage = new Bitmap(Pic_Graphic.Width, Pic_Graphic.Height);
 
 			Graphics g = Graphics.FromImage(GraphImage);
             g.Clear(Properties.WindowBackColor);
@@ -2771,9 +2855,10 @@ namespace Ctrl_GraphWindow
             Graphics gFrame = Graphics.FromImage(FrameImage);
             gFrame.Clear(Properties.WindowBackColor);
 
-            LV_Legend.BackColor = Properties.WindowBackColor;
-            LV_Legend.Items.Clear();
-            Init_Legend();
+            //TODO: Hack for threaded graphic picture computation
+            //LV_Legend.BackColor = Properties.WindowBackColor;
+            //LV_Legend.Items.Clear();
+            //Init_Legend();
 
             //GraphFrame
             #region Graphic frame
@@ -3956,64 +4041,63 @@ namespace Ctrl_GraphWindow
                         	}
 
                             //Legend
-                    		#region Legend
+                            #region Legend
 
-                    		if (Properties.LegendProperties.Visible && (!(oSerieData == null)))
-                    		{
-                    			ListViewItem SerieLegItem = new ListViewItem();
+                            //TODO: Hack for threaded graphic picture computation
 
-                    			SerieLegItem.Text = oSerieProps.Label;
-                    			SerieLegItem.ForeColor = oSerieProps.Trace.LineColor;
-                    			SerieLegItem.Tag = oSerieProps.KeyId;
+                      //      if (Properties.LegendProperties.Visible && (!(oSerieData == null)))
+                    		//{
+                    		//	ListViewItem SerieLegItem = new ListViewItem();
+
+                    		//	SerieLegItem.Text = oSerieProps.Label;
+                    		//	SerieLegItem.ForeColor = oSerieProps.Trace.LineColor;
+                    		//	SerieLegItem.Tag = oSerieProps.KeyId;
                     			
-                    			Properties.LegendProperties.LegendFont.Set_FontProperty(GW_Font.FontProperty.Strikeout, !oSerieProps.Visible);
-                    			SerieLegItem.Font = Properties.LegendProperties.LegendFont.oFont;
+                    		//	Properties.LegendProperties.LegendFont.Set_FontProperty(GW_Font.FontProperty.Strikeout, !oSerieProps.Visible);
+                    		//	SerieLegItem.Font = Properties.LegendProperties.LegendFont.oFont;
                     			
-                    			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-                    			{
-                                    if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
-                                    {
-                                        SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
-                                    }
-                                    else
-                                    {
-                                        SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Samples[0].SampleValue));
-                                    }
-                    			}
+                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
+                    		//	{
+                      //              if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
+                      //              {
+                      //                  SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
+                      //              }
+                      //              else
+                      //              {
+                      //                  SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Samples[0].SampleValue));
+                      //              }
+                    		//	}
 
-                    			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
-                    			{
-                    				SerieLegItem.SubItems.Add(oSerieProps.Unit);
-                    			}
+                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
+                    		//	{
+                    		//		SerieLegItem.SubItems.Add(oSerieProps.Unit);
+                    		//	}
 
-                    			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
-                    			{
-                    				SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Min));
-                    			}
+                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
+                    		//	{
+                    		//		SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Min));
+                    		//	}
 
-                    			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
-                    			{
-                    				SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Max));
-                    			}
+                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
+                    		//	{
+                    		//		SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Max));
+                    		//	}
 
-                    			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
-                    			{
-                    				SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Avg));
-                    			}
+                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
+                    		//	{
+                    		//		SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Avg));
+                    		//	}
 
-                    			LV_Legend.Items.Add(SerieLegItem);
-                    			LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    		//	LV_Legend.Items.Add(SerieLegItem);
+                    		//	LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                     			
-                    		}
+                    		//}
 
                     		#endregion
                         }
                     }
                 }
             }
-            
-            Pic_GraphFrame.Image = FrameImage;
-            Pic_Graphic.Image = GraphImage;
             
             g.Dispose();
             gFrame.Dispose();
@@ -4994,8 +5078,8 @@ namespace Ctrl_GraphWindow
         		
         		if (bPlot)
         		{
-        			Init_GraphWindow();
-        		}
+                    oGraphicUpdateRequest.UpdateRequested = true;
+                }
         	}
         }
         
@@ -5032,8 +5116,8 @@ namespace Ctrl_GraphWindow
         	
         	if (bPlot)
         	{
-        		Init_GraphWindow();
-        	}
+                oGraphicUpdateRequest.UpdateRequested = true;
+            }
         }
         
         private bool Zoom_X_Plus(bool ZoomMax)
@@ -5186,8 +5270,8 @@ namespace Ctrl_GraphWindow
         	
         	if (bPlot)
         	{
-        		Init_GraphWindow();
-        	}
+                oGraphicUpdateRequest.UpdateRequested = true;
+            }
         }
         
         private void ZoomMin()
@@ -5195,8 +5279,8 @@ namespace Ctrl_GraphWindow
         	DataFile = WholeDataFile;
         	bXZoom = false;
         	bYZoom = false;
-        	Init_GraphWindow();
-        		
+            oGraphicUpdateRequest.UpdateRequested = true;
+
         }
         
         private bool Zoom_X_Minus()
@@ -5310,8 +5394,8 @@ namespace Ctrl_GraphWindow
         	
         	if (Set_DataFile_BetweenAbsPoint(X1, X2))
         	{
-        		Init_GraphWindow();
-        	}
+                oGraphicUpdateRequest.UpdateRequested = true;
+            }
         }
         
         private void Plot_DataAtYZoomBarPosition()
@@ -5323,8 +5407,8 @@ namespace Ctrl_GraphWindow
         	
         	if (Set_DataFileForYZoom(ZoomY1, ZoomY2, false))
         	{
-        		Init_GraphWindow();
-        	}    
+                oGraphicUpdateRequest.UpdateRequested = true;
+            }    
         }
         
         private void Show_ZoomBoxStatistics()
@@ -6541,7 +6625,7 @@ namespace Ctrl_GraphWindow
                 if (oNewData.Load_DataFile(Dlg_OpenData.FileName))
                 {
                 	Set_DataFile(oNewData);
-                    Init_GraphWindow();
+                    oGraphicUpdateRequest.UpdateRequested = true;
                 }
                 else
                 {
@@ -7399,7 +7483,7 @@ namespace Ctrl_GraphWindow
         private void Change_GraphLayout(GraphicWindowLayoutModes eNewLayoutMode)
         {
         	Properties.GraphLayoutMode = eNewLayoutMode;
-        	Init_GraphWindow();
+            oGraphicUpdateRequest.UpdateRequested = true;
         }
         
         private void Change_MainCursorMode(GraphicCursorMode eNewCursorMode)
@@ -7448,8 +7532,8 @@ namespace Ctrl_GraphWindow
                 {
                     Properties.Create_Serie(ItChannel.Text);
                 }
-                
-                Init_GraphWindow();
+
+                oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
         
@@ -7673,7 +7757,7 @@ namespace Ctrl_GraphWindow
         #endregion
 
         #region Events handling methods
-        
+
         /// <summary>
         /// UserControlKey down event firing method
         /// </summary>
@@ -7702,8 +7786,7 @@ namespace Ctrl_GraphWindow
         {
             if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
             {
-                bDataPlotted = false;
-                Init_GraphWindow();
+                oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
 
@@ -7742,9 +7825,9 @@ namespace Ctrl_GraphWindow
         		{
         			Properties.Create_Serie(Name);
         		}
-        		
-        		Init_GraphWindow();
-        	}
+
+                oGraphicUpdateRequest.UpdateRequested = true;
+            }
         }
         
         /// <summary>

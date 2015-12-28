@@ -38,63 +38,17 @@ namespace Ctrl_GraphWindow
 		{
             this.components = new System.ComponentModel.Container();
             this.TB_Graph = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.TSL_PlotCount = new System.Windows.Forms.ToolStripLabel();
-            this.TSL_PlotLast = new System.Windows.Forms.ToolStripLabel();
-            this.TSL_PlotAvg = new System.Windows.Forms.ToolStripLabel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.Cmd_ZoomYPosition = new System.Windows.Forms.Button();
-            this.Cmd_ZoomXPosition = new System.Windows.Forms.Button();
-            this.LV_Legend = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Dlg_OpenData = new System.Windows.Forms.OpenFileDialog();
-            this.Context_PicGraphic_ZoomStats = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Context_PicGraph_Options = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ZoomMintoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ZoomMaxtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
-            this.Context_Legend = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.TSMI_Ctxt_Legend_Edit = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Hide = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Remove = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.TSMI_Ctxt_Legend_Infos = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_Label = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_Value = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_Unit = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_Min = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_Max = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_Avg = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_RefCursor = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_ShowTitles = new System.Windows.Forms.ToolStripMenuItem();
-            this.TSMI_Ctxt_Legend_ShowGridLines = new System.Windows.Forms.ToolStripMenuItem();
-            this.Dlg_Save_Snapshot = new System.Windows.Forms.SaveFileDialog();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.TSB_LoadData = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TSB_ShowHide_ChannelList = new System.Windows.Forms.ToolStripButton();
             this.TSB_ShowHide_Legend = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TSB_GraphProperties = new System.Windows.Forms.ToolStripButton();
             this.TSDdB_GraphLayoutMode = new System.Windows.Forms.ToolStripDropDownButton();
             this.TSDdB_overlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TSDdB_parallelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TSDdB_customToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.TSDdB_MainGraphCursor = new System.Windows.Forms.ToolStripDropDownButton();
             this.TSDdB_noneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TSDdB_verticalLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,6 +75,7 @@ namespace Ctrl_GraphWindow
             this.TSDB_RefCursor_Mode_None = new System.Windows.Forms.ToolStripMenuItem();
             this.TSDB_RefCursor_Mode_Vertical = new System.Windows.Forms.ToolStripMenuItem();
             this.TSDB_RefCursor_Mode_Horizontal = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.TSDdB_ZoomMode = new System.Windows.Forms.ToolStripDropDownButton();
             this.TSDdB_zoomXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TSDdB_zoomYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -135,14 +90,43 @@ namespace Ctrl_GraphWindow
             this.TSDdB_ZoomFactor_32 = new System.Windows.Forms.ToolStripMenuItem();
             this.TSB_ZoomPlus = new System.Windows.Forms.ToolStripButton();
             this.TSB_ZoomMinus = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.TSB_Snapshot = new System.Windows.Forms.ToolStripButton();
             this.TSB_Print = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.TSB_RT_Play = new System.Windows.Forms.ToolStripButton();
             this.TSB_RT_Break = new System.Windows.Forms.ToolStripButton();
             this.TSB_RT_Stop = new System.Windows.Forms.ToolStripButton();
+            this.TSL_PlotCount = new System.Windows.Forms.ToolStripLabel();
+            this.TSL_PlotLast = new System.Windows.Forms.ToolStripLabel();
+            this.TSL_PlotAvg = new System.Windows.Forms.ToolStripLabel();
             this.TSB_Replot = new System.Windows.Forms.ToolStripButton();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.Ctrl_ChannelList = new Ctrl_GraphWindow.Ctrl_GW_ChannelList();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.Cmd_ZoomYPosition = new System.Windows.Forms.Button();
+            this.Cmd_ZoomXPosition = new System.Windows.Forms.Button();
+            this.Pic_Graphic = new Ctrl_GraphWindow.GW_SelectablePictureBox();
+            this.Pic_GraphFrame = new Ctrl_GraphWindow.GW_SelectablePictureBox();
+            this.LV_Legend = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Dlg_OpenData = new System.Windows.Forms.OpenFileDialog();
+            this.Context_PicGraphic_ZoomStats = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Context_PicGraph_Options = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.RT_PlaytoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RT_BreaktoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RT_StoptoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.ZoomPlustoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomMinustoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ZoomMintoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ZoomMaxtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomModetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomMode_X_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomMode_Y_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,6 +139,7 @@ namespace Ctrl_GraphWindow
             this.ZoomFactor_8_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomFactor_16_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomFactor_32_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cursorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Cursor_noneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Cursor_verticalLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -182,20 +167,35 @@ namespace Ctrl_GraphWindow
             this.RefCursor_Mode_None_TSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.RefCursor_Mode_Vertical_TSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.RefCursor_Mode_Horizontal_TSMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.graphLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Layout_overlayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Layout_parallelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Layout_customToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.snapshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.RT_PlaytoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RT_BreaktoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RT_StoptoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Ctrl_ChannelList = new Ctrl_GraphWindow.Ctrl_GW_ChannelList();
-            this.Pic_Graphic = new Ctrl_GraphWindow.GW_SelectablePictureBox();
-            this.Pic_GraphFrame = new Ctrl_GraphWindow.GW_SelectablePictureBox();
+            this.Context_Legend = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.TSMI_Ctxt_Legend_Edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Hide = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.TSMI_Ctxt_Legend_Infos = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_Label = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_Value = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_Unit = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_Min = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_Max = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_Avg = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_RefCursor = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_ShowTitles = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_Ctxt_Legend_ShowGridLines = new System.Windows.Forms.ToolStripMenuItem();
+            this.Dlg_Save_Snapshot = new System.Windows.Forms.SaveFileDialog();
             this.TB_Graph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -205,11 +205,11 @@ namespace Ctrl_GraphWindow
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).BeginInit();
             this.Context_PicGraphic_ZoomStats.SuspendLayout();
             this.Context_PicGraph_Options.SuspendLayout();
             this.Context_Legend.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).BeginInit();
             this.SuspendLayout();
             // 
             // TB_Graph
@@ -249,408 +249,6 @@ namespace Ctrl_GraphWindow
             this.TB_Graph.TabIndex = 0;
             this.TB_Graph.Text = "toolStrip1";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
-            // 
-            // TSL_PlotCount
-            // 
-            this.TSL_PlotCount.Name = "TSL_PlotCount";
-            this.TSL_PlotCount.Size = new System.Drawing.Size(36, 22);
-            this.TSL_PlotCount.Text = "Plots:";
-            this.TSL_PlotCount.Visible = false;
-            // 
-            // TSL_PlotLast
-            // 
-            this.TSL_PlotLast.Name = "TSL_PlotLast";
-            this.TSL_PlotLast.Size = new System.Drawing.Size(31, 22);
-            this.TSL_PlotLast.Text = "Last:";
-            this.TSL_PlotLast.Visible = false;
-            // 
-            // TSL_PlotAvg
-            // 
-            this.TSL_PlotAvg.Name = "TSL_PlotAvg";
-            this.TSL_PlotAvg.Size = new System.Drawing.Size(31, 22);
-            this.TSL_PlotAvg.Text = "Avg:";
-            this.TSL_PlotAvg.Visible = false;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.Ctrl_ChannelList);
-            this.splitContainer1.Panel1MinSize = 0;
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(673, 374);
-            this.splitContainer1.SplitterDistance = 74;
-            this.splitContainer1.TabIndex = 1;
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.Cmd_ZoomYPosition);
-            this.splitContainer2.Panel1.Controls.Add(this.Cmd_ZoomXPosition);
-            this.splitContainer2.Panel1.Controls.Add(this.Pic_Graphic);
-            this.splitContainer2.Panel1.Controls.Add(this.Pic_GraphFrame);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.LV_Legend);
-            this.splitContainer2.Size = new System.Drawing.Size(595, 374);
-            this.splitContainer2.SplitterDistance = 514;
-            this.splitContainer2.TabIndex = 0;
-            // 
-            // Cmd_ZoomYPosition
-            // 
-            this.Cmd_ZoomYPosition.FlatAppearance.BorderSize = 0;
-            this.Cmd_ZoomYPosition.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Cmd_ZoomYPosition.Location = new System.Drawing.Point(491, 72);
-            this.Cmd_ZoomYPosition.Margin = new System.Windows.Forms.Padding(0);
-            this.Cmd_ZoomYPosition.MinimumSize = new System.Drawing.Size(5, 5);
-            this.Cmd_ZoomYPosition.Name = "Cmd_ZoomYPosition";
-            this.Cmd_ZoomYPosition.Size = new System.Drawing.Size(5, 75);
-            this.Cmd_ZoomYPosition.TabIndex = 6;
-            this.Cmd_ZoomYPosition.UseVisualStyleBackColor = true;
-            this.Cmd_ZoomYPosition.Visible = false;
-            this.Cmd_ZoomYPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomYPositionMouseDown);
-            this.Cmd_ZoomYPosition.MouseEnter += new System.EventHandler(this.Cmd_ZoomYPositionMouseEnter);
-            this.Cmd_ZoomYPosition.MouseLeave += new System.EventHandler(this.Cmd_ZoomYPositionMouseLeave);
-            this.Cmd_ZoomYPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomYPositionMouseMove);
-            this.Cmd_ZoomYPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomYPositionMouseUp);
-            // 
-            // Cmd_ZoomXPosition
-            // 
-            this.Cmd_ZoomXPosition.FlatAppearance.BorderSize = 0;
-            this.Cmd_ZoomXPosition.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Cmd_ZoomXPosition.Location = new System.Drawing.Point(96, 15);
-            this.Cmd_ZoomXPosition.Margin = new System.Windows.Forms.Padding(0);
-            this.Cmd_ZoomXPosition.MinimumSize = new System.Drawing.Size(5, 5);
-            this.Cmd_ZoomXPosition.Name = "Cmd_ZoomXPosition";
-            this.Cmd_ZoomXPosition.Size = new System.Drawing.Size(75, 5);
-            this.Cmd_ZoomXPosition.TabIndex = 5;
-            this.Cmd_ZoomXPosition.UseVisualStyleBackColor = true;
-            this.Cmd_ZoomXPosition.Visible = false;
-            this.Cmd_ZoomXPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseDown);
-            this.Cmd_ZoomXPosition.MouseEnter += new System.EventHandler(this.Cmd_ZoomXPositionMouseEnter);
-            this.Cmd_ZoomXPosition.MouseLeave += new System.EventHandler(this.Cmd_ZoomXPositionMouseLeave);
-            this.Cmd_ZoomXPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseMove);
-            this.Cmd_ZoomXPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseUp);
-            // 
-            // LV_Legend
-            // 
-            this.LV_Legend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.LV_Legend.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5});
-            this.LV_Legend.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.LV_Legend.Location = new System.Drawing.Point(1, 1);
-            this.LV_Legend.Margin = new System.Windows.Forms.Padding(1);
-            this.LV_Legend.Name = "LV_Legend";
-            this.LV_Legend.Size = new System.Drawing.Size(74, 370);
-            this.LV_Legend.TabIndex = 0;
-            this.LV_Legend.UseCompatibleStateImageBehavior = false;
-            this.LV_Legend.View = System.Windows.Forms.View.Details;
-            this.LV_Legend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_LegendKeyDown);
-            this.LV_Legend.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LV_LegendMouseDoubleClick);
-            this.LV_Legend.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LV_LegendMouseDown);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Name";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Value";
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Min";
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Max";
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Avg";
-            // 
-            // Dlg_OpenData
-            // 
-            this.Dlg_OpenData.Filter = "CSV File|*.csv";
-            // 
-            // Context_PicGraphic_ZoomStats
-            // 
-            this.Context_PicGraphic_ZoomStats.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.zoomToolStripMenuItem,
-            this.statisticsToolStripMenuItem});
-            this.Context_PicGraphic_ZoomStats.Name = "Context_PicGraphic_Zoom";
-            this.Context_PicGraphic_ZoomStats.Size = new System.Drawing.Size(121, 48);
-            // 
-            // zoomToolStripMenuItem
-            // 
-            this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
-            this.zoomToolStripMenuItem.Text = "Zoom";
-            this.zoomToolStripMenuItem.Click += new System.EventHandler(this.ZoomToolStripMenuItemClick);
-            // 
-            // statisticsToolStripMenuItem
-            // 
-            this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
-            this.statisticsToolStripMenuItem.Text = "Statistics";
-            this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.StatisticsToolStripMenuItemClick);
-            // 
-            // Context_PicGraph_Options
-            // 
-            this.Context_PicGraph_Options.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RT_PlaytoolStripMenuItem,
-            this.RT_BreaktoolStripMenuItem,
-            this.RT_StoptoolStripMenuItem,
-            this.toolStripSeparator8,
-            this.ZoomPlustoolStripMenuItem,
-            this.ZoomMinustoolStripMenuItem,
-            this.ZoomMintoolStripMenuItem,
-            this.ZoomMaxtoolStripMenuItem,
-            this.ZoomModetoolStripMenuItem,
-            this.ZoomFactortoolStripMenuItem,
-            this.toolStripSeparator3,
-            this.cursorToolStripMenuItem,
-            this.ReferenceCursorToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.graphLayoutToolStripMenuItem,
-            this.propertiesToolStripMenuItem,
-            this.toolStripMenuItem7,
-            this.snapshotToolStripMenuItem,
-            this.printToolStripMenuItem});
-            this.Context_PicGraph_Options.Name = "Context_PicGraph_Options";
-            this.Context_PicGraph_Options.Size = new System.Drawing.Size(163, 380);
-            // 
-            // ZoomMintoolStripMenuItem
-            // 
-            this.ZoomMintoolStripMenuItem.Name = "ZoomMintoolStripMenuItem";
-            this.ZoomMintoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.ZoomMintoolStripMenuItem.Text = "Zoom min";
-            this.ZoomMintoolStripMenuItem.Click += new System.EventHandler(this.ZoomMintoolStripMenuItemClick);
-            // 
-            // ZoomMaxtoolStripMenuItem
-            // 
-            this.ZoomMaxtoolStripMenuItem.Name = "ZoomMaxtoolStripMenuItem";
-            this.ZoomMaxtoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.ZoomMaxtoolStripMenuItem.Text = "Zoom max";
-            this.ZoomMaxtoolStripMenuItem.Click += new System.EventHandler(this.ZoomMaxtoolStripMenuItemClick);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(159, 6);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(159, 6);
-            // 
-            // toolStripMenuItem7
-            // 
-            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(159, 6);
-            // 
-            // Context_Legend
-            // 
-            this.Context_Legend.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TSMI_Ctxt_Legend_Edit,
-            this.TSMI_Ctxt_Legend_Hide,
-            this.TSMI_Ctxt_Legend_Remove,
-            this.toolStripMenuItem4,
-            this.TSMI_Ctxt_Legend_Infos,
-            this.TSMI_Ctxt_Legend_ShowTitles,
-            this.TSMI_Ctxt_Legend_ShowGridLines});
-            this.Context_Legend.Name = "Context_Legend";
-            this.Context_Legend.Size = new System.Drawing.Size(198, 142);
-            // 
-            // TSMI_Ctxt_Legend_Edit
-            // 
-            this.TSMI_Ctxt_Legend_Edit.Name = "TSMI_Ctxt_Legend_Edit";
-            this.TSMI_Ctxt_Legend_Edit.Size = new System.Drawing.Size(197, 22);
-            this.TSMI_Ctxt_Legend_Edit.Text = "Edit graph properties";
-            this.TSMI_Ctxt_Legend_Edit.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_EditClick);
-            // 
-            // TSMI_Ctxt_Legend_Hide
-            // 
-            this.TSMI_Ctxt_Legend_Hide.Name = "TSMI_Ctxt_Legend_Hide";
-            this.TSMI_Ctxt_Legend_Hide.ShortcutKeyDisplayString = "[T]";
-            this.TSMI_Ctxt_Legend_Hide.Size = new System.Drawing.Size(197, 22);
-            this.TSMI_Ctxt_Legend_Hide.Text = "Hide graph";
-            this.TSMI_Ctxt_Legend_Hide.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_HideClick);
-            // 
-            // TSMI_Ctxt_Legend_Remove
-            // 
-            this.TSMI_Ctxt_Legend_Remove.Name = "TSMI_Ctxt_Legend_Remove";
-            this.TSMI_Ctxt_Legend_Remove.ShortcutKeyDisplayString = "[Del]";
-            this.TSMI_Ctxt_Legend_Remove.Size = new System.Drawing.Size(197, 22);
-            this.TSMI_Ctxt_Legend_Remove.Text = "Remove graph";
-            this.TSMI_Ctxt_Legend_Remove.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_RemoveClick);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(194, 6);
-            // 
-            // TSMI_Ctxt_Legend_Infos
-            // 
-            this.TSMI_Ctxt_Legend_Infos.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TSMI_Ctxt_Legend_Infos_Label,
-            this.TSMI_Ctxt_Legend_Infos_Value,
-            this.TSMI_Ctxt_Legend_Infos_Unit,
-            this.TSMI_Ctxt_Legend_Infos_Min,
-            this.TSMI_Ctxt_Legend_Infos_Max,
-            this.TSMI_Ctxt_Legend_Infos_Avg,
-            this.TSMI_Ctxt_Legend_Infos_RefCursor});
-            this.TSMI_Ctxt_Legend_Infos.Name = "TSMI_Ctxt_Legend_Infos";
-            this.TSMI_Ctxt_Legend_Infos.Size = new System.Drawing.Size(197, 22);
-            this.TSMI_Ctxt_Legend_Infos.Text = "Legend informations";
-            // 
-            // TSMI_Ctxt_Legend_Infos_Label
-            // 
-            this.TSMI_Ctxt_Legend_Infos_Label.Name = "TSMI_Ctxt_Legend_Infos_Label";
-            this.TSMI_Ctxt_Legend_Infos_Label.Size = new System.Drawing.Size(162, 22);
-            this.TSMI_Ctxt_Legend_Infos_Label.Text = "Label";
-            this.TSMI_Ctxt_Legend_Infos_Label.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_LabelClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_Value
-            // 
-            this.TSMI_Ctxt_Legend_Infos_Value.Name = "TSMI_Ctxt_Legend_Infos_Value";
-            this.TSMI_Ctxt_Legend_Infos_Value.Size = new System.Drawing.Size(162, 22);
-            this.TSMI_Ctxt_Legend_Infos_Value.Text = "Cursor value";
-            this.TSMI_Ctxt_Legend_Infos_Value.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_ValueClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_Unit
-            // 
-            this.TSMI_Ctxt_Legend_Infos_Unit.Name = "TSMI_Ctxt_Legend_Infos_Unit";
-            this.TSMI_Ctxt_Legend_Infos_Unit.Size = new System.Drawing.Size(162, 22);
-            this.TSMI_Ctxt_Legend_Infos_Unit.Text = "Unit";
-            this.TSMI_Ctxt_Legend_Infos_Unit.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_UnitClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_Min
-            // 
-            this.TSMI_Ctxt_Legend_Infos_Min.Name = "TSMI_Ctxt_Legend_Infos_Min";
-            this.TSMI_Ctxt_Legend_Infos_Min.Size = new System.Drawing.Size(162, 22);
-            this.TSMI_Ctxt_Legend_Infos_Min.Text = "Graph min";
-            this.TSMI_Ctxt_Legend_Infos_Min.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_MinClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_Max
-            // 
-            this.TSMI_Ctxt_Legend_Infos_Max.Name = "TSMI_Ctxt_Legend_Infos_Max";
-            this.TSMI_Ctxt_Legend_Infos_Max.Size = new System.Drawing.Size(162, 22);
-            this.TSMI_Ctxt_Legend_Infos_Max.Text = "Graph max";
-            this.TSMI_Ctxt_Legend_Infos_Max.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_MaxClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_Avg
-            // 
-            this.TSMI_Ctxt_Legend_Infos_Avg.Name = "TSMI_Ctxt_Legend_Infos_Avg";
-            this.TSMI_Ctxt_Legend_Infos_Avg.Size = new System.Drawing.Size(162, 22);
-            this.TSMI_Ctxt_Legend_Infos_Avg.Text = "Graph average";
-            this.TSMI_Ctxt_Legend_Infos_Avg.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_AvgClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_RefCursor
-            // 
-            this.TSMI_Ctxt_Legend_Infos_RefCursor.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value,
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff,
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc,
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient});
-            this.TSMI_Ctxt_Legend_Infos_RefCursor.Name = "TSMI_Ctxt_Legend_Infos_RefCursor";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor.Size = new System.Drawing.Size(162, 22);
-            this.TSMI_Ctxt_Legend_Infos_RefCursor.Text = "Reference cursor";
-            // 
-            // TSMI_Ctxt_Legend_Infos_RefCursor_Value
-            // 
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_Value";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Size = new System.Drawing.Size(226, 22);
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Text = "Reference value";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_ValueClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_RefCursor_Diff
-            // 
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_Diff";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Size = new System.Drawing.Size(226, 22);
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Text = "Reference value difference";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc
-            // 
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Size = new System.Drawing.Size(226, 22);
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Text = "Reference value difference %";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPercClick);
-            // 
-            // TSMI_Ctxt_Legend_Infos_RefCursor_Gradient
-            // 
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_Gradient";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Size = new System.Drawing.Size(226, 22);
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Text = "Gradient";
-            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_GradientClick);
-            // 
-            // TSMI_Ctxt_Legend_ShowTitles
-            // 
-            this.TSMI_Ctxt_Legend_ShowTitles.Name = "TSMI_Ctxt_Legend_ShowTitles";
-            this.TSMI_Ctxt_Legend_ShowTitles.Size = new System.Drawing.Size(197, 22);
-            this.TSMI_Ctxt_Legend_ShowTitles.Text = "Show information titles";
-            this.TSMI_Ctxt_Legend_ShowTitles.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_ShowTitlesClick);
-            // 
-            // TSMI_Ctxt_Legend_ShowGridLines
-            // 
-            this.TSMI_Ctxt_Legend_ShowGridLines.Name = "TSMI_Ctxt_Legend_ShowGridLines";
-            this.TSMI_Ctxt_Legend_ShowGridLines.Size = new System.Drawing.Size(197, 22);
-            this.TSMI_Ctxt_Legend_ShowGridLines.Text = "Show grid lines";
-            this.TSMI_Ctxt_Legend_ShowGridLines.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_ShowGridLinesClick);
-            // 
-            // Dlg_Save_Snapshot
-            // 
-            this.Dlg_Save_Snapshot.Filter = "Bitmap image|*.bmp";
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
-            // 
             // TSB_LoadData
             // 
             this.TSB_LoadData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -661,6 +259,11 @@ namespace Ctrl_GraphWindow
             this.TSB_LoadData.Text = "toolStripButton1";
             this.TSB_LoadData.ToolTipText = "Load data file";
             this.TSB_LoadData.Click += new System.EventHandler(this.TSB_LoadData_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // TSB_ShowHide_ChannelList
             // 
@@ -683,6 +286,11 @@ namespace Ctrl_GraphWindow
             this.TSB_ShowHide_Legend.Text = "toolStripButton1";
             this.TSB_ShowHide_Legend.ToolTipText = "Show/Hide legend";
             this.TSB_ShowHide_Legend.Click += new System.EventHandler(this.TSB_ShowHide_LegendClick);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
             // TSB_GraphProperties
             // 
@@ -729,6 +337,11 @@ namespace Ctrl_GraphWindow
             this.TSDdB_customToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.TSDdB_customToolStripMenuItem.Text = "Custom";
             this.TSDdB_customToolStripMenuItem.Click += new System.EventHandler(this.TSDdB_customToolStripMenuItemClick);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // TSDdB_MainGraphCursor
             // 
@@ -948,6 +561,11 @@ namespace Ctrl_GraphWindow
             this.TSDB_RefCursor_Mode_Horizontal.Text = "Horizontal line";
             this.TSDB_RefCursor_Mode_Horizontal.Click += new System.EventHandler(this.TSDB_RefCursor_Mode_HorizontalClick);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
             // TSDdB_ZoomMode
             // 
             this.TSDdB_ZoomMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1070,6 +688,11 @@ namespace Ctrl_GraphWindow
             this.TSB_ZoomMinus.ToolTipText = "Zoom -";
             this.TSB_ZoomMinus.Click += new System.EventHandler(this.TSB_ZoomMinusClick);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            // 
             // TSB_Snapshot
             // 
             this.TSB_Snapshot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1091,6 +714,11 @@ namespace Ctrl_GraphWindow
             this.TSB_Print.Text = "toolStripButton1";
             this.TSB_Print.ToolTipText = "Print graphic";
             this.TSB_Print.Click += new System.EventHandler(this.TSB_PrintClick);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
             // 
             // TSB_RT_Play
             // 
@@ -1125,6 +753,27 @@ namespace Ctrl_GraphWindow
             this.TSB_RT_Stop.ToolTipText = "Stop";
             this.TSB_RT_Stop.Click += new System.EventHandler(this.TSB_RT_Stop_Click);
             // 
+            // TSL_PlotCount
+            // 
+            this.TSL_PlotCount.Name = "TSL_PlotCount";
+            this.TSL_PlotCount.Size = new System.Drawing.Size(36, 22);
+            this.TSL_PlotCount.Text = "Plots:";
+            this.TSL_PlotCount.Visible = false;
+            // 
+            // TSL_PlotLast
+            // 
+            this.TSL_PlotLast.Name = "TSL_PlotLast";
+            this.TSL_PlotLast.Size = new System.Drawing.Size(31, 22);
+            this.TSL_PlotLast.Text = "Last:";
+            this.TSL_PlotLast.Visible = false;
+            // 
+            // TSL_PlotAvg
+            // 
+            this.TSL_PlotAvg.Name = "TSL_PlotAvg";
+            this.TSL_PlotAvg.Size = new System.Drawing.Size(31, 22);
+            this.TSL_PlotAvg.Text = "Avg:";
+            this.TSL_PlotAvg.Visible = false;
+            // 
             // TSB_Replot
             // 
             this.TSB_Replot.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1136,6 +785,246 @@ namespace Ctrl_GraphWindow
             this.TSB_Replot.ToolTipText = "Re-Plot";
             this.TSB_Replot.Visible = false;
             this.TSB_Replot.Click += new System.EventHandler(this.TSB_Replot_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.Ctrl_ChannelList);
+            this.splitContainer1.Panel1MinSize = 0;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+            this.splitContainer1.Size = new System.Drawing.Size(673, 374);
+            this.splitContainer1.SplitterDistance = 74;
+            this.splitContainer1.TabIndex = 1;
+            // 
+            // Ctrl_ChannelList
+            // 
+            this.Ctrl_ChannelList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Ctrl_ChannelList.Location = new System.Drawing.Point(3, 3);
+            this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
+            this.Ctrl_ChannelList.Size = new System.Drawing.Size(69, 368);
+            this.Ctrl_ChannelList.TabIndex = 0;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.Cmd_ZoomYPosition);
+            this.splitContainer2.Panel1.Controls.Add(this.Cmd_ZoomXPosition);
+            this.splitContainer2.Panel1.Controls.Add(this.Pic_Graphic);
+            this.splitContainer2.Panel1.Controls.Add(this.Pic_GraphFrame);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.LV_Legend);
+            this.splitContainer2.Size = new System.Drawing.Size(595, 374);
+            this.splitContainer2.SplitterDistance = 514;
+            this.splitContainer2.TabIndex = 0;
+            // 
+            // Cmd_ZoomYPosition
+            // 
+            this.Cmd_ZoomYPosition.FlatAppearance.BorderSize = 0;
+            this.Cmd_ZoomYPosition.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Cmd_ZoomYPosition.Location = new System.Drawing.Point(491, 72);
+            this.Cmd_ZoomYPosition.Margin = new System.Windows.Forms.Padding(0);
+            this.Cmd_ZoomYPosition.MinimumSize = new System.Drawing.Size(5, 5);
+            this.Cmd_ZoomYPosition.Name = "Cmd_ZoomYPosition";
+            this.Cmd_ZoomYPosition.Size = new System.Drawing.Size(5, 75);
+            this.Cmd_ZoomYPosition.TabIndex = 6;
+            this.Cmd_ZoomYPosition.UseVisualStyleBackColor = true;
+            this.Cmd_ZoomYPosition.Visible = false;
+            this.Cmd_ZoomYPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomYPositionMouseDown);
+            this.Cmd_ZoomYPosition.MouseEnter += new System.EventHandler(this.Cmd_ZoomYPositionMouseEnter);
+            this.Cmd_ZoomYPosition.MouseLeave += new System.EventHandler(this.Cmd_ZoomYPositionMouseLeave);
+            this.Cmd_ZoomYPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomYPositionMouseMove);
+            this.Cmd_ZoomYPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomYPositionMouseUp);
+            // 
+            // Cmd_ZoomXPosition
+            // 
+            this.Cmd_ZoomXPosition.FlatAppearance.BorderSize = 0;
+            this.Cmd_ZoomXPosition.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Cmd_ZoomXPosition.Location = new System.Drawing.Point(96, 15);
+            this.Cmd_ZoomXPosition.Margin = new System.Windows.Forms.Padding(0);
+            this.Cmd_ZoomXPosition.MinimumSize = new System.Drawing.Size(5, 5);
+            this.Cmd_ZoomXPosition.Name = "Cmd_ZoomXPosition";
+            this.Cmd_ZoomXPosition.Size = new System.Drawing.Size(75, 5);
+            this.Cmd_ZoomXPosition.TabIndex = 5;
+            this.Cmd_ZoomXPosition.UseVisualStyleBackColor = true;
+            this.Cmd_ZoomXPosition.Visible = false;
+            this.Cmd_ZoomXPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseDown);
+            this.Cmd_ZoomXPosition.MouseEnter += new System.EventHandler(this.Cmd_ZoomXPositionMouseEnter);
+            this.Cmd_ZoomXPosition.MouseLeave += new System.EventHandler(this.Cmd_ZoomXPositionMouseLeave);
+            this.Cmd_ZoomXPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseMove);
+            this.Cmd_ZoomXPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseUp);
+            // 
+            // Pic_Graphic
+            // 
+            this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.Pic_Graphic.Location = new System.Drawing.Point(71, 41);
+            this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
+            this.Pic_Graphic.Name = "Pic_Graphic";
+            this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
+            this.Pic_Graphic.TabIndex = 4;
+            this.Pic_Graphic.TabStop = false;
+            this.Pic_Graphic.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragDrop);
+            this.Pic_Graphic.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragEnter);
+            this.Pic_Graphic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseDown);
+            this.Pic_Graphic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseMove);
+            this.Pic_Graphic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseUp);
+            this.Pic_Graphic.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Pic_GraphicPreviewKeyDown);
+            // 
+            // Pic_GraphFrame
+            // 
+            this.Pic_GraphFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Pic_GraphFrame.BackColor = System.Drawing.Color.Black;
+            this.Pic_GraphFrame.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
+            this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
+            this.Pic_GraphFrame.Name = "Pic_GraphFrame";
+            this.Pic_GraphFrame.Size = new System.Drawing.Size(512, 373);
+            this.Pic_GraphFrame.TabIndex = 3;
+            this.Pic_GraphFrame.TabStop = false;
+            this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
+            this.Pic_GraphFrame.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragDrop);
+            this.Pic_GraphFrame.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragEnter);
+            // 
+            // LV_Legend
+            // 
+            this.LV_Legend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LV_Legend.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5});
+            this.LV_Legend.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.LV_Legend.Location = new System.Drawing.Point(1, 1);
+            this.LV_Legend.Margin = new System.Windows.Forms.Padding(1);
+            this.LV_Legend.Name = "LV_Legend";
+            this.LV_Legend.Size = new System.Drawing.Size(74, 370);
+            this.LV_Legend.TabIndex = 0;
+            this.LV_Legend.UseCompatibleStateImageBehavior = false;
+            this.LV_Legend.View = System.Windows.Forms.View.Details;
+            this.LV_Legend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_LegendKeyDown);
+            this.LV_Legend.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LV_LegendMouseDoubleClick);
+            this.LV_Legend.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LV_LegendMouseDown);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Value";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Min";
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Max";
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Avg";
+            // 
+            // Dlg_OpenData
+            // 
+            this.Dlg_OpenData.Filter = "CSV File|*.csv";
+            // 
+            // Context_PicGraphic_ZoomStats
+            // 
+            this.Context_PicGraphic_ZoomStats.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.zoomToolStripMenuItem,
+            this.statisticsToolStripMenuItem});
+            this.Context_PicGraphic_ZoomStats.Name = "Context_PicGraphic_Zoom";
+            this.Context_PicGraphic_ZoomStats.Size = new System.Drawing.Size(121, 48);
+            // 
+            // zoomToolStripMenuItem
+            // 
+            this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
+            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.zoomToolStripMenuItem.Text = "Zoom";
+            this.zoomToolStripMenuItem.Click += new System.EventHandler(this.ZoomToolStripMenuItemClick);
+            // 
+            // statisticsToolStripMenuItem
+            // 
+            this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.statisticsToolStripMenuItem.Text = "Statistics";
+            this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.StatisticsToolStripMenuItemClick);
+            // 
+            // Context_PicGraph_Options
+            // 
+            this.Context_PicGraph_Options.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RT_PlaytoolStripMenuItem,
+            this.RT_BreaktoolStripMenuItem,
+            this.RT_StoptoolStripMenuItem,
+            this.toolStripSeparator8,
+            this.ZoomPlustoolStripMenuItem,
+            this.ZoomMinustoolStripMenuItem,
+            this.ZoomMintoolStripMenuItem,
+            this.ZoomMaxtoolStripMenuItem,
+            this.ZoomModetoolStripMenuItem,
+            this.ZoomFactortoolStripMenuItem,
+            this.toolStripSeparator3,
+            this.cursorToolStripMenuItem,
+            this.ReferenceCursorToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.graphLayoutToolStripMenuItem,
+            this.propertiesToolStripMenuItem,
+            this.toolStripMenuItem7,
+            this.snapshotToolStripMenuItem,
+            this.printToolStripMenuItem});
+            this.Context_PicGraph_Options.Name = "Context_PicGraph_Options";
+            this.Context_PicGraph_Options.Size = new System.Drawing.Size(163, 358);
+            // 
+            // RT_PlaytoolStripMenuItem
+            // 
+            this.RT_PlaytoolStripMenuItem.Image = global::Ctrl_GraphWindow.Icones.play_icone_6427;
+            this.RT_PlaytoolStripMenuItem.Name = "RT_PlaytoolStripMenuItem";
+            this.RT_PlaytoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.RT_PlaytoolStripMenuItem.Text = "Run";
+            this.RT_PlaytoolStripMenuItem.Click += new System.EventHandler(this.RT_PlaytoolStripMenuItem_Click);
+            // 
+            // RT_BreaktoolStripMenuItem
+            // 
+            this.RT_BreaktoolStripMenuItem.Image = global::Ctrl_GraphWindow.Icones.break_icone_9058;
+            this.RT_BreaktoolStripMenuItem.Name = "RT_BreaktoolStripMenuItem";
+            this.RT_BreaktoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.RT_BreaktoolStripMenuItem.Text = "Break";
+            this.RT_BreaktoolStripMenuItem.Click += new System.EventHandler(this.RT_BreaktoolStripMenuItem_Click);
+            // 
+            // RT_StoptoolStripMenuItem
+            // 
+            this.RT_StoptoolStripMenuItem.Image = global::Ctrl_GraphWindow.Icones.stop_icone_5072;
+            this.RT_StoptoolStripMenuItem.Name = "RT_StoptoolStripMenuItem";
+            this.RT_StoptoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.RT_StoptoolStripMenuItem.Text = "Stop";
+            this.RT_StoptoolStripMenuItem.Click += new System.EventHandler(this.RT_StoptoolStripMenuItem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(159, 6);
             // 
             // ZoomPlustoolStripMenuItem
             // 
@@ -1152,6 +1041,20 @@ namespace Ctrl_GraphWindow
             this.ZoomMinustoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.ZoomMinustoolStripMenuItem.Text = "Zoom -";
             this.ZoomMinustoolStripMenuItem.Click += new System.EventHandler(this.ZoomMinustoolStripMenuItemClick);
+            // 
+            // ZoomMintoolStripMenuItem
+            // 
+            this.ZoomMintoolStripMenuItem.Name = "ZoomMintoolStripMenuItem";
+            this.ZoomMintoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.ZoomMintoolStripMenuItem.Text = "Zoom min";
+            this.ZoomMintoolStripMenuItem.Click += new System.EventHandler(this.ZoomMintoolStripMenuItemClick);
+            // 
+            // ZoomMaxtoolStripMenuItem
+            // 
+            this.ZoomMaxtoolStripMenuItem.Name = "ZoomMaxtoolStripMenuItem";
+            this.ZoomMaxtoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.ZoomMaxtoolStripMenuItem.Text = "Zoom max";
+            this.ZoomMaxtoolStripMenuItem.Click += new System.EventHandler(this.ZoomMaxtoolStripMenuItemClick);
             // 
             // ZoomModetoolStripMenuItem
             // 
@@ -1246,6 +1149,11 @@ namespace Ctrl_GraphWindow
             this.ZoomFactor_32_ToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
             this.ZoomFactor_32_ToolStripMenuItem.Text = "x 32";
             this.ZoomFactor_32_ToolStripMenuItem.Click += new System.EventHandler(this.ZoomFactor_32_ToolStripMenuItemClick);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(159, 6);
             // 
             // cursorToolStripMenuItem
             // 
@@ -1462,6 +1370,11 @@ namespace Ctrl_GraphWindow
             this.RefCursor_Mode_Horizontal_TSMI.Text = "Horizontal line";
             this.RefCursor_Mode_Horizontal_TSMI.Click += new System.EventHandler(this.RefCursor_Mode_Horizontal_TSMIClick);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(159, 6);
+            // 
             // graphLayoutToolStripMenuItem
             // 
             this.graphLayoutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1502,6 +1415,11 @@ namespace Ctrl_GraphWindow
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(159, 6);
+            // 
             // snapshotToolStripMenuItem
             // 
             this.snapshotToolStripMenuItem.Image = global::Ctrl_GraphWindow.Icones.camera_icone_8948_16;
@@ -1518,77 +1436,159 @@ namespace Ctrl_GraphWindow
             this.printToolStripMenuItem.Text = "Print";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.PrintToolStripMenuItemClick);
             // 
-            // toolStripSeparator8
+            // Context_Legend
             // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(159, 6);
+            this.Context_Legend.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TSMI_Ctxt_Legend_Edit,
+            this.TSMI_Ctxt_Legend_Hide,
+            this.TSMI_Ctxt_Legend_Remove,
+            this.toolStripMenuItem4,
+            this.TSMI_Ctxt_Legend_Infos,
+            this.TSMI_Ctxt_Legend_ShowTitles,
+            this.TSMI_Ctxt_Legend_ShowGridLines});
+            this.Context_Legend.Name = "Context_Legend";
+            this.Context_Legend.Size = new System.Drawing.Size(198, 142);
             // 
-            // RT_PlaytoolStripMenuItem
+            // TSMI_Ctxt_Legend_Edit
             // 
-            this.RT_PlaytoolStripMenuItem.Image = global::Ctrl_GraphWindow.Icones.play_icone_6427;
-            this.RT_PlaytoolStripMenuItem.Name = "RT_PlaytoolStripMenuItem";
-            this.RT_PlaytoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.RT_PlaytoolStripMenuItem.Text = "Run";
-            this.RT_PlaytoolStripMenuItem.Click += new System.EventHandler(this.RT_PlaytoolStripMenuItem_Click);
+            this.TSMI_Ctxt_Legend_Edit.Name = "TSMI_Ctxt_Legend_Edit";
+            this.TSMI_Ctxt_Legend_Edit.Size = new System.Drawing.Size(197, 22);
+            this.TSMI_Ctxt_Legend_Edit.Text = "Edit graph properties";
+            this.TSMI_Ctxt_Legend_Edit.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_EditClick);
             // 
-            // RT_BreaktoolStripMenuItem
+            // TSMI_Ctxt_Legend_Hide
             // 
-            this.RT_BreaktoolStripMenuItem.Image = global::Ctrl_GraphWindow.Icones.break_icone_9058;
-            this.RT_BreaktoolStripMenuItem.Name = "RT_BreaktoolStripMenuItem";
-            this.RT_BreaktoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.RT_BreaktoolStripMenuItem.Text = "Break";
-            this.RT_BreaktoolStripMenuItem.Click += new System.EventHandler(this.RT_BreaktoolStripMenuItem_Click);
+            this.TSMI_Ctxt_Legend_Hide.Name = "TSMI_Ctxt_Legend_Hide";
+            this.TSMI_Ctxt_Legend_Hide.ShortcutKeyDisplayString = "[T]";
+            this.TSMI_Ctxt_Legend_Hide.Size = new System.Drawing.Size(197, 22);
+            this.TSMI_Ctxt_Legend_Hide.Text = "Hide graph";
+            this.TSMI_Ctxt_Legend_Hide.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_HideClick);
             // 
-            // RT_StoptoolStripMenuItem
+            // TSMI_Ctxt_Legend_Remove
             // 
-            this.RT_StoptoolStripMenuItem.Image = global::Ctrl_GraphWindow.Icones.stop_icone_5072;
-            this.RT_StoptoolStripMenuItem.Name = "RT_StoptoolStripMenuItem";
-            this.RT_StoptoolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.RT_StoptoolStripMenuItem.Text = "Stop";
-            this.RT_StoptoolStripMenuItem.Click += new System.EventHandler(this.RT_StoptoolStripMenuItem_Click);
+            this.TSMI_Ctxt_Legend_Remove.Name = "TSMI_Ctxt_Legend_Remove";
+            this.TSMI_Ctxt_Legend_Remove.ShortcutKeyDisplayString = "[Del]";
+            this.TSMI_Ctxt_Legend_Remove.Size = new System.Drawing.Size(197, 22);
+            this.TSMI_Ctxt_Legend_Remove.Text = "Remove graph";
+            this.TSMI_Ctxt_Legend_Remove.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_RemoveClick);
             // 
-            // Ctrl_ChannelList
+            // toolStripMenuItem4
             // 
-            this.Ctrl_ChannelList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Ctrl_ChannelList.Location = new System.Drawing.Point(3, 3);
-            this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
-            this.Ctrl_ChannelList.Size = new System.Drawing.Size(69, 368);
-            this.Ctrl_ChannelList.TabIndex = 0;
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(194, 6);
             // 
-            // Pic_Graphic
+            // TSMI_Ctxt_Legend_Infos
             // 
-            this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Pic_Graphic.Location = new System.Drawing.Point(71, 41);
-            this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
-            this.Pic_Graphic.Name = "Pic_Graphic";
-            this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
-            this.Pic_Graphic.TabIndex = 4;
-            this.Pic_Graphic.TabStop = false;
-            this.Pic_Graphic.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragDrop);
-            this.Pic_Graphic.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragEnter);
-            this.Pic_Graphic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseDown);
-            this.Pic_Graphic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseMove);
-            this.Pic_Graphic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseUp);
-            this.Pic_Graphic.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Pic_GraphicPreviewKeyDown);
+            this.TSMI_Ctxt_Legend_Infos.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TSMI_Ctxt_Legend_Infos_Label,
+            this.TSMI_Ctxt_Legend_Infos_Value,
+            this.TSMI_Ctxt_Legend_Infos_Unit,
+            this.TSMI_Ctxt_Legend_Infos_Min,
+            this.TSMI_Ctxt_Legend_Infos_Max,
+            this.TSMI_Ctxt_Legend_Infos_Avg,
+            this.TSMI_Ctxt_Legend_Infos_RefCursor});
+            this.TSMI_Ctxt_Legend_Infos.Name = "TSMI_Ctxt_Legend_Infos";
+            this.TSMI_Ctxt_Legend_Infos.Size = new System.Drawing.Size(197, 22);
+            this.TSMI_Ctxt_Legend_Infos.Text = "Legend informations";
             // 
-            // Pic_GraphFrame
+            // TSMI_Ctxt_Legend_Infos_Label
             // 
-            this.Pic_GraphFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Pic_GraphFrame.BackColor = System.Drawing.Color.Black;
-            this.Pic_GraphFrame.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
-            this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
-            this.Pic_GraphFrame.Name = "Pic_GraphFrame";
-            this.Pic_GraphFrame.Size = new System.Drawing.Size(512, 373);
-            this.Pic_GraphFrame.TabIndex = 3;
-            this.Pic_GraphFrame.TabStop = false;
-            this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
-            this.Pic_GraphFrame.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragDrop);
-            this.Pic_GraphFrame.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragEnter);
+            this.TSMI_Ctxt_Legend_Infos_Label.Name = "TSMI_Ctxt_Legend_Infos_Label";
+            this.TSMI_Ctxt_Legend_Infos_Label.Size = new System.Drawing.Size(162, 22);
+            this.TSMI_Ctxt_Legend_Infos_Label.Text = "Label";
+            this.TSMI_Ctxt_Legend_Infos_Label.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_LabelClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_Value
+            // 
+            this.TSMI_Ctxt_Legend_Infos_Value.Name = "TSMI_Ctxt_Legend_Infos_Value";
+            this.TSMI_Ctxt_Legend_Infos_Value.Size = new System.Drawing.Size(162, 22);
+            this.TSMI_Ctxt_Legend_Infos_Value.Text = "Cursor value";
+            this.TSMI_Ctxt_Legend_Infos_Value.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_ValueClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_Unit
+            // 
+            this.TSMI_Ctxt_Legend_Infos_Unit.Name = "TSMI_Ctxt_Legend_Infos_Unit";
+            this.TSMI_Ctxt_Legend_Infos_Unit.Size = new System.Drawing.Size(162, 22);
+            this.TSMI_Ctxt_Legend_Infos_Unit.Text = "Unit";
+            this.TSMI_Ctxt_Legend_Infos_Unit.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_UnitClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_Min
+            // 
+            this.TSMI_Ctxt_Legend_Infos_Min.Name = "TSMI_Ctxt_Legend_Infos_Min";
+            this.TSMI_Ctxt_Legend_Infos_Min.Size = new System.Drawing.Size(162, 22);
+            this.TSMI_Ctxt_Legend_Infos_Min.Text = "Graph min";
+            this.TSMI_Ctxt_Legend_Infos_Min.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_MinClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_Max
+            // 
+            this.TSMI_Ctxt_Legend_Infos_Max.Name = "TSMI_Ctxt_Legend_Infos_Max";
+            this.TSMI_Ctxt_Legend_Infos_Max.Size = new System.Drawing.Size(162, 22);
+            this.TSMI_Ctxt_Legend_Infos_Max.Text = "Graph max";
+            this.TSMI_Ctxt_Legend_Infos_Max.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_MaxClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_Avg
+            // 
+            this.TSMI_Ctxt_Legend_Infos_Avg.Name = "TSMI_Ctxt_Legend_Infos_Avg";
+            this.TSMI_Ctxt_Legend_Infos_Avg.Size = new System.Drawing.Size(162, 22);
+            this.TSMI_Ctxt_Legend_Infos_Avg.Text = "Graph average";
+            this.TSMI_Ctxt_Legend_Infos_Avg.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_AvgClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_RefCursor
+            // 
+            this.TSMI_Ctxt_Legend_Infos_RefCursor.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value,
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff,
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc,
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient});
+            this.TSMI_Ctxt_Legend_Infos_RefCursor.Name = "TSMI_Ctxt_Legend_Infos_RefCursor";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor.Size = new System.Drawing.Size(162, 22);
+            this.TSMI_Ctxt_Legend_Infos_RefCursor.Text = "Reference cursor";
+            // 
+            // TSMI_Ctxt_Legend_Infos_RefCursor_Value
+            // 
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_Value";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Size = new System.Drawing.Size(226, 22);
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Text = "Reference value";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Value.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_ValueClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_RefCursor_Diff
+            // 
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_Diff";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Size = new System.Drawing.Size(226, 22);
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Text = "Reference value difference";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc
+            // 
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Size = new System.Drawing.Size(226, 22);
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Text = "Reference value difference %";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_DiffPercClick);
+            // 
+            // TSMI_Ctxt_Legend_Infos_RefCursor_Gradient
+            // 
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Name = "TSMI_Ctxt_Legend_Infos_RefCursor_Gradient";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Size = new System.Drawing.Size(226, 22);
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Text = "Gradient";
+            this.TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_Infos_RefCursor_GradientClick);
+            // 
+            // TSMI_Ctxt_Legend_ShowTitles
+            // 
+            this.TSMI_Ctxt_Legend_ShowTitles.Name = "TSMI_Ctxt_Legend_ShowTitles";
+            this.TSMI_Ctxt_Legend_ShowTitles.Size = new System.Drawing.Size(197, 22);
+            this.TSMI_Ctxt_Legend_ShowTitles.Text = "Show information titles";
+            this.TSMI_Ctxt_Legend_ShowTitles.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_ShowTitlesClick);
+            // 
+            // TSMI_Ctxt_Legend_ShowGridLines
+            // 
+            this.TSMI_Ctxt_Legend_ShowGridLines.Name = "TSMI_Ctxt_Legend_ShowGridLines";
+            this.TSMI_Ctxt_Legend_ShowGridLines.Size = new System.Drawing.Size(197, 22);
+            this.TSMI_Ctxt_Legend_ShowGridLines.Text = "Show grid lines";
+            this.TSMI_Ctxt_Legend_ShowGridLines.Click += new System.EventHandler(this.TSMI_Ctxt_Legend_ShowGridLinesClick);
+            // 
+            // Dlg_Save_Snapshot
+            // 
+            this.Dlg_Save_Snapshot.Filter = "Bitmap image|*.bmp";
             // 
             // Ctrl_WaveForm
             // 
@@ -1609,11 +1609,11 @@ namespace Ctrl_GraphWindow
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).EndInit();
             this.Context_PicGraphic_ZoomStats.ResumeLayout(false);
             this.Context_PicGraph_Options.ResumeLayout(false);
             this.Context_Legend.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
