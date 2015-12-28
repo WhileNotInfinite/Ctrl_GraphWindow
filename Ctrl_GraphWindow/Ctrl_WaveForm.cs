@@ -301,6 +301,25 @@ namespace Ctrl_GraphWindow
 	    	#endregion
 	    }
 	    
+        private class LegendItemData
+        {
+            #region Public member
+
+            public GraphSerieProperties ItemProperties;
+
+            public double CurrentValue;
+            public double Min;
+            public double Max;
+            public double Avg;
+
+            #endregion
+
+            public LegendItemData()
+            {
+                ItemProperties = null;
+            }
+        }
+
 	    #endregion
 	    
     	#endregion
@@ -411,9 +430,13 @@ namespace Ctrl_GraphWindow
 
         #region Private delegates
 
-        private delegate void GraphicPicturePostTracingDelegateHandler();
-
         private delegate void Pic_GraphicSetupDelegateHandler(Rectangle PicGraphicRectangle);
+
+        private delegate void InitLegendDelegateHandler(Color BackColor);
+
+        private delegate void AddLegendItemDelegateHandler(LegendItemData LegendItem);
+
+        private delegate void GraphicPicturePostTracingDelegateHandler();
 
         #endregion
 
@@ -699,8 +722,10 @@ namespace Ctrl_GraphWindow
         private Thread GraphPictureMaker;
         private GraphicUpdateRequest oGraphicUpdateRequest;
 
-        private GraphicPicturePostTracingDelegateHandler GraphicPicturePostTracingDelegate;
         private Pic_GraphicSetupDelegateHandler Pic_GraphicSetupDelegate;
+        private InitLegendDelegateHandler InitLegendDelegate;
+        private AddLegendItemDelegateHandler AddLegendItemDelegate;
+        private GraphicPicturePostTracingDelegateHandler GraphicPicturePostTracingDelegate;
 
         private bool bDataPlotted;
 
@@ -983,8 +1008,11 @@ namespace Ctrl_GraphWindow
             */
             oGraphicUpdateRequest = new GraphicUpdateRequest(false);
 
-            GraphicPicturePostTracingDelegate = new GraphicPicturePostTracingDelegateHandler(GraphicPicturePostTracingTask);
+            
             Pic_GraphicSetupDelegate = new Pic_GraphicSetupDelegateHandler(Pic_GraphicSetupTask);
+            InitLegendDelegate = new InitLegendDelegateHandler(LegendInitTask);
+            AddLegendItemDelegate = new AddLegendItemDelegateHandler(AddLegendSerieTask);
+            GraphicPicturePostTracingDelegate = new GraphicPicturePostTracingDelegateHandler(GraphicPicturePostTracingTask);
 
             GraphPictureMaker = new Thread(new ThreadStart(GraphTracingThreadTask));
             GraphPictureMaker.IsBackground = true; //This to automatically close the thread on host application closing
@@ -2600,7 +2628,7 @@ namespace Ctrl_GraphWindow
 
         #region Private methodes
 
-        #region Threaded method and callback
+        #region Threaded method and delegates
 
         private void GraphTracingThreadTask()
         {
@@ -2632,6 +2660,53 @@ namespace Ctrl_GraphWindow
         {
             Pic_Graphic.Location = PicGraphicRectangle.Location;
             Pic_Graphic.Size = PicGraphicRectangle.Size;
+        }
+
+        private void LegendInitTask(Color Backcolor)
+        {
+            LV_Legend.BackColor = Backcolor;
+            LV_Legend.Items.Clear();
+            Init_Legend();
+        }
+
+        private void AddLegendSerieTask(LegendItemData LegendData)
+        {
+            ListViewItem SerieLegItem = new ListViewItem();
+
+            SerieLegItem.Text = LegendData.ItemProperties.Label;
+            SerieLegItem.ForeColor = LegendData.ItemProperties.Trace.LineColor;
+            SerieLegItem.Tag = LegendData.ItemProperties.KeyId;
+
+            Properties.LegendProperties.LegendFont.Set_FontProperty(GW_Font.FontProperty.Strikeout, !LegendData.ItemProperties.Visible);
+            SerieLegItem.Font = Properties.LegendProperties.LegendFont.oFont;
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
+            {
+                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.CurrentValue));
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
+            {
+                SerieLegItem.SubItems.Add(LegendData.ItemProperties.Unit);
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
+            {
+                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Min));
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
+            {
+                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Max));
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
+            {
+                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Avg));
+            }
+
+            LV_Legend.Items.Add(SerieLegItem);
+            LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void GraphicPicturePostTracingTask()
@@ -2855,10 +2930,8 @@ namespace Ctrl_GraphWindow
             Graphics gFrame = Graphics.FromImage(FrameImage);
             gFrame.Clear(Properties.WindowBackColor);
 
-            //TODO: Hack for threaded graphic picture computation
-            //LV_Legend.BackColor = Properties.WindowBackColor;
-            //LV_Legend.Items.Clear();
-            //Init_Legend();
+            //Legend initialisation
+            this.BeginInvoke(this.InitLegendDelegate, new object[] { Properties.WindowBackColor });
 
             //GraphFrame
             #region Graphic frame
@@ -4043,57 +4116,29 @@ namespace Ctrl_GraphWindow
                             //Legend
                             #region Legend
 
-                            //TODO: Hack for threaded graphic picture computation
+                            if (Properties.LegendProperties.Visible && (!(oSerieData == null)))
+                            {
+                                LegendItemData oLegendData = new LegendItemData();
 
-                      //      if (Properties.LegendProperties.Visible && (!(oSerieData == null)))
-                    		//{
-                    		//	ListViewItem SerieLegItem = new ListViewItem();
+                                oLegendData.ItemProperties = oSerieProps;
 
-                    		//	SerieLegItem.Text = oSerieProps.Label;
-                    		//	SerieLegItem.ForeColor = oSerieProps.Trace.LineColor;
-                    		//	SerieLegItem.Tag = oSerieProps.KeyId;
-                    			
-                    		//	Properties.LegendProperties.LegendFont.Set_FontProperty(GW_Font.FontProperty.Strikeout, !oSerieProps.Visible);
-                    		//	SerieLegItem.Font = Properties.LegendProperties.LegendFont.oFont;
-                    			
-                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-                    		//	{
-                      //              if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
-                      //              {
-                      //                  SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
-                      //              }
-                      //              else
-                      //              {
-                      //                  SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Samples[0].SampleValue));
-                      //              }
-                    		//	}
+                                if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
+                                {
+                                    oLegendData.CurrentValue = oSerieData.Samples[0].SampleValue;
+                                }
+                                else
+                                {
+                                    oLegendData.CurrentValue = oSerieData.Values[0];
+                                }
 
-                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
-                    		//	{
-                    		//		SerieLegItem.SubItems.Add(oSerieProps.Unit);
-                    		//	}
+                                oLegendData.Min = oSerieData.Min;
+                                oLegendData.Max = oSerieData.Max;
+                                oLegendData.Avg = oSerieData.Avg;
 
-                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
-                    		//	{
-                    		//		SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Min));
-                    		//	}
+                                this.BeginInvoke(this.AddLegendItemDelegate, new object[] { oLegendData });
+                            }
 
-                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
-                    		//	{
-                    		//		SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Max));
-                    		//	}
-
-                    		//	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
-                    		//	{
-                    		//		SerieLegItem.SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Avg));
-                    		//	}
-
-                    		//	LV_Legend.Items.Add(SerieLegItem);
-                    		//	LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                    			
-                    		//}
-
-                    		#endregion
+                            #endregion
                         }
                     }
                 }
