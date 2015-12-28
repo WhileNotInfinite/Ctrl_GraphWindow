@@ -245,7 +245,7 @@ namespace Ctrl_GraphWindow
             this.TSB_Replot});
             this.TB_Graph.Location = new System.Drawing.Point(0, 0);
             this.TB_Graph.Name = "TB_Graph";
-            this.TB_Graph.Size = new System.Drawing.Size(673, 25);
+            this.TB_Graph.Size = new System.Drawing.Size(814, 25);
             this.TB_Graph.TabIndex = 0;
             this.TB_Graph.Text = "toolStrip1";
             // 
@@ -800,8 +800,8 @@ namespace Ctrl_GraphWindow
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(673, 374);
-            this.splitContainer1.SplitterDistance = 74;
+            this.splitContainer1.Size = new System.Drawing.Size(814, 374);
+            this.splitContainer1.SplitterDistance = 89;
             this.splitContainer1.TabIndex = 1;
             // 
             // Ctrl_ChannelList
@@ -811,7 +811,7 @@ namespace Ctrl_GraphWindow
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Ctrl_ChannelList.Location = new System.Drawing.Point(3, 3);
             this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
-            this.Ctrl_ChannelList.Size = new System.Drawing.Size(69, 368);
+            this.Ctrl_ChannelList.Size = new System.Drawing.Size(84, 368);
             this.Ctrl_ChannelList.TabIndex = 0;
             // 
             // splitContainer2
@@ -830,8 +830,8 @@ namespace Ctrl_GraphWindow
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.LV_Legend);
-            this.splitContainer2.Size = new System.Drawing.Size(595, 374);
-            this.splitContainer2.SplitterDistance = 514;
+            this.splitContainer2.Size = new System.Drawing.Size(721, 374);
+            this.splitContainer2.SplitterDistance = 531;
             this.splitContainer2.TabIndex = 0;
             // 
             // Cmd_ZoomYPosition
@@ -873,7 +873,7 @@ namespace Ctrl_GraphWindow
             // Pic_Graphic
             // 
             this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Pic_Graphic.Location = new System.Drawing.Point(71, 41);
+            this.Pic_Graphic.Location = new System.Drawing.Point(79, 41);
             this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
             this.Pic_Graphic.Name = "Pic_Graphic";
             this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
@@ -896,7 +896,7 @@ namespace Ctrl_GraphWindow
             this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
             this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
             this.Pic_GraphFrame.Name = "Pic_GraphFrame";
-            this.Pic_GraphFrame.Size = new System.Drawing.Size(512, 373);
+            this.Pic_GraphFrame.Size = new System.Drawing.Size(529, 373);
             this.Pic_GraphFrame.TabIndex = 3;
             this.Pic_GraphFrame.TabStop = false;
             this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
@@ -918,7 +918,7 @@ namespace Ctrl_GraphWindow
             this.LV_Legend.Location = new System.Drawing.Point(1, 1);
             this.LV_Legend.Margin = new System.Windows.Forms.Padding(1);
             this.LV_Legend.Name = "LV_Legend";
-            this.LV_Legend.Size = new System.Drawing.Size(74, 370);
+            this.LV_Legend.Size = new System.Drawing.Size(183, 370);
             this.LV_Legend.TabIndex = 0;
             this.LV_Legend.UseCompatibleStateImageBehavior = false;
             this.LV_Legend.View = System.Windows.Forms.View.Details;
@@ -1597,7 +1597,7 @@ namespace Ctrl_GraphWindow
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.TB_Graph);
             this.Name = "Ctrl_WaveForm";
-            this.Size = new System.Drawing.Size(673, 399);
+            this.Size = new System.Drawing.Size(814, 399);
             this.Load += new System.EventHandler(this.Ctrl_WaveForm_Load);
             this.TB_Graph.ResumeLayout(false);
             this.TB_Graph.PerformLayout();

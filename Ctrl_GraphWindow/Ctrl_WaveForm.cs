@@ -18,6 +18,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+#if DEBUG
+using System.Diagnostics;
+#endif
+
 namespace Ctrl_GraphWindow
 {
 	/// <summary>
@@ -802,8 +806,10 @@ namespace Ctrl_GraphWindow
 #if DEBUG
 
         private int GraphPlotCount;
-        private double LastPlotTime;
+        private long LastPlotTime;
         private double AvgPlotTime;
+        private long TotalMathTime;
+        private long TotalGraphicTime;
 
 #endif
 
@@ -2639,7 +2645,8 @@ namespace Ctrl_GraphWindow
                     if (oGraphicUpdateRequest.UpdateRequested)
                     {
 #if DEBUG
-                        DateTime Tic = DateTime.Now;
+                        Stopwatch swTaskTime = new Stopwatch();
+                        swTaskTime.Start();
 #endif
                         bDataPlotted = false;
                         Init_GraphWindow();
@@ -2649,7 +2656,8 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
                         //Plot statistics computation
-                        LastPlotTime = DateTime.Now.Subtract(Tic).TotalMilliseconds;
+                        swTaskTime.Stop();
+                        LastPlotTime = swTaskTime.ElapsedMilliseconds;
 #endif
                     }
                 }
@@ -2720,14 +2728,16 @@ namespace Ctrl_GraphWindow
 #if DEBUG
             if (LastPlotTime > 0)
             {
-                AvgPlotTime = ((AvgPlotTime * GraphPlotCount) + LastPlotTime) / (GraphPlotCount + 1);
+                AvgPlotTime = ((AvgPlotTime * GraphPlotCount) + (double)LastPlotTime) / (GraphPlotCount + 1);
                 GraphPlotCount++;
 
                 TSL_PlotCount.Text = "Plots: " + GraphPlotCount.ToString();
-                TSL_PlotAvg.Text = "Avg: " + Math.Round(AvgPlotTime, 3).ToString() + " ms";
+                TSL_PlotAvg.Text = "Avg: " + AvgPlotTime.ToString("F3") + " ms";
             }
 
-            TSL_PlotLast.Text = "Last: " + Math.Round(LastPlotTime, 3).ToString() + " ms";
+            TSL_PlotLast.Text = "Last total: " + LastPlotTime.ToString() 
+                                + " ms / Math: " + TotalMathTime.ToString() 
+                                + " ms / Graphic: " + TotalGraphicTime.ToString() + " ms";
 #endif
         }
 
@@ -2920,8 +2930,13 @@ namespace Ctrl_GraphWindow
         }
 
         private void Plot_Series()
-        {			
-			FrameImage = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
+        {
+#if DEBUG
+            Stopwatch swPlotTime = new Stopwatch();
+            TotalMathTime = 0;
+            TotalGraphicTime = 0;
+#endif
+            FrameImage = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
 		    GraphImage = new Bitmap(Pic_Graphic.Width, Pic_Graphic.Height);
 
 			Graphics g = Graphics.FromImage(GraphImage);
@@ -3298,7 +3313,11 @@ namespace Ctrl_GraphWindow
                         {
                         	if (oSerieProps.Visible)
                         	{
-								oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+#if DEBUG
+                                swPlotTime.Start();
+#endif
+
+                                oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
 								
                         		if (!(oSerieData == null))
                         		{
@@ -3482,8 +3501,13 @@ namespace Ctrl_GraphWindow
 	            						{
 	            							SerieCoords.Add(PartialSerieCoords.ToArray());
 	            						}
-                        				
-                        				if (nVisiblePointCnt > 1)
+
+#if DEBUG
+                                        TotalMathTime += swPlotTime.ElapsedMilliseconds;
+                                        swPlotTime.Restart();
+#endif
+
+                                        if (nVisiblePointCnt > 1)
                         				{                        					
                         					//Trace ploting
                         					#region Trace ploting
@@ -4100,7 +4124,11 @@ namespace Ctrl_GraphWindow
                         					
                         					#endregion
                         				}
-                        			}
+
+#if DEBUG
+                                        TotalGraphicTime += swPlotTime.ElapsedMilliseconds;
+#endif
+                                    }
                         			else
                         			{                        				
                         				MessageBox.Show("Ploting error !\nSerie: " + oSerieProps.Name
@@ -4111,7 +4139,8 @@ namespace Ctrl_GraphWindow
                         				return;
                         			}
                         		}
-                        	}
+
+                            }
 
                             //Legend
                             #region Legend
@@ -4140,6 +4169,10 @@ namespace Ctrl_GraphWindow
 
                             #endregion
                         }
+
+#if DEBUG
+                        swPlotTime.Stop();
+#endif
                     }
                 }
             }
