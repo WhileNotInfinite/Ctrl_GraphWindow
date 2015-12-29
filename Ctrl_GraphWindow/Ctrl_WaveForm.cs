@@ -261,12 +261,58 @@ namespace Ctrl_GraphWindow
 
         private class GraphicUpdateRequest
         {
-            public bool UpdateRequested { get; set; }
+            #region Public properties
+
+            public bool UpdateRequested
+            {
+                get
+                {
+                    return (mUpdateRequest);
+                }
+
+                set
+                {
+                    mUpdateRequest = value;
+
+                    if(mUpdateRequest)
+                    {
+                        OnRequestRaised();
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Public events
+
+            public event EventHandler RequestRaised;
+
+            #endregion
+
+            #region Private members
+
+            private bool mUpdateRequest;
+
+            #endregion
 
             public GraphicUpdateRequest(bool Init)
             {
                 UpdateRequested = Init;
             }
+
+            #region Events handling methods
+
+            protected virtual void OnRequestRaised()
+            {
+                EventHandler Handler = RequestRaised;
+
+                if(Handler!=null)
+                {
+                    Handler(this, new EventArgs());
+                }
+            }
+
+            #endregion
         }
 
         private class GraphicCoordinates
@@ -345,20 +391,6 @@ namespace Ctrl_GraphWindow
 	    	public int SerieKeyId;
 	    }
 	  	
-	    private struct LegendColumnsIndexes
-	    {
-	    	public int LabelColumn;
-	    	public int CurrentValueColumn;
-	    	public int UnitColumn;
-	    	public int GraphMinColumn;
-	    	public int GraphMaxColumn;
-	    	public int GraphAvgColumn;
-	    	public int RefCursorValueColumn;
-	    	public int RefCursorDiffColumn;
-	    	public int RefCursorDiffPercColumn;
-	    	public int RefCursorGradientColumn;
-	    }
-	    
 	    private struct SerieCoordConversion
 	    {
 	    	public int SerieKeyId;
@@ -419,6 +451,17 @@ namespace Ctrl_GraphWindow
 
         private const int REF_LINE_TEXT_POS_OFFSET = 5;
 
+        private const int LEGEND_LABEL_COL          = 0;
+        private const int LEGEND_VALUE_COL          = 1;
+        private const int LEGEND_UNIT_COL           = 2;
+        private const int LEGEND_MIN_COL            = 3;
+        private const int LEGEND_MAX_COL            = 4;
+        private const int LEGEND_AVG_COL            = 5;
+        private const int LEGEND_REF_VAL_COL        = 6;
+        private const int LEGEND_REF_DIFF_COL       = 7;
+        private const int LEGEND_REF_DIFF_PERC_COL  = 8;
+        private const int LEGEND_REF_GRADIENT_COL   = 9;
+
         #endregion
 
         #region Public events
@@ -436,7 +479,7 @@ namespace Ctrl_GraphWindow
 
         private delegate void Pic_GraphicSetupDelegateHandler(Rectangle PicGraphicRectangle);
 
-        private delegate void InitLegendDelegateHandler(Color BackColor);
+        private delegate void InitLegendDelegateHandler();
 
         private delegate void AddLegendItemDelegateHandler(LegendItemData LegendItem);
 
@@ -724,6 +767,7 @@ namespace Ctrl_GraphWindow
         #region Private members
 
         private Thread GraphPictureMaker;
+        private ManualResetEvent WaitHandle;
         private GraphicUpdateRequest oGraphicUpdateRequest;
 
         private Pic_GraphicSetupDelegateHandler Pic_GraphicSetupDelegate;
@@ -756,7 +800,6 @@ namespace Ctrl_GraphWindow
 
         private GraphAxisCollection oYAxis;
         
-        private LegendColumnsIndexes LegendColIds;
         private int BaseLegendWidth;
 
         private GW_DataChannel oWholeAbcsisseChannel;
@@ -908,8 +951,8 @@ namespace Ctrl_GraphWindow
             oWholeAbcsisseChannel = null;
             oAbcsisseChannel = null;
             oAbcisseValFormat = new GraphSerieValueFormat(); //Default format is 'Auto'
-            
-            BaseLegendWidth = LV_Legend.Width;
+
+            BaseLegendWidth = Grid_Legend.Width;
             
             CurrentGraphCursor =  GraphicCursorObject.CursorMain;
             PtCursorPos = Point.Empty;
@@ -1013,13 +1056,14 @@ namespace Ctrl_GraphWindow
                 not with value types such as 'bool'
             */
             oGraphicUpdateRequest = new GraphicUpdateRequest(false);
+            oGraphicUpdateRequest.RequestRaised += new EventHandler(GraphicUpdateRequestRaised);
 
-            
             Pic_GraphicSetupDelegate = new Pic_GraphicSetupDelegateHandler(Pic_GraphicSetupTask);
             InitLegendDelegate = new InitLegendDelegateHandler(LegendInitTask);
             AddLegendItemDelegate = new AddLegendItemDelegateHandler(AddLegendSerieTask);
             GraphicPicturePostTracingDelegate = new GraphicPicturePostTracingDelegateHandler(GraphicPicturePostTracingTask);
 
+            WaitHandle = new ManualResetEvent(false);
             GraphPictureMaker = new Thread(new ThreadStart(GraphTracingThreadTask));
             GraphPictureMaker.IsBackground = true; //This to automatically close the thread on host application closing
         }
@@ -2315,129 +2359,129 @@ namespace Ctrl_GraphWindow
 		{
 			Cursor = Cursors.Default;
 		}
-        
+
         #endregion
-        
-        #region LV_Legend
-        
-        private void LV_LegendMouseDown(object sender, MouseEventArgs e)
-		{
-        	if (e.Button.Equals(MouseButtons.Right))
-        	{
-        		if (!(LV_Legend.SelectedItems.Count == 0))
-        		{
-        			TSMI_Ctxt_Legend_Edit.Enabled = true;
-        			TSMI_Ctxt_Legend_Hide.Enabled = true;
-        			TSMI_Ctxt_Legend_Remove.Enabled = true;
-        			
-        			if (LV_Legend.SelectedItems[0].Font.Strikeout)
-        			{
-        				TSMI_Ctxt_Legend_Hide.Text = "Show graph";
-        			}
-        			else
-        			{
-        				TSMI_Ctxt_Legend_Hide.Text = "Hide graph";
-        			}
-        		}
-        		else
-        		{
-        			TSMI_Ctxt_Legend_Edit.Enabled = false;
-        			TSMI_Ctxt_Legend_Hide.Enabled = false;
-        			TSMI_Ctxt_Legend_Remove.Enabled = false;
-        		}
-        		
-        		if (PtRefCursorPos.IsEmpty)
-        		{
-        			TSMI_Ctxt_Legend_Infos_RefCursor.Visible = false;
-        		}
-        		else
-        		{
-        			TSMI_Ctxt_Legend_Infos_RefCursor.Visible = true;
-        		}
-        		
-        		if (LV_Legend.HeaderStyle.Equals(ColumnHeaderStyle.None))
-        		{
-        			TSMI_Ctxt_Legend_ShowTitles.Text = "Show information titles";
-        		}
-        		else
-        		{
-        			TSMI_Ctxt_Legend_ShowTitles.Text = "Hide information titles";
-        		}
-        		
-        		if (LV_Legend.GridLines)
-        		{
-        			TSMI_Ctxt_Legend_ShowGridLines.Text = "Hide grid lines";
-        		}
-        		else
-        		{
-        			TSMI_Ctxt_Legend_ShowGridLines.Text = "Show grid lines";
-        		}
-        		
-        		Context_Legend.Show(LV_Legend, e.Location);
-        	}
-		}
-        
-        private void LV_LegendMouseDoubleClick(object sender, MouseEventArgs e)
-		{
-        	if (!(LV_Legend.SelectedItems.Count == 0))
-        	{
-        		Edit_SerieProperties((int)LV_Legend.SelectedItems[0].Tag);
-        	}
-		}
-        
-        private void LV_LegendKeyDown(object sender, KeyEventArgs e)
-		{
-        	if (!(LV_Legend.SelectedItems.Count == 0))
-        	{
-	        	switch (e.KeyCode)
-	        	{
-	        		case Keys.T:
-	        				        			
-	        			foreach (ListViewItem It in LV_Legend.SelectedItems)
-	        			{
-	        				Change_SerieVisibility((int)It.Tag);
-	        			}
-	        			
-	        			break;
-	        			
-	        		case Keys.Delete:
-	        				        			
-	        			foreach (ListViewItem It in LV_Legend.SelectedItems)
-	        			{
-	        				Remove_Serie((int)It.Tag);
-	        			}
-	        			
-	        			break;
-	        	}
-        	}
-		}
-        
+
+        #region Grid_Legend
+
+        private void Grid_Legend_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button.Equals(MouseButtons.Right))
+            {
+                if (!(Grid_Legend.SelectedRows == null))
+                {
+                    TSMI_Ctxt_Legend_Edit.Enabled = true;
+                    TSMI_Ctxt_Legend_Hide.Enabled = true;
+                    TSMI_Ctxt_Legend_Remove.Enabled = true;
+
+                    if (Grid_Legend.SelectedRows[0].Cells[LEGEND_LABEL_COL].Style.Font.Strikeout)
+                    {
+                        TSMI_Ctxt_Legend_Hide.Text = "Show graph";
+                    }
+                    else
+                    {
+                        TSMI_Ctxt_Legend_Hide.Text = "Hide graph";
+                    }
+                }
+                else
+                {
+                    TSMI_Ctxt_Legend_Edit.Enabled = false;
+                    TSMI_Ctxt_Legend_Hide.Enabled = false;
+                    TSMI_Ctxt_Legend_Remove.Enabled = false;
+                }
+
+                if (PtRefCursorPos.IsEmpty)
+                {
+                    TSMI_Ctxt_Legend_Infos_RefCursor.Visible = false;
+                }
+                else
+                {
+                    TSMI_Ctxt_Legend_Infos_RefCursor.Visible = true;
+                }
+
+                if(Grid_Legend.ColumnHeadersVisible)
+                {
+                    TSMI_Ctxt_Legend_ShowTitles.Text = "Hide information titles";
+                }
+                else
+                {
+                    TSMI_Ctxt_Legend_ShowTitles.Text = "Show information titles";
+                }
+
+                if (Grid_Legend.CellBorderStyle == DataGridViewCellBorderStyle.Single)
+                {
+                    TSMI_Ctxt_Legend_ShowGridLines.Text = "Hide grid lines";
+                }
+                else
+                {
+                    TSMI_Ctxt_Legend_ShowGridLines.Text = "Show grid lines";
+                }
+
+                Context_Legend.Show(Grid_Legend, e.Location);
+            }
+        }
+
+        private void Grid_Legend_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (!(Grid_Legend.SelectedCells == null))
+            {
+                Edit_SerieProperties((int)Grid_Legend.SelectedRows[0].Cells[LEGEND_LABEL_COL].Tag);
+            }
+        }
+
+        private void Grid_Legend_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Grid_Legend.SelectedCells != null)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.T:
+
+                        foreach (DataGridViewRow oRow in Grid_Legend.SelectedRows)
+                        {
+                            Change_SerieVisibility((int)oRow.Cells[LEGEND_LABEL_COL].Tag);
+                        }
+
+                        break;
+
+                    case Keys.Delete:
+
+                        foreach (DataGridViewRow oRow in Grid_Legend.SelectedRows)
+                        {
+                            Remove_Serie((int)oRow.Cells[LEGEND_LABEL_COL].Tag);
+                        }
+
+                        break;
+                }
+            }
+        }
+
         #endregion
-        
+
         #region Context_Legend
         
         private void TSMI_Ctxt_Legend_EditClick(object sender, EventArgs e)
 		{
-			if (!(LV_Legend.SelectedItems.Count == 0))
-        	{
-        		Edit_SerieProperties((int)LV_Legend.SelectedItems[0].Tag);
-        	}
+            if (Grid_Legend.SelectedRows != null)
+            {
+                Edit_SerieProperties((int)Grid_Legend.SelectedRows[0].Cells[LEGEND_LABEL_COL].Tag);
+            }
 		}
         
         private void TSMI_Ctxt_Legend_HideClick(object sender, EventArgs e)
 		{
-        	if (!(LV_Legend.SelectedItems.Count == 0))
-			{
-				Change_SerieVisibility((int)LV_Legend.SelectedItems[0].Tag);
-			}
+            if (Grid_Legend.SelectedRows != null)
+            {
+                Change_SerieVisibility((int)Grid_Legend.SelectedRows[0].Cells[LEGEND_LABEL_COL].Tag);
+            }
 		}
         
         private void TSMI_Ctxt_Legend_RemoveClick(object sender, EventArgs e)
 		{
-			if (!(LV_Legend.SelectedItems.Count == 0))
-			{
-				Remove_Serie((int)LV_Legend.SelectedItems[0].Tag);
-			}
+            if (Grid_Legend.SelectedRows != null)
+            {
+                Remove_Serie((int)Grid_Legend.SelectedRows[0].Cells[LEGEND_LABEL_COL].Tag);
+            }
 		}
         
         #region Legend informations
@@ -2445,24 +2489,24 @@ namespace Ctrl_GraphWindow
         private void TSMI_Ctxt_Legend_Infos_LabelClick(object sender, EventArgs e)
 		{
         	TSMI_Ctxt_Legend_Infos_Label.Checked = !TSMI_Ctxt_Legend_Infos_Label.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_Label.Checked)
+            Grid_Legend.Columns[LEGEND_LABEL_COL].Visible = TSMI_Ctxt_Legend_Infos_Label.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_Label.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.Label;
 			}
 			else
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.Label;
-			}
-			
-			Reset_Legend();
+			}			
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_ValueClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_Value.Checked = !TSMI_Ctxt_Legend_Infos_Value.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_Value.Checked)
+            Grid_Legend.Columns[LEGEND_VALUE_COL].Visible = TSMI_Ctxt_Legend_Infos_Value.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_Value.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.CurrentValue;
 			}
@@ -2470,15 +2514,14 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.CurrentValue;
 			}
-			
-			Reset_Legend();
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_UnitClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_Unit.Checked = !TSMI_Ctxt_Legend_Infos_Unit.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_Unit.Checked)
+            Grid_Legend.Columns[LEGEND_UNIT_COL].Visible = TSMI_Ctxt_Legend_Infos_Unit.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_Unit.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.Unit;
 			}
@@ -2486,15 +2529,14 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.Unit;
 			}
-			
-			Reset_Legend();
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_MinClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_Min.Checked = !TSMI_Ctxt_Legend_Infos_Min.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_Min.Checked)
+            Grid_Legend.Columns[LEGEND_MIN_COL].Visible = TSMI_Ctxt_Legend_Infos_Min.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_Min.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.GraphMin;
 			}
@@ -2502,15 +2544,14 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.GraphMin;
 			}
-			
-			Reset_Legend();
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_MaxClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_Max.Checked = !TSMI_Ctxt_Legend_Infos_Max.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_Max.Checked)
+            Grid_Legend.Columns[LEGEND_MAX_COL].Visible = TSMI_Ctxt_Legend_Infos_Max.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_Max.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.GraphMax;
 			}
@@ -2518,15 +2559,14 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.GraphMax;
 			}
-			
-			Reset_Legend();
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_AvgClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_Avg.Checked = !TSMI_Ctxt_Legend_Infos_Avg.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_Avg.Checked)
+            Grid_Legend.Columns[LEGEND_AVG_COL].Visible = TSMI_Ctxt_Legend_Infos_Avg.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_Avg.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.GraphAvg;
 			}
@@ -2534,8 +2574,6 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.GraphAvg;
 			}
-			
-			Reset_Legend();
 		}
 		
         #region Reference cursor
@@ -2543,8 +2581,9 @@ namespace Ctrl_GraphWindow
         private void TSMI_Ctxt_Legend_Infos_RefCursor_ValueClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked = !TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked)
+            Grid_Legend.Columns[LEGEND_REF_VAL_COL].Visible = TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.RefCursorValue;
 			}
@@ -2552,15 +2591,14 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.RefCursorValue;
 			}
-			
-			Reset_Legend();
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_RefCursor_DiffClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked = !TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked)
+            Grid_Legend.Columns[LEGEND_REF_DIFF_COL].Visible = TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.RefCursorDiffValue;
 			}
@@ -2568,15 +2606,14 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.RefCursorDiffValue;
 			}
-			
-			Reset_Legend();
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_RefCursor_DiffPercClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked = !TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked)
+            Grid_Legend.Columns[LEGEND_REF_DIFF_PERC_COL].Visible = TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.RefCursorDiffPerc;
 			}
@@ -2584,15 +2621,14 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.RefCursorDiffPerc;
 			}
-			
-			Reset_Legend();
 		}
 		
 		private void TSMI_Ctxt_Legend_Infos_RefCursor_GradientClick(object sender, EventArgs e)
 		{
 			TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked = !TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked;
-			
-			if (TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked)
+            Grid_Legend.Columns[LEGEND_REF_GRADIENT_COL].Visible = TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked;
+
+            if (TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked)
 			{
 				Properties.LegendProperties.Informations |= GraphicLegendInformations.RefCursorGradient;
 			}
@@ -2600,8 +2636,6 @@ namespace Ctrl_GraphWindow
 			{
 				Properties.LegendProperties.Informations -= GraphicLegendInformations.RefCursorGradient;
 			}
-			
-			Reset_Legend();
 		}
         
         #endregion
@@ -2610,25 +2644,38 @@ namespace Ctrl_GraphWindow
         
         private void TSMI_Ctxt_Legend_ShowTitlesClick(object sender, EventArgs e)
 		{
-        	if (LV_Legend.HeaderStyle.Equals(ColumnHeaderStyle.None))
-        	{
-        		LV_Legend.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-        		Properties.LegendProperties.LegendHeaderVisible = true;
-        	}
-        	else
-        	{
-        		LV_Legend.HeaderStyle = ColumnHeaderStyle.None;
-        		Properties.LegendProperties.LegendHeaderVisible = false;
-        	}
+            Properties.LegendProperties.LegendHeaderVisible = !Properties.LegendProperties.LegendHeaderVisible;
+            Grid_Legend.ColumnHeadersVisible = Properties.LegendProperties.LegendHeaderVisible;
 		}
         
         private void TSMI_Ctxt_Legend_ShowGridLinesClick(object sender, EventArgs e)
 		{
-			LV_Legend.GridLines = !LV_Legend.GridLines;
-			Properties.LegendProperties.LegendGridLinesVisible = LV_Legend.GridLines;
+            if (Grid_Legend.CellBorderStyle == DataGridViewCellBorderStyle.Single)
+            {
+                Grid_Legend.CellBorderStyle = DataGridViewCellBorderStyle.None;
+                Properties.LegendProperties.LegendGridLinesVisible = false;
+            }
+            else
+            {
+                Grid_Legend.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+                Properties.LegendProperties.LegendGridLinesVisible = true;
+            }
 		}
 
         #endregion
+
+        #endregion
+
+        #region Private classes events
+
+        private void GraphicUpdateRequestRaised(object sender, EventArgs e)
+        {
+            if (GraphPictureMaker.ThreadState == (System.Threading.ThreadState.Background | System.Threading.ThreadState.WaitSleepJoin))
+            {
+                Grid_Legend.SuspendLayout();
+                WaitHandle.Set();
+            }
+        }
 
         #endregion
 
@@ -2640,7 +2687,9 @@ namespace Ctrl_GraphWindow
         {
             while (true)
             {
-                lock(oGraphicUpdateRequest)
+                WaitHandle.WaitOne();
+
+                lock (oGraphicUpdateRequest)
                 {
                     if (oGraphicUpdateRequest.UpdateRequested)
                     {
@@ -2661,6 +2710,8 @@ namespace Ctrl_GraphWindow
 #endif
                     }
                 }
+
+                WaitHandle.Reset();
             }
         }
 
@@ -2670,51 +2721,58 @@ namespace Ctrl_GraphWindow
             Pic_Graphic.Size = PicGraphicRectangle.Size;
         }
 
-        private void LegendInitTask(Color Backcolor)
+        private void LegendInitTask()
         {
-            LV_Legend.BackColor = Backcolor;
-            LV_Legend.Items.Clear();
             Init_Legend();
         }
 
         private void AddLegendSerieTask(LegendItemData LegendData)
         {
-            ListViewItem SerieLegItem = new ListViewItem();
+            Grid_Legend.Rows.Add();
+            DataGridViewRow oRow = Grid_Legend.Rows[Grid_Legend.Rows.Count - 1];
 
-            SerieLegItem.Text = LegendData.ItemProperties.Label;
-            SerieLegItem.ForeColor = LegendData.ItemProperties.Trace.LineColor;
-            SerieLegItem.Tag = LegendData.ItemProperties.KeyId;
-
-            Properties.LegendProperties.LegendFont.Set_FontProperty(GW_Font.FontProperty.Strikeout, !LegendData.ItemProperties.Visible);
-            SerieLegItem.Font = Properties.LegendProperties.LegendFont.oFont;
-
-            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
+            foreach(DataGridViewCell oCell in oRow.Cells)
             {
-                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.CurrentValue));
-            }
+                oCell.Style.BackColor = Properties.WindowBackColor;
+                oCell.Style.ForeColor = LegendData.ItemProperties.Trace.LineColor;
 
-            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
-            {
-                SerieLegItem.SubItems.Add(LegendData.ItemProperties.Unit);
-            }
+                Properties.LegendProperties.LegendFont.Set_FontProperty(GW_Font.FontProperty.Strikeout, !LegendData.ItemProperties.Visible);
+                oCell.Style.Font = Properties.LegendProperties.LegendFont.oFont;
 
-            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
-            {
-                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Min));
-            }
+                switch(oCell.ColumnIndex)
+                {
+                    case LEGEND_LABEL_COL:
 
-            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
-            {
-                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Max));
-            }
+                        oCell.Tag = LegendData.ItemProperties.KeyId;
+                        oCell.Value = LegendData.ItemProperties.Name;
+                        break;
 
-            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
-            {
-                SerieLegItem.SubItems.Add(LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Avg));
-            }
+                    case LEGEND_VALUE_COL:
 
-            LV_Legend.Items.Add(SerieLegItem);
-            LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                        oCell.Value = LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.CurrentValue);
+                        break;
+
+                    case LEGEND_UNIT_COL:
+
+                        oCell.Value = LegendData.ItemProperties.Unit;
+                        break;
+
+                    case LEGEND_MIN_COL:
+
+                        oCell.Value = LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Min);
+                        break;
+
+                    case LEGEND_MAX_COL:
+
+                        oCell.Value = LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Max);
+                        break;
+
+                    case LEGEND_AVG_COL:
+
+                        oCell.Value = LegendData.ItemProperties.ValueFormat.Get_ValueFormatted(LegendData.Avg);
+                        break;
+                }
+            }
         }
 
         private void GraphicPicturePostTracingTask()
@@ -2722,6 +2780,7 @@ namespace Ctrl_GraphWindow
             Pic_GraphFrame.Image = FrameImage;
             Pic_Graphic.Image = GraphImage;
 
+            Grid_Legend.ResumeLayout(true);
             Set_ZoomBars();
             Set_Options_Controls();
 
@@ -2946,7 +3005,7 @@ namespace Ctrl_GraphWindow
             gFrame.Clear(Properties.WindowBackColor);
 
             //Legend initialisation
-            this.BeginInvoke(this.InitLegendDelegate, new object[] { Properties.WindowBackColor });
+            this.BeginInvoke(this.InitLegendDelegate);
 
             //GraphFrame
             #region Graphic frame
@@ -6047,146 +6106,34 @@ namespace Ctrl_GraphWindow
          
         private void Init_Legend()
         {
-        	ListViewItem[] ItemsBackUp = null;
-        	
-        	if (!(LV_Legend.Items.Count == 0))
-        	{
-        		ItemsBackUp =  new ListViewItem[LV_Legend.Items.Count];
-        		
-        		for (int i = 0; i < LV_Legend.Items.Count; i++)
-        		{
-        			ItemsBackUp[i] = LV_Legend.Items[i];
-        		}
-        	}
-        	
-        	LV_Legend.Items.Clear();
-            LV_Legend.Columns.Clear();
+            Grid_Legend.Rows.Clear();
+            Grid_Legend.BackgroundColor = Properties.WindowBackColor;
+            
+            if(Properties.LegendProperties.LegendGridLinesVisible)
+            {
+                Grid_Legend.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            }
+            else
+            {
+                Grid_Legend.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            }
+
+            Grid_Legend.ColumnHeadersVisible = Properties.LegendProperties.LegendHeaderVisible;
 
             if(Properties.LegendProperties.Visible)
             {
-                int ColId = 0;
-            	
-            	LV_Legend.Columns.Add("Label");
-                LegendColIds.LabelColumn = ColId;
-                ColId++;
+                Grid_Legend.GridColor = Properties.Frame.BorderColor;
 
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-                {
-                    LV_Legend.Columns.Add("Value");
-                    LegendColIds.CurrentValueColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.CurrentValueColumn = -1;
-                }
-
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
-                {
-                    LV_Legend.Columns.Add("Unit");
-                    LegendColIds.UnitColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.UnitColumn = -1;
-                }
-
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
-                {
-                    LV_Legend.Columns.Add("Graph Min");
-                    LegendColIds.GraphMinColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.GraphMinColumn = -1;
-                }
-                
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
-                {
-                    LV_Legend.Columns.Add("Graph Max");
-                    LegendColIds.GraphMaxColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.GraphMaxColumn = -1;
-                }
-
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
-                {
-                    LV_Legend.Columns.Add("Graph Avg");
-                    LegendColIds.GraphAvgColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.GraphAvgColumn = -1;
-                }
-
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
-                {
-                    LV_Legend.Columns.Add("Ref cursor value");
-                    LegendColIds.RefCursorValueColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.RefCursorValueColumn = -1;
-                }
-
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
-                {
-                    LV_Legend.Columns.Add("Ref cursor diff");
-                    LegendColIds.RefCursorDiffColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.RefCursorDiffColumn = -1;
-                }
-
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
-                {
-                    LV_Legend.Columns.Add("Ref cursor diff %");
-                    LegendColIds.RefCursorDiffPercColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.RefCursorDiffPercColumn = -1;
-                }
-
-                if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
-                {
-                    LV_Legend.Columns.Add("Ref cursor gradient");
-                    LegendColIds.RefCursorGradientColumn = ColId;
-                    ColId++;
-                }
-                else
-                {
-                	LegendColIds.RefCursorGradientColumn = -1;
-                }
-
-                LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-                
-                if (!(ItemsBackUp == null))
-                {
-                	LV_Legend.Items.AddRange(ItemsBackUp);
-                	LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                }
-                
-                LV_Legend.GridLines = Properties.LegendProperties.LegendGridLinesVisible;
-                
-                if (Properties.LegendProperties.LegendHeaderVisible)
-                {
-                	LV_Legend.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-                }
-                else
-                {
-                	LV_Legend.HeaderStyle = ColumnHeaderStyle.None;
-                }
+                Grid_Legend.Columns[LEGEND_LABEL_COL].Visible         = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Label);
+                Grid_Legend.Columns[LEGEND_VALUE_COL].Visible         = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue);
+                Grid_Legend.Columns[LEGEND_UNIT_COL].Visible          = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit);
+                Grid_Legend.Columns[LEGEND_MIN_COL].Visible           = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin);
+                Grid_Legend.Columns[LEGEND_MAX_COL].Visible           = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax);
+                Grid_Legend.Columns[LEGEND_AVG_COL].Visible           = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg);
+                Grid_Legend.Columns[LEGEND_REF_VAL_COL].Visible       = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue);
+                Grid_Legend.Columns[LEGEND_REF_DIFF_COL].Visible      = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue);
+                Grid_Legend.Columns[LEGEND_REF_DIFF_PERC_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc);
+                Grid_Legend.Columns[LEGEND_REF_GRADIENT_COL].Visible  = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient);
             }
         }
 
@@ -6208,10 +6155,9 @@ namespace Ctrl_GraphWindow
 
         private void UpDate_LegendValues_MultipleRatesSampling(double AbscisseValue)
         {
-            for (int iLegendItem = 0; iLegendItem < LV_Legend.Items.Count; iLegendItem++)
+            foreach(DataGridViewRow oLegRow in Grid_Legend.Rows)
             {
-                ListViewItem LvIt = LV_Legend.Items[iLegendItem];
-                GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey((int)LvIt.Tag);
+                GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey((int)oLegRow.Cells[LEGEND_LABEL_COL].Tag);
 
                 if (!(oSerieProp == null))
                 {
@@ -6219,12 +6165,10 @@ namespace Ctrl_GraphWindow
 
                     if (!(double.IsNaN(SerieValue)))
                     {
-                        Set_LegendItemValues(LvIt, SerieValue, AbscisseValue, oSerieProp);
+                        Set_LegendItemValues(oLegRow, SerieValue, AbscisseValue, oSerieProp);
                     }
                 }
             }
-
-            LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void UpDate_LegendValues_SingleRateSampling(double AbscisseValue)
@@ -6233,33 +6177,27 @@ namespace Ctrl_GraphWindow
         	
         	if (!(TimeSampleIndex == -1))
         	{
-        		for (int iLegendItem = 0; iLegendItem < LV_Legend.Items.Count; iLegendItem++)
-        		{
-        			ListViewItem LvIt = LV_Legend.Items[iLegendItem];
-        			GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey((int)LvIt.Tag);
-        			
-        			if (!(oSerieProp == null))
-        			{
-        				double SerieValue = DataFile.Get_ChannelValueAtIndex(oSerieProp.Name, TimeSampleIndex);
-        				
-        				if (!(SerieValue == double.NaN))
-        				{
-                            Set_LegendItemValues(LvIt, SerieValue, AbscisseValue, oSerieProp);
-        				}
-        			}
-        		}
-        		
-        		LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                foreach (DataGridViewRow oLegRow in Grid_Legend.Rows)
+                {
+                    GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey((int)oLegRow.Cells[LEGEND_LABEL_COL].Tag);
+
+                    if (!(oSerieProp == null))
+                    {
+                        double SerieValue = DataFile.Get_ChannelValueAtIndex(oSerieProp.Name, TimeSampleIndex);
+
+                        if (!(double.IsNaN(SerieValue)))
+                        {
+                            Set_LegendItemValues(oLegRow, SerieValue, AbscisseValue, oSerieProp);
+                        }
+                    }
+                }
         	}
         }
         
-        private void Set_LegendItemValues(ListViewItem LegendItem, double ItemValue, double AbscisseValue, GraphSerieProperties oSerieProp)
+        private void Set_LegendItemValues(DataGridViewRow LegendRow, double ItemValue, double AbscisseValue, GraphSerieProperties oSerieProp)
         {
             //Main cursor value
-            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-            {
-                LegendItem.SubItems[LegendColIds.CurrentValueColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(ItemValue);
-            }
+            LegendRow.Cells[LEGEND_VALUE_COL].Value = oSerieProp.ValueFormat.Get_ValueFormatted(ItemValue);
 
             //Reference cursor values
             if (!(RefCursorCoordinates == null))
@@ -6268,67 +6206,10 @@ namespace Ctrl_GraphWindow
 
                 if (RefCursorCoordinates.Get_OrdinateValue(oSerieProp.KeyId, out RefCursorOrd))
                 {
-                    if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
-                    {
-                        if (LegendItem.SubItems.Count <= LegendColIds.RefCursorValueColumn)
-                        {
-                            LegendItem.SubItems.Add(oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue));
-                        }
-                        else
-                        {
-                            LegendItem.SubItems[LegendColIds.RefCursorValueColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue);
-                        }
-
-                        if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
-                        {
-                            double Diff = RefCursorOrd.SerieDblValue - ItemValue;
-
-                            if (LegendItem.SubItems.Count <= LegendColIds.RefCursorDiffColumn)
-                            {
-                                LegendItem.SubItems.Add(oSerieProp.ValueFormat.Get_ValueFormatted(Diff));
-                            }
-                            else
-                            {
-                                LegendItem.SubItems[LegendColIds.RefCursorDiffColumn].Text = oSerieProp.ValueFormat.Get_ValueFormatted(Diff);
-                            }
-                        }
-
-                        if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
-                        {
-                            double DiffPerc = Math.Round(((RefCursorOrd.SerieDblValue - ItemValue) * 100) / RefCursorOrd.SerieDblValue, 2);
-
-                            if (LegendItem.SubItems.Count <= LegendColIds.RefCursorDiffPercColumn)
-                            {
-                                LegendItem.SubItems.Add(DiffPerc.ToString());
-                            }
-                            else
-                            {
-                                LegendItem.SubItems[LegendColIds.RefCursorDiffPercColumn].Text = DiffPerc.ToString();
-                            }
-                        }
-
-                        if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
-                        {
-                            if (!(RefCursorCoordinates.Abs.Equals(double.NaN)))
-                            {
-                                double Grad = double.NaN;
-
-                                if (!((RefCursorCoordinates.Abs - AbscisseValue) == 0))
-                                {
-                                    Grad = Math.Round((RefCursorOrd.SerieDblValue - ItemValue) / (RefCursorCoordinates.Abs - AbscisseValue), 3);
-                                }
-
-                                if (LegendItem.SubItems.Count <= LegendColIds.RefCursorGradientColumn)
-                                {
-                                    LegendItem.SubItems.Add(Grad.ToString());
-                                }
-                                else
-                                {
-                                    LegendItem.SubItems[LegendColIds.RefCursorGradientColumn].Text = Grad.ToString();
-                                }
-                            }
-                        }
-                    }
+                    LegendRow.Cells[LEGEND_REF_VAL_COL].Value = oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue);
+                    LegendRow.Cells[LEGEND_REF_DIFF_COL].Value = oSerieProp.ValueFormat.Get_ValueFormatted(RefCursorOrd.SerieDblValue - ItemValue);
+                    LegendRow.Cells[LEGEND_REF_DIFF_PERC_COL].Value = ((RefCursorOrd.SerieDblValue - ItemValue) * 100 / RefCursorOrd.SerieDblValue).ToString("F2");
+                    LegendRow.Cells[LEGEND_REF_DIFF_PERC_COL].Value = ((RefCursorOrd.SerieDblValue - ItemValue) / (RefCursorCoordinates.Abs - AbscisseValue)).ToString("F3");
                 }
             }
         }
@@ -6337,330 +6218,38 @@ namespace Ctrl_GraphWindow
         {
         	if (!(LegendValue == null))
         	{
-        		for (int iLvIt = 0; iLvIt < LV_Legend.Items.Count; iLvIt++)
-        		{
-        			SerieValueAtPoint Val = new Ctrl_WaveForm.SerieValueAtPoint();
-        			
-        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-        			{
-        				if (LegendValue.Get_OrdinateValue((int)LV_Legend.Items[iLvIt].Tag, out Val))
-        				{
-        					LV_Legend.Items[iLvIt].SubItems[LegendColIds.CurrentValueColumn].Text = Val.SerieValue;
-        					
-        					if (!(RefCursorCoordinates == null))
-        					{
-        						SerieValueAtPoint RefCursorOrd = new Ctrl_WaveForm.SerieValueAtPoint();
-        						
-        						if (RefCursorCoordinates.Get_OrdinateValue((int)LV_Legend.Items[iLvIt].Tag, out RefCursorOrd))
-        						{
-        							if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
-        							{
-        								if (LV_Legend.Items[iLvIt].SubItems.Count <= LegendColIds.RefCursorValueColumn)
-        								{
-        									LV_Legend.Items[iLvIt].SubItems.Add(RefCursorOrd.SerieValue);
-        								}
-        								else
-        								{
-        									LV_Legend.Items[iLvIt].SubItems[LegendColIds.RefCursorValueColumn].Text = RefCursorOrd.SerieValue;
-        								}
-        							}
-        							
-        							if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
-        							{
-        								double Diff = RefCursorOrd.SerieDblValue - double.Parse(Val.SerieValue);
-        								
-        								if (LV_Legend.Items[iLvIt].SubItems.Count <= LegendColIds.RefCursorDiffColumn)
-        								{
-        									LV_Legend.Items[iLvIt].SubItems.Add(Diff.ToString());
-        								}
-        								else
-        								{
-        									LV_Legend.Items[iLvIt].SubItems[LegendColIds.RefCursorDiffColumn].Text = Diff.ToString();
-        								}
-        							}
-        							
-        							if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
-        							{
-        								double DiffPerc = Math.Round(((RefCursorOrd.SerieDblValue - double.Parse(Val.SerieValue)) * 100 ) / RefCursorOrd.SerieDblValue, 2);
-        								
-        								if (LV_Legend.Items[iLvIt].SubItems.Count <= LegendColIds.RefCursorDiffPercColumn)
-        								{
-        									LV_Legend.Items[iLvIt].SubItems.Add(DiffPerc.ToString());
-        								}
-        								else
-        								{
-        									LV_Legend.Items[iLvIt].SubItems[LegendColIds.RefCursorDiffPercColumn].Text = DiffPerc.ToString();
-        								}
-        							}
-        							
-        							if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
-        							{
-        								if (!(RefCursorCoordinates.Abs.Equals(double.NaN)))
-        								{
-        									double Grad = double.NaN;
-        				
-        									if (LV_Legend.Items[iLvIt].SubItems.Count <= LegendColIds.RefCursorGradientColumn)
-        									{
-        										LV_Legend.Items[iLvIt].SubItems.Add(Grad.ToString());
-        									}
-        									else
-        									{
-        										LV_Legend.Items[iLvIt].SubItems[LegendColIds.RefCursorGradientColumn].Text = Grad.ToString();
-        									}
-        								}
-        							}
-        						}
-        					}
-        				}
-        				else
-        				{
-        					for (int iSubIt = 0; iSubIt < LV_Legend.Items[iLvIt].SubItems.Count; iSubIt++)
-        					{
-        						if (!(iSubIt == LegendColIds.LabelColumn || iSubIt == LegendColIds.UnitColumn))
-        						{
-        							LV_Legend.Items[iLvIt].SubItems[iSubIt].Text = "NoRx";
-        						}
-        					}
-        				}
-        			}
-        		}
-        		
-        		LV_Legend.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-        	}
-        }
-		
-        private void Reset_Legend()
-        {
-        	Init_Legend();
-        	
-        	if (LV_Legend.Items.Count > 0)
-        	{
-        		ListViewItem[] LegendItems = new ListViewItem[LV_Legend.Items.Count];
-        		
-        		for (int i=0; i<LV_Legend.Items.Count; i++)
-        		{
-        			GraphSerieProperties oSerieProps = Properties.Get_SerieAtKey((int)LV_Legend.Items[i].Tag);
-        			
-        			if (!(oSerieProps == null))
-        			{
-        				GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
-        				
-        				if (!(oSerieData == null))
-        				{
-        					LegendItems[i] = new ListViewItem();
-        					LegendItems[i].Font = LV_Legend.Items[i].Font;
-        					LegendItems[i].ForeColor = LV_Legend.Items[i].ForeColor;
-        					LegendItems[i].Tag = LV_Legend.Items[i].Tag;
-        					
-        					int ColId = 0;
-		        			
-        					//Label
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Label))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.Label);
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].Text = oSerieProps.Label;
-		        				}
-		        				
-		        				LegendColIds.LabelColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.LabelColumn = -1;
-		        			}
-		        			
-		        			//Current value
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]);
-		        				}
-		        				
-		        				LegendColIds.CurrentValueColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.CurrentValueColumn = -1;
-		        			}
-		        			
-		        			//Value unit
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.Unit);
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.Unit;
-		        				}
-		        				
-		        				LegendColIds.UnitColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.UnitColumn = -1;
-		        			}
-		        			
-		        			//Value min
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Min));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Min);
-		        				}
-		        				
-		        				LegendColIds.GraphMinColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.GraphMinColumn = -1;
-		        			}
-		        			
-		        			//Value max
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Max));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Max);
-		        				}
-		        				
-		        				LegendColIds.GraphMaxColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.GraphMaxColumn = -1;
-		        			}
-		        			
-		        			//Value avg
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Avg));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Avg);
-		        				}
-		        				
-		        				LegendColIds.GraphAvgColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.GraphAvgColumn = -1;
-		        			}
-		        			
-		        			//Reference value
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]);
-		        				}
-		        				
-		        				LegendColIds.RefCursorValueColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.RefCursorValueColumn = -1;
-		        			}
-		        			
-		        			//Reference value difference
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]);
-		        				}
-		        				
-		        				LegendColIds.RefCursorDiffColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.RefCursorDiffColumn = -1;
-		        			}
-		        			
-		        			//Reference value difference perc
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]);
-		        				}
-		        				
-		        				LegendColIds.RefCursorDiffPercColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.RefCursorDiffPercColumn = -1;
-		        			}
-		        			
-		        			//Reference value gradient
-		        			if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
-		        			{
-		        				if (!(ColId == 0)) //A ListViewItem object always contains at least a SubItem which is the ListViewItem text
-		        				{
-		        					LegendItems[i].SubItems.Add(oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]));
-		        				}
-		        				else
-		        				{
-		        					LegendItems[i].SubItems[0].Text = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Values[0]);
-		        				}
-		        				
-		        				LegendColIds.RefCursorGradientColumn = ColId;
-		        				ColId++;
-		        			}
-		        			else
-		        			{
-		        				LegendColIds.RefCursorGradientColumn = -1;
-		        			}
-        				}
-        			}
-        		}
-        		
-        		LV_Legend.Items.Clear();
-        		LV_Legend.Items.AddRange(LegendItems);
-        		
-        		Draw_Cursor(PtCursorPos);
+                foreach (DataGridViewRow oRow in Grid_Legend.Rows)
+                {
+                    SerieValueAtPoint Val = new Ctrl_WaveForm.SerieValueAtPoint();
+
+                    if (LegendValue.Get_OrdinateValue((int)oRow.Cells[LEGEND_LABEL_COL].Tag, out Val))
+                    {
+                        oRow.Cells[LEGEND_VALUE_COL].Value = Val.SerieValue;
+
+                        if (!(RefCursorCoordinates == null))
+                        {
+                            SerieValueAtPoint RefCursorOrd = new Ctrl_WaveForm.SerieValueAtPoint();
+
+                            if (RefCursorCoordinates.Get_OrdinateValue((int)oRow.Cells[LEGEND_LABEL_COL].Tag, out RefCursorOrd))
+                            {
+                                oRow.Cells[LEGEND_REF_VAL_COL].Value = RefCursorOrd.SerieValue;
+                                oRow.Cells[LEGEND_REF_DIFF_COL].Value = (RefCursorOrd.SerieDblValue - double.Parse(Val.SerieValue)).ToString("F3");
+                                oRow.Cells[LEGEND_REF_DIFF_PERC_COL].Value = (((RefCursorOrd.SerieDblValue - double.Parse(Val.SerieValue)) * 100) / RefCursorOrd.SerieDblValue).ToString("F2");
+                                oRow.Cells[LEGEND_REF_GRADIENT_COL].Value = ((RefCursorOrd.SerieDblValue - double.Parse(Val.SerieValue)) / (RefCursorCoordinates.Abs - mMainCursorAbscisse)).ToString("F3");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (DataGridViewCell oCell in oRow.Cells)
+                        {
+                            if (!(oCell.ColumnIndex == LEGEND_LABEL_COL || oCell.ColumnIndex == LEGEND_UNIT_COL))
+                            {
+                                oCell.Value = "NoRx";
+                            }
+                        }
+                    }
+                }
         	}
         }
         
@@ -6678,14 +6267,14 @@ namespace Ctrl_GraphWindow
         	if (RefCursorVisible)
         	{
         		splitContainer2.SplitterDistance -= SizeOffset;
-        		LV_Legend.Width += SizeOffset;
+        		Grid_Legend.Width += SizeOffset;
         	}
         	else
         	{
-        		if (LV_Legend.Width >= 250)
+        		if (Grid_Legend.Width >= 250)
         		{
         			splitContainer2.SplitterDistance += SizeOffset;
-        			LV_Legend.Width -= SizeOffset;
+                    Grid_Legend.Width -= SizeOffset;
         		}
         	}
         }
@@ -7679,10 +7268,10 @@ namespace Ctrl_GraphWindow
         		
         		SnapGraphics.Clear(Properties.WindowBackColor);
         		
-        		Point PtSrc = LV_Legend.PointToScreen(LV_Legend.Location);        		
+        		Point PtSrc = Grid_Legend.PointToScreen(Grid_Legend.Location);        		
         		Point PtDest = new Point (FrameRightPoint + GRAPH_FRAME_WIDTH_OFFSET, FrameTopPoint);
         		
-        		SnapGraphics.CopyFromScreen(PtSrc, PtDest, LV_Legend.Size);
+        		SnapGraphics.CopyFromScreen(PtSrc, PtDest, Grid_Legend.Size);
         	}
         	else //Legend hidden
         	{
@@ -7865,6 +7454,7 @@ namespace Ctrl_GraphWindow
             if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
             {
                 oGraphicUpdateRequest.UpdateRequested = true;
+                //WaitHandle.Set();
             }
         }
 

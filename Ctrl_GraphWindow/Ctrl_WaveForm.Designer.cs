@@ -37,6 +37,16 @@ namespace Ctrl_GraphWindow
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TB_Graph = new System.Windows.Forms.ToolStrip();
             this.TSB_LoadData = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -102,18 +112,10 @@ namespace Ctrl_GraphWindow
             this.TSL_PlotAvg = new System.Windows.Forms.ToolStripLabel();
             this.TSB_Replot = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.Ctrl_ChannelList = new Ctrl_GraphWindow.Ctrl_GW_ChannelList();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.Cmd_ZoomYPosition = new System.Windows.Forms.Button();
             this.Cmd_ZoomXPosition = new System.Windows.Forms.Button();
-            this.Pic_Graphic = new Ctrl_GraphWindow.GW_SelectablePictureBox();
-            this.Pic_GraphFrame = new Ctrl_GraphWindow.GW_SelectablePictureBox();
-            this.LV_Legend = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Grid_Legend = new System.Windows.Forms.DataGridView();
             this.Dlg_OpenData = new System.Windows.Forms.OpenFileDialog();
             this.Context_PicGraphic_ZoomStats = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -196,6 +198,19 @@ namespace Ctrl_GraphWindow
             this.TSMI_Ctxt_Legend_ShowTitles = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Ctxt_Legend_ShowGridLines = new System.Windows.Forms.ToolStripMenuItem();
             this.Dlg_Save_Snapshot = new System.Windows.Forms.SaveFileDialog();
+            this.Ctrl_ChannelList = new Ctrl_GraphWindow.Ctrl_GW_ChannelList();
+            this.Pic_Graphic = new Ctrl_GraphWindow.GW_SelectablePictureBox();
+            this.Pic_GraphFrame = new Ctrl_GraphWindow.GW_SelectablePictureBox();
+            this.Legend_Col_Label = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_Unit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_GraphMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_GraphMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_GraphAvg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefDiff = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefDiffPerc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefGradient = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TB_Graph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -205,11 +220,12 @@ namespace Ctrl_GraphWindow
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Grid_Legend)).BeginInit();
             this.Context_PicGraphic_ZoomStats.SuspendLayout();
             this.Context_PicGraph_Options.SuspendLayout();
             this.Context_Legend.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).BeginInit();
             this.SuspendLayout();
             // 
             // TB_Graph
@@ -804,16 +820,6 @@ namespace Ctrl_GraphWindow
             this.splitContainer1.SplitterDistance = 89;
             this.splitContainer1.TabIndex = 1;
             // 
-            // Ctrl_ChannelList
-            // 
-            this.Ctrl_ChannelList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Ctrl_ChannelList.Location = new System.Drawing.Point(3, 3);
-            this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
-            this.Ctrl_ChannelList.Size = new System.Drawing.Size(84, 368);
-            this.Ctrl_ChannelList.TabIndex = 0;
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -829,7 +835,7 @@ namespace Ctrl_GraphWindow
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.LV_Legend);
+            this.splitContainer2.Panel2.Controls.Add(this.Grid_Legend);
             this.splitContainer2.Size = new System.Drawing.Size(721, 374);
             this.splitContainer2.SplitterDistance = 531;
             this.splitContainer2.TabIndex = 0;
@@ -870,81 +876,37 @@ namespace Ctrl_GraphWindow
             this.Cmd_ZoomXPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseMove);
             this.Cmd_ZoomXPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseUp);
             // 
-            // Pic_Graphic
+            // Grid_Legend
             // 
-            this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Pic_Graphic.Location = new System.Drawing.Point(79, 41);
-            this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
-            this.Pic_Graphic.Name = "Pic_Graphic";
-            this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
-            this.Pic_Graphic.TabIndex = 4;
-            this.Pic_Graphic.TabStop = false;
-            this.Pic_Graphic.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragDrop);
-            this.Pic_Graphic.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragEnter);
-            this.Pic_Graphic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseDown);
-            this.Pic_Graphic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseMove);
-            this.Pic_Graphic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseUp);
-            this.Pic_Graphic.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Pic_GraphicPreviewKeyDown);
-            // 
-            // Pic_GraphFrame
-            // 
-            this.Pic_GraphFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Grid_Legend.AllowUserToAddRows = false;
+            this.Grid_Legend.AllowUserToDeleteRows = false;
+            this.Grid_Legend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Pic_GraphFrame.BackColor = System.Drawing.Color.Black;
-            this.Pic_GraphFrame.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
-            this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
-            this.Pic_GraphFrame.Name = "Pic_GraphFrame";
-            this.Pic_GraphFrame.Size = new System.Drawing.Size(529, 373);
-            this.Pic_GraphFrame.TabIndex = 3;
-            this.Pic_GraphFrame.TabStop = false;
-            this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
-            this.Pic_GraphFrame.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragDrop);
-            this.Pic_GraphFrame.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragEnter);
-            // 
-            // LV_Legend
-            // 
-            this.LV_Legend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.LV_Legend.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5});
-            this.LV_Legend.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.LV_Legend.Location = new System.Drawing.Point(1, 1);
-            this.LV_Legend.Margin = new System.Windows.Forms.Padding(1);
-            this.LV_Legend.Name = "LV_Legend";
-            this.LV_Legend.Size = new System.Drawing.Size(183, 370);
-            this.LV_Legend.TabIndex = 0;
-            this.LV_Legend.UseCompatibleStateImageBehavior = false;
-            this.LV_Legend.View = System.Windows.Forms.View.Details;
-            this.LV_Legend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_LegendKeyDown);
-            this.LV_Legend.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LV_LegendMouseDoubleClick);
-            this.LV_Legend.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LV_LegendMouseDown);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Name";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Value";
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Min";
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Max";
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Avg";
+            this.Grid_Legend.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Grid_Legend.ColumnHeadersVisible = false;
+            this.Grid_Legend.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Legend_Col_Label,
+            this.Legend_Col_Value,
+            this.Legend_Col_Unit,
+            this.Legend_Col_GraphMin,
+            this.Legend_Col_GraphMax,
+            this.Legend_Col_GraphAvg,
+            this.Legend_Col_RefValue,
+            this.Legend_Col_RefDiff,
+            this.Legend_Col_RefDiffPerc,
+            this.Legend_Col_RefGradient});
+            this.Grid_Legend.Location = new System.Drawing.Point(3, 3);
+            this.Grid_Legend.MultiSelect = false;
+            this.Grid_Legend.Name = "Grid_Legend";
+            this.Grid_Legend.ReadOnly = true;
+            this.Grid_Legend.RowHeadersVisible = false;
+            this.Grid_Legend.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.Grid_Legend.Size = new System.Drawing.Size(180, 368);
+            this.Grid_Legend.TabIndex = 0;
+            this.Grid_Legend.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Grid_Legend_CellMouseDoubleClick);
+            this.Grid_Legend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Grid_Legend_KeyDown);
+            this.Grid_Legend.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Grid_Legend_MouseDown);
             // 
             // Dlg_OpenData
             // 
@@ -1590,6 +1552,162 @@ namespace Ctrl_GraphWindow
             // 
             this.Dlg_Save_Snapshot.Filter = "Bitmap image|*.bmp";
             // 
+            // Ctrl_ChannelList
+            // 
+            this.Ctrl_ChannelList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Ctrl_ChannelList.Location = new System.Drawing.Point(3, 3);
+            this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
+            this.Ctrl_ChannelList.Size = new System.Drawing.Size(84, 368);
+            this.Ctrl_ChannelList.TabIndex = 0;
+            // 
+            // Pic_Graphic
+            // 
+            this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.Pic_Graphic.Location = new System.Drawing.Point(79, 41);
+            this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
+            this.Pic_Graphic.Name = "Pic_Graphic";
+            this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
+            this.Pic_Graphic.TabIndex = 4;
+            this.Pic_Graphic.TabStop = false;
+            this.Pic_Graphic.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragDrop);
+            this.Pic_Graphic.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragEnter);
+            this.Pic_Graphic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseDown);
+            this.Pic_Graphic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseMove);
+            this.Pic_Graphic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseUp);
+            this.Pic_Graphic.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Pic_GraphicPreviewKeyDown);
+            // 
+            // Pic_GraphFrame
+            // 
+            this.Pic_GraphFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Pic_GraphFrame.BackColor = System.Drawing.Color.Black;
+            this.Pic_GraphFrame.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
+            this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
+            this.Pic_GraphFrame.Name = "Pic_GraphFrame";
+            this.Pic_GraphFrame.Size = new System.Drawing.Size(529, 373);
+            this.Pic_GraphFrame.TabIndex = 3;
+            this.Pic_GraphFrame.TabStop = false;
+            this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
+            this.Pic_GraphFrame.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragDrop);
+            this.Pic_GraphFrame.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragEnter);
+            // 
+            // Legend_Col_Label
+            // 
+            this.Legend_Col_Label.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Legend_Col_Label.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Legend_Col_Label.HeaderText = "Label";
+            this.Legend_Col_Label.Name = "Legend_Col_Label";
+            this.Legend_Col_Label.ReadOnly = true;
+            this.Legend_Col_Label.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Legend_Col_Value
+            // 
+            this.Legend_Col_Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_Value.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Legend_Col_Value.HeaderText = "Value";
+            this.Legend_Col_Value.Name = "Legend_Col_Value";
+            this.Legend_Col_Value.ReadOnly = true;
+            this.Legend_Col_Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_Value.Width = 5;
+            // 
+            // Legend_Col_Unit
+            // 
+            this.Legend_Col_Unit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_Unit.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Legend_Col_Unit.HeaderText = "Unit";
+            this.Legend_Col_Unit.Name = "Legend_Col_Unit";
+            this.Legend_Col_Unit.ReadOnly = true;
+            this.Legend_Col_Unit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_Unit.Width = 5;
+            // 
+            // Legend_Col_GraphMin
+            // 
+            this.Legend_Col_GraphMin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphMin.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Legend_Col_GraphMin.HeaderText = "Min";
+            this.Legend_Col_GraphMin.Name = "Legend_Col_GraphMin";
+            this.Legend_Col_GraphMin.ReadOnly = true;
+            this.Legend_Col_GraphMin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_GraphMin.Width = 5;
+            // 
+            // Legend_Col_GraphMax
+            // 
+            this.Legend_Col_GraphMax.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphMax.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Legend_Col_GraphMax.HeaderText = "Max";
+            this.Legend_Col_GraphMax.Name = "Legend_Col_GraphMax";
+            this.Legend_Col_GraphMax.ReadOnly = true;
+            this.Legend_Col_GraphMax.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_GraphMax.Width = 5;
+            // 
+            // Legend_Col_GraphAvg
+            // 
+            this.Legend_Col_GraphAvg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphAvg.DefaultCellStyle = dataGridViewCellStyle6;
+            this.Legend_Col_GraphAvg.HeaderText = "Avg";
+            this.Legend_Col_GraphAvg.Name = "Legend_Col_GraphAvg";
+            this.Legend_Col_GraphAvg.ReadOnly = true;
+            this.Legend_Col_GraphAvg.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_GraphAvg.Width = 5;
+            // 
+            // Legend_Col_RefValue
+            // 
+            this.Legend_Col_RefValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefValue.DefaultCellStyle = dataGridViewCellStyle7;
+            this.Legend_Col_RefValue.HeaderText = "Ref value";
+            this.Legend_Col_RefValue.Name = "Legend_Col_RefValue";
+            this.Legend_Col_RefValue.ReadOnly = true;
+            this.Legend_Col_RefValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefValue.Visible = false;
+            this.Legend_Col_RefValue.Width = 5;
+            // 
+            // Legend_Col_RefDiff
+            // 
+            this.Legend_Col_RefDiff.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefDiff.DefaultCellStyle = dataGridViewCellStyle8;
+            this.Legend_Col_RefDiff.HeaderText = "Diff";
+            this.Legend_Col_RefDiff.Name = "Legend_Col_RefDiff";
+            this.Legend_Col_RefDiff.ReadOnly = true;
+            this.Legend_Col_RefDiff.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefDiff.Visible = false;
+            this.Legend_Col_RefDiff.Width = 5;
+            // 
+            // Legend_Col_RefDiffPerc
+            // 
+            this.Legend_Col_RefDiffPerc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefDiffPerc.DefaultCellStyle = dataGridViewCellStyle9;
+            this.Legend_Col_RefDiffPerc.HeaderText = "Diff %";
+            this.Legend_Col_RefDiffPerc.Name = "Legend_Col_RefDiffPerc";
+            this.Legend_Col_RefDiffPerc.ReadOnly = true;
+            this.Legend_Col_RefDiffPerc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefDiffPerc.Visible = false;
+            this.Legend_Col_RefDiffPerc.Width = 5;
+            // 
+            // Legend_Col_RefGradient
+            // 
+            this.Legend_Col_RefGradient.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefGradient.DefaultCellStyle = dataGridViewCellStyle10;
+            this.Legend_Col_RefGradient.HeaderText = "Gradient";
+            this.Legend_Col_RefGradient.Name = "Legend_Col_RefGradient";
+            this.Legend_Col_RefGradient.ReadOnly = true;
+            this.Legend_Col_RefGradient.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefGradient.Visible = false;
+            this.Legend_Col_RefGradient.Width = 5;
+            // 
             // Ctrl_WaveForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1609,11 +1727,12 @@ namespace Ctrl_GraphWindow
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Grid_Legend)).EndInit();
             this.Context_PicGraphic_ZoomStats.ResumeLayout(false);
             this.Context_PicGraph_Options.ResumeLayout(false);
             this.Context_Legend.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1751,12 +1870,6 @@ namespace Ctrl_GraphWindow
 		private System.Windows.Forms.ContextMenuStrip Context_PicGraph_Options;
 		private System.Windows.Forms.ContextMenuStrip Context_PicGraphic_ZoomStats;
 		private Ctrl_GraphWindow.Ctrl_GW_ChannelList Ctrl_ChannelList;
-		private System.Windows.Forms.ColumnHeader columnHeader5;
-		private System.Windows.Forms.ColumnHeader columnHeader4;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ListView LV_Legend;
 		private System.Windows.Forms.OpenFileDialog Dlg_OpenData;
 		private System.Windows.Forms.ToolStripButton TSB_Replot;
 		private System.Windows.Forms.ToolStripLabel TSL_PlotAvg;
@@ -1777,5 +1890,16 @@ namespace Ctrl_GraphWindow
         private System.Windows.Forms.ToolStripMenuItem RT_BreaktoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem RT_StoptoolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.DataGridView Grid_Legend;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_Label;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_Unit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_GraphMin;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_GraphMax;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_GraphAvg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_RefValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_RefDiff;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_RefDiffPerc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_RefGradient;
     }
 }
