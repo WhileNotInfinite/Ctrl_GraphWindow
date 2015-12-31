@@ -315,6 +315,24 @@ namespace Ctrl_GraphWindow
             #endregion
         }
 
+        private class GraphicDrawingStage
+        {
+            #region Public members
+
+            public GraphDrawingStages DrawingStage;
+            public GraphicsState InitialFrameState;
+            public GraphicsState InitialGraphState;
+
+            #endregion
+
+            public GraphicDrawingStage()
+            {
+                DrawingStage = GraphDrawingStages.Scratch;
+                InitialFrameState = null;
+                InitialGraphState = null;
+            }
+        }
+
         private class GraphicCoordinates
 	    {
 	    	#region public members
@@ -420,6 +438,19 @@ namespace Ctrl_GraphWindow
             Running = 0,
             Broken  = 1,
             Stopped = 2,
+        }
+
+        private enum GraphDrawingStages
+        {
+            Scratch         = 0,
+            Frame           = 1,
+            Grid            = 2,
+            XAxis_Lines     = 3,
+            YAxis_Lines     = 4,
+            Series_Options  = 5,
+            YAxis_Values    = 6,
+            XAxis_Values    = 7,
+            Series_Values   = 8,
         }
 
 	    #endregion
@@ -777,6 +808,8 @@ namespace Ctrl_GraphWindow
 
         private bool bDataPlotted;
 
+        private GraphicDrawingStage[] DrawingStages;
+
         private Image FrameImage;
         private Image GraphImage;
 
@@ -938,6 +971,7 @@ namespace Ctrl_GraphWindow
 
             bDataPlotted = false;
 
+            Init_DrawingStages();
             FrameImage = null;
             GraphImage = null;
 
@@ -2802,6 +2836,22 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Drawing stages
+
+        private void Init_DrawingStages()
+        {
+            string[] eStageNames = Enum.GetNames(typeof(GraphDrawingStages));
+            DrawingStages = new GraphicDrawingStage[eStageNames.Length];
+
+            for (int iStage = 0; iStage < eStageNames.Length; iStage++)
+            {
+                DrawingStages[iStage] = new GraphicDrawingStage();
+                DrawingStages[iStage].DrawingStage = (GraphDrawingStages)Enum.Parse(typeof(GraphDrawingStages), eStageNames[iStage]);
+            }
+        }
+
+        #endregion
+
         #region Graphic plotting functions
 
         private void Init_GraphWindow()
@@ -4463,7 +4513,7 @@ namespace Ctrl_GraphWindow
             return (Cnt);
         }
         
-         #endregion
+        #endregion
         
         #region Cursor functions
         
