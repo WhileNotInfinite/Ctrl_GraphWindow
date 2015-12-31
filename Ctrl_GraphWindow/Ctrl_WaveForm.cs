@@ -422,9 +422,9 @@ namespace Ctrl_GraphWindow
             Stopped = 2,
         }
 
-	    #endregion
-	    
-		#region Privates constants
+        #endregion
+
+        #region Privates constants
 
         private const string MSG_BOX_TITLE = "Graph Window";
 
@@ -777,8 +777,11 @@ namespace Ctrl_GraphWindow
 
         private bool bDataPlotted;
 
-        private Image FrameImage;
-        private Image GraphImage;
+        MultiLayerImage ImgFrameLayers;
+        MultiLayerImage ImgGraphLayers;
+
+        private Image FrameImage; //TODO: Remove
+        private Image GraphImage; //TODO: Remove
 
         private GW_DataFile WholeDataFile;
         private GW_DataFile DataFile;
@@ -938,8 +941,11 @@ namespace Ctrl_GraphWindow
 
             bDataPlotted = false;
 
-            FrameImage = null;
-            GraphImage = null;
+            Init_FrameMultiLayersImage();
+            Init_GraphMultiLayersImage();
+
+            FrameImage = null; //TODO: Remove
+            GraphImage = null; //TODO: Remove
 
             Properties = new GraphWindowProperties();
 			WholeDataFile = null;
@@ -2698,7 +2704,16 @@ namespace Ctrl_GraphWindow
                         swTaskTime.Start();
 #endif
                         bDataPlotted = false;
-                        Init_GraphWindow();
+
+                        ImgFrameLayers.ResetImage(Pic_GraphFrame.Size, Properties.WindowBackColor);
+                        ImgFrameLayers.DrawImage(0);
+
+                        ImgGraphLayers.ResetImage(Pic_Graphic.Size, Properties.WindowBackColor);
+                        ImgGraphLayers.DrawImage(0);
+                        
+                        //TODO: Remove
+                        //Init_GraphWindow();
+
 
                         oGraphicUpdateRequest.UpdateRequested = false;
                         this.Invoke(this.GraphicPicturePostTracingDelegate);
@@ -2777,8 +2792,12 @@ namespace Ctrl_GraphWindow
 
         private void GraphicPicturePostTracingTask()
         {
-            Pic_GraphFrame.Image = FrameImage;
-            Pic_Graphic.Image = GraphImage;
+            Pic_GraphFrame.Image = ImgFrameLayers.FinalImage;
+            Pic_Graphic.Image = ImgGraphLayers.FinalImage;
+            
+            //TODO: Remove
+            //Pic_GraphFrame.Image = FrameImage;
+            //Pic_Graphic.Image = GraphImage;
 
             Grid_Legend.ResumeLayout(true);
             Set_ZoomBars();
@@ -4462,11 +4481,85 @@ namespace Ctrl_GraphWindow
 
             return (Cnt);
         }
-        
-         #endregion
-        
+
+        #region Picture layers methods
+
+        #region Frame layers methods
+
+        private void Init_FrameMultiLayersImage()
+        {
+            LayerDrawingMethodHandler[] FrameDrawingMethods = new LayerDrawingMethodHandler[5];
+
+            FrameDrawingMethods[0] = new LayerDrawingMethodHandler(Draw_GraphFrame);
+            FrameDrawingMethods[1] = new LayerDrawingMethodHandler(Draw_X_AxisLine);
+            FrameDrawingMethods[2] = new LayerDrawingMethodHandler(Draw_Y_AxisLines);
+            FrameDrawingMethods[3] = new LayerDrawingMethodHandler(Draw_Y_AxisValues);
+            FrameDrawingMethods[4] = new LayerDrawingMethodHandler(Draw_X_AxisValues);
+
+            ImgFrameLayers = new MultiLayerImage(FrameDrawingMethods);
+        }
+
+        private Image Draw_GraphFrame(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        private Image Draw_X_AxisLine(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        private Image Draw_Y_AxisLines(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        private Image Draw_Y_AxisValues(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        private Image Draw_X_AxisValues(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        #endregion
+
+        #region Graph layers methods
+
+        private void Init_GraphMultiLayersImage()
+        {
+            LayerDrawingMethodHandler[] GraphDrawingMethods = new LayerDrawingMethodHandler[3];
+
+            GraphDrawingMethods[0] = new LayerDrawingMethodHandler(Draw_GraphGrids);
+            GraphDrawingMethods[1] = new LayerDrawingMethodHandler(Draw_SeriesOptions);
+            GraphDrawingMethods[2] = new LayerDrawingMethodHandler(Draw_SeriesValues);
+
+            ImgGraphLayers = new MultiLayerImage(GraphDrawingMethods);
+        }
+
+        private Image Draw_GraphGrids(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        private Image Draw_SeriesOptions(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        private Image Draw_SeriesValues(Graphics ImgGraphics)
+        {
+            return (null);
+        }
+
+        #endregion
+
+        #endregion
+
         #region Cursor functions
-        
+
         private void Draw_Cursor(Point MouseLocation)
         {
         	Draw_Cursor(MouseLocation, null, null);
