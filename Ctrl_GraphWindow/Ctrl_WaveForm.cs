@@ -447,10 +447,11 @@ namespace Ctrl_GraphWindow
             Grid            = 2,
             XAxis_Lines     = 3,
             YAxis_Lines     = 4,
-            Series_Options  = 5,
-            YAxis_Values    = 6,
+            YAxis_Values    = 5,
+            Series_Options  = 6,
             XAxis_Values    = 7,
-            Series_Values   = 8,
+            XAxis_Options   = 8,
+            Series_Values   = 9,
         }
 
 	    #endregion
@@ -810,6 +811,8 @@ namespace Ctrl_GraphWindow
 
         private GraphicDrawingStage[] DrawingStages;
 
+        private Graphics FrameGraphics;
+        private Graphics GraphGraphics;
         private Image FrameImage;
         private Image GraphImage;
 
@@ -2846,8 +2849,161 @@ namespace Ctrl_GraphWindow
             for (int iStage = 0; iStage < eStageNames.Length; iStage++)
             {
                 DrawingStages[iStage] = new GraphicDrawingStage();
-                DrawingStages[iStage].DrawingStage = (GraphDrawingStages)Enum.Parse(typeof(GraphDrawingStages), eStageNames[iStage]);
+                DrawingStages[iStage].DrawingStage = (GraphDrawingStages)iStage;
             }
+        }
+
+        private void DrawGraphFromStage(GraphDrawingStages InitialStage)
+        {
+            int StageIndex = (int)InitialStage;
+
+            if (InitialStage != GraphDrawingStages.Scratch)
+            {
+                FrameGraphics.Restore(DrawingStages[StageIndex].InitialFrameState);
+                GraphGraphics.Restore(DrawingStages[StageIndex].InitialFrameState);
+
+                switch (InitialStage)
+                {
+                    case GraphDrawingStages.Frame:
+
+                        goto FrameDrawingStage;
+
+                    case GraphDrawingStages.Grid:
+
+                        goto GridDrawingStage;
+
+                    case GraphDrawingStages.XAxis_Lines:
+
+                        goto XAxisLinesDrawingStage;
+
+                    case GraphDrawingStages.YAxis_Lines:
+
+                        goto YAxisLinesDrawingStage;
+
+                    case GraphDrawingStages.YAxis_Values:
+
+                        goto YAxisValuesDrawingStage;
+
+                    case GraphDrawingStages.Series_Options:
+
+                        goto SeriesOptionsDrawingStage;
+
+                    case GraphDrawingStages.XAxis_Values:
+
+                        goto XAxisValuesDrawingStage;
+
+                    case GraphDrawingStages.XAxis_Options:
+
+                        goto XAxisOptionsDrawingStage;
+
+                    case GraphDrawingStages.Series_Values:
+
+                        goto SeriesValuesDrawingStage;
+                }
+            }
+
+            #region Initialization
+
+            Init_DrawingStages();
+            StageIndex = 0;
+
+            FrameImage = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
+            GraphImage = new Bitmap(Pic_Graphic.Width, Pic_Graphic.Height);
+
+            FrameGraphics = Graphics.FromImage(FrameImage);
+            GraphGraphics = Graphics.FromImage(GraphImage);
+
+            #endregion
+
+            #region Frame drawing
+
+            FrameDrawingStage: //Graphic frmame drawing
+
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region Grid drawing
+
+            GridDrawingStage: //Graphic grids drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region X Axis lines
+
+            XAxisLinesDrawingStage: //Axis X line and graduations drawing
+
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region Y Axis lines
+
+            YAxisLinesDrawingStage: //Series Y Axis lines and graduations drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region Y Axis values
+
+            YAxisValuesDrawingStage: //Series Y Axis graduations values drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region Series Options
+
+            SeriesOptionsDrawingStage: //Series options (custom grids, reference lines) drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region X Axis values
+
+            XAxisValuesDrawingStage: //X Axis graduation values drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region X Axis options
+
+            XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            #endregion
+
+            #region Series values
+
+            SeriesValuesDrawingStage: //Series values (trace and markers) drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+            
+            #endregion
         }
 
         #endregion
