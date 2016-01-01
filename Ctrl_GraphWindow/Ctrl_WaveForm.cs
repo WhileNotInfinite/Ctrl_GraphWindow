@@ -87,18 +87,22 @@ namespace Ctrl_GraphWindow
 	        public int EndPos;
 	        public int SerieKey;
 	        public int TitleLeft;
-	
+
+            public AxisGraduation[] Graduations;
+
 	        #endregion
 	
 	        public GraphAxis()
 	        {
 	            StartPos = 0;
 	            EndPos = 0;
-	        }
+
+                Graduations = null;
+            }
 	
 	        #region Public methodes
 	
-	        public AxisGraduation[] Get_AxisGraduations(int FrameSize, int FramePosOffset, double ValueMin, double ValueMax, GraphSerieValueFormat oFormat, bool bAbscisse)
+	        public void Set_AxisGraduations(int FrameSize, int FramePosOffset)
 	        {
 	            int GradCnt = 0;
 	
@@ -137,43 +141,47 @@ namespace Ctrl_GraphWindow
 	
 	            if(GradCnt>0)
 	            {
-	                AxisGraduation[] Grads = new AxisGraduation[GradCnt];
+	                Graduations = new AxisGraduation[GradCnt];
 	
-	                double GradValStep = (ValueMax - ValueMin) / (GradCnt - 1);
 	                int GradPosStep = ((EndPos - StartPos) / (GradCnt - 1));
 	
 	                for (int iGrad = 0; iGrad < GradCnt; iGrad++)
 	                {
-	                    Grads[iGrad] = new AxisGraduation();
+	                    Graduations[iGrad] = new AxisGraduation();
 
 	                    if (!(iGrad == GradCnt - 1))
 	                    {
-	                    	Grads[iGrad].Position = StartPos + (GradPosStep * iGrad);
+	                    	Graduations[iGrad].Position = StartPos + (GradPosStep * iGrad);
 	                    }
 	                    else
 	                    {
-	                    	Grads[iGrad].Position = EndPos;
+	                    	Graduations[iGrad].Position = EndPos;
 	                    }
-	
-	                    if (!bAbscisse)
-	                    {
-	                        Grads[iGrad].Value = oFormat.Get_ValueFormatted(ValueMax - (GradValStep * iGrad));
-	                    }
-	                    else
-	                    {
-	                        Grads[iGrad].Value = oFormat.Get_ValueFormatted(ValueMin + (GradValStep * iGrad));
-	                    }
-	                }
-	
-	                return (Grads);
-	            }
-	
-	            return (null);
+	                }	
+	            }	
 	        }
 			
+            public void Set_GraduationsValues(double ValueMin, double ValueMax, GraphSerieValueFormat oFormat, bool bAbscisse)
+            {
+                double GradValStep = (ValueMax - ValueMin) / (Graduations.Length - 1);
+
+                for (int iGrad = 0; iGrad < Graduations.Length; iGrad++)
+                {
+                    if (!bAbscisse)
+                    {
+                        Graduations[iGrad].Value = oFormat.Get_ValueFormatted(ValueMax - (GradValStep * iGrad));
+                    }
+                    else
+                    {
+                        Graduations[iGrad].Value = oFormat.Get_ValueFormatted(ValueMin + (GradValStep * iGrad));
+                    }
+                }
+            }
+
 	        public string Get_LongestGraduationText(int FrameSize, int FramePosOffset, double ValueMin, double ValueMax, GraphSerieValueFormat oFormat, bool bAbscisse)
 	        {
-	        	AxisGraduation[] Graduations = Get_AxisGraduations(FrameSize, FramePosOffset, ValueMin, ValueMax, oFormat, bAbscisse);
+                Set_AxisGraduations(FrameSize, FramePosOffset);
+                Set_GraduationsValues(ValueMin, ValueMax, oFormat, bAbscisse);
 	        	
 	        	if (!(Graduations == null))
 	        	{
@@ -186,7 +194,7 @@ namespace Ctrl_GraphWindow
 	        				LongestGradTxt = sGrad.Value;
 	        			}
 	        		}
-	        		
+
 	        		return(LongestGradTxt);
 	        	}
 	        	
@@ -834,6 +842,8 @@ namespace Ctrl_GraphWindow
         private int SeriesVisibleCount;
         private int[] AbscisseCoords;
 
+        GraphAxis oAbscisseAxis;
+
         private GraphAxisCollection oYAxis;
         
         private int BaseLegendWidth;
@@ -982,6 +992,8 @@ namespace Ctrl_GraphWindow
 			WholeDataFile = null;
             DataFile = null;
             SeriesReferenceCoordConversion = null;
+
+            oAbscisseAxis = null;
 
             oYAxis = new GraphAxisCollection();
             
@@ -2855,7 +2867,21 @@ namespace Ctrl_GraphWindow
 
         private void DrawGraphFromStage(GraphDrawingStages InitialStage)
         {
+            //TODO: Implement time measurements
+
+            if (Pic_GraphFrame.Width == 0 || Pic_GraphFrame.Height == 0)
+            {
+                return;
+            }
+
+            #region Local variables
+
             int StageIndex = (int)InitialStage;
+
+            Pen oPen = null;
+            SolidBrush oBrush = null;
+
+            #endregion
 
             if (InitialStage != GraphDrawingStages.Scratch)
             {
@@ -2904,6 +2930,8 @@ namespace Ctrl_GraphWindow
 
             #region Initialization
 
+            Init_GraphWindow();
+
             Init_DrawingStages();
             StageIndex = 0;
 
@@ -2912,6 +2940,9 @@ namespace Ctrl_GraphWindow
 
             FrameGraphics = Graphics.FromImage(FrameImage);
             GraphGraphics = Graphics.FromImage(GraphImage);
+
+            //Legend initialisation
+            this.BeginInvoke(this.InitLegendDelegate);
 
             #endregion
 
@@ -2923,6 +2954,11 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
 
+            oPen = new Pen(Properties.Frame.BorderColor, (float)Properties.Frame.BorderWidth);
+            oPen.DashStyle = DashStyle.Solid;
+
+            FrameGraphics.DrawRectangle(oPen, FrameLeftPoint, FrameTopPoint, FrameWidth, FrameHeight);
+
             #endregion
 
             #region Grid drawing
@@ -2932,6 +2968,74 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
+
+            //Main horizontal grid
+            if (Properties.Grid.MainHorizontalGrid.Visible)
+            {
+                oPen = new Pen(Properties.Grid.MainHorizontalGrid.LineColor, (float)Properties.Grid.MainHorizontalGrid.LineWidth);
+                oPen.DashStyle = Properties.Grid.MainHorizontalGrid.LineStyle;
+
+                int hGridStep = (int)(FrameWidth / (HORIZONTAL_GRID_LINES_COUNT + 1));
+
+                for (int i = 0; i < HORIZONTAL_GRID_LINES_COUNT; i++)
+                {
+                    GraphGraphics.DrawLine(oPen, (hGridStep * (i + 1)),
+                                       0,
+                                       (hGridStep * (i + 1)),
+                                       Pic_Graphic.Height);
+                }
+            }
+
+            //Main vertical grid
+            if (Properties.Grid.MainVerticalGrid.Visible)
+            {
+                oPen = new Pen(Properties.Grid.MainVerticalGrid.LineColor, (float)Properties.Grid.MainVerticalGrid.LineWidth);
+                oPen.DashStyle = Properties.Grid.MainVerticalGrid.LineStyle;
+
+                int vGridStep = (int)(FrameHeight / (VERTICAL_GRID_LINES_COUNT + 1));
+
+                for (int i = 0; i < VERTICAL_GRID_LINES_COUNT; i++)
+                {
+                    GraphGraphics.DrawLine(oPen, 0,
+                                       (vGridStep * (i + 1)),
+                                       Pic_Graphic.Width,
+                                       (vGridStep * (i + 1)));
+                }
+            }
+
+            //Secondary horizontal grid
+            if (Properties.Grid.SecondaryHorizontalGrid.Visible)
+            {
+                oPen = new Pen(Properties.Grid.SecondaryHorizontalGrid.LineColor, (float)Properties.Grid.SecondaryHorizontalGrid.LineWidth);
+                oPen.DashStyle = Properties.Grid.SecondaryHorizontalGrid.LineStyle;
+
+                int hGridStep = (int)(FrameWidth / (SEC_H_GRID_LINES_COUNT + 1));
+
+                for (int i = 0; i < SEC_H_GRID_LINES_COUNT; i++)
+                {
+                    GraphGraphics.DrawLine(oPen, (hGridStep * (i + 1)),
+                                       0,
+                                       (hGridStep * (i + 1)),
+                                       Pic_Graphic.Height);
+                }
+            }
+
+            //Secondary vertical grid
+            if (Properties.Grid.SecondaryVerticalGrid.Visible)
+            {
+                oPen = new Pen(Properties.Grid.SecondaryVerticalGrid.LineColor, (float)Properties.Grid.SecondaryVerticalGrid.LineWidth);
+                oPen.DashStyle = Properties.Grid.SecondaryVerticalGrid.LineStyle;
+
+                int vGridStep = (int)(FrameHeight / (SEC_V_GRID_LINES_COUNT + 1));
+
+                for (int i = 0; i < SEC_V_GRID_LINES_COUNT; i++)
+                {
+                    GraphGraphics.DrawLine(oPen, 0,
+                                       (vGridStep * (i + 1)),
+                                       Pic_Graphic.Width,
+                                       (vGridStep * (i + 1)));
+                }
+            }
 
             #endregion
 
@@ -2943,6 +3047,33 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
 
+            if(Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
+            {
+                oPen = new Pen(Properties.AbscisseAxis.AxisLineStyle.LineColor, (float)Properties.AbscisseAxis.AxisLineStyle.LineWidth);
+                oPen.DashStyle = Properties.AbscisseAxis.AxisLineStyle.LineStyle;
+
+                oAbscisseAxis = new GraphAxis();
+                oAbscisseAxis.StartPos = FrameLeftPoint;
+                oAbscisseAxis.EndPos = FrameRightPoint;
+
+                oAbscisseAxis.Set_AxisGraduations(FrameWidth, 0);
+
+                int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
+
+                //Main abscisse axis line drawing
+                FrameGraphics.DrawLine(oPen, FrameLeftPoint, AxisPos, FrameRightPoint, AxisPos);
+
+                if (oAbscisseAxis.Graduations != null)
+                {
+                    int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
+
+                    foreach (AxisGraduation oGrad in oAbscisseAxis.Graduations)
+                    {
+                        FrameGraphics.DrawLine(oPen, oGrad.Position, AxisPos, oGrad.Position, GradEndPos);
+                    }
+                }
+            }
+
             #endregion
 
             #region Y Axis lines
@@ -2952,6 +3083,60 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
+
+            if (DataFile != null && SeriesVisibleCount > 0)
+            {
+                foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
+                {
+                    if(oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible) && oSerieProps.YAxis.Visible)
+                    {
+                        object[] oAxisInfos = oYAxis.Get_AxisInfos(oSerieProps.KeyId);
+
+                        if(oAxisInfos!=null)
+                        {
+                            GraphAxis oAxis = (GraphAxis)oAxisInfos[0];
+                            int AxisPos = FrameLeftPoint - AXIS_BASE_POS - (int)oAxisInfos[1];
+
+                            oPen = new Pen(oSerieProps.YAxis.AxisLineStyle.LineColor, (float)oSerieProps.YAxis.AxisLineStyle.LineWidth);
+                            oPen.DashStyle = oSerieProps.YAxis.AxisLineStyle.LineStyle;
+
+                            oAxis.Set_AxisGraduations(FrameHeight, FrameTopPoint);
+
+                            //Main axis line drawing
+                            FrameGraphics.DrawLine(oPen, AxisPos, oAxis.StartPos, AxisPos, oAxis.EndPos);
+
+                            //Graduations drawing
+                            if (oAxis.Graduations != null)
+                            {
+                                int GradEndPos = AxisPos - (AXIS_BASE_SIZE * oSerieProps.YAxis.AxisLineStyle.LineWidth);
+
+                                foreach (AxisGraduation oGrad in oAxis.Graduations)
+                                {
+                                    FrameGraphics.DrawLine(oPen, AxisPos, oGrad.Position, GradEndPos, oGrad.Position);
+                                }
+                            }
+
+                            //Axis title drawing
+                            if (oSerieProps.YAxis.AxisTitleVisible)
+                            {
+                                if (!(oSerieProps.Label.Equals("")))
+                                {
+                                    oBrush = new SolidBrush(oSerieProps.YAxis.AxisLineStyle.LineColor);
+
+                                    StringFormat sFormat = new StringFormat();
+                                    sFormat.FormatFlags |= StringFormatFlags.DirectionVertical;
+                                    sFormat.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
+
+                                    SizeF TitleSize = FrameGraphics.MeasureString(oSerieProps.Label, oSerieProps.YAxis.AxisValuesFont.oFont, new PointF(0, 0), sFormat);
+                                    PointF pTitle = new PointF(AxisPos - oAxis.TitleLeft, oAxis.StartPos + (((oAxis.EndPos - oAxis.StartPos) - TitleSize.Height) / 2));
+
+                                    FrameGraphics.DrawString(oSerieProps.Label, oSerieProps.YAxis.AxisValuesFont.oFont, oBrush, pTitle, sFormat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             #endregion
 
@@ -2963,6 +3148,57 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
 
+            if (DataFile != null && SeriesVisibleCount > 0)
+            {
+                foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
+                {
+                    if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible) && oSerieProps.YAxis.Visible)
+                    {
+                        object[] oAxisInfos = oYAxis.Get_AxisInfos(oSerieProps.KeyId);
+
+                        if (oAxisInfos != null)
+                        {
+                            GraphAxis oAxis = (GraphAxis)oAxisInfos[0];
+                            int AxisPos = FrameLeftPoint - AXIS_BASE_POS - (int)oAxisInfos[1];
+
+                            if (oAxis.Graduations != null && oSerieProps.YAxis.AxisValuesVisible)
+                            {
+                                oBrush = new SolidBrush(oSerieProps.YAxis.AxisLineStyle.LineColor);
+
+                                oAxis.Set_GraduationsValues(oSerieProps.CoordConversion.Min,
+                                                            oSerieProps.CoordConversion.Max,
+                                                            oSerieProps.ValueFormat, false);
+
+                                int GradEndPos = AxisPos - (AXIS_BASE_SIZE * oSerieProps.YAxis.AxisLineStyle.LineWidth);
+
+                                for (int iGrad = 0; iGrad < oAxis.Graduations.Length; iGrad++)
+                                {
+                                    SizeF sGradTxt = FrameGraphics.MeasureString(oAxis.Graduations[iGrad].Value, oSerieProps.YAxis.AxisValuesFont.oFont);
+                                    PointF pGradTxt = new PointF();
+
+                                    pGradTxt.X = (float)(GradEndPos - AXIS_TEXT_POS_OFFSET) - sGradTxt.Width;
+
+                                    if (iGrad == 0) //First graduation
+                                    {
+                                        pGradTxt.Y = (float)(oAxis.Graduations[iGrad].Position);
+                                    }
+                                    else if (iGrad == oAxis.Graduations.Length - 1) //Last graduation
+                                    {
+                                        pGradTxt.Y = (float)(oAxis.Graduations[iGrad].Position) - sGradTxt.Height;
+                                    }
+                                    else //General case
+                                    {
+                                        pGradTxt.Y = (float)(oAxis.Graduations[iGrad].Position) - (sGradTxt.Height / 2);
+                                    }
+
+                                    FrameGraphics.DrawString(oAxis.Graduations[iGrad].Value, oSerieProps.YAxis.AxisValuesFont.oFont, oBrush, pGradTxt);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             #endregion
 
             #region Series Options
@@ -2972,6 +3208,401 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
+
+            if (DataFile != null && SeriesVisibleCount > 0)
+            {
+                foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
+                {
+                    if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible))
+                    {
+                        #region Serie user grid
+
+                        #region Vertical grid
+
+                        if (oSerieProps.UserGrid.VerticalLinesStyle.Visible)
+                        {
+                            oPen = new Pen(oSerieProps.UserGrid.VerticalLinesStyle.LineColor, (float)oSerieProps.UserGrid.VerticalLinesStyle.LineWidth);
+                            oPen.DashStyle = oSerieProps.UserGrid.VerticalLinesStyle.LineStyle;
+
+                            oBrush = new SolidBrush(oSerieProps.UserGrid.VerticalLinesStyle.LineColor);
+
+                            double[] GridValues = null;
+
+                            switch (oSerieProps.UserGrid.VerticalGridMode)
+                            {
+                                case GraphSerieUserGridModes.Even:
+
+                                    if (oSerieProps.UserGrid.VerticalDivisionCount > 1)
+                                    {
+                                        GridValues = new double[oSerieProps.UserGrid.VerticalDivisionCount - 1];
+
+                                        double vGridStep = (double)((DataFile.Time.Max - DataFile.Time.Min) / (oSerieProps.UserGrid.VerticalDivisionCount));
+
+                                        for (int i = 0; i < oSerieProps.UserGrid.VerticalDivisionCount - 1; i++)
+                                        {
+                                            GridValues[i] = Properties.AbscisseAxis.CoordConversion.Min + (vGridStep * (i + 1));
+                                        }
+
+                                    }
+
+                                    break;
+
+                                case GraphSerieUserGridModes.CustomValues:
+
+                                    if (oSerieProps.UserGrid.VerticalCustomValues.Count > 0)
+                                    {
+                                        GridValues = oSerieProps.UserGrid.VerticalCustomValues.ToArray();
+
+                                    }
+
+                                    break;
+                            }
+
+                            if (GridValues != null)
+                            {
+                                foreach (double Val in GridValues)
+                                {
+                                    int ValAbs = (int)(Val * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
+
+                                    if (ValAbs >= 0 && ValAbs <= FrameWidth)
+                                    {
+                                        GraphGraphics.DrawLine(oPen, ValAbs, oSerieProps.CoordConversion.Top, ValAbs, oSerieProps.CoordConversion.Bottom);
+
+                                        if (oSerieProps.UserGrid.VerticalGridValuesVisible)
+                                        {
+                                            string sVal = oSerieProps.ValueFormat.Get_ValueFormatted(Val);
+
+                                            SizeF sValTxt = GraphGraphics.MeasureString(sVal, oSerieProps.UserGrid.VerticalGridValueFont.oFont);
+
+                                            PointF pValTxt = new PointF((float)(ValAbs - 5) - sValTxt.Width,
+                                                                        (float)(oSerieProps.CoordConversion.Top) + sValTxt.Height);
+
+                                            if (pValTxt.X > 0)
+                                            {
+                                                GraphGraphics.DrawString(sVal, oSerieProps.UserGrid.VerticalGridValueFont.oFont, oBrush, pValTxt);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+
+                        #region Horizontal grid
+
+                        if (oSerieProps.UserGrid.HorizontalLinesStyle.Visible)
+                        {
+                            oPen = new Pen(oSerieProps.UserGrid.HorizontalLinesStyle.LineColor, (float)oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth);
+                            oPen.DashStyle = oSerieProps.UserGrid.HorizontalLinesStyle.LineStyle;
+
+                            oBrush = new SolidBrush(oSerieProps.UserGrid.HorizontalLinesStyle.LineColor);
+
+                            double[] GridValues = null;
+
+                            switch (oSerieProps.UserGrid.HorizontalGridMode)
+                            {
+                                case GraphSerieUserGridModes.Even:
+
+                                    if (oSerieProps.UserGrid.HorizontalDivisionCount > 1)
+                                    {
+                                        GridValues = new double[oSerieProps.UserGrid.HorizontalDivisionCount + 1];
+
+                                        double hGridStep = (double)((oSerieProps.CoordConversion.Max - oSerieProps.CoordConversion.Min) / (oSerieProps.UserGrid.HorizontalDivisionCount));
+
+                                        for (int i = 0; i < oSerieProps.UserGrid.HorizontalDivisionCount + 1; i++)
+                                        {
+                                            GridValues[i] = oSerieProps.CoordConversion.Min + (hGridStep * i);
+                                        }
+
+                                    }
+
+                                    break;
+
+                                case GraphSerieUserGridModes.MinMaxAvg:
+
+                                    {
+                                        GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+
+                                        if (oSerieData != null)
+                                        {
+                                            GridValues = new double[3];
+                                            GridValues[0] = oSerieData.Min;
+                                            GridValues[1] = oSerieData.Avg;
+                                            GridValues[2] = oSerieData.Max;
+                                        }
+                                    }
+
+                                    break;
+
+                                case GraphSerieUserGridModes.MinMaxZero:
+
+                                    {
+                                        GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+
+                                        if (oSerieData != null)
+                                        {
+                                            GridValues = new double[3];
+                                            GridValues[0] = oSerieData.Min;
+                                            GridValues[1] = 0;
+                                            GridValues[2] = oSerieData.Max;
+                                        }
+                                    }
+
+                                    break;
+
+                                case GraphSerieUserGridModes.CustomValues:
+
+                                    if (oSerieProps.UserGrid.VerticalCustomValues.Count > 0)
+                                    {
+                                        GridValues = oSerieProps.UserGrid.VerticalCustomValues.ToArray();
+
+                                    }
+
+                                    break;
+                            }
+
+                            if (GridValues != null)
+                            {
+                                foreach (double Val in GridValues)
+                                {
+                                    int ValOrd = (int)(Val * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
+
+                                    if (ValOrd >= 0 && ValOrd <= FrameHeight)
+                                    {
+                                        GraphGraphics.DrawLine(oPen, 0, ValOrd, FrameWidth, ValOrd);
+
+                                        if (oSerieProps.UserGrid.HorizontalGridValuesVisible)
+                                        {
+                                            string sVal = oSerieProps.ValueFormat.Get_ValueFormatted(Val);
+
+                                            PointF pValTxt = new PointF(5, (float)(ValOrd + oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth + 1));
+
+                                            if (pValTxt.Y > 0 && pValTxt.Y < (float)FrameHeight)
+                                            {
+                                                GraphGraphics.DrawString(sVal, oSerieProps.UserGrid.HorizontalGridValueFont.oFont, oBrush, pValTxt);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+
+                        #endregion
+
+                        #region Serie reference lines
+
+                        if (oSerieProps.ReferenceLines.Count > 0)
+                        {
+                            GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+
+                            if (oSerieData != null)
+                            {
+                                foreach (GraphReferenceLine oLine in oSerieProps.ReferenceLines)
+                                {
+                                    if (oLine.Visible)
+                                    {
+                                        int LineOrd = 0;
+                                        string sLineVal = "";
+
+                                        switch (oLine.ReferenceMode)
+                                        {
+                                            case GraphSerieReferenceLineModes.Average:
+
+                                                LineOrd = (int)(oSerieData.Avg * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
+                                                sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Avg);
+                                                break;
+
+                                            case GraphSerieReferenceLineModes.Custom:
+
+                                                LineOrd = (int)(oLine.ReferenceValue * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
+                                                sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oLine.ReferenceValue);
+                                                break;
+
+                                            case GraphSerieReferenceLineModes.Max:
+
+                                                LineOrd = (int)(oSerieData.Max * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
+                                                sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Max);
+                                                break;
+
+                                            case GraphSerieReferenceLineModes.Min:
+
+                                                LineOrd = (int)(oSerieData.Min * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
+                                                sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Min);
+                                                break;
+
+                                            case GraphSerieReferenceLineModes.Zero:
+
+                                                LineOrd = (int)(0 * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
+                                                sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(0);
+                                                break;
+
+                                            default:
+
+                                                LineOrd = -1;
+                                                break;
+                                        }
+
+                                        if (LineOrd >= oSerieProps.CoordConversion.Top && LineOrd <= oSerieProps.CoordConversion.Bottom)
+                                        {
+                                            oPen = new Pen(oLine.ReferenceStyle.LineColor, (float)oLine.ReferenceStyle.LineWidth);
+                                            oPen.DashStyle = oLine.ReferenceStyle.LineStyle;
+
+                                            //Line drawing
+                                            GraphGraphics.DrawLine(oPen, 0, LineOrd, FrameWidth, LineOrd);
+
+                                            //Reference line value and title drawing
+                                            if(!(oLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible) && oLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible) && oLine.ReferenceTitle.Equals("")))
+                                            {
+                                                oBrush = new SolidBrush(oLine.ReferenceStyle.LineColor);
+
+                                                PointF pValTxt = new PointF(0, 0);
+
+                                                //Check user setting for value position (top & bottom forbidden for serie reference line)
+                                                ScreenPositions ValPos = oLine.ReferenceValuePosition;
+                                                if (ValPos.Equals(ScreenPositions.Top) || ValPos.Equals(ScreenPositions.Bottom))
+                                                {
+                                                    ValPos = ScreenPositions.Center;
+                                                }
+
+                                                //Check user setting for title position (top & bottom forbidden for serie reference line)
+                                                ScreenPositions TitlePos = oLine.ReferenceTitlePosition;
+                                                if (TitlePos.Equals(ScreenPositions.Top) || TitlePos.Equals(ScreenPositions.Bottom))
+                                                {
+                                                    TitlePos = ScreenPositions.Center;
+                                                }
+
+                                                if (ValPos == TitlePos) //Both title and value have the same location
+                                                {
+                                                    //Title and value strings concatenation
+                                                    if (!oLine.ReferenceTitle.Equals(""))
+                                                    {
+                                                        string s = sLineVal;
+                                                        sLineVal = oLine.ReferenceTitle + " " + s;
+                                                    }
+
+                                                    SizeF RefTxtSize = GraphGraphics.MeasureString(sLineVal, oLine.ReferenceValueFont.oFont);
+
+                                                    //Text written on top of the reference line if reference line is drawn under 2 times REF_LINE_TEXT_POS_OFFSET
+                                                    //Otherwise it is written on the bottom of the reference line
+                                                    if (((float)LineOrd - RefTxtSize.Height) > (float)REF_LINE_TEXT_POS_OFFSET * 2)
+                                                    {
+                                                        pValTxt.Y = (float)(LineOrd - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
+                                                    }
+                                                    else
+                                                    {
+                                                        pValTxt.Y = (float)(LineOrd + REF_LINE_TEXT_POS_OFFSET);
+                                                    }
+
+                                                    switch (ValPos)
+                                                    {
+                                                        case ScreenPositions.Left:
+
+                                                            pValTxt.X = (float)REF_LINE_TEXT_POS_OFFSET;
+                                                            break;
+
+                                                        case ScreenPositions.Right:
+
+                                                            pValTxt.X = (float)(FrameWidth - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Width;
+                                                            break;
+
+                                                        case ScreenPositions.Center:
+
+                                                            pValTxt.X = ((float)FrameWidth / 2) - (RefTxtSize.Width / 2);
+                                                            break;
+                                                    }
+
+                                                    GraphGraphics.DrawString(sLineVal, oLine.ReferenceValueFont.oFont, oBrush, pValTxt);
+                                                }
+                                                else
+                                                {
+                                                    if (!ValPos.Equals(ScreenPositions.Invisible))
+                                                    {
+                                                        SizeF RefTxtSize = GraphGraphics.MeasureString(sLineVal, oLine.ReferenceValueFont.oFont);
+
+                                                        //Text written on top of the reference line if reference line is drawn under 2 times REF_LINE_TEXT_POS_OFFSET
+                                                        //Otherwise it is written on the bottom of the reference line
+                                                        if (((float)LineOrd - RefTxtSize.Height) > (float)REF_LINE_TEXT_POS_OFFSET * 2)
+                                                        {
+                                                            pValTxt.Y = (float)(LineOrd - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
+                                                        }
+                                                        else
+                                                        {
+                                                            pValTxt.Y = (float)(LineOrd + REF_LINE_TEXT_POS_OFFSET);
+                                                        }
+
+                                                        switch (ValPos)
+                                                        {
+                                                            case ScreenPositions.Left:
+
+                                                                pValTxt.X = (float)REF_LINE_TEXT_POS_OFFSET;
+                                                                break;
+
+                                                            case ScreenPositions.Right:
+
+                                                                pValTxt.X = (float)(FrameWidth - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Width;
+                                                                break;
+
+                                                            case ScreenPositions.Center:
+
+                                                                pValTxt.X = ((float)FrameWidth / 2) - (RefTxtSize.Width / 2);
+                                                                break;
+                                                        }
+
+                                                        GraphGraphics.DrawString(sLineVal, oLine.ReferenceValueFont.oFont, oBrush, pValTxt);
+                                                    }
+
+                                                    if (!(TitlePos.Equals(ScreenPositions.Invisible) || oLine.ReferenceTitle.Equals("")))
+                                                    {
+                                                        pValTxt = PointF.Empty;
+
+                                                        SizeF RefTxtSize = GraphGraphics.MeasureString(oLine.ReferenceTitle, oLine.ReferenceValueFont.oFont);
+
+                                                        //Text written on top of the reference line if reference line is drawn under 2 times REF_LINE_TEXT_POS_OFFSET
+                                                        //Otherwise it is written on the bottom of the reference line
+                                                        if (((float)LineOrd - RefTxtSize.Height) > (float)REF_LINE_TEXT_POS_OFFSET * 2)
+                                                        {
+                                                            pValTxt.Y = (float)(LineOrd - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
+                                                        }
+                                                        else
+                                                        {
+                                                            pValTxt.Y = (float)(LineOrd + REF_LINE_TEXT_POS_OFFSET);
+                                                        }
+
+                                                        switch (TitlePos)
+                                                        {
+                                                            case ScreenPositions.Left:
+
+                                                                pValTxt.X = (float)REF_LINE_TEXT_POS_OFFSET;
+                                                                break;
+
+                                                            case ScreenPositions.Right:
+
+                                                                pValTxt.X = (float)(FrameWidth - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Width;
+                                                                break;
+
+                                                            case ScreenPositions.Center:
+
+                                                                pValTxt.X = ((float)FrameWidth / 2) - (RefTxtSize.Width / 2);
+                                                                break;
+                                                        }
+
+                                                        GraphGraphics.DrawString(oLine.ReferenceTitle, oLine.ReferenceValueFont.oFont, oBrush, pValTxt);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+                    }
+                }
+            }
 
             #endregion
 
@@ -2983,6 +3614,32 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
 
+            if (Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
+            {
+                //Graduation value
+                if (oAbscisseAxis.Graduations != null && Properties.AbscisseAxis.AxisValuesVisible)
+                {
+                    oAbscisseAxis.Set_GraduationsValues(Properties.AbscisseAxis.CoordConversion.Min,
+                                                        Properties.AbscisseAxis.CoordConversion.Max,
+                                                        oAbcisseValFormat, true);
+                                                        
+
+                    int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
+
+                    foreach (AxisGraduation oGrad in oAbscisseAxis.Graduations)
+                    {
+                        int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
+
+                        SizeF sGradTxt = FrameGraphics.MeasureString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont);
+
+                        PointF pGradTxt = new PointF((float)oGrad.Position - sGradTxt.Width/2,
+                                                     (float)(GradEndPos + AXIS_TEXT_POS_OFFSET));
+
+                        FrameGraphics.DrawString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont, oBrush, pGradTxt);
+                    }
+                }
+            }
+
             #endregion
 
             #region X Axis options
@@ -2992,6 +3649,206 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
+
+            //Abscisse reference lines
+            foreach (GraphReferenceLine oRefLine in Properties.AbscisseAxis.ReferenceLines)
+            {
+                if (oRefLine.Visible)
+                {
+                    int LineAbcsisse = 0;
+                    string sLineVal = "";
+
+                    switch (oRefLine.ReferenceMode)
+                    {
+                        case GraphSerieReferenceLineModes.Average:
+
+                            LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oAbcsisseChannel.Avg + Properties.AbscisseAxis.CoordConversion.Zero);
+                            sLineVal = oAbcisseValFormat.Get_ValueFormatted(oAbcsisseChannel.Avg);
+                            break;
+
+                        case GraphSerieReferenceLineModes.Custom:
+
+                            LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oRefLine.ReferenceValue + Properties.AbscisseAxis.CoordConversion.Zero);
+                            sLineVal = oAbcisseValFormat.Get_ValueFormatted(oRefLine.ReferenceValue);
+                            break;
+
+                        case GraphSerieReferenceLineModes.Max:
+
+                            LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oAbcsisseChannel.Max + Properties.AbscisseAxis.CoordConversion.Zero);
+                            sLineVal = oAbcisseValFormat.Get_ValueFormatted(oAbcsisseChannel.Max);
+                            break;
+
+                        case GraphSerieReferenceLineModes.Min:
+
+                            LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oAbcsisseChannel.Min + Properties.AbscisseAxis.CoordConversion.Zero);
+                            sLineVal = oAbcisseValFormat.Get_ValueFormatted(oAbcsisseChannel.Min);
+                            break;
+
+                        case GraphSerieReferenceLineModes.Zero:
+
+                            LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * 0 + Properties.AbscisseAxis.CoordConversion.Zero);
+                            sLineVal = oAbcisseValFormat.Get_ValueFormatted(0);
+                            break;
+
+                        default:
+
+                            LineAbcsisse = -1;
+                            break;
+                    }
+
+                    if (LineAbcsisse >= FrameLeftPoint && LineAbcsisse <= FrameRightPoint)
+                    {
+                        //TODO: Declare as float the 'LineWidth' property of 'GraphLineProperties' class in order to avoid the (float) cast
+                        oPen = new Pen(oRefLine.ReferenceStyle.LineColor, (float)oRefLine.ReferenceStyle.LineWidth);
+                        oPen.DashStyle = oRefLine.ReferenceStyle.LineStyle;
+
+                        //Reference line drawing
+                        GraphGraphics.DrawLine(oPen, LineAbcsisse, 0, LineAbcsisse, FrameHeight);
+
+                        //Reference line value and title drawing
+                        if (!(oRefLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible) || (oRefLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible) || oRefLine.ReferenceTitle.Equals(""))))
+                        {
+                            oBrush = new SolidBrush(oRefLine.ReferenceStyle.LineColor);
+                            PointF pRefTxt = PointF.Empty;
+
+                            //Check user setting for value position (left & right forbidden for abscisse reference line)
+                            ScreenPositions ValPos = oRefLine.ReferenceValuePosition;
+                            if (ValPos.Equals(ScreenPositions.Left) || ValPos.Equals(ScreenPositions.Right))
+                            {
+                                ValPos = ScreenPositions.Center;
+                            }
+
+                            //Check user setting for title position (left & right forbidden for abscisse reference line)
+                            ScreenPositions TitlePos = oRefLine.ReferenceTitlePosition;
+                            if (TitlePos.Equals(ScreenPositions.Left) || TitlePos.Equals(ScreenPositions.Right))
+                            {
+                                TitlePos = ScreenPositions.Center;
+                            }
+
+                            if (ValPos == TitlePos) //Both title and value have the same location
+                            {
+                                //Title and value strings concatenation
+                                if (!oRefLine.ReferenceTitle.Equals(""))
+                                {
+                                    string s = sLineVal;
+                                    sLineVal = oRefLine.ReferenceTitle + " " + s;
+                                }
+
+                                SizeF RefTxtSize = GraphGraphics.MeasureString(sLineVal, oRefLine.ReferenceValueFont.oFont);
+
+                                //Text written on left of the reference line if reference line is drawn beyond the middle of the frame
+                                //Otherwise it is written on the right of the reference line
+                                if (LineAbcsisse > (FrameWidth / 2))
+                                {
+                                    pRefTxt.X = (float)(LineAbcsisse - RefTxtSize.Width - REF_LINE_TEXT_POS_OFFSET);
+                                }
+                                else
+                                {
+                                    pRefTxt.X = (float)(LineAbcsisse + REF_LINE_TEXT_POS_OFFSET);
+                                }
+
+                                switch (ValPos)
+                                {
+                                    case ScreenPositions.Center:
+
+                                        pRefTxt.Y = (float)(FrameHeight / 2) - (RefTxtSize.Height / 2);
+                                        break;
+
+                                    case ScreenPositions.Top:
+
+                                        pRefTxt.Y = (float)REF_LINE_TEXT_POS_OFFSET;
+                                        break;
+
+                                    case ScreenPositions.Bottom:
+
+                                        pRefTxt.Y = (float)(FrameHeight - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
+                                        break;
+                                }
+
+                                GraphGraphics.DrawString(sLineVal, oRefLine.ReferenceValueFont.oFont, oBrush, pRefTxt);
+                            }
+                            else //Title and value have different position
+                            {
+                                //Reference line value drawing
+                                if (!ValPos.Equals(ScreenPositions.Invisible))
+                                {
+                                    SizeF RefTxtSize = GraphGraphics.MeasureString(sLineVal, oRefLine.ReferenceValueFont.oFont);
+
+                                    //Text written on left of the reference line if reference line is drawn beyond the middle of the frame
+                                    //Otherwise it is written on the right of the reference line
+                                    if (LineAbcsisse > (FrameWidth / 2))
+                                    {
+                                        pRefTxt.X = (float)(LineAbcsisse - RefTxtSize.Width - REF_LINE_TEXT_POS_OFFSET);
+                                    }
+                                    else
+                                    {
+                                        pRefTxt.X = (float)(LineAbcsisse + REF_LINE_TEXT_POS_OFFSET);
+                                    }
+
+                                    switch (ValPos)
+                                    {
+                                        case ScreenPositions.Center:
+
+                                            pRefTxt.Y = (float)(FrameHeight / 2) - (RefTxtSize.Height / 2);
+                                            break;
+
+                                        case ScreenPositions.Top:
+
+                                            pRefTxt.Y = (float)REF_LINE_TEXT_POS_OFFSET;
+                                            break;
+
+                                        case ScreenPositions.Bottom:
+
+                                            pRefTxt.Y = pRefTxt.Y = (float)(FrameHeight - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
+                                            break;
+                                    }
+
+                                    GraphGraphics.DrawString(sLineVal, oRefLine.ReferenceValueFont.oFont, oBrush, pRefTxt);
+                                }
+
+                                //Reference line title drawing
+                                if (!(TitlePos.Equals(ScreenPositions.Invisible) || oRefLine.ReferenceTitle.Equals("")))
+                                {
+                                    pRefTxt = PointF.Empty;
+
+                                    SizeF RefTxtSize = GraphGraphics.MeasureString(oRefLine.ReferenceTitle, oRefLine.ReferenceValueFont.oFont);
+
+                                    //Text written on left of the reference line if reference line is drawn beyond the middle of the frame
+                                    //Otherwise it is written on the right of the reference line
+                                    if (LineAbcsisse > (FrameLeftPoint + (FrameWidth / 2)))
+                                    {
+                                        pRefTxt.X = (float)(LineAbcsisse - RefTxtSize.Width - REF_LINE_TEXT_POS_OFFSET);
+                                    }
+                                    else
+                                    {
+                                        pRefTxt.X = (float)(LineAbcsisse + REF_LINE_TEXT_POS_OFFSET);
+                                    }
+
+                                    switch (TitlePos)
+                                    {
+                                        case ScreenPositions.Center:
+
+                                            pRefTxt.Y = (float)(FrameHeight / 2) - (RefTxtSize.Height / 2);
+                                            break;
+
+                                        case ScreenPositions.Top:
+
+                                            pRefTxt.Y = (float)REF_LINE_TEXT_POS_OFFSET;
+                                            break;
+
+                                        case ScreenPositions.Bottom:
+
+                                            pRefTxt.Y = pRefTxt.Y = (float)(FrameHeight - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
+                                            break;
+                                    }
+
+                                    GraphGraphics.DrawString(oRefLine.ReferenceTitle, oRefLine.ReferenceValueFont.oFont, oBrush, pRefTxt);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             #endregion
 
@@ -3003,7 +3860,373 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
             
+            if (DataFile != null && SeriesVisibleCount > 0)
+            {
+                foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
+                {
+                    if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible) && oSerieProps.YAxis.Visible)
+                    {
+                        //TODO: Find a way faster than searching by name to get data channel
+                        GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+
+                        if (oSerieData != null)
+                        {
+                            //TODO: Anything better (faster) than 'IsDoubleValidValue' ??? ... !(Double.IsNaN(oSerieProps.CoordConversion.Gain))
+                            if (IsDoubleValidValue(oSerieProps.CoordConversion.Gain) && IsDoubleValidValue(oSerieProps.CoordConversion.Zero))
+                            {
+                                //Sub sampling
+                                if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
+                                {
+                                    Compute_SubSampling(oSerieData.Samples.Count);
+                                }
+
+                                //Trace points coords init
+                                List<Point[]> SerieCoords = new List<Point[]>();
+                                List<Point> PartialSerieCoords = new List<Point>();
+                                int nVisiblePointCnt = 0;
+                                double DblSampleIndex = 0;
+
+                                //Marks objects init
+                                #region Markers init
+
+                                List<object> SerieMarksCoords = null;
+
+                                int MarkerSize = MARKER_BASE_SIZE * oSerieProps.Markers.Size;
+                                int Marker_Pos_Ofset = MarkerSize / 2;
+                                bool bMark = true;
+
+                                if (oSerieProps.Markers.Visible)
+                                {
+                                    SerieMarksCoords = new List<object>();
+                                }
+
+                                #endregion
+
+                                #region Graphic points coordinates calculation
+
+                                for (int iSample = 0; iSample < nSampleCount; iSample++)
+                                {
+                                    int iSampleIndex = (int)DblSampleIndex;
+                                    DblSampleIndex += DblSampleStep;
+
+                                    //Trace points coords computation 
+                                    Point PtSample = Point.Empty;
+                                    bool bPointValid = true;
+
+                                    switch (DataFile.DataSamplingMode)
+                                    {
+                                        case SamplingMode.SingleRate:
+
+                                            {
+                                                int TmpY = (int)SATURA((oSerieData.Values[iSampleIndex]
+                                                                * oSerieProps.CoordConversion.Gain
+                                                                + oSerieProps.CoordConversion.Zero),
+                                                                -100, FrameHeight + 100);
+
+                                                PtSample = new Point(AbscisseCoords[iSampleIndex], TmpY);
+                                            }
+                                            break;
+
+                                        case SamplingMode.MultipleRates:
+
+                                            {
+                                                int TmpX = (int)SATURA((oSerieData.Samples[iSampleIndex].SampleTime
+                                                                        * Properties.AbscisseAxis.CoordConversion.Gain
+                                                                        + Properties.AbscisseAxis.CoordConversion.Zero),
+                                                                        -100, FrameWidth + 100);
+
+                                                int TmpY = (int)SATURA((oSerieData.Samples[iSampleIndex].SampleValue
+                                                                        * oSerieProps.CoordConversion.Gain
+                                                                        + oSerieProps.CoordConversion.Zero),
+                                                                        -100, FrameHeight + 100);
+
+                                                PtSample = new Point(TmpX, TmpY);
+                                            }
+
+                                            break;
+                                    }
+
+                                    if ((PtSample.X < 0 && PtSample.X > FrameWidth)
+                                                && ((PtSample.Y < oSerieProps.CoordConversion.Top || PtSample.Y > oSerieProps.CoordConversion.Bottom)
+                                                    && (!(Properties.bAllowOverScaling || bYZoom))))
+                                    {
+                                        bPointValid = false;
+
+                                        //Serie's samples set adding to sample set collection
+                                        if (PartialSerieCoords.Count > 1) //Minimum 2 points to trace a line
+                                        {
+                                            SerieCoords.Add(PartialSerieCoords.ToArray());
+                                        }
+
+                                        PartialSerieCoords = new List<Point>();
+                                    }
+                                    else
+                                    {
+                                        nVisiblePointCnt++;
+                                        PartialSerieCoords.Add(PtSample);
+                                    }
+
+                                    //Marks objects computation
+                                    #region Markers points definition
+
+                                    if (oSerieProps.Markers.Visible)
+                                    {
+                                        if (bPointValid)
+                                        {
+                                            if (bMark)
+                                            {
+                                                switch (oSerieProps.Markers.Style)
+                                                {
+                                                    case GraphSerieMarkerStyles.Square:
+
+                                                        {
+                                                            Rectangle RecMark = new Rectangle(PtSample.X - Marker_Pos_Ofset,
+                                                                                              PtSample.Y - Marker_Pos_Ofset,
+                                                                                              MarkerSize, MarkerSize);
+
+                                                            SerieMarksCoords.Add((object)RecMark);
+                                                        }
+                                                        break;
+
+                                                    case GraphSerieMarkerStyles.Round:
+
+                                                        {
+                                                            Rectangle RecMark = new Rectangle(PtSample.X - Marker_Pos_Ofset,
+                                                                                              PtSample.Y - Marker_Pos_Ofset,
+                                                                                             MarkerSize, MarkerSize);
+
+                                                            SerieMarksCoords.Add((object)RecMark);
+                                                        }
+                                                        break;
+
+                                                    case GraphSerieMarkerStyles.Diamond:
+
+                                                        {
+                                                            DiamondMarker Diamond = new DiamondMarker();
+                                                            Diamond.Points[0] = new Point(PtSample.X, PtSample.Y - Marker_Pos_Ofset);
+                                                            Diamond.Points[1] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y);
+                                                            Diamond.Points[2] = new Point(PtSample.X, PtSample.Y + Marker_Pos_Ofset);
+                                                            Diamond.Points[3] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y);
+
+                                                            SerieMarksCoords.Add((object)Diamond);
+                                                        }
+
+                                                        break;
+
+                                                    case GraphSerieMarkerStyles.Cross:
+
+                                                        {
+                                                            CrossMarker Cross = new CrossMarker();
+                                                            Cross.Points[0] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y - Marker_Pos_Ofset);
+                                                            Cross.Points[1] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y + Marker_Pos_Ofset);
+                                                            Cross.Points[2] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y - Marker_Pos_Ofset);
+                                                            Cross.Points[3] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y + Marker_Pos_Ofset);
+
+                                                            SerieMarksCoords.Add((object)Cross);
+                                                        }
+
+                                                        break;
+
+                                                    case GraphSerieMarkerStyles.Triangle:
+
+                                                        {
+                                                            TriangleMarker Triangle = new TriangleMarker();
+                                                            Triangle.Points[0] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y);
+                                                            Triangle.Points[1] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y);
+                                                            Triangle.Points[2] = new Point(PtSample.X, PtSample.Y - Marker_Pos_Ofset);
+
+                                                            SerieMarksCoords.Add((object)Triangle);
+                                                        }
+
+                                                        break;
+                                                }
+                                            }
+
+                                            bMark = !bMark;
+                                        }
+                                    }
+
+                                    #endregion  
+                                }
+
+                                //Add the last (or unique) set of sample points
+                                if (PartialSerieCoords.Count > 1) //Minimum 2 points to trace a line
+                                {
+                                    SerieCoords.Add(PartialSerieCoords.ToArray());
+                                }
+
+                                #endregion
+
+                                #region Serie trace and sample markers drawing
+
+                                if (nVisiblePointCnt > 1)
+                                {
+                                    //Trace ploting
+                                    #region Trace ploting
+
+                                    if (oSerieProps.Trace.Visible)
+                                    {
+                                        oPen = new Pen(oSerieProps.Trace.LineColor, (float)oSerieProps.Trace.LineWidth);
+                                        oPen.DashStyle = oSerieProps.Trace.LineStyle;
+
+                                        switch (oSerieProps.DrawingMode)
+                                        {
+                                            case GraphSerieDrawingModes.Line:
+
+                                                foreach (Point[] SeriePoints in SerieCoords)
+                                                {
+                                                    GraphGraphics.DrawLines(oPen, SeriePoints);
+                                                }
+
+                                                break;
+
+                                            case GraphSerieDrawingModes.Step:
+
+                                                foreach (Point[] SeriePoints in SerieCoords)
+                                                {
+                                                    Point[] SerieStepPoints = new Point[SeriePoints.Length * 2 - 1];
+                                                    int iPoint = 0;
+
+                                                    for (int iSample = 0; iSample < SeriePoints.Length; iSample++)
+                                                    {
+                                                        SerieStepPoints[iPoint] = SeriePoints[iSample];
+
+                                                        if (iSample < SeriePoints.Length - 1)
+                                                        {
+                                                            SerieStepPoints[iPoint + 1] = new Point(SeriePoints[iSample + 1].X, SeriePoints[iSample].Y);
+                                                        }
+
+                                                        iPoint += 2;
+                                                    }
+
+                                                    GraphGraphics.DrawLines(oPen, SerieStepPoints);
+                                                }
+
+                                                break;
+                                        }
+                                    }
+
+                                    #endregion
+
+                                    //Markers plotting
+                                    #region Markers plotting
+
+                                    if (oSerieProps.Markers.Visible)
+                                    {
+                                        oPen = new Pen(oSerieProps.Markers.MarkColor);
+                                        oBrush = new SolidBrush(oSerieProps.Markers.MarkColor);
+
+                                        switch (oSerieProps.Markers.Style)
+                                        {
+                                            case GraphSerieMarkerStyles.Square:
+
+                                                if (oSerieProps.Markers.InteriorEmpty)
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.DrawRectangle(oPen, (Rectangle)Mark);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.FillRectangle(oBrush, (Rectangle)Mark);
+                                                    }
+                                                }
+
+                                                break;
+
+                                            case GraphSerieMarkerStyles.Round:
+
+                                                if (oSerieProps.Markers.InteriorEmpty)
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.DrawEllipse(oPen, (Rectangle)Mark);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.FillEllipse(oBrush, (Rectangle)Mark);
+                                                    }
+                                                }
+
+                                                break;
+
+                                            case GraphSerieMarkerStyles.Diamond:
+
+                                                if (oSerieProps.Markers.InteriorEmpty)
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.DrawPolygon(oPen, ((DiamondMarker)Mark).Points);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.FillPolygon(oBrush, ((DiamondMarker)Mark).Points);
+                                                    }
+                                                }
+
+                                                break;
+
+                                            case GraphSerieMarkerStyles.Cross:
+
+                                                foreach (object Mark in SerieMarksCoords)
+                                                {
+                                                    CrossMarker CrossMark = (CrossMarker)Mark;
+
+                                                    GraphGraphics.DrawLine(oPen, CrossMark.Points[0], CrossMark.Points[1]);
+                                                    GraphGraphics.DrawLine(oPen, CrossMark.Points[2], CrossMark.Points[3]);
+                                                }
+
+                                                break;
+
+                                            case GraphSerieMarkerStyles.Triangle:
+
+                                                if (oSerieProps.Markers.InteriorEmpty)
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.DrawPolygon(oPen, ((TriangleMarker)Mark).Points);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    foreach (object Mark in SerieMarksCoords)
+                                                    {
+                                                        GraphGraphics.FillPolygon(oBrush, ((TriangleMarker)Mark).Points);
+                                                    }
+                                                }
+
+                                                break;
+                                        }
+                                    }
+                                }
+
+                                #endregion
+
+                                #endregion
+                            }
+                        }
+                    }
+                }
+            }
+
             #endregion
+
+            oPen.Dispose();
+            oBrush.Dispose();
+
+            //Cursor positions reset
+            PtCursorPos = Point.Empty;
+            CursorPosMouseDown = Point.Empty;
+            CursorPosMouseUp = Point.Empty;
         }
 
         #endregion
@@ -3012,11 +4235,6 @@ namespace Ctrl_GraphWindow
 
         private void Init_GraphWindow()
         {
-            if (Pic_GraphFrame.Width == 0 || Pic_GraphFrame.Height == 0)
-            {
-                return;
-            }
-
             //Control feedback to host application members init
             mMainCursorAbscisse = double.NaN;
 
@@ -3185,1265 +4403,6 @@ namespace Ctrl_GraphWindow
                     }
                 }
             }
-
-            //Series
-            Plot_Series();
-            
-            PtCursorPos = Point.Empty;            
-            CursorPosMouseDown = Point.Empty;
-            CursorPosMouseUp = Point.Empty;
-        }
-
-        private void Plot_Series()
-        {
-#if DEBUG
-            Stopwatch swPlotTime = new Stopwatch();
-            TotalMathTime = 0;
-            TotalGraphicTime = 0;
-#endif
-            FrameImage = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
-		    GraphImage = new Bitmap(Pic_Graphic.Width, Pic_Graphic.Height);
-
-			Graphics g = Graphics.FromImage(GraphImage);
-            g.Clear(Properties.WindowBackColor);
-            
-            Graphics gFrame = Graphics.FromImage(FrameImage);
-            gFrame.Clear(Properties.WindowBackColor);
-
-            //Legend initialisation
-            this.BeginInvoke(this.InitLegendDelegate);
-
-            //GraphFrame
-            #region Graphic frame
-
-            Pen pFrame = new Pen(Properties.Frame.BorderColor, (float)Properties.Frame.BorderWidth);
-            pFrame.DashStyle = DashStyle.Solid;
-
-            gFrame.DrawRectangle(pFrame, FrameLeftPoint, FrameTopPoint, FrameWidth, FrameHeight);
-            
-            pFrame.Dispose();
-
-            #endregion
-
-            //Grids
-            #region Grids
-
-            //Main horizontal grid
-            if (Properties.Grid.MainHorizontalGrid.Visible)
-            {
-                Pen pHGrid = new Pen(Properties.Grid.MainHorizontalGrid.LineColor, (float)Properties.Grid.MainHorizontalGrid.LineWidth);
-                pHGrid.DashStyle = Properties.Grid.MainHorizontalGrid.LineStyle;
-
-                int hGridStep = (int)(FrameWidth / (HORIZONTAL_GRID_LINES_COUNT + 1));
-
-                for (int i = 0; i < HORIZONTAL_GRID_LINES_COUNT; i++)
-                {
-                    g.DrawLine(pHGrid, (hGridStep * (i + 1)),
-                                       0,
-                                       (hGridStep * (i + 1)),
-                                       Pic_Graphic.Height);
-                }
-                
-                pHGrid.Dispose();
-            }
-
-            //Main vertical grid
-            if (Properties.Grid.MainVerticalGrid.Visible)
-            {
-                Pen pVGrid = new Pen(Properties.Grid.MainVerticalGrid.LineColor, (float)Properties.Grid.MainVerticalGrid.LineWidth);
-                pVGrid.DashStyle = Properties.Grid.MainVerticalGrid.LineStyle;
-
-                int vGridStep = (int)(FrameHeight / (VERTICAL_GRID_LINES_COUNT + 1));
-
-                for (int i = 0; i < VERTICAL_GRID_LINES_COUNT; i++)
-                {
-                    g.DrawLine(pVGrid, 0,
-                                       (vGridStep * (i + 1)),
-                                       Pic_Graphic.Width,
-                                       (vGridStep * (i + 1)));
-                }
-                
-                pVGrid.Dispose();
-            }
-
-            //Secondary horizontal grid
-            if (Properties.Grid.SecondaryHorizontalGrid.Visible)
-            {
-                Pen pHGrid = new Pen(Properties.Grid.SecondaryHorizontalGrid.LineColor, (float)Properties.Grid.SecondaryHorizontalGrid.LineWidth);
-                pHGrid.DashStyle = Properties.Grid.SecondaryHorizontalGrid.LineStyle;
-
-                int hGridStep = (int)(FrameWidth / (SEC_H_GRID_LINES_COUNT + 1));
-
-                for (int i = 0; i < SEC_H_GRID_LINES_COUNT; i++)
-                {
-                    g.DrawLine(pHGrid, (hGridStep * (i + 1)),
-                                       0,
-                                       (hGridStep * (i + 1)),
-                                       Pic_Graphic.Height);
-                }
-                
-                pHGrid.Dispose();
-            }
-
-            //Secondary vertical grid
-            if (Properties.Grid.SecondaryVerticalGrid.Visible)
-            {
-                Pen pVGrid = new Pen(Properties.Grid.SecondaryVerticalGrid.LineColor, (float)Properties.Grid.SecondaryVerticalGrid.LineWidth);
-                pVGrid.DashStyle = Properties.Grid.SecondaryVerticalGrid.LineStyle;
-
-                int vGridStep = (int)(FrameHeight / (SEC_V_GRID_LINES_COUNT + 1));
-
-                for (int i = 0; i < SEC_V_GRID_LINES_COUNT; i++)
-                {
-                    g.DrawLine(pVGrid, 0,
-                                       (vGridStep * (i + 1)),
-                                       Pic_Graphic.Width,
-                                       (vGridStep * (i + 1)));
-                }
-                
-                pVGrid.Dispose();
-            }
-
-            #endregion
-
-            if (!(DataFile == null))
-            {
-                GW_DataChannel oSerieData = null;
-            	
-            	//Abscisse axis
-                #region Abscisse axis
-
-                if(Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
-                {
-                    Pen p = new Pen(Properties.AbscisseAxis.AxisLineStyle.LineColor, (float)Properties.AbscisseAxis.AxisLineStyle.LineWidth);
-                    p.DashStyle = Properties.AbscisseAxis.AxisLineStyle.LineStyle;
-
-                    SolidBrush b = new SolidBrush(Properties.AbscisseAxis.AxisLineStyle.LineColor);
-
-                    GraphAxis oAbscisse = new GraphAxis();
-                    oAbscisse.StartPos = FrameLeftPoint;
-                    oAbscisse.EndPos = FrameRightPoint;
-
-                    AxisGraduation[] Graduations = oAbscisse.Get_AxisGraduations(FrameWidth, 0,
-                                                                                 Properties.AbscisseAxis.CoordConversion.Min,
-                                                                                 Properties.AbscisseAxis.CoordConversion.Max, 
-                                                                                 oAbcisseValFormat, true);
-
-                    int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
-
-                    //Main abscisse axis line drawing
-                    gFrame.DrawLine(p, FrameLeftPoint, AxisPos, FrameRightPoint, AxisPos);
-
-                    //Abscisse axis graduation drawing
-                    if(!(Graduations==null))
-                    {
-                        int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
-
-                        foreach(AxisGraduation oGrad in Graduations)
-                        {
-                            gFrame.DrawLine(p, oGrad.Position, AxisPos, oGrad.Position, GradEndPos);
-
-                            //Graduation value
-                            if(Properties.AbscisseAxis.AxisValuesVisible)
-                            {
-                                
-                                PointF pGradTxt = new PointF((float)(oGrad.Position - ((oGrad.Value.Length * Properties.AbscisseAxis.AxisValuesFont.oFont.Size) / 2)), 
-                                                                (float)(GradEndPos + AXIS_TEXT_POS_OFFSET));
-
-                                gFrame.DrawString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont, b, pGradTxt);
-                            }
-                        }
-                    }
-
-                    //Abscisse reference lines
-                    foreach (GraphReferenceLine oRefLine in Properties.AbscisseAxis.ReferenceLines)
-                    {
-                        if (oRefLine.Visible)
-                        {
-                            int LineAbcsisse = 0;
-                            string sLineVal = "";
-
-                            switch(oRefLine.ReferenceMode)
-                            {
-                                case GraphSerieReferenceLineModes.Average:
-
-                                    LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oAbcsisseChannel.Avg + Properties.AbscisseAxis.CoordConversion.Zero);
-                                    sLineVal = oAbcisseValFormat.Get_ValueFormatted(oAbcsisseChannel.Avg);
-                                    break;
-
-                                case GraphSerieReferenceLineModes.Custom:
-
-                                    LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oRefLine.ReferenceValue + Properties.AbscisseAxis.CoordConversion.Zero);
-                                    sLineVal = oAbcisseValFormat.Get_ValueFormatted(oRefLine.ReferenceValue);
-                                    break;
-
-                                case GraphSerieReferenceLineModes.Max:
-
-                                    LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oAbcsisseChannel.Max + Properties.AbscisseAxis.CoordConversion.Zero);
-                                    sLineVal = oAbcisseValFormat.Get_ValueFormatted(oAbcsisseChannel.Max);
-                                    break;
-
-                                case GraphSerieReferenceLineModes.Min:
-
-                                    LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * oAbcsisseChannel.Min + Properties.AbscisseAxis.CoordConversion.Zero);
-                                    sLineVal = oAbcisseValFormat.Get_ValueFormatted(oAbcsisseChannel.Min);
-                                    break;
-
-                                case GraphSerieReferenceLineModes.Zero:
-
-                                    LineAbcsisse = (int)(Properties.AbscisseAxis.CoordConversion.Gain * 0 + Properties.AbscisseAxis.CoordConversion.Zero);
-                                    sLineVal = oAbcisseValFormat.Get_ValueFormatted(0);
-                                    break;
-
-                                default:
-
-                                    LineAbcsisse = -1;
-                                    break;
-                            }
-
-                            if (LineAbcsisse >= FrameLeftPoint && LineAbcsisse <= FrameRightPoint)
-                            {
-                                Pen pRefLine = new Pen(oRefLine.ReferenceStyle.LineColor, (float)oRefLine.ReferenceStyle.LineWidth);
-                                pRefLine.DashStyle = oRefLine.ReferenceStyle.LineStyle;
-
-                                g.DrawLine(pRefLine, LineAbcsisse, 0, LineAbcsisse, FrameHeight);
-
-                                //Reference line value and title drawing
-                                if ((!oRefLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible)) || ((!oRefLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible)) && (!oRefLine.ReferenceTitle.Equals(""))))
-                                {
-                                    SolidBrush bRefLine = new SolidBrush(oRefLine.ReferenceStyle.LineColor);
-                                    PointF pRefTxt = PointF.Empty;
-
-                                    //Check user setting for value position (left & right forbidden for abscisse reference line)
-                                    ScreenPositions ValPos = oRefLine.ReferenceValuePosition;
-                                    if (ValPos.Equals(ScreenPositions.Left) || ValPos.Equals(ScreenPositions.Right))
-                                    {
-                                        ValPos = ScreenPositions.Center;
-                                    }
-
-                                    //Check user setting for title position (left & right forbidden for abscisse reference line)
-                                    ScreenPositions TitlePos = oRefLine.ReferenceTitlePosition;
-                                    if (TitlePos.Equals(ScreenPositions.Left) || TitlePos.Equals(ScreenPositions.Right))
-                                    {
-                                        TitlePos = ScreenPositions.Center;
-                                    }
-
-                                    if (ValPos == TitlePos) //Both title and value have the same location
-                                    {
-                                        //Title and value strings concatenation
-                                        if (!oRefLine.ReferenceTitle.Equals(""))
-                                        {
-                                            string s = sLineVal;
-                                            sLineVal = oRefLine.ReferenceTitle + " " + s;
-                                        }
-
-                                        SizeF RefTxtSize = g.MeasureString(sLineVal, oRefLine.ReferenceValueFont.oFont);
-
-                                        //Text written on left of the reference line if reference line is drawn beyond the middle of the frame
-                                        //Otherwise it is written on the right of the reference line
-                                        if (LineAbcsisse > (FrameWidth / 2))
-                                        {
-                                            pRefTxt.X = (float)(LineAbcsisse - RefTxtSize.Width - REF_LINE_TEXT_POS_OFFSET);
-                                        }
-                                        else
-                                        {
-                                            pRefTxt.X = (float)(LineAbcsisse + REF_LINE_TEXT_POS_OFFSET);
-                                        }
-
-                                        switch (ValPos)
-                                        {
-                                            case ScreenPositions.Center:
-
-                                                pRefTxt.Y = (float)(FrameHeight / 2) - (RefTxtSize.Height / 2);
-                                                break;
-
-                                            case ScreenPositions.Top:
-
-                                                pRefTxt.Y = (float)REF_LINE_TEXT_POS_OFFSET;
-                                                break;
-
-                                            case ScreenPositions.Bottom:
-
-                                                pRefTxt.Y = (float)(FrameHeight - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
-                                                break;
-                                        }
-
-                                        g.DrawString(sLineVal, oRefLine.ReferenceValueFont.oFont, bRefLine, pRefTxt);
-                                    }
-                                    else //Title and value have different position
-                                    {
-                                        if (!ValPos.Equals(ScreenPositions.Invisible))
-                                        {
-                                            SizeF RefTxtSize = g.MeasureString(sLineVal, oRefLine.ReferenceValueFont.oFont);
-
-                                            //Text written on left of the reference line if reference line is drawn beyond the middle of the frame
-                                            //Otherwise it is written on the right of the reference line
-                                            if (LineAbcsisse > (FrameWidth / 2))
-                                            {
-                                                pRefTxt.X = (float)(LineAbcsisse - RefTxtSize.Width - REF_LINE_TEXT_POS_OFFSET);
-                                            }
-                                            else
-                                            {
-                                                pRefTxt.X = (float)(LineAbcsisse + REF_LINE_TEXT_POS_OFFSET);
-                                            }
-
-                                            switch (ValPos)
-                                            {
-                                                case ScreenPositions.Center:
-
-                                                    pRefTxt.Y = (float)(FrameHeight / 2) - (RefTxtSize.Height / 2);
-                                                    break;
-
-                                                case ScreenPositions.Top:
-
-                                                    pRefTxt.Y = (float)REF_LINE_TEXT_POS_OFFSET;
-                                                    break;
-
-                                                case ScreenPositions.Bottom:
-
-                                                    pRefTxt.Y = pRefTxt.Y = (float)(FrameHeight - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
-                                                    break;
-                                            }
-
-                                            g.DrawString(sLineVal, oRefLine.ReferenceValueFont.oFont, bRefLine, pRefTxt);
-                                        }
-
-                                        if (!(TitlePos.Equals(ScreenPositions.Invisible) || oRefLine.ReferenceTitle.Equals("")))
-                                        {
-                                            pRefTxt = PointF.Empty;
-                                            
-                                            SizeF RefTxtSize = g.MeasureString(oRefLine.ReferenceTitle, oRefLine.ReferenceValueFont.oFont);
-
-                                            //Text written on left of the reference line if reference line is drawn beyond the middle of the frame
-                                            //Otherwise it is written on the right of the reference line
-                                            if (LineAbcsisse > (FrameLeftPoint + (FrameWidth / 2)))
-                                            {
-                                                pRefTxt.X = (float)(LineAbcsisse - RefTxtSize.Width - REF_LINE_TEXT_POS_OFFSET);
-                                            }
-                                            else
-                                            {
-                                                pRefTxt.X = (float)(LineAbcsisse + REF_LINE_TEXT_POS_OFFSET);
-                                            }
-
-                                            switch (TitlePos)
-                                            {
-                                                case ScreenPositions.Center:
-
-                                                    pRefTxt.Y = (float)(FrameHeight / 2) - (RefTxtSize.Height / 2);
-                                                    break;
-
-                                                case ScreenPositions.Top:
-
-                                                    pRefTxt.Y = (float)REF_LINE_TEXT_POS_OFFSET;
-                                                    break;
-
-                                                case ScreenPositions.Bottom:
-
-                                                    pRefTxt.Y = pRefTxt.Y = (float)(FrameHeight - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
-                                                    break;
-                                            }
-
-                                            g.DrawString(oRefLine.ReferenceTitle, oRefLine.ReferenceValueFont.oFont, bRefLine, pRefTxt);
-                                        }
-                                    }
-    
-                                    bRefLine.Dispose();
-                                }
-                                    
-                                pRefLine.Dispose();
-                            }
-                        }
-                    }
-                    
-                    p.Dispose();
-                    b.Dispose();
-                }
-
-                #endregion
-                
-                if (SeriesVisibleCount > 0)
-                {
-                    //Sub sampling
-                    if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
-                    {
-                        Compute_SubSampling(oAbcsisseChannel.Values.Count);
-                    }
-
-                    bDataPlotted = true;
-
-                    foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
-                    {
-                        //if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible))
-                        if (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible)
-                        {
-                        	if (oSerieProps.Visible)
-                        	{
-#if DEBUG
-                                swPlotTime.Start();
-#endif
-
-                                oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
-								
-                        		if (!(oSerieData == null))
-                        		{
-                        			if (IsDoubleValidValue(oSerieProps.CoordConversion.Gain) && IsDoubleValidValue(oSerieProps.CoordConversion.Zero))
-                        			{
-                                        //Sub sampling
-                                        if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
-                                        {
-                                            Compute_SubSampling(oSerieData.Samples.Count);
-                                        }
-                                        
-                                        //Trace points coords init
-                        				List<Point[]> SerieCoords = new List<Point[]>();
-                        				List<Point> PartialSerieCoords = new List<Point>();
-                        				int nVisiblePointCnt = 0;
-                                        double DblSampleIndex = 0;
-
-                        				//Marks objects init
-                        				#region Markers init
-                        				
-										List<object> SerieMarksCoords = null;
-
-                        				int MarkerSize = MARKER_BASE_SIZE * oSerieProps.Markers.Size;
-                        				int Marker_Pos_Ofset = MarkerSize / 2;
-                        				bool bMark = true;
-                        				
-                        				if (oSerieProps.Markers.Visible)
-                        				{
-                        					SerieMarksCoords = new List<object>();
-                        				}
-
-                                        #endregion
-
-                                        for (int iSample = 0; iSample < nSampleCount; iSample++)
-                                        {
-                                            int iSampleIndex = (int)DblSampleIndex;
-                                            DblSampleIndex += DblSampleStep;
-
-                                            //Trace points coords computation 
-                                            Point PtSample = Point.Empty;
-                                            bool bPointValid = true;
-
-                                            switch (DataFile.DataSamplingMode)
-                                            {
-                                                case SamplingMode.SingleRate:
-
-                                                    {
-                                                        int TmpY = (int)SATURA((oSerieData.Values[iSampleIndex]
-                                                                        * oSerieProps.CoordConversion.Gain
-                                                                        + oSerieProps.CoordConversion.Zero),
-                                                                        -100, FrameHeight + 100);
-
-                                                        PtSample = new Point(AbscisseCoords[iSampleIndex], TmpY);
-                                                    }
-                                                    break;
-
-                                                case SamplingMode.MultipleRates:
-
-                                                    {
-                                                        int TmpX = (int)SATURA((oSerieData.Samples[iSampleIndex].SampleTime
-                                                                                * Properties.AbscisseAxis.CoordConversion.Gain
-                                                                                + Properties.AbscisseAxis.CoordConversion.Zero),
-                                                                                -100, FrameWidth + 100);
-
-                                                        int TmpY = (int)SATURA((oSerieData.Samples[iSampleIndex].SampleValue
-                                                                                * oSerieProps.CoordConversion.Gain 
-                                                                                + oSerieProps.CoordConversion.Zero),
-                                                                                -100, FrameHeight + 100);
-
-                                                        PtSample = new Point(TmpX, TmpY);
-                                                    }
-
-                                                    break;
-                                            }
-
-                                            if ((PtSample.X < 0 && PtSample.X > FrameWidth)
-                                                && ((PtSample.Y < oSerieProps.CoordConversion.Top || PtSample.Y > oSerieProps.CoordConversion.Bottom)
-                                                    && (!(Properties.bAllowOverScaling || bYZoom))))
-                                            {
-                                                bPointValid = false;
-
-                                                //Serie's samples set adding to sample set collection
-                                                if (PartialSerieCoords.Count > 1) //Minimum 2 points to trace a line
-                                                {
-                                                    SerieCoords.Add(PartialSerieCoords.ToArray());
-                                                }
-
-                                                PartialSerieCoords = new List<Point>();
-                                            }
-                                            else
-                                            {
-                                                nVisiblePointCnt++;
-                                                PartialSerieCoords.Add(PtSample);
-                                            }
-                        					
-                        					//Marks objects computation
-                        					#region Markers points definition
-                        					
-                        					if (oSerieProps.Markers.Visible)
-                        					{
-                        						if (bPointValid)
-                        						{
-                        							if (bMark)
-                        							{
-                        								switch (oSerieProps.Markers.Style)
-                        								{
-                        									case GraphSerieMarkerStyles.Square:
-                        										
-                        										{
-	                        										Rectangle RecMark = new Rectangle(PtSample.X - Marker_Pos_Ofset,
-	                        										                                  PtSample.Y - Marker_Pos_Ofset,
-	                        										                                  MarkerSize, MarkerSize);
-	                        										
-	                        										SerieMarksCoords.Add((object)RecMark);
-                        										}
-                        										break;
-                        										
-                        									case GraphSerieMarkerStyles.Round:
-                        										
-                        										{
-                        											Rectangle RecMark = new Rectangle(PtSample.X - Marker_Pos_Ofset,
-                        										                                  	PtSample.Y - Marker_Pos_Ofset,
-                        										                                 	MarkerSize, MarkerSize);
-                        										
-                        											SerieMarksCoords.Add((object)RecMark);
-                        										}
-                        										break;
-                        										
-                        									case GraphSerieMarkerStyles.Diamond:
-                        										
-                        										{
-	                        										DiamondMarker Diamond = new DiamondMarker();
-		                        									Diamond.Points[0] = new Point(PtSample.X, PtSample.Y - Marker_Pos_Ofset);
-		                        									Diamond.Points[1] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y);
-		                        									Diamond.Points[2] = new Point(PtSample.X, PtSample.Y + Marker_Pos_Ofset);
-		                        									Diamond.Points[3] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y);
-	                        										
-		                        									SerieMarksCoords.Add((object)Diamond);
-                        										}
-                        										
-                        										break;
-                        										
-                        									case GraphSerieMarkerStyles.Cross:
-                        										
-                        										{
-	                        										CrossMarker Cross = new CrossMarker();
-		                        									Cross.Points[0] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y - Marker_Pos_Ofset);
-		                        									Cross.Points[1] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y + Marker_Pos_Ofset);
-		                        									Cross.Points[2] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y - Marker_Pos_Ofset);
-		                        									Cross.Points[3] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y + Marker_Pos_Ofset);
-	                        										
-		                        									SerieMarksCoords.Add((object)Cross);
-                        										}
-                        										
-                        										break;
-                        										
-                        									case GraphSerieMarkerStyles.Triangle:
-                        										
-                        										{
-	                        										TriangleMarker Triangle = new TriangleMarker();
-		                        									Triangle.Points[0] = new Point(PtSample.X - Marker_Pos_Ofset, PtSample.Y);
-		                        									Triangle.Points[1] = new Point(PtSample.X + Marker_Pos_Ofset, PtSample.Y);
-		                        									Triangle.Points[2] = new Point(PtSample.X , PtSample.Y - Marker_Pos_Ofset);
-		                        									
-		                        									SerieMarksCoords.Add((object)Triangle);
-                        										}
-                        										
-                        										break;
-                        								}
-                        							}
-                        							
-                        							bMark = !bMark;
-                        						}
-                        					}
-                        					
-                        					#endregion
-                        				}
-                        				
-                        				//Add the last (or unique) set of sample points
-                        				if (PartialSerieCoords.Count > 1) //Minimum 2 points to trace a line
-	            						{
-	            							SerieCoords.Add(PartialSerieCoords.ToArray());
-	            						}
-
-#if DEBUG
-                                        TotalMathTime += swPlotTime.ElapsedMilliseconds;
-                                        swPlotTime.Restart();
-#endif
-
-                                        if (nVisiblePointCnt > 1)
-                        				{                        					
-                        					//Trace ploting
-                        					#region Trace ploting
-                        					
-                        					if (oSerieProps.Trace.Visible)
-                        					{
-                        						Pen p = new Pen(oSerieProps.Trace.LineColor, (float)oSerieProps.Trace.LineWidth);
-                        						p.DashStyle = oSerieProps.Trace.LineStyle;
-                        						
-                        						switch (oSerieProps.DrawingMode)
-                        						{
-                        							case GraphSerieDrawingModes.Line:
-                        								                        								
-                        								foreach(Point[] SeriePoints in SerieCoords)
-                        								{
-                        									g.DrawLines(p, SeriePoints);
-                        								}
-                        								
-                        								break;
-                        								
-                        							case GraphSerieDrawingModes.Step:
-                        								
-                        								foreach(Point[] SeriePoints in SerieCoords)
-                        								{
-                        									Point[] SerieStepPoints = new Point[SeriePoints.Length * 2 - 1];
-                        									int iPoint = 0;
-                        									
-                        									for(int iSample = 0; iSample < SeriePoints.Length; iSample++)
-                        									{
-                        										SerieStepPoints[iPoint] = SeriePoints[iSample];
-                        										
-                        										if (iSample < SeriePoints.Length - 1)
-                        										{
-                        											SerieStepPoints[iPoint + 1] = new Point(SeriePoints[iSample + 1].X, SeriePoints[iSample].Y);
-                        										}
-                        										
-                        										iPoint += 2;
-                        									}
-                        									
-                        									g.DrawLines(p, SerieStepPoints);
-                        								}
-                        								
-                        								break;
-                        						}
-                        						
-                        						p.Dispose();
-                        					}
-                        					
-                        					#endregion
-                        					
-                        					//Markers plotting
-                        					#region Markers plotting
-                        					
-                        					if (oSerieProps.Markers.Visible)
-                        					{
-                        						Pen p = new Pen(oSerieProps.Markers.MarkColor);
-                        						SolidBrush b = new SolidBrush(oSerieProps.Markers.MarkColor);
-                        						
-                        						switch (oSerieProps.Markers.Style)
-                        						{
-                        							case GraphSerieMarkerStyles.Square:
-                        								
-                        								if (oSerieProps.Markers.InteriorEmpty)
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.DrawRectangle(p, (Rectangle)Mark);
-                        									}
-                        								}
-                        								else
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.FillRectangle(b, (Rectangle)Mark);
-                        									}
-                        								}
-                        								
-                        								break;
-                        								
-                        							case GraphSerieMarkerStyles.Round:
-                        								
-                        								if (oSerieProps.Markers.InteriorEmpty)
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.DrawEllipse(p, (Rectangle)Mark);
-                        									}
-                        								}
-                        								else
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.FillEllipse(b, (Rectangle)Mark);
-                        									}
-                        								}
-                        								
-                        								break;
-                        								
-                        							case GraphSerieMarkerStyles.Diamond:
-                        								
-                        								if (oSerieProps.Markers.InteriorEmpty)
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.DrawPolygon(p, ((DiamondMarker)Mark).Points);
-                        									}
-                        								}
-                        								else
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.FillPolygon(b, ((DiamondMarker)Mark).Points);
-                        									}
-                        								}
-                        								
-                        								break;
-                        								
-                        							case GraphSerieMarkerStyles.Cross:
-                        								
-                        								foreach(object Mark in SerieMarksCoords)
-                    									{
-                        									CrossMarker CrossMark = (CrossMarker)Mark;
-                        							
-                        									g.DrawLine(p,CrossMark.Points[0], CrossMark.Points[1]);
-                        									g.DrawLine(p,CrossMark.Points[2], CrossMark.Points[3]);
-                    									}
-                        								
-                        								break;
-                        								
-                        							case GraphSerieMarkerStyles.Triangle:
-                        								
-                        								if (oSerieProps.Markers.InteriorEmpty)
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.DrawPolygon(p, ((TriangleMarker)Mark).Points);
-                        									}
-                        								}
-                        								else
-                        								{
-                        									foreach(object Mark in SerieMarksCoords)
-                        									{
-                        										g.FillPolygon(b, ((TriangleMarker)Mark).Points);
-                        									}
-                        								}
-                        								
-                        								break;
-                        						}
-                        						                        						
-                        						p.Dispose();
-                        						b.Dispose();
-                        					}
-                        					
-                        					#endregion
-                        					
-                        					//Y Axis drawing
-                        					#region Y Axis drawing
-                        					
-                        					if(oSerieProps.YAxis.Visible)
-                        					{
-                        						object[] oAxisInfos = oYAxis.Get_AxisInfos(oSerieProps.KeyId);
-                        						
-                        						if (!(oAxisInfos == null))
-                        						{
-                        							GraphAxis oAxis = (GraphAxis)oAxisInfos[0];
-                        							int AxisPos = FrameLeftPoint - AXIS_BASE_POS - (int)oAxisInfos[1];
-                        							
-                        							Pen p = new Pen(oSerieProps.YAxis.AxisLineStyle.LineColor, (float)oSerieProps.YAxis.AxisLineStyle.LineWidth);
-                        							p.DashStyle = oSerieProps.YAxis.AxisLineStyle.LineStyle;
-                        							
-                        							SolidBrush b = new SolidBrush(oSerieProps.YAxis.AxisLineStyle.LineColor);
-                        							                        							
-                        							AxisGraduation[] Graduations = oAxis.Get_AxisGraduations(FrameHeight, FrameTopPoint,
-                        							                                                         oSerieProps.CoordConversion.Min,
-                        							                                                         oSerieProps.CoordConversion.Max, 
-                        							                                                         oSerieProps.ValueFormat, false);
-                        							
-                        							//Main axis line drawing
-                        							gFrame.DrawLine(p, AxisPos, oAxis.StartPos, AxisPos, oAxis.EndPos);
-                        							
-                        							//Graduations drawing
-                        							if (!(Graduations == null))
-                        							{
-                        								int GradEndPos = AxisPos - (AXIS_BASE_SIZE * oSerieProps.YAxis.AxisLineStyle.LineWidth);
-                        								int iGrad = 0;
-                        								
-                        								foreach(AxisGraduation oGrad in Graduations)
-                        								{
-                        									gFrame.DrawLine(p, AxisPos, oGrad.Position, GradEndPos, oGrad.Position);
-                        									
-                        									if (oSerieProps.YAxis.AxisValuesVisible)
-                        									{
-                        										PointF pGradTxt = PointF.Empty;
-                        										
-                        										if(iGrad == 0) //First graduation
-                        										{
-                        											pGradTxt = new PointF((float)(GradEndPos - AXIS_TEXT_POS_OFFSET - (oGrad.Value.Length * oSerieProps.YAxis.AxisValuesFont.oFont.Size)),
-                        											                      (float)(oGrad.Position));
-                        										}
-                        										else if (iGrad == Graduations.Length - 1) //Last graduation
-                        										{
-                        											pGradTxt = new PointF((float)(GradEndPos - AXIS_TEXT_POS_OFFSET - (oGrad.Value.Length * oSerieProps.YAxis.AxisValuesFont.oFont.Size)),
-                        											                      (float)(oGrad.Position - oSerieProps.YAxis.AxisValuesFont.oFont.GetHeight(g)));
-                        										}
-                        										else //General case
-                        										{
-                        											
-                        											pGradTxt = new PointF((float)(GradEndPos - AXIS_TEXT_POS_OFFSET - (oGrad.Value.Length * oSerieProps.YAxis.AxisValuesFont.oFont.Size)),
-                        											                      (float)(oGrad.Position - (oSerieProps.YAxis.AxisValuesFont.oFont.GetHeight(g) / 2)));
-                        										}
-                        										
-                        										gFrame.DrawString(oGrad.Value, oSerieProps.YAxis.AxisValuesFont.oFont, b, pGradTxt);
-                        									}
-                        									
-                        									iGrad++;
-                        								}
-                        							}
-                        							
-                        							//Axis title drawing
-                        							if (oSerieProps.YAxis.AxisTitleVisible)
-                        							{
-                        								if (!(oSerieProps.Label.Equals("")))
-                        								{
-                        									StringFormat sFormat = new StringFormat();
-                        									sFormat.FormatFlags |= StringFormatFlags.DirectionVertical;
-                        									sFormat.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
-                        									
-                        									SizeF TitleSize = gFrame.MeasureString(oSerieProps.Label,oSerieProps.YAxis.AxisValuesFont.oFont, new PointF(0,0), sFormat);
-                        									PointF pTitle = new PointF(AxisPos - oAxis.TitleLeft, oAxis.StartPos + (((oAxis.EndPos - oAxis.StartPos) -  TitleSize.Height) / 2));
-                        									
-                        									gFrame.DrawString(oSerieProps.Label, oSerieProps.YAxis.AxisValuesFont.oFont, b, pTitle, sFormat);
-                        								}
-                        							}
-                        							
-                        							p.Dispose();
-                        							b.Dispose();
-                        						}
-                        					}
-                        					
-                        					#endregion
-                        					
-                        					//User grid drawing
-                        					#region User grid drawing
-                        					
-                        					if (oSerieProps.UserGrid.Visible)
-                        					{
-                        						//Vertical grid
-                        						#region vertical grid
-                        						if (oSerieProps.UserGrid.VerticalLinesStyle.Visible)
-                        						{
-                        							Pen p = new Pen(oSerieProps.UserGrid.VerticalLinesStyle.LineColor, (float)oSerieProps.UserGrid.VerticalLinesStyle.LineWidth);
-                        							p.DashStyle = oSerieProps.UserGrid.VerticalLinesStyle.LineStyle;
-                        							
-                        							SolidBrush b = new SolidBrush(oSerieProps.UserGrid.VerticalLinesStyle.LineColor);
-                        							
-                        							double[] GridValues = null;
-                        							
-                        							switch(oSerieProps.UserGrid.VerticalGridMode)
-                        							{
-                        								case GraphSerieUserGridModes.Even:
-                        									
-                        									if (oSerieProps.UserGrid.VerticalDivisionCount > 1)
-                        									{
-                        										GridValues = new double[oSerieProps.UserGrid.VerticalDivisionCount - 1];
-                        										
-                        										double vGridStep = (double)((DataFile.Time.Max - DataFile.Time.Min) / (oSerieProps.UserGrid.VerticalDivisionCount));
-                        										
-                        										for (int i = 0; i < oSerieProps.UserGrid.VerticalDivisionCount - 1; i++)
-                        										{
-                        											GridValues[i] = Properties.AbscisseAxis.CoordConversion.Min + (vGridStep * (i + 1));
-                        										}
-                        										
-                        									}
-                        									
-                        									break;
-                        									
-                        								case GraphSerieUserGridModes.CustomValues:
-                        									
-                        									if (oSerieProps.UserGrid.VerticalCustomValues.Count > 0)
-                        									{
-                        										GridValues = oSerieProps.UserGrid.VerticalCustomValues.ToArray();
-                        										
-                        									}
-                        									
-                        									break;
-                        							}
-                        							
-                        							if (!(GridValues == null))
-                        							{
-                        								foreach (double Val in GridValues)
-                        								{
-                        									int ValAbs = (int)(Val * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
-                        									
-                        									if (ValAbs >= 0 && ValAbs <= FrameWidth)
-                        									{
-                        										g.DrawLine(p, ValAbs, oSerieProps.CoordConversion.Top, ValAbs, oSerieProps.CoordConversion.Bottom);
-                        										
-                        										if (oSerieProps.UserGrid.VerticalGridValuesVisible)
-                        										{
-                        											string sVal = oSerieProps.ValueFormat.Get_ValueFormatted(Val);
-                        											
-                        											PointF pValTxt = new PointF((float)(ValAbs - sVal.Length * oSerieProps.UserGrid.VerticalGridValueFont.oFont.Size - 5),
-                        											                            (float)(oSerieProps.CoordConversion.Top + oSerieProps.UserGrid.VerticalGridValueFont.oFont.Size));
-                        											
-                        											if (pValTxt.X > 0)
-                        											{
-                        												g.DrawString(sVal, oSerieProps.UserGrid.VerticalGridValueFont.oFont, b, pValTxt);
-                        											}
-                        										}
-                        									}
-                        								}
-                        							}
-                        							
-                        							p.Dispose();
-                        							b.Dispose();
-                        						}
-                        						#endregion
-                        						
-                        						//Horizontal grid
-                        						#region Horizontal grid
-                        						if (oSerieProps.UserGrid.HorizontalLinesStyle.Visible)
-                        						{
-                        							Pen p = new Pen(oSerieProps.UserGrid.HorizontalLinesStyle.LineColor, (float)oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth);
-                        							p.DashStyle = oSerieProps.UserGrid.HorizontalLinesStyle.LineStyle;
-                        							
-                        							SolidBrush b = new SolidBrush(oSerieProps.UserGrid.HorizontalLinesStyle.LineColor);
-                        							
-                        							double[] GridValues = null;
-                        							
-                        							switch(oSerieProps.UserGrid.HorizontalGridMode)
-                        							{
-                        								case GraphSerieUserGridModes.Even:
-                        									
-                        									if (oSerieProps.UserGrid.HorizontalDivisionCount > 1)
-                        									{
-                        										GridValues = new double[oSerieProps.UserGrid.HorizontalDivisionCount + 1];
-                        										
-                        										double hGridStep = (double)((oSerieProps.CoordConversion.Max - oSerieProps.CoordConversion.Min) / (oSerieProps.UserGrid.HorizontalDivisionCount));
-                        										
-                        										for (int i = 0; i < oSerieProps.UserGrid.HorizontalDivisionCount + 1; i++)
-                        										{
-                        											GridValues[i] = oSerieProps.CoordConversion.Min + (hGridStep * i);
-                        										}
-                        										
-                        									}
-                        									
-                        									break;
-                        									
-                        								case GraphSerieUserGridModes.MinMaxAvg:
-                        									
-                        									GridValues = new double[3];
-                        									GridValues[0] = oSerieData.Min;
-                        									GridValues[1] = oSerieData.Avg;
-                        									GridValues[2] = oSerieData.Max;
-                        									
-                        									break;
-                        									
-                        								case GraphSerieUserGridModes.MinMaxZero:
-                        									
-                        									GridValues = new double[3];
-                        									GridValues[0] = oSerieData.Min;
-                        									GridValues[1] = 0;
-                        									GridValues[2] = oSerieData.Max;
-                        									
-                        									break;
-                        									
-                        								case GraphSerieUserGridModes.CustomValues:
-                        									
-                        									if (oSerieProps.UserGrid.HorizontalCustomValues.Count > 0)
-                        									{
-                        										GridValues = oSerieProps.UserGrid.HorizontalCustomValues.ToArray();
-                        									}
-                        									
-                        									break;
-                        							}
-                        							
-                        							if (!(GridValues == null))
-                        							{
-                        								foreach (double Val in GridValues)
-                        								{
-                        									int ValOrd = (int)(Val * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
-                        									
-                        									if (ValOrd >= 0 && ValOrd <= FrameHeight)
-                        									{
-                        										g.DrawLine(p, 0, ValOrd, FrameWidth, ValOrd);
-                        										
-                        										if (oSerieProps.UserGrid.HorizontalGridValuesVisible)
-                        										{
-                        											string sVal = oSerieProps.ValueFormat.Get_ValueFormatted(Val);
-                        											
-                        											PointF pValTxt = new PointF(5, (float)(ValOrd + oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth + 1));
-                        											
-                        											if (pValTxt.Y > 0 && pValTxt.Y < (float)FrameHeight)
-                        											{
-                        												g.DrawString(sVal, oSerieProps.UserGrid.HorizontalGridValueFont.oFont, b, pValTxt);
-                        											}
-                        										}
-                        									}
-                        								}
-                        							}
-                        							
-                        							p.Dispose();
-                        							b.Dispose();
-                        						}
-                        						#endregion
-                        					}
-                        					
-                        					#endregion
-                        					
-                        					//Reference lines plotting
-                        					#region Reference lines plotting
-                        					
-                        					if(oSerieProps.ReferenceLines.Count > 0)
-                        					{
-                        						foreach (GraphReferenceLine oLine in oSerieProps.ReferenceLines)
-                        						{
-                        							if (oLine.Visible)
-                        							{
-                        								int LineOrd = 0;
-                        								string sLineVal = "";
-                        								
-                        								switch(oLine.ReferenceMode)
-                        								{
-                        									case GraphSerieReferenceLineModes.Average:
-                        										
-                        										LineOrd = (int)(oSerieData.Avg * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
-                        										sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Avg);
-                        										break;
-                        										
-                        									case GraphSerieReferenceLineModes.Custom:
-                        										
-                        										LineOrd = (int)(oLine.ReferenceValue * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
-                        										sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oLine.ReferenceValue);
-                        										break;
-                        										
-                        									case GraphSerieReferenceLineModes.Max:
-                        										
-                        										LineOrd = (int)(oSerieData.Max * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
-                        										sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Max);
-                        										break;
-                        										
-                        									case GraphSerieReferenceLineModes.Min:
-                        										
-                        										LineOrd = (int)(oSerieData.Min * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
-                        										sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(oSerieData.Min);
-                        										break;
-                        										
-                        									case GraphSerieReferenceLineModes.Zero:
-                        										
-                        										LineOrd = (int)(0 * oSerieProps.CoordConversion.Gain + oSerieProps.CoordConversion.Zero);
-                        										sLineVal = oSerieProps.ValueFormat.Get_ValueFormatted(0);
-                        										break;
-                        										
-                        									default:
-                        										
-                        										LineOrd = -1;
-                        										break;
-                        								}
-                        								
-                        								if (LineOrd >= oSerieProps.CoordConversion.Top && LineOrd <= oSerieProps.CoordConversion.Bottom)
-                        								{
-                        									Pen p = new Pen(oLine.ReferenceStyle.LineColor, (float)oLine.ReferenceStyle.LineWidth);
-                        									p.DashStyle = oLine.ReferenceStyle.LineStyle;
-                        									
-                        									g.DrawLine(p, 0, LineOrd, FrameWidth, LineOrd);
-                        									
-                                                            //Reference line value and title drawing
-                        									if ((!oLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible)) || (!(oLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible) || oLine.ReferenceTitle.Equals(""))))
-                                                            {
-                        										SolidBrush b = new SolidBrush(oLine.ReferenceStyle.LineColor);
-                                                                PointF pValTxt = PointF.Empty;
-
-                                                                //Check user setting for value position (top & bottom forbidden for serie reference line)
-                                                                ScreenPositions ValPos = oLine.ReferenceValuePosition;
-                                                                if (ValPos.Equals(ScreenPositions.Top) || ValPos.Equals(ScreenPositions.Bottom))
-                                                                {
-                                                                    ValPos = ScreenPositions.Center;
-                                                                }
-
-                                                                //Check user setting for title position (top & bottom forbidden for serie reference line)
-                                                                ScreenPositions TitlePos = oLine.ReferenceTitlePosition;
-                                                                if (TitlePos.Equals(ScreenPositions.Top) || TitlePos.Equals(ScreenPositions.Bottom))
-                                                                {
-                                                                    TitlePos = ScreenPositions.Center;
-                                                                }
-
-                                                                if (ValPos == TitlePos) //Both title and value have the same location
-                                                                {
-                                                                    //Title and value strings concatenation
-                                                                    if (!oLine.ReferenceTitle.Equals(""))
-                                                                    {
-                                                                        string s = sLineVal;
-                                                                        sLineVal = oLine.ReferenceTitle + " " + s;
-                                                                    }
-
-                                                                    SizeF RefTxtSize = g.MeasureString(sLineVal, oLine.ReferenceValueFont.oFont);
-
-                                                                    //Text written on top of the reference line if reference line is drawn under 2 times REF_LINE_TEXT_POS_OFFSET
-                                                                    //Otherwise it is written on the bottom of the reference line
-                                                                    if (((float)LineOrd - RefTxtSize.Height) > (float)REF_LINE_TEXT_POS_OFFSET * 2)
-                                                                    {
-                                                                        pValTxt.Y = (float)(LineOrd - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height; 
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        pValTxt.Y = (float)(LineOrd + REF_LINE_TEXT_POS_OFFSET);
-                                                                    }
-
-                                                                    switch (ValPos)
-                                                                    {
-                                                                        case ScreenPositions.Left:
-
-                                                                            pValTxt.X = (float)REF_LINE_TEXT_POS_OFFSET;
-                                                                            break;
-
-                                                                        case ScreenPositions.Right:
-
-                                                                            pValTxt.X = (float)(FrameWidth - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Width;
-                                                                            break;
-
-                                                                        case ScreenPositions.Center:
-
-                                                                            pValTxt.X = ((float)FrameWidth / 2) - (RefTxtSize.Width / 2);
-                                                                            break;
-                                                                    }
-
-                                                                    g.DrawString(sLineVal, oLine.ReferenceValueFont.oFont, b, pValTxt);
-                                                                }
-                                                                else //Title and value have different position
-                                                                {
-                                                                    if (!ValPos.Equals(ScreenPositions.Invisible))
-                                                                    {
-                                                                        SizeF RefTxtSize = g.MeasureString(sLineVal, oLine.ReferenceValueFont.oFont);
-
-                                                                        //Text written on top of the reference line if reference line is drawn under 2 times REF_LINE_TEXT_POS_OFFSET
-                                                                        //Otherwise it is written on the bottom of the reference line
-                                                                        if (((float)LineOrd - RefTxtSize.Height) > (float)REF_LINE_TEXT_POS_OFFSET * 2)
-                                                                        {
-                                                                            pValTxt.Y = (float)(LineOrd - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            pValTxt.Y = (float)(LineOrd + REF_LINE_TEXT_POS_OFFSET);
-                                                                        }
-
-                                                                        switch (ValPos)
-                                                                        {
-                                                                            case ScreenPositions.Left:
-
-                                                                                pValTxt.X = (float)REF_LINE_TEXT_POS_OFFSET;
-                                                                                break;
-
-                                                                            case ScreenPositions.Right:
-
-                                                                                pValTxt.X = (float)(FrameWidth - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Width;
-                                                                                break;
-
-                                                                            case ScreenPositions.Center:
-
-                                                                                pValTxt.X = ((float)FrameWidth / 2) - (RefTxtSize.Width / 2);
-                                                                                break;
-                                                                        }
-
-                                                                        g.DrawString(sLineVal, oLine.ReferenceValueFont.oFont, b, pValTxt);
-                                                                    }
-
-                                                                    if (!(TitlePos.Equals(ScreenPositions.Invisible) || oLine.ReferenceTitle.Equals("")))
-                                                                    {
-                                                                        pValTxt = PointF.Empty;
-
-                                                                        SizeF RefTxtSize = g.MeasureString(oLine.ReferenceTitle, oLine.ReferenceValueFont.oFont);
-
-                                                                        //Text written on top of the reference line if reference line is drawn under 2 times REF_LINE_TEXT_POS_OFFSET
-                                                                        //Otherwise it is written on the bottom of the reference line
-                                                                        if (((float)LineOrd - RefTxtSize.Height) > (float)REF_LINE_TEXT_POS_OFFSET * 2)
-                                                                        {
-                                                                            pValTxt.Y = (float)(LineOrd - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Height;
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            pValTxt.Y = (float)(LineOrd + REF_LINE_TEXT_POS_OFFSET);
-                                                                        }
-
-                                                                        switch (TitlePos)
-                                                                        {
-                                                                            case ScreenPositions.Left:
-
-                                                                                pValTxt.X = (float)REF_LINE_TEXT_POS_OFFSET;
-                                                                                break;
-
-                                                                            case ScreenPositions.Right:
-
-                                                                                pValTxt.X = (float)(FrameWidth - REF_LINE_TEXT_POS_OFFSET) - RefTxtSize.Width;
-                                                                                break;
-
-                                                                            case ScreenPositions.Center:
-
-                                                                                pValTxt.X = ((float)FrameWidth / 2) - (RefTxtSize.Width / 2);
-                                                                                break;
-                                                                        }
-
-                                                                        g.DrawString(oLine.ReferenceTitle, oLine.ReferenceValueFont.oFont, b, pValTxt);
-                                                                    }
-                                                                }
-
-                        										b.Dispose();
-                        									}
-                        									
-                        									p.Dispose();
-                        								}
-                        							}
-                        						}
-                        					}
-                        					
-                        					#endregion
-                        				}
-
-#if DEBUG
-                                        TotalGraphicTime += swPlotTime.ElapsedMilliseconds;
-#endif
-                                    }
-                        			else
-                        			{                        				
-                        				MessageBox.Show("Ploting error !\nSerie: " + oSerieProps.Name
-                        				                + "\nCoord conversion gain: " + oSerieProps.CoordConversion.Gain.ToString()
-                        				                + "\nCoord conversion offset: " + oSerieProps.CoordConversion.Zero.ToString(),
-                        				                "Graphic Window", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        				
-                        				return;
-                        			}
-                        		}
-
-                            }
-
-                            //Legend
-                            #region Legend
-
-                            if (Properties.LegendProperties.Visible && (!(oSerieData == null)))
-                            {
-                                LegendItemData oLegendData = new LegendItemData();
-
-                                oLegendData.ItemProperties = oSerieProps;
-
-                                if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
-                                {
-                                    oLegendData.CurrentValue = oSerieData.Samples[0].SampleValue;
-                                }
-                                else
-                                {
-                                    oLegendData.CurrentValue = oSerieData.Values[0];
-                                }
-
-                                oLegendData.Min = oSerieData.Min;
-                                oLegendData.Max = oSerieData.Max;
-                                oLegendData.Avg = oSerieData.Avg;
-
-                                this.BeginInvoke(this.AddLegendItemDelegate, new object[] { oLegendData });
-                            }
-
-                            #endregion
-                        }
-
-#if DEBUG
-                        swPlotTime.Stop();
-#endif
-                    }
-                }
-            }
-            
-            g.Dispose();
-            gFrame.Dispose();
         }
 
         private void Compute_SubSampling(int SampleCount)
