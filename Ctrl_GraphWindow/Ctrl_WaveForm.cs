@@ -3088,50 +3088,82 @@ namespace Ctrl_GraphWindow
             {
                 foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
                 {
-                    if(oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible) && oSerieProps.YAxis.Visible)
+                    if(oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible))
                     {
-                        object[] oAxisInfos = oYAxis.Get_AxisInfos(oSerieProps.KeyId);
-
-                        if(oAxisInfos!=null)
+                        //Serie Y Axis
+                        if (oSerieProps.YAxis.Visible)
                         {
-                            GraphAxis oAxis = (GraphAxis)oAxisInfos[0];
-                            int AxisPos = FrameLeftPoint - AXIS_BASE_POS - (int)oAxisInfos[1];
+                            object[] oAxisInfos = oYAxis.Get_AxisInfos(oSerieProps.KeyId);
 
-                            oPen = new Pen(oSerieProps.YAxis.AxisLineStyle.LineColor, (float)oSerieProps.YAxis.AxisLineStyle.LineWidth);
-                            oPen.DashStyle = oSerieProps.YAxis.AxisLineStyle.LineStyle;
-
-                            oAxis.Set_AxisGraduations(FrameHeight, FrameTopPoint);
-
-                            //Main axis line drawing
-                            FrameGraphics.DrawLine(oPen, AxisPos, oAxis.StartPos, AxisPos, oAxis.EndPos);
-
-                            //Graduations drawing
-                            if (oAxis.Graduations != null)
+                            if (oAxisInfos != null)
                             {
-                                int GradEndPos = AxisPos - (AXIS_BASE_SIZE * oSerieProps.YAxis.AxisLineStyle.LineWidth);
+                                GraphAxis oAxis = (GraphAxis)oAxisInfos[0];
+                                int AxisPos = FrameLeftPoint - AXIS_BASE_POS - (int)oAxisInfos[1];
 
-                                foreach (AxisGraduation oGrad in oAxis.Graduations)
+                                oPen = new Pen(oSerieProps.YAxis.AxisLineStyle.LineColor, (float)oSerieProps.YAxis.AxisLineStyle.LineWidth);
+                                oPen.DashStyle = oSerieProps.YAxis.AxisLineStyle.LineStyle;
+
+                                oAxis.Set_AxisGraduations(FrameHeight, FrameTopPoint);
+
+                                //Main axis line drawing
+                                FrameGraphics.DrawLine(oPen, AxisPos, oAxis.StartPos, AxisPos, oAxis.EndPos);
+
+                                //Graduations drawing
+                                if (oAxis.Graduations != null)
                                 {
-                                    FrameGraphics.DrawLine(oPen, AxisPos, oGrad.Position, GradEndPos, oGrad.Position);
+                                    int GradEndPos = AxisPos - (AXIS_BASE_SIZE * oSerieProps.YAxis.AxisLineStyle.LineWidth);
+
+                                    foreach (AxisGraduation oGrad in oAxis.Graduations)
+                                    {
+                                        FrameGraphics.DrawLine(oPen, AxisPos, oGrad.Position, GradEndPos, oGrad.Position);
+                                    }
+                                }
+
+                                //Axis title drawing
+                                if (oSerieProps.YAxis.AxisTitleVisible)
+                                {
+                                    if (!(oSerieProps.Label.Equals("")))
+                                    {
+                                        oBrush = new SolidBrush(oSerieProps.YAxis.AxisLineStyle.LineColor);
+
+                                        StringFormat sFormat = new StringFormat();
+                                        sFormat.FormatFlags |= StringFormatFlags.DirectionVertical;
+                                        sFormat.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
+
+                                        SizeF TitleSize = FrameGraphics.MeasureString(oSerieProps.Label, oSerieProps.YAxis.AxisValuesFont.oFont, new PointF(0, 0), sFormat);
+                                        PointF pTitle = new PointF(AxisPos - oAxis.TitleLeft, oAxis.StartPos + (((oAxis.EndPos - oAxis.StartPos) - TitleSize.Height) / 2));
+
+                                        FrameGraphics.DrawString(oSerieProps.Label, oSerieProps.YAxis.AxisValuesFont.oFont, oBrush, pTitle, sFormat);
+                                    }
                                 }
                             }
+                        }
 
-                            //Axis title drawing
-                            if (oSerieProps.YAxis.AxisTitleVisible)
+                        //Serie legend item
+                        if (Properties.LegendProperties.Visible)
+                        {
+                            GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+
+                            if (oSerieData != null)
                             {
-                                if (!(oSerieProps.Label.Equals("")))
+                                LegendItemData oLegendData = new LegendItemData();
+
+                                oLegendData.ItemProperties = oSerieProps;
+
+                                if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
                                 {
-                                    oBrush = new SolidBrush(oSerieProps.YAxis.AxisLineStyle.LineColor);
-
-                                    StringFormat sFormat = new StringFormat();
-                                    sFormat.FormatFlags |= StringFormatFlags.DirectionVertical;
-                                    sFormat.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
-
-                                    SizeF TitleSize = FrameGraphics.MeasureString(oSerieProps.Label, oSerieProps.YAxis.AxisValuesFont.oFont, new PointF(0, 0), sFormat);
-                                    PointF pTitle = new PointF(AxisPos - oAxis.TitleLeft, oAxis.StartPos + (((oAxis.EndPos - oAxis.StartPos) - TitleSize.Height) / 2));
-
-                                    FrameGraphics.DrawString(oSerieProps.Label, oSerieProps.YAxis.AxisValuesFont.oFont, oBrush, pTitle, sFormat);
+                                    oLegendData.CurrentValue = oSerieData.Samples[0].SampleValue;
                                 }
+                                else
+                                {
+                                    oLegendData.CurrentValue = oSerieData.Values[0];
+                                }
+
+                                oLegendData.Min = oSerieData.Min;
+                                oLegendData.Max = oSerieData.Max;
+                                oLegendData.Avg = oSerieData.Avg;
+
+                                this.BeginInvoke(this.AddLegendItemDelegate, new object[] { oLegendData });
                             }
                         }
                     }
