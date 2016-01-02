@@ -20,6 +20,7 @@ using System.Windows.Forms;
 
 #if DEBUG
 using System.Diagnostics;
+using System.IO;
 #endif
 
 namespace Ctrl_GraphWindow
@@ -502,6 +503,10 @@ namespace Ctrl_GraphWindow
         private const int LEGEND_REF_DIFF_PERC_COL  = 8;
         private const int LEGEND_REF_GRADIENT_COL   = 9;
 
+#if DEBUG
+        private const string TASK_TIME_LOG_FILE = "..\\..\\..\\GraphControlLogs\\TracingTimeLog_";
+#endif
+
         #endregion
 
         #region Public events
@@ -897,8 +902,19 @@ namespace Ctrl_GraphWindow
         private int GraphPlotCount;
         private long LastPlotTime;
         private double AvgPlotTime;
-        private long TotalMathTime;
-        private long TotalGraphicTime;
+
+        private long InitTime;
+        private long FrameTime;
+        private long GridTime;
+        private long XAxisLineTime;
+        private long YAxisLineTime;
+        private long YAxisValueTime;
+        private long SeriesOptionsTime;
+        private long XAxisOptionsTime;
+        private long XAxisValueTime;
+        private long SeriesValuesTime;
+
+        private string TraceTimeLogFile = "";
 
 #endif
 
@@ -2843,9 +2859,49 @@ namespace Ctrl_GraphWindow
                 TSL_PlotAvg.Text = "Avg: " + AvgPlotTime.ToString("F3") + " ms";
             }
 
-            TSL_PlotLast.Text = "Last total: " + LastPlotTime.ToString() 
-                                + " ms / Math: " + TotalMathTime.ToString() 
-                                + " ms / Graphic: " + TotalGraphicTime.ToString() + " ms";
+            TSL_PlotLast.Text = "Last total: " + LastPlotTime.ToString() + " ms";
+
+            StreamWriter SR = null;
+
+            if (TraceTimeLogFile.Equals(""))
+            {
+                TraceTimeLogFile = TASK_TIME_LOG_FILE 
+                                    + this.Name + "_"
+                                    + DateTime.Now.Year.ToString("D4")
+                                    + DateTime.Now.Month.ToString("D2")
+                                    + DateTime.Now.Day.ToString("D2")
+                                    + "_" 
+                                    + DateTime.Now.Hour.ToString("D2")
+                                    + DateTime.Now.Minute.ToString("D2")
+                                    + DateTime.Now.Second.ToString("D2") + ".txt";
+
+                SR = new StreamWriter(TraceTimeLogFile);
+            }
+            else
+            {
+                SR = new StreamWriter(TraceTimeLogFile, true);
+            }
+
+            SR.Write(DateTime.Now.ToShortDateString()
+                + " " + DateTime.Now.ToLongTimeString()
+                + " Plot #" + GraphPlotCount.ToString("D4")
+                + " Avg time: " + AvgPlotTime.ToString("F3") + " ms"
+                + " Total time: " + LastPlotTime.ToString("D3") + " ms\n"
+                + "      Init time           : "  + InitTime.ToString("D2") + " ms\n"
+                + "      Frame time          : "  + (FrameTime         - InitTime).ToString("D2") + " ms\n"
+                + "      Grid time           : "  + (GridTime          - FrameTime).ToString("D2") + " ms\n"
+                + "      X Axis line time    : "  + (XAxisLineTime     - GridTime).ToString("D2") + " ms\n"
+                + "      Y Axis line time    : "  + (YAxisLineTime     - XAxisLineTime).ToString("D2") + " ms\n"
+                + "      Y Axis values time  : "  + (YAxisValueTime    - YAxisLineTime).ToString("D2") + " ms\n"
+                + "      Series options time : "  + (SeriesOptionsTime - YAxisValueTime).ToString("D2") + " ms\n"
+                + "      X Axis options time : "  + (XAxisOptionsTime  - SeriesOptionsTime).ToString("D2") + " ms\n"
+                + "      X Axis values time  : "  + (XAxisValueTime    - XAxisOptionsTime).ToString("D2") + " ms\n"
+                + "      Series values time  : "  + (SeriesValuesTime  - XAxisValueTime).ToString("D2") + " ms\n");
+
+            SR.WriteLine("");
+
+            SR.Close();
+            SR.Dispose();
 #endif
         }
 
@@ -2867,7 +2923,10 @@ namespace Ctrl_GraphWindow
 
         private void DrawGraphFromStage(GraphDrawingStages InitialStage)
         {
-            //TODO: Implement time measurements
+
+#if DEBUG
+            Stopwatch swTimer = new Stopwatch();
+#endif   
 
             if (Pic_GraphFrame.Width == 0 || Pic_GraphFrame.Height == 0)
             {
@@ -2928,6 +2987,10 @@ namespace Ctrl_GraphWindow
                 }
             }
 
+#if DEBUG
+            swTimer.Start();
+#endif
+
             #region Initialization
 
             Init_GraphWindow();
@@ -2946,6 +3009,10 @@ namespace Ctrl_GraphWindow
 
             #endregion
 
+#if DEBUG
+            InitTime = swTimer.ElapsedMilliseconds;
+#endif
+
             #region Frame drawing
 
             FrameDrawingStage: //Graphic frmame drawing
@@ -2960,6 +3027,10 @@ namespace Ctrl_GraphWindow
             FrameGraphics.DrawRectangle(oPen, FrameLeftPoint, FrameTopPoint, FrameWidth, FrameHeight);
 
             #endregion
+
+#if DEBUG
+            FrameTime = swTimer.ElapsedMilliseconds;
+#endif
 
             #region Grid drawing
 
@@ -3039,6 +3110,10 @@ namespace Ctrl_GraphWindow
 
             #endregion
 
+#if DEBUG
+            GridTime = swTimer.ElapsedMilliseconds;
+#endif
+
             #region X Axis lines
 
             XAxisLinesDrawingStage: //Axis X line and graduations drawing
@@ -3075,6 +3150,10 @@ namespace Ctrl_GraphWindow
             }
 
             #endregion
+
+#if DEBUG
+            XAxisLineTime = swTimer.ElapsedMilliseconds;
+#endif
 
             #region Y Axis lines
 
@@ -3172,6 +3251,10 @@ namespace Ctrl_GraphWindow
 
             #endregion
 
+#if DEBUG
+            YAxisLineTime = swTimer.ElapsedMilliseconds;
+#endif
+
             #region Y Axis values
 
             YAxisValuesDrawingStage: //Series Y Axis graduations values drawing
@@ -3232,6 +3315,10 @@ namespace Ctrl_GraphWindow
             }
 
             #endregion
+
+#if DEBUG
+            YAxisValueTime = swTimer.ElapsedMilliseconds;
+#endif
 
             #region Series Options
 
@@ -3638,46 +3725,14 @@ namespace Ctrl_GraphWindow
 
             #endregion
 
-            #region X Axis values
-
-            XAxisValuesDrawingStage: //X Axis graduation values drawing
-            
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
-            StageIndex++;
-
-            if (Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
-            {
-                //Graduation value
-                if (oAbscisseAxis.Graduations != null && Properties.AbscisseAxis.AxisValuesVisible)
-                {
-                    oAbscisseAxis.Set_GraduationsValues(Properties.AbscisseAxis.CoordConversion.Min,
-                                                        Properties.AbscisseAxis.CoordConversion.Max,
-                                                        oAbcisseValFormat, true);
-                                                        
-
-                    int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
-
-                    foreach (AxisGraduation oGrad in oAbscisseAxis.Graduations)
-                    {
-                        int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
-
-                        SizeF sGradTxt = FrameGraphics.MeasureString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont);
-
-                        PointF pGradTxt = new PointF((float)oGrad.Position - sGradTxt.Width/2,
-                                                     (float)(GradEndPos + AXIS_TEXT_POS_OFFSET));
-
-                        FrameGraphics.DrawString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont, oBrush, pGradTxt);
-                    }
-                }
-            }
-
-            #endregion
+#if DEBUG
+            SeriesOptionsTime = swTimer.ElapsedMilliseconds;
+#endif
 
             #region X Axis options
 
             XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
-            
+
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
@@ -3883,6 +3938,50 @@ namespace Ctrl_GraphWindow
             }
 
             #endregion
+
+#if DEBUG
+            XAxisOptionsTime = swTimer.ElapsedMilliseconds;
+#endif
+
+            #region X Axis values
+
+            XAxisValuesDrawingStage: //X Axis graduation values drawing
+            
+            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            StageIndex++;
+
+            if (Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
+            {
+                //Graduation value
+                if (oAbscisseAxis.Graduations != null && Properties.AbscisseAxis.AxisValuesVisible)
+                {
+                    oAbscisseAxis.Set_GraduationsValues(Properties.AbscisseAxis.CoordConversion.Min,
+                                                        Properties.AbscisseAxis.CoordConversion.Max,
+                                                        oAbcisseValFormat, true);
+                                                        
+
+                    int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
+
+                    foreach (AxisGraduation oGrad in oAbscisseAxis.Graduations)
+                    {
+                        int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
+
+                        SizeF sGradTxt = FrameGraphics.MeasureString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont);
+
+                        PointF pGradTxt = new PointF((float)oGrad.Position - sGradTxt.Width/2,
+                                                     (float)(GradEndPos + AXIS_TEXT_POS_OFFSET));
+
+                        FrameGraphics.DrawString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont, oBrush, pGradTxt);
+                    }
+                }
+            }
+
+            #endregion
+
+#if DEBUG
+            XAxisValueTime = swTimer.ElapsedMilliseconds;
+#endif
 
             #region Series values
 
@@ -4252,6 +4351,10 @@ namespace Ctrl_GraphWindow
 
             #endregion
 
+#if DEBUG
+            SeriesValuesTime = swTimer.ElapsedMilliseconds;
+#endif
+
             oPen.Dispose();
             oBrush.Dispose();
 
@@ -4259,6 +4362,10 @@ namespace Ctrl_GraphWindow
             PtCursorPos = Point.Empty;
             CursorPosMouseDown = Point.Empty;
             CursorPosMouseUp = Point.Empty;
+
+#if DEBUG
+            swTimer.Stop();
+#endif
         }
 
         #endregion
