@@ -400,7 +400,7 @@ namespace Ctrl_GraphWindow
 	    #endregion
 	    
     	#endregion
-	
+	    
 	    #region Private structures
 	
 	    private struct AxisGraduation
@@ -1102,10 +1102,15 @@ namespace Ctrl_GraphWindow
             //Graph configuration file loading in debug mode avoiding to have to load it all the time
 
             //Plot statistics labels displaying
+            TSCmb_InitialStage.Visible = true;
+            TSB_Replot.Visible = true;
             TSL_PlotCount.Visible = true;
             TSL_PlotLast.Visible = true;
             TSL_PlotAvg.Visible = true;
-            TSB_Replot.Visible = true;
+
+            TSCmb_InitialStage.Items.Clear();
+            TSCmb_InitialStage.Items.AddRange(Enum.GetNames(typeof(GraphDrawingStages)));
+            TSCmb_InitialStage.SelectedIndex = 0;
 
             //Plot statistics init
             GraphPlotCount = 0;
@@ -2763,7 +2768,7 @@ namespace Ctrl_GraphWindow
                         swTaskTime.Start();
 #endif
                         bDataPlotted = false;
-                        Init_GraphWindow();
+                        DrawGraphFromStage(GraphDrawingStages.Scratch);
 
                         oGraphicUpdateRequest.UpdateRequested = false;
                         this.Invoke(this.GraphicPicturePostTracingDelegate);
@@ -3963,6 +3968,8 @@ namespace Ctrl_GraphWindow
 
                     int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
 
+                    oBrush = new SolidBrush(Properties.AbscisseAxis.AxisLineStyle.LineColor);
+
                     foreach (AxisGraduation oGrad in oAbscisseAxis.Graduations)
                     {
                         int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
@@ -3993,6 +4000,14 @@ namespace Ctrl_GraphWindow
             
             if (DataFile != null && SeriesVisibleCount > 0)
             {
+                //Sub sampling
+                if (DataFile.DataSamplingMode == SamplingMode.SingleRate)
+                {
+                    Compute_SubSampling(oAbcsisseChannel.Values.Count);
+                }
+
+                bDataPlotted = true;
+
                 foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
                 {
                     if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible) && oSerieProps.YAxis.Visible)
@@ -4356,7 +4371,7 @@ namespace Ctrl_GraphWindow
 #endif
 
             oPen.Dispose();
-            oBrush.Dispose();
+            if (oBrush != null) oBrush.Dispose();
 
             //Cursor positions reset
             PtCursorPos = Point.Empty;

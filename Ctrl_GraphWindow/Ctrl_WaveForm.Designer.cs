@@ -37,16 +37,16 @@ namespace Ctrl_GraphWindow
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TB_Graph = new System.Windows.Forms.ToolStrip();
             this.TSB_LoadData = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -116,6 +116,16 @@ namespace Ctrl_GraphWindow
             this.Cmd_ZoomYPosition = new System.Windows.Forms.Button();
             this.Cmd_ZoomXPosition = new System.Windows.Forms.Button();
             this.Grid_Legend = new System.Windows.Forms.DataGridView();
+            this.Legend_Col_Label = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_Unit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_GraphMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_GraphMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_GraphAvg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefDiff = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefDiffPerc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Legend_Col_RefGradient = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Dlg_OpenData = new System.Windows.Forms.OpenFileDialog();
             this.Context_PicGraphic_ZoomStats = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -198,19 +208,10 @@ namespace Ctrl_GraphWindow
             this.TSMI_Ctxt_Legend_ShowTitles = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Ctxt_Legend_ShowGridLines = new System.Windows.Forms.ToolStripMenuItem();
             this.Dlg_Save_Snapshot = new System.Windows.Forms.SaveFileDialog();
+            this.TSCmb_InitialStage = new System.Windows.Forms.ToolStripComboBox();
             this.Ctrl_ChannelList = new Ctrl_GraphWindow.Ctrl_GW_ChannelList();
             this.Pic_Graphic = new Ctrl_GraphWindow.GW_SelectablePictureBox();
             this.Pic_GraphFrame = new Ctrl_GraphWindow.GW_SelectablePictureBox();
-            this.Legend_Col_Label = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_Unit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_GraphMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_GraphMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_GraphAvg = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_RefValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_RefDiff = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_RefDiffPerc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Legend_Col_RefGradient = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TB_Graph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -255,10 +256,11 @@ namespace Ctrl_GraphWindow
             this.TSB_RT_Play,
             this.TSB_RT_Break,
             this.TSB_RT_Stop,
+            this.TSCmb_InitialStage,
+            this.TSB_Replot,
             this.TSL_PlotCount,
             this.TSL_PlotLast,
-            this.TSL_PlotAvg,
-            this.TSB_Replot});
+            this.TSL_PlotAvg});
             this.TB_Graph.Location = new System.Drawing.Point(0, 0);
             this.TB_Graph.Name = "TB_Graph";
             this.TB_Graph.Size = new System.Drawing.Size(814, 25);
@@ -902,11 +904,124 @@ namespace Ctrl_GraphWindow
             this.Grid_Legend.ReadOnly = true;
             this.Grid_Legend.RowHeadersVisible = false;
             this.Grid_Legend.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Grid_Legend.Size = new System.Drawing.Size(180, 368);
+            this.Grid_Legend.Size = new System.Drawing.Size(180, 493);
             this.Grid_Legend.TabIndex = 0;
             this.Grid_Legend.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Grid_Legend_CellMouseDoubleClick);
             this.Grid_Legend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Grid_Legend_KeyDown);
             this.Grid_Legend.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Grid_Legend_MouseDown);
+            // 
+            // Legend_Col_Label
+            // 
+            this.Legend_Col_Label.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Legend_Col_Label.DefaultCellStyle = dataGridViewCellStyle11;
+            this.Legend_Col_Label.HeaderText = "Label";
+            this.Legend_Col_Label.Name = "Legend_Col_Label";
+            this.Legend_Col_Label.ReadOnly = true;
+            this.Legend_Col_Label.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Legend_Col_Value
+            // 
+            this.Legend_Col_Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_Value.DefaultCellStyle = dataGridViewCellStyle12;
+            this.Legend_Col_Value.HeaderText = "Value";
+            this.Legend_Col_Value.Name = "Legend_Col_Value";
+            this.Legend_Col_Value.ReadOnly = true;
+            this.Legend_Col_Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_Value.Width = 5;
+            // 
+            // Legend_Col_Unit
+            // 
+            this.Legend_Col_Unit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_Unit.DefaultCellStyle = dataGridViewCellStyle13;
+            this.Legend_Col_Unit.HeaderText = "Unit";
+            this.Legend_Col_Unit.Name = "Legend_Col_Unit";
+            this.Legend_Col_Unit.ReadOnly = true;
+            this.Legend_Col_Unit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_Unit.Width = 5;
+            // 
+            // Legend_Col_GraphMin
+            // 
+            this.Legend_Col_GraphMin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphMin.DefaultCellStyle = dataGridViewCellStyle14;
+            this.Legend_Col_GraphMin.HeaderText = "Min";
+            this.Legend_Col_GraphMin.Name = "Legend_Col_GraphMin";
+            this.Legend_Col_GraphMin.ReadOnly = true;
+            this.Legend_Col_GraphMin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_GraphMin.Width = 5;
+            // 
+            // Legend_Col_GraphMax
+            // 
+            this.Legend_Col_GraphMax.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphMax.DefaultCellStyle = dataGridViewCellStyle15;
+            this.Legend_Col_GraphMax.HeaderText = "Max";
+            this.Legend_Col_GraphMax.Name = "Legend_Col_GraphMax";
+            this.Legend_Col_GraphMax.ReadOnly = true;
+            this.Legend_Col_GraphMax.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_GraphMax.Width = 5;
+            // 
+            // Legend_Col_GraphAvg
+            // 
+            this.Legend_Col_GraphAvg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphAvg.DefaultCellStyle = dataGridViewCellStyle16;
+            this.Legend_Col_GraphAvg.HeaderText = "Avg";
+            this.Legend_Col_GraphAvg.Name = "Legend_Col_GraphAvg";
+            this.Legend_Col_GraphAvg.ReadOnly = true;
+            this.Legend_Col_GraphAvg.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_GraphAvg.Width = 5;
+            // 
+            // Legend_Col_RefValue
+            // 
+            this.Legend_Col_RefValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefValue.DefaultCellStyle = dataGridViewCellStyle17;
+            this.Legend_Col_RefValue.HeaderText = "Ref value";
+            this.Legend_Col_RefValue.Name = "Legend_Col_RefValue";
+            this.Legend_Col_RefValue.ReadOnly = true;
+            this.Legend_Col_RefValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefValue.Visible = false;
+            this.Legend_Col_RefValue.Width = 5;
+            // 
+            // Legend_Col_RefDiff
+            // 
+            this.Legend_Col_RefDiff.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefDiff.DefaultCellStyle = dataGridViewCellStyle18;
+            this.Legend_Col_RefDiff.HeaderText = "Diff";
+            this.Legend_Col_RefDiff.Name = "Legend_Col_RefDiff";
+            this.Legend_Col_RefDiff.ReadOnly = true;
+            this.Legend_Col_RefDiff.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefDiff.Visible = false;
+            this.Legend_Col_RefDiff.Width = 5;
+            // 
+            // Legend_Col_RefDiffPerc
+            // 
+            this.Legend_Col_RefDiffPerc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefDiffPerc.DefaultCellStyle = dataGridViewCellStyle19;
+            this.Legend_Col_RefDiffPerc.HeaderText = "Diff %";
+            this.Legend_Col_RefDiffPerc.Name = "Legend_Col_RefDiffPerc";
+            this.Legend_Col_RefDiffPerc.ReadOnly = true;
+            this.Legend_Col_RefDiffPerc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefDiffPerc.Visible = false;
+            this.Legend_Col_RefDiffPerc.Width = 5;
+            // 
+            // Legend_Col_RefGradient
+            // 
+            this.Legend_Col_RefGradient.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefGradient.DefaultCellStyle = dataGridViewCellStyle20;
+            this.Legend_Col_RefGradient.HeaderText = "Gradient";
+            this.Legend_Col_RefGradient.Name = "Legend_Col_RefGradient";
+            this.Legend_Col_RefGradient.ReadOnly = true;
+            this.Legend_Col_RefGradient.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Legend_Col_RefGradient.Visible = false;
+            this.Legend_Col_RefGradient.Width = 5;
             // 
             // Dlg_OpenData
             // 
@@ -1552,6 +1667,14 @@ namespace Ctrl_GraphWindow
             // 
             this.Dlg_Save_Snapshot.Filter = "Bitmap image|*.bmp";
             // 
+            // TSCmb_InitialStage
+            // 
+            this.TSCmb_InitialStage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TSCmb_InitialStage.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.TSCmb_InitialStage.Name = "TSCmb_InitialStage";
+            this.TSCmb_InitialStage.Size = new System.Drawing.Size(121, 25);
+            this.TSCmb_InitialStage.Visible = false;
+            // 
             // Ctrl_ChannelList
             // 
             this.Ctrl_ChannelList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1559,13 +1682,13 @@ namespace Ctrl_GraphWindow
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Ctrl_ChannelList.Location = new System.Drawing.Point(3, 3);
             this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
-            this.Ctrl_ChannelList.Size = new System.Drawing.Size(84, 368);
+            this.Ctrl_ChannelList.Size = new System.Drawing.Size(84, 493);
             this.Ctrl_ChannelList.TabIndex = 0;
             // 
             // Pic_Graphic
             // 
             this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Pic_Graphic.Location = new System.Drawing.Point(79, 41);
+            this.Pic_Graphic.Location = new System.Drawing.Point(79, 104);
             this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
             this.Pic_Graphic.Name = "Pic_Graphic";
             this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
@@ -1588,125 +1711,12 @@ namespace Ctrl_GraphWindow
             this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
             this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
             this.Pic_GraphFrame.Name = "Pic_GraphFrame";
-            this.Pic_GraphFrame.Size = new System.Drawing.Size(529, 373);
+            this.Pic_GraphFrame.Size = new System.Drawing.Size(529, 498);
             this.Pic_GraphFrame.TabIndex = 3;
             this.Pic_GraphFrame.TabStop = false;
             this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
             this.Pic_GraphFrame.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragDrop);
             this.Pic_GraphFrame.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragEnter);
-            // 
-            // Legend_Col_Label
-            // 
-            this.Legend_Col_Label.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Legend_Col_Label.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Legend_Col_Label.HeaderText = "Label";
-            this.Legend_Col_Label.Name = "Legend_Col_Label";
-            this.Legend_Col_Label.ReadOnly = true;
-            this.Legend_Col_Label.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Legend_Col_Value
-            // 
-            this.Legend_Col_Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_Value.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Legend_Col_Value.HeaderText = "Value";
-            this.Legend_Col_Value.Name = "Legend_Col_Value";
-            this.Legend_Col_Value.ReadOnly = true;
-            this.Legend_Col_Value.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_Value.Width = 5;
-            // 
-            // Legend_Col_Unit
-            // 
-            this.Legend_Col_Unit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_Unit.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Legend_Col_Unit.HeaderText = "Unit";
-            this.Legend_Col_Unit.Name = "Legend_Col_Unit";
-            this.Legend_Col_Unit.ReadOnly = true;
-            this.Legend_Col_Unit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_Unit.Width = 5;
-            // 
-            // Legend_Col_GraphMin
-            // 
-            this.Legend_Col_GraphMin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_GraphMin.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Legend_Col_GraphMin.HeaderText = "Min";
-            this.Legend_Col_GraphMin.Name = "Legend_Col_GraphMin";
-            this.Legend_Col_GraphMin.ReadOnly = true;
-            this.Legend_Col_GraphMin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_GraphMin.Width = 5;
-            // 
-            // Legend_Col_GraphMax
-            // 
-            this.Legend_Col_GraphMax.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_GraphMax.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Legend_Col_GraphMax.HeaderText = "Max";
-            this.Legend_Col_GraphMax.Name = "Legend_Col_GraphMax";
-            this.Legend_Col_GraphMax.ReadOnly = true;
-            this.Legend_Col_GraphMax.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_GraphMax.Width = 5;
-            // 
-            // Legend_Col_GraphAvg
-            // 
-            this.Legend_Col_GraphAvg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_GraphAvg.DefaultCellStyle = dataGridViewCellStyle6;
-            this.Legend_Col_GraphAvg.HeaderText = "Avg";
-            this.Legend_Col_GraphAvg.Name = "Legend_Col_GraphAvg";
-            this.Legend_Col_GraphAvg.ReadOnly = true;
-            this.Legend_Col_GraphAvg.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_GraphAvg.Width = 5;
-            // 
-            // Legend_Col_RefValue
-            // 
-            this.Legend_Col_RefValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefValue.DefaultCellStyle = dataGridViewCellStyle7;
-            this.Legend_Col_RefValue.HeaderText = "Ref value";
-            this.Legend_Col_RefValue.Name = "Legend_Col_RefValue";
-            this.Legend_Col_RefValue.ReadOnly = true;
-            this.Legend_Col_RefValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_RefValue.Visible = false;
-            this.Legend_Col_RefValue.Width = 5;
-            // 
-            // Legend_Col_RefDiff
-            // 
-            this.Legend_Col_RefDiff.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefDiff.DefaultCellStyle = dataGridViewCellStyle8;
-            this.Legend_Col_RefDiff.HeaderText = "Diff";
-            this.Legend_Col_RefDiff.Name = "Legend_Col_RefDiff";
-            this.Legend_Col_RefDiff.ReadOnly = true;
-            this.Legend_Col_RefDiff.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_RefDiff.Visible = false;
-            this.Legend_Col_RefDiff.Width = 5;
-            // 
-            // Legend_Col_RefDiffPerc
-            // 
-            this.Legend_Col_RefDiffPerc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefDiffPerc.DefaultCellStyle = dataGridViewCellStyle9;
-            this.Legend_Col_RefDiffPerc.HeaderText = "Diff %";
-            this.Legend_Col_RefDiffPerc.Name = "Legend_Col_RefDiffPerc";
-            this.Legend_Col_RefDiffPerc.ReadOnly = true;
-            this.Legend_Col_RefDiffPerc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_RefDiffPerc.Visible = false;
-            this.Legend_Col_RefDiffPerc.Width = 5;
-            // 
-            // Legend_Col_RefGradient
-            // 
-            this.Legend_Col_RefGradient.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefGradient.DefaultCellStyle = dataGridViewCellStyle10;
-            this.Legend_Col_RefGradient.HeaderText = "Gradient";
-            this.Legend_Col_RefGradient.Name = "Legend_Col_RefGradient";
-            this.Legend_Col_RefGradient.ReadOnly = true;
-            this.Legend_Col_RefGradient.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Legend_Col_RefGradient.Visible = false;
-            this.Legend_Col_RefGradient.Width = 5;
             // 
             // Ctrl_WaveForm
             // 
@@ -1901,5 +1911,6 @@ namespace Ctrl_GraphWindow
         private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_RefDiff;
         private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_RefDiffPerc;
         private System.Windows.Forms.DataGridViewTextBoxColumn Legend_Col_RefGradient;
+        private System.Windows.Forms.ToolStripComboBox TSCmb_InitialStage;
     }
 }
