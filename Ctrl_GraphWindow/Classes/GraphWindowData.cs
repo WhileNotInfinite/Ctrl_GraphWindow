@@ -894,6 +894,9 @@ namespace Ctrl_GraphWindow
         /// </summary>
         public void FIFO_TimeBuffer()
         {
+            //TODO: Update serie Min/Max/Avg stats on value removal
+            //TODO: Raise an event on Min/Max values change for series conversion coords re-computing and Y axis values updates
+
             if (TimeBufferSize != -1)
             {
                 if (DataSamplingMode == SamplingMode.MultipleRates)

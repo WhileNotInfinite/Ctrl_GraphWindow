@@ -25,10 +25,59 @@ using System.IO;
 
 namespace Ctrl_GraphWindow
 {
-	/// <summary>
-	/// Description of Ctrl_WaveForm.
-	/// </summary>
-	public partial class Ctrl_WaveForm : UserControl
+    #region Public enums
+
+    /// <summary>
+    /// Graphic drawing stages enumeration
+    /// </summary>
+    public enum GraphDrawingStages
+    {
+        /// <summary>Nothing exists at this stage</summary>
+        Scratch = 0,
+
+        /// <summary>Frame and graphic pictures size and background color set,
+        /// start from graphic frame borders drawing</summary>
+        Frame = 1,
+
+        /// <summary>Graphic frame borders are drawn,
+        /// start from grid drawing</summary>
+        Grid = 2,
+
+        /// <summary>Graphic grid drawn,
+        /// start from graphic X axis lines drawing</summary>
+        XAxis_Lines = 3,
+
+        /// <summary>Graphic X axis lines drawn,
+        /// start from graphic Y axis lines drawing</summary>
+        YAxis_Lines = 4,
+
+        /// <summary>Graphic Y axis lines drawn,
+        /// start from graphic Y axis values writing</summary>
+        YAxis_Values = 5,
+
+        /// <summary>Graphic Y axis values written,
+        /// start from graphic series options drawing</summary>
+        Series_Options = 6,
+
+        /// <summary>Graphic series options drawn,
+        /// start from graphic X axis options drawing/summary>
+        XAxis_Options = 7,
+
+        /// <summary>Graphic X axis options drawn,
+        /// start from graphic X axis values writing</summary>
+        XAxis_Values = 8,
+
+        /// <summary>Graphic X axis values written,
+        /// start from graphic series values tracing</summary>
+        Series_Values = 9,
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Description of Ctrl_WaveForm.
+    /// </summary>
+    public partial class Ctrl_WaveForm : UserControl
 	{
 		#region Private classes
 
@@ -449,20 +498,6 @@ namespace Ctrl_GraphWindow
             Stopped = 2,
         }
 
-        private enum GraphDrawingStages
-        {
-            Scratch         = 0,
-            Frame           = 1,
-            Grid            = 2,
-            XAxis_Lines     = 3,
-            YAxis_Lines     = 4,
-            YAxis_Values    = 5,
-            Series_Options  = 6,
-            XAxis_Values    = 7,
-            XAxis_Options   = 8,
-            Series_Values   = 9,
-        }
-
 	    #endregion
 	    
 		#region Privates constants
@@ -822,6 +857,7 @@ namespace Ctrl_GraphWindow
 
         private bool bDataPlotted;
 
+        private GraphDrawingStages eCurrentStage;
         private GraphicDrawingStage[] DrawingStages;
 
         private Graphics FrameGraphics;
@@ -902,6 +938,8 @@ namespace Ctrl_GraphWindow
         private int GraphPlotCount;
         private long LastPlotTime;
         private double AvgPlotTime;
+
+        private GraphDrawingStages eGraphStartingPointLog;
 
         private long InitTime;
         private long FrameTime;
@@ -1000,7 +1038,9 @@ namespace Ctrl_GraphWindow
 
             bDataPlotted = false;
 
+            eCurrentStage = GraphDrawingStages.Scratch;
             Init_DrawingStages();
+
             FrameImage = null;
             GraphImage = null;
 
@@ -1524,7 +1564,7 @@ namespace Ctrl_GraphWindow
         private void TSB_Replot_Click(object sender, EventArgs e)
         {
 #if DEBUG
-            Refresh_Graphic();
+            Refresh_Graphic((GraphDrawingStages)TSCmb_InitialStage.SelectedIndex);
 #endif
         }
 
@@ -1534,6 +1574,7 @@ namespace Ctrl_GraphWindow
 
         private void Pic_GraphFrameSizeChanged(object sender, EventArgs e)
 		{
+            eCurrentStage = GraphDrawingStages.Scratch;
             oGraphicUpdateRequest.UpdateRequested = true;
         }
         
@@ -1867,6 +1908,7 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Overlay;
+                            eCurrentStage = GraphDrawingStages.Scratch;
                             oGraphicUpdateRequest.UpdateRequested = true;
                         }
         				
@@ -1877,6 +1919,7 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Parallel;
+                            eCurrentStage = GraphDrawingStages.Scratch;
                             oGraphicUpdateRequest.UpdateRequested = true;
                         }
         				
@@ -1887,6 +1930,7 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Custom;
+                            eCurrentStage = GraphDrawingStages.Grid;
                             oGraphicUpdateRequest.UpdateRequested = true;
                         }
         				
@@ -2768,16 +2812,15 @@ namespace Ctrl_GraphWindow
                         swTaskTime.Start();
 #endif
                         bDataPlotted = false;
-                        DrawGraphFromStage(GraphDrawingStages.Scratch);
-
-                        oGraphicUpdateRequest.UpdateRequested = false;
-                        this.Invoke(this.GraphicPicturePostTracingDelegate);
+                        DrawGraphFromStage(eCurrentStage);
 
 #if DEBUG
                         //Plot statistics computation
                         swTaskTime.Stop();
                         LastPlotTime = swTaskTime.ElapsedMilliseconds;
 #endif
+                        oGraphicUpdateRequest.UpdateRequested = false;
+                        this.Invoke(this.GraphicPicturePostTracingDelegate);
                     }
                 }
 
@@ -2890,20 +2933,33 @@ namespace Ctrl_GraphWindow
             SR.Write(DateTime.Now.ToShortDateString()
                 + " " + DateTime.Now.ToLongTimeString()
                 + " Plot #" + GraphPlotCount.ToString("D4")
-                + " Avg time: " + AvgPlotTime.ToString("F3") + " ms"
-                + " Total time: " + LastPlotTime.ToString("D3") + " ms\n"
-                + "      Init time           : "  + InitTime.ToString("D2") + " ms\n"
-                + "      Frame time          : "  + (FrameTime         - InitTime).ToString("D2") + " ms\n"
-                + "      Grid time           : "  + (GridTime          - FrameTime).ToString("D2") + " ms\n"
-                + "      X Axis line time    : "  + (XAxisLineTime     - GridTime).ToString("D2") + " ms\n"
-                + "      Y Axis line time    : "  + (YAxisLineTime     - XAxisLineTime).ToString("D2") + " ms\n"
-                + "      Y Axis values time  : "  + (YAxisValueTime    - YAxisLineTime).ToString("D2") + " ms\n"
-                + "      Series options time : "  + (SeriesOptionsTime - YAxisValueTime).ToString("D2") + " ms\n"
-                + "      X Axis options time : "  + (XAxisOptionsTime  - SeriesOptionsTime).ToString("D2") + " ms\n"
-                + "      X Axis values time  : "  + (XAxisValueTime    - XAxisOptionsTime).ToString("D2") + " ms\n"
-                + "      Series values time  : "  + (SeriesValuesTime  - XAxisValueTime).ToString("D2") + " ms\n");
+                + " Initial stage: " + eGraphStartingPointLog.ToString()
+                + " Avg time: " + AvgPlotTime.ToString("F3")                         + " ms"
+                + " Total time: " + LastPlotTime.ToString("D3")                      + " ms\n"
+                + "      Init time           : "  + InitTime.ToString("D2")          + " ms\n"
+                + "      Frame time          : "  + FrameTime.ToString("D2")         + " ms\n"
+                + "      Grid time           : "  + GridTime.ToString("D2")          + " ms\n"
+                + "      X Axis line time    : "  + XAxisLineTime.ToString("D2")     + " ms\n"
+                + "      Y Axis line time    : "  + YAxisLineTime.ToString("D2")     + " ms\n"
+                + "      Y Axis values time  : "  + YAxisValueTime.ToString("D2")    + " ms\n"
+                + "      Series options time : "  + SeriesOptionsTime.ToString("D2") + " ms\n"
+                + "      X Axis options time : "  + XAxisOptionsTime.ToString("D2")  + " ms\n"
+                + "      X Axis values time  : "  + XAxisValueTime.ToString("D2")    + " ms\n"
+                + "      Series values time  : "  + SeriesValuesTime.ToString("D2")  + " ms\n");
 
             SR.WriteLine("");
+
+            //Time measurements reset
+            InitTime = 0;
+            FrameTime = 0;
+            GridTime = 0;
+            XAxisLineTime = 0;
+            YAxisLineTime = 0;
+            YAxisValueTime = 0;
+            SeriesOptionsTime = 0;
+            XAxisOptionsTime = 0;
+            XAxisValueTime = 0;
+            SeriesValuesTime = 0;
 
             SR.Close();
             SR.Dispose();
@@ -2917,12 +2973,15 @@ namespace Ctrl_GraphWindow
         private void Init_DrawingStages()
         {
             string[] eStageNames = Enum.GetNames(typeof(GraphDrawingStages));
-            DrawingStages = new GraphicDrawingStage[eStageNames.Length];
+            DrawingStages = new GraphicDrawingStage[eStageNames.Length - 1];
 
-            for (int iStage = 0; iStage < eStageNames.Length; iStage++)
+            int StageId = 0;
+
+            for (int iStage = 1; iStage < eStageNames.Length; iStage++)
             {
-                DrawingStages[iStage] = new GraphicDrawingStage();
-                DrawingStages[iStage].DrawingStage = (GraphDrawingStages)iStage;
+                DrawingStages[StageId] = new GraphicDrawingStage();
+                DrawingStages[StageId].DrawingStage = (GraphDrawingStages)iStage;
+                StageId++;
             }
         }
 
@@ -2931,7 +2990,8 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             Stopwatch swTimer = new Stopwatch();
-#endif   
+            eGraphStartingPointLog = InitialStage;
+#endif
 
             if (Pic_GraphFrame.Width == 0 || Pic_GraphFrame.Height == 0)
             {
@@ -2940,12 +3000,16 @@ namespace Ctrl_GraphWindow
 
             #region Local variables
 
-            int StageIndex = (int)InitialStage;
+            int StageIndex = (int)InitialStage - 1;
 
             Pen oPen = null;
             SolidBrush oBrush = null;
 
             #endregion
+
+#if DEBUG
+            swTimer.Start();
+#endif
 
             if (InitialStage != GraphDrawingStages.Scratch)
             {
@@ -2992,10 +3056,6 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#if DEBUG
-            swTimer.Start();
-#endif
-
             #region Initialization
 
             Init_GraphWindow();
@@ -3009,13 +3069,11 @@ namespace Ctrl_GraphWindow
             FrameGraphics = Graphics.FromImage(FrameImage);
             GraphGraphics = Graphics.FromImage(GraphImage);
 
-            //Legend initialisation
-            this.BeginInvoke(this.InitLegendDelegate);
-
             #endregion
 
 #if DEBUG
             InitTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region Frame drawing
@@ -3035,6 +3093,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             FrameTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region Grid drawing
@@ -3117,6 +3176,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             GridTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region X Axis lines
@@ -3158,6 +3218,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             XAxisLineTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region Y Axis lines
@@ -3167,6 +3228,9 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
             DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
             StageIndex++;
+
+            //Legend initialisation
+            this.BeginInvoke(this.InitLegendDelegate);
 
             if (DataFile != null && SeriesVisibleCount > 0)
             {
@@ -3258,6 +3322,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             YAxisLineTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region Y Axis values
@@ -3323,6 +3388,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             YAxisValueTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region Series Options
@@ -3732,6 +3798,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             SeriesOptionsTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region X Axis options
@@ -3946,6 +4013,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             XAxisOptionsTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region X Axis values
@@ -3988,6 +4056,7 @@ namespace Ctrl_GraphWindow
 
 #if DEBUG
             XAxisValueTime = swTimer.ElapsedMilliseconds;
+            swTimer.Restart();
 #endif
 
             #region Series values
@@ -4370,8 +4439,10 @@ namespace Ctrl_GraphWindow
             SeriesValuesTime = swTimer.ElapsedMilliseconds;
 #endif
 
-            oPen.Dispose();
+            if (oPen != null) oPen.Dispose();
             if (oBrush != null) oBrush.Dispose();
+
+            eCurrentStage = GraphDrawingStages.Series_Values;
 
             //Cursor positions reset
             PtCursorPos = Point.Empty;
@@ -5534,6 +5605,7 @@ namespace Ctrl_GraphWindow
         		
         		if (bPlot)
         		{
+                    eCurrentStage = GraphDrawingStages.Scratch;
                     oGraphicUpdateRequest.UpdateRequested = true;
                 }
         	}
@@ -5572,6 +5644,7 @@ namespace Ctrl_GraphWindow
         	
         	if (bPlot)
         	{
+                eCurrentStage = GraphDrawingStages.Scratch;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -5726,6 +5799,7 @@ namespace Ctrl_GraphWindow
         	
         	if (bPlot)
         	{
+                eCurrentStage = GraphDrawingStages.Scratch;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -5735,6 +5809,7 @@ namespace Ctrl_GraphWindow
         	DataFile = WholeDataFile;
         	bXZoom = false;
         	bYZoom = false;
+            eCurrentStage = GraphDrawingStages.Scratch;
             oGraphicUpdateRequest.UpdateRequested = true;
 
         }
@@ -5850,6 +5925,7 @@ namespace Ctrl_GraphWindow
         	
         	if (Set_DataFile_BetweenAbsPoint(X1, X2))
         	{
+                eCurrentStage = GraphDrawingStages.Scratch;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -5863,6 +5939,7 @@ namespace Ctrl_GraphWindow
         	
         	if (Set_DataFileForYZoom(ZoomY1, ZoomY2, false))
         	{
+                eCurrentStage = GraphDrawingStages.Scratch;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }    
         }
@@ -7469,6 +7546,7 @@ namespace Ctrl_GraphWindow
         private void Change_GraphLayout(GraphicWindowLayoutModes eNewLayoutMode)
         {
         	Properties.GraphLayoutMode = eNewLayoutMode;
+            eCurrentStage = GraphDrawingStages.Scratch;
             oGraphicUpdateRequest.UpdateRequested = true;
         }
         
@@ -7493,7 +7571,7 @@ namespace Ctrl_GraphWindow
         	if (!(oSerieProp == null))
         	{
         		oSerieProp.Visible = !oSerieProp.Visible;
-        		Refresh_Graphic();
+        		Refresh_Graphic(GraphDrawingStages.YAxis_Lines);
         	}
         }
         
@@ -7519,6 +7597,7 @@ namespace Ctrl_GraphWindow
                     Properties.Create_Serie(ItChannel.Text);
                 }
 
+                eCurrentStage = GraphDrawingStages.Scratch;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -7766,14 +7845,35 @@ namespace Ctrl_GraphWindow
         #region Graphic methodes
 
         /// <summary>
-        /// Refresh the graphic window
+        /// Redraw the graphic window from scratch
         /// </summary>
         public void Refresh_Graphic()
         {
             if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
             {
+                eCurrentStage = GraphDrawingStages.Scratch;
                 oGraphicUpdateRequest.UpdateRequested = true;
-                //WaitHandle.Set();
+            }
+        }
+
+        /// <summary>
+        /// Redraw the graphic window from the stage given as argument
+        /// </summary>
+        /// <param name="eInitialStage">Drawing stage to start from</param>
+        public void Refresh_Graphic(GraphDrawingStages eInitialStage)
+        {
+            if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
+            {
+                if (bDataPlotted)
+                {
+                    eCurrentStage = eInitialStage;
+                }
+                else
+                {
+                    eCurrentStage = GraphDrawingStages.Scratch;
+                }
+
+                oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
 
@@ -7796,7 +7896,8 @@ namespace Ctrl_GraphWindow
         {
         	WholeDataFile = oNewDataFile;
         	DataFile = WholeDataFile;
-        	SeriesReferenceCoordConversion = null;
+            eCurrentStage = GraphDrawingStages.Scratch;
+            SeriesReferenceCoordConversion = null;
         	Fill_ChannelList();
         }
         
@@ -7813,6 +7914,7 @@ namespace Ctrl_GraphWindow
         			Properties.Create_Serie(Name);
         		}
 
+                eCurrentStage = GraphDrawingStages.Scratch;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }

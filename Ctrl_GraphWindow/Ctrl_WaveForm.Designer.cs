@@ -37,16 +37,16 @@ namespace Ctrl_GraphWindow
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TB_Graph = new System.Windows.Forms.ToolStrip();
             this.TSB_LoadData = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -839,7 +839,7 @@ namespace Ctrl_GraphWindow
             // 
             this.splitContainer2.Panel2.Controls.Add(this.Grid_Legend);
             this.splitContainer2.Size = new System.Drawing.Size(721, 374);
-            this.splitContainer2.SplitterDistance = 531;
+            this.splitContainer2.SplitterDistance = 592;
             this.splitContainer2.TabIndex = 0;
             // 
             // Cmd_ZoomYPosition
@@ -904,7 +904,7 @@ namespace Ctrl_GraphWindow
             this.Grid_Legend.ReadOnly = true;
             this.Grid_Legend.RowHeadersVisible = false;
             this.Grid_Legend.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Grid_Legend.Size = new System.Drawing.Size(180, 493);
+            this.Grid_Legend.Size = new System.Drawing.Size(119, 493);
             this.Grid_Legend.TabIndex = 0;
             this.Grid_Legend.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Grid_Legend_CellMouseDoubleClick);
             this.Grid_Legend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Grid_Legend_KeyDown);
@@ -913,8 +913,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_Label
             // 
             this.Legend_Col_Label.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Legend_Col_Label.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Legend_Col_Label.DefaultCellStyle = dataGridViewCellStyle1;
             this.Legend_Col_Label.HeaderText = "Label";
             this.Legend_Col_Label.Name = "Legend_Col_Label";
             this.Legend_Col_Label.ReadOnly = true;
@@ -923,8 +923,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_Value
             // 
             this.Legend_Col_Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_Value.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_Value.DefaultCellStyle = dataGridViewCellStyle2;
             this.Legend_Col_Value.HeaderText = "Value";
             this.Legend_Col_Value.Name = "Legend_Col_Value";
             this.Legend_Col_Value.ReadOnly = true;
@@ -934,8 +934,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_Unit
             // 
             this.Legend_Col_Unit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_Unit.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_Unit.DefaultCellStyle = dataGridViewCellStyle3;
             this.Legend_Col_Unit.HeaderText = "Unit";
             this.Legend_Col_Unit.Name = "Legend_Col_Unit";
             this.Legend_Col_Unit.ReadOnly = true;
@@ -945,8 +945,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_GraphMin
             // 
             this.Legend_Col_GraphMin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_GraphMin.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphMin.DefaultCellStyle = dataGridViewCellStyle4;
             this.Legend_Col_GraphMin.HeaderText = "Min";
             this.Legend_Col_GraphMin.Name = "Legend_Col_GraphMin";
             this.Legend_Col_GraphMin.ReadOnly = true;
@@ -956,8 +956,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_GraphMax
             // 
             this.Legend_Col_GraphMax.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_GraphMax.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphMax.DefaultCellStyle = dataGridViewCellStyle5;
             this.Legend_Col_GraphMax.HeaderText = "Max";
             this.Legend_Col_GraphMax.Name = "Legend_Col_GraphMax";
             this.Legend_Col_GraphMax.ReadOnly = true;
@@ -967,8 +967,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_GraphAvg
             // 
             this.Legend_Col_GraphAvg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_GraphAvg.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_GraphAvg.DefaultCellStyle = dataGridViewCellStyle6;
             this.Legend_Col_GraphAvg.HeaderText = "Avg";
             this.Legend_Col_GraphAvg.Name = "Legend_Col_GraphAvg";
             this.Legend_Col_GraphAvg.ReadOnly = true;
@@ -978,8 +978,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_RefValue
             // 
             this.Legend_Col_RefValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefValue.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefValue.DefaultCellStyle = dataGridViewCellStyle7;
             this.Legend_Col_RefValue.HeaderText = "Ref value";
             this.Legend_Col_RefValue.Name = "Legend_Col_RefValue";
             this.Legend_Col_RefValue.ReadOnly = true;
@@ -990,8 +990,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_RefDiff
             // 
             this.Legend_Col_RefDiff.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefDiff.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefDiff.DefaultCellStyle = dataGridViewCellStyle8;
             this.Legend_Col_RefDiff.HeaderText = "Diff";
             this.Legend_Col_RefDiff.Name = "Legend_Col_RefDiff";
             this.Legend_Col_RefDiff.ReadOnly = true;
@@ -1002,8 +1002,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_RefDiffPerc
             // 
             this.Legend_Col_RefDiffPerc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefDiffPerc.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefDiffPerc.DefaultCellStyle = dataGridViewCellStyle9;
             this.Legend_Col_RefDiffPerc.HeaderText = "Diff %";
             this.Legend_Col_RefDiffPerc.Name = "Legend_Col_RefDiffPerc";
             this.Legend_Col_RefDiffPerc.ReadOnly = true;
@@ -1014,8 +1014,8 @@ namespace Ctrl_GraphWindow
             // Legend_Col_RefGradient
             // 
             this.Legend_Col_RefGradient.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Legend_Col_RefGradient.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Legend_Col_RefGradient.DefaultCellStyle = dataGridViewCellStyle10;
             this.Legend_Col_RefGradient.HeaderText = "Gradient";
             this.Legend_Col_RefGradient.Name = "Legend_Col_RefGradient";
             this.Legend_Col_RefGradient.ReadOnly = true;
@@ -1688,7 +1688,7 @@ namespace Ctrl_GraphWindow
             // Pic_Graphic
             // 
             this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Pic_Graphic.Location = new System.Drawing.Point(79, 104);
+            this.Pic_Graphic.Location = new System.Drawing.Point(110, 41);
             this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
             this.Pic_Graphic.Name = "Pic_Graphic";
             this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
@@ -1711,7 +1711,7 @@ namespace Ctrl_GraphWindow
             this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
             this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
             this.Pic_GraphFrame.Name = "Pic_GraphFrame";
-            this.Pic_GraphFrame.Size = new System.Drawing.Size(529, 498);
+            this.Pic_GraphFrame.Size = new System.Drawing.Size(590, 373);
             this.Pic_GraphFrame.TabIndex = 3;
             this.Pic_GraphFrame.TabStop = false;
             this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
