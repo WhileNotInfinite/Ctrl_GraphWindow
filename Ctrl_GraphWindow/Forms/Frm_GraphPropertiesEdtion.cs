@@ -1794,7 +1794,8 @@ namespace Ctrl_GraphWindow
             Txt_AbscisseFont.Font = GraphProperties.AbscisseAxis.AxisValuesFont.oFont;
             Txt_AbscisseFontSize.Text = GraphProperties.AbscisseAxis.AxisValuesFont.oFont.Size.ToString();
             
-            Ctrl_AbcisseRefLines.ReferenceLines.Clear();
+            //TODO: Remove old code
+            //Ctrl_AbcisseRefLines.ReferenceLines.Clear();
             Ctrl_AbcisseRefLines.Show_ReferenceLines();
             
             //Cursors

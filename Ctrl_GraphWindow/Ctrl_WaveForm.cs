@@ -3803,6 +3803,10 @@ namespace Ctrl_GraphWindow
 
             #region X Axis options
 
+            //TODO: Debug abs reference lines title and value position drawing
+            //TODO: Debug abs reference lines title drawing with value invisible
+            //TODO: Debug abs reference line value formating (decimals)
+
             XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
 
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
@@ -3865,7 +3869,7 @@ namespace Ctrl_GraphWindow
                         GraphGraphics.DrawLine(oPen, LineAbcsisse, 0, LineAbcsisse, FrameHeight);
 
                         //Reference line value and title drawing
-                        if (!(oRefLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible) || (oRefLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible) || oRefLine.ReferenceTitle.Equals(""))))
+                        if (!(oRefLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible) && oRefLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible) && oRefLine.ReferenceTitle.Equals("")))
                         {
                             oBrush = new SolidBrush(oRefLine.ReferenceStyle.LineColor);
                             PointF pRefTxt = PointF.Empty;
