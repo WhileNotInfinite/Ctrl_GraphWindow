@@ -653,7 +653,7 @@ namespace Ctrl_GraphWindow
         #region Private constants
 
         private const bool DEF_VISIBLE = true;
-        private const int  DEF_WIDTH   = 1;
+        private const float  DEF_WIDTH   = 1;
         private const System.Drawing.Drawing2D.DashStyle DEF_STYLE = System.Drawing.Drawing2D.DashStyle.Solid;
 
         #endregion
@@ -668,7 +668,7 @@ namespace Ctrl_GraphWindow
         /// <summary>
         /// Grid line width
         /// </summary>
-        public int LineWidth;
+        public float LineWidth;
 
         /// <summary>
         /// Grid line color

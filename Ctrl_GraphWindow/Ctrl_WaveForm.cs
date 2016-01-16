@@ -60,7 +60,7 @@ namespace Ctrl_GraphWindow
         Series_Options = 6,
 
         /// <summary>Graphic series options drawn,
-        /// start from graphic X axis options drawing/summary>
+        /// start from graphic X axis options drawing</summary>
         XAxis_Options = 7,
 
         /// <summary>Graphic X axis options drawn,
@@ -3107,7 +3107,7 @@ namespace Ctrl_GraphWindow
             //Main horizontal grid
             if (Properties.Grid.MainHorizontalGrid.Visible)
             {
-                oPen = new Pen(Properties.Grid.MainHorizontalGrid.LineColor, (float)Properties.Grid.MainHorizontalGrid.LineWidth);
+                oPen = new Pen(Properties.Grid.MainHorizontalGrid.LineColor, Properties.Grid.MainHorizontalGrid.LineWidth);
                 oPen.DashStyle = Properties.Grid.MainHorizontalGrid.LineStyle;
 
                 int hGridStep = (int)(FrameWidth / (HORIZONTAL_GRID_LINES_COUNT + 1));
@@ -3124,7 +3124,7 @@ namespace Ctrl_GraphWindow
             //Main vertical grid
             if (Properties.Grid.MainVerticalGrid.Visible)
             {
-                oPen = new Pen(Properties.Grid.MainVerticalGrid.LineColor, (float)Properties.Grid.MainVerticalGrid.LineWidth);
+                oPen = new Pen(Properties.Grid.MainVerticalGrid.LineColor, Properties.Grid.MainVerticalGrid.LineWidth);
                 oPen.DashStyle = Properties.Grid.MainVerticalGrid.LineStyle;
 
                 int vGridStep = (int)(FrameHeight / (VERTICAL_GRID_LINES_COUNT + 1));
@@ -3141,7 +3141,7 @@ namespace Ctrl_GraphWindow
             //Secondary horizontal grid
             if (Properties.Grid.SecondaryHorizontalGrid.Visible)
             {
-                oPen = new Pen(Properties.Grid.SecondaryHorizontalGrid.LineColor, (float)Properties.Grid.SecondaryHorizontalGrid.LineWidth);
+                oPen = new Pen(Properties.Grid.SecondaryHorizontalGrid.LineColor, Properties.Grid.SecondaryHorizontalGrid.LineWidth);
                 oPen.DashStyle = Properties.Grid.SecondaryHorizontalGrid.LineStyle;
 
                 int hGridStep = (int)(FrameWidth / (SEC_H_GRID_LINES_COUNT + 1));
@@ -3158,7 +3158,7 @@ namespace Ctrl_GraphWindow
             //Secondary vertical grid
             if (Properties.Grid.SecondaryVerticalGrid.Visible)
             {
-                oPen = new Pen(Properties.Grid.SecondaryVerticalGrid.LineColor, (float)Properties.Grid.SecondaryVerticalGrid.LineWidth);
+                oPen = new Pen(Properties.Grid.SecondaryVerticalGrid.LineColor, Properties.Grid.SecondaryVerticalGrid.LineWidth);
                 oPen.DashStyle = Properties.Grid.SecondaryVerticalGrid.LineStyle;
 
                 int vGridStep = (int)(FrameHeight / (SEC_V_GRID_LINES_COUNT + 1));
@@ -3189,7 +3189,7 @@ namespace Ctrl_GraphWindow
 
             if(Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
             {
-                oPen = new Pen(Properties.AbscisseAxis.AxisLineStyle.LineColor, (float)Properties.AbscisseAxis.AxisLineStyle.LineWidth);
+                oPen = new Pen(Properties.AbscisseAxis.AxisLineStyle.LineColor, Properties.AbscisseAxis.AxisLineStyle.LineWidth);
                 oPen.DashStyle = Properties.AbscisseAxis.AxisLineStyle.LineStyle;
 
                 oAbscisseAxis = new GraphAxis();
@@ -3205,7 +3205,7 @@ namespace Ctrl_GraphWindow
 
                 if (oAbscisseAxis.Graduations != null)
                 {
-                    int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
+                    int GradEndPos = AxisPos + (AXIS_BASE_SIZE * (int)Properties.AbscisseAxis.AxisLineStyle.LineWidth);
 
                     foreach (AxisGraduation oGrad in oAbscisseAxis.Graduations)
                     {
@@ -3248,7 +3248,7 @@ namespace Ctrl_GraphWindow
                                 GraphAxis oAxis = (GraphAxis)oAxisInfos[0];
                                 int AxisPos = FrameLeftPoint - AXIS_BASE_POS - (int)oAxisInfos[1];
 
-                                oPen = new Pen(oSerieProps.YAxis.AxisLineStyle.LineColor, (float)oSerieProps.YAxis.AxisLineStyle.LineWidth);
+                                oPen = new Pen(oSerieProps.YAxis.AxisLineStyle.LineColor, oSerieProps.YAxis.AxisLineStyle.LineWidth);
                                 oPen.DashStyle = oSerieProps.YAxis.AxisLineStyle.LineStyle;
 
                                 oAxis.Set_AxisGraduations(FrameHeight, FrameTopPoint);
@@ -3259,7 +3259,7 @@ namespace Ctrl_GraphWindow
                                 //Graduations drawing
                                 if (oAxis.Graduations != null)
                                 {
-                                    int GradEndPos = AxisPos - (AXIS_BASE_SIZE * oSerieProps.YAxis.AxisLineStyle.LineWidth);
+                                    int GradEndPos = AxisPos - (AXIS_BASE_SIZE * (int)oSerieProps.YAxis.AxisLineStyle.LineWidth);
 
                                     foreach (AxisGraduation oGrad in oAxis.Graduations)
                                     {
@@ -3354,7 +3354,7 @@ namespace Ctrl_GraphWindow
                                                             oSerieProps.CoordConversion.Max,
                                                             oSerieProps.ValueFormat, false);
 
-                                int GradEndPos = AxisPos - (AXIS_BASE_SIZE * oSerieProps.YAxis.AxisLineStyle.LineWidth);
+                                int GradEndPos = AxisPos - (AXIS_BASE_SIZE * (int)oSerieProps.YAxis.AxisLineStyle.LineWidth);
 
                                 for (int iGrad = 0; iGrad < oAxis.Graduations.Length; iGrad++)
                                 {
@@ -3411,7 +3411,7 @@ namespace Ctrl_GraphWindow
 
                         if (oSerieProps.UserGrid.VerticalLinesStyle.Visible)
                         {
-                            oPen = new Pen(oSerieProps.UserGrid.VerticalLinesStyle.LineColor, (float)oSerieProps.UserGrid.VerticalLinesStyle.LineWidth);
+                            oPen = new Pen(oSerieProps.UserGrid.VerticalLinesStyle.LineColor, oSerieProps.UserGrid.VerticalLinesStyle.LineWidth);
                             oPen.DashStyle = oSerieProps.UserGrid.VerticalLinesStyle.LineStyle;
 
                             oBrush = new SolidBrush(oSerieProps.UserGrid.VerticalLinesStyle.LineColor);
@@ -3483,7 +3483,7 @@ namespace Ctrl_GraphWindow
 
                         if (oSerieProps.UserGrid.HorizontalLinesStyle.Visible)
                         {
-                            oPen = new Pen(oSerieProps.UserGrid.HorizontalLinesStyle.LineColor, (float)oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth);
+                            oPen = new Pen(oSerieProps.UserGrid.HorizontalLinesStyle.LineColor, oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth);
                             oPen.DashStyle = oSerieProps.UserGrid.HorizontalLinesStyle.LineStyle;
 
                             oBrush = new SolidBrush(oSerieProps.UserGrid.HorizontalLinesStyle.LineColor);
@@ -3566,7 +3566,7 @@ namespace Ctrl_GraphWindow
                                         {
                                             string sVal = oSerieProps.ValueFormat.Get_ValueFormatted(Val);
 
-                                            PointF pValTxt = new PointF(5, (float)(ValOrd + oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth + 1));
+                                            PointF pValTxt = new PointF(5, (ValOrd + oSerieProps.UserGrid.HorizontalLinesStyle.LineWidth + 1));
 
                                             if (pValTxt.Y > 0 && pValTxt.Y < (float)FrameHeight)
                                             {
@@ -3637,7 +3637,7 @@ namespace Ctrl_GraphWindow
 
                                         if (LineOrd >= oSerieProps.CoordConversion.Top && LineOrd <= oSerieProps.CoordConversion.Bottom)
                                         {
-                                            oPen = new Pen(oLine.ReferenceStyle.LineColor, (float)oLine.ReferenceStyle.LineWidth);
+                                            oPen = new Pen(oLine.ReferenceStyle.LineColor, oLine.ReferenceStyle.LineWidth);
                                             oPen.DashStyle = oLine.ReferenceStyle.LineStyle;
 
                                             //Line drawing
@@ -3861,8 +3861,7 @@ namespace Ctrl_GraphWindow
 
                     if (LineAbcsisse >= FrameLeftPoint && LineAbcsisse <= FrameRightPoint)
                     {
-                        //TODO: Declare as float the 'LineWidth' property of 'GraphLineProperties' class in order to avoid the (float) cast
-                        oPen = new Pen(oRefLine.ReferenceStyle.LineColor, (float)oRefLine.ReferenceStyle.LineWidth);
+                        oPen = new Pen(oRefLine.ReferenceStyle.LineColor, oRefLine.ReferenceStyle.LineWidth);
                         oPen.DashStyle = oRefLine.ReferenceStyle.LineStyle;
 
                         //Reference line drawing
@@ -4044,7 +4043,7 @@ namespace Ctrl_GraphWindow
 
                     foreach (AxisGraduation oGrad in oAbscisseAxis.Graduations)
                     {
-                        int GradEndPos = AxisPos + (AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth);
+                        int GradEndPos = AxisPos + (AXIS_BASE_SIZE * (int)Properties.AbscisseAxis.AxisLineStyle.LineWidth);
 
                         SizeF sGradTxt = FrameGraphics.MeasureString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont);
 
@@ -4285,7 +4284,7 @@ namespace Ctrl_GraphWindow
 
                                     if (oSerieProps.Trace.Visible)
                                     {
-                                        oPen = new Pen(oSerieProps.Trace.LineColor, (float)oSerieProps.Trace.LineWidth);
+                                        oPen = new Pen(oSerieProps.Trace.LineColor, oSerieProps.Trace.LineWidth);
                                         oPen.DashStyle = oSerieProps.Trace.LineStyle;
 
                                         switch (oSerieProps.DrawingMode)
@@ -4483,7 +4482,7 @@ namespace Ctrl_GraphWindow
 
             if (Properties.AbscisseAxis.Visible)
             {
-                FrameHeight -= ((AXIS_BASE_SIZE * Properties.AbscisseAxis.AxisLineStyle.LineWidth) + AXIS_SEPARATION_SPACE + AXIS_BASE_POS); //Abscisse axis space
+                FrameHeight -= ((AXIS_BASE_SIZE * (int)Properties.AbscisseAxis.AxisLineStyle.LineWidth) + AXIS_SEPARATION_SPACE + AXIS_BASE_POS); //Abscisse axis space
 
                 if (Properties.AbscisseAxis.AxisValuesVisible)
                 {
@@ -4803,7 +4802,7 @@ namespace Ctrl_GraphWindow
             oAxisGrp.AxisGroup.Add(oAxis); //Axis adding into the found or created group
 
             //Axis group 'width' property update 
-            int AxisWidth = (AXIS_BASE_SIZE * oAxisProps.AxisLineStyle.LineWidth) + AXIS_SEPARATION_SPACE;
+            int AxisWidth = (AXIS_BASE_SIZE * (int)oAxisProps.AxisLineStyle.LineWidth) + AXIS_SEPARATION_SPACE;
             
             if (oAxisProps.AxisValuesVisible)
             {            	

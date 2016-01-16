@@ -1924,7 +1924,7 @@ namespace Ctrl_GraphWindow
             {
                 if (!(Txt_MHGrid_Width.Text.Equals("")))
                 {
-                    if (!(int.TryParse(Txt_MHGrid_Width.Text, out TmpProp.Grid.MainHorizontalGrid.LineWidth)))
+                    if (!(float.TryParse(Txt_MHGrid_Width.Text, out TmpProp.Grid.MainHorizontalGrid.LineWidth)))
                     {
                         MessageBox.Show("Main horizontal grid line width value must be a number !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return(false);
@@ -1957,7 +1957,7 @@ namespace Ctrl_GraphWindow
             {
                 if (!(Txt_MVGrid_Width.Text.Equals("")))
                 {
-                    if (!(int.TryParse(Txt_MVGrid_Width.Text, out TmpProp.Grid.MainVerticalGrid.LineWidth)))
+                    if (!(float.TryParse(Txt_MVGrid_Width.Text, out TmpProp.Grid.MainVerticalGrid.LineWidth)))
                     {
                         MessageBox.Show("Main horizontal grid line width value must be a number !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return(false);
@@ -1990,7 +1990,7 @@ namespace Ctrl_GraphWindow
             {
                 if (!(Txt_SHGrid_Width.Text.Equals("")))
                 {
-                    if (!(int.TryParse(Txt_SHGrid_Width.Text, out TmpProp.Grid.SecondaryHorizontalGrid.LineWidth)))
+                    if (!(float.TryParse(Txt_SHGrid_Width.Text, out TmpProp.Grid.SecondaryHorizontalGrid.LineWidth)))
                     {
                         MessageBox.Show("Main horizontal grid line width value must be a number !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return(false);
@@ -2023,7 +2023,7 @@ namespace Ctrl_GraphWindow
             {
                 if (!(Txt_SVGrid_Width.Text.Equals("")))
                 {
-                    if (!(int.TryParse(Txt_SVGrid_Width.Text, out TmpProp.Grid.SecondaryVerticalGrid.LineWidth)))
+                    if (!(float.TryParse(Txt_SVGrid_Width.Text, out TmpProp.Grid.SecondaryVerticalGrid.LineWidth)))
                     {
                         MessageBox.Show("Main horizontal grid line width value must be a number !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return(false);
@@ -2066,7 +2066,7 @@ namespace Ctrl_GraphWindow
             {
                 if (!(Txt_AbscisseWidth.Text.Equals("")))
                 {
-                    if (!(int.TryParse(Txt_AbscisseWidth.Text, out TmpProp.AbscisseAxis.AxisLineStyle.LineWidth)))
+                    if (!(float.TryParse(Txt_AbscisseWidth.Text, out TmpProp.AbscisseAxis.AxisLineStyle.LineWidth)))
                     {
                         MessageBox.Show("Abscisse line width value must be a number !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return (false);
@@ -2119,7 +2119,7 @@ namespace Ctrl_GraphWindow
             	
             	if (!(Txt_CursorLineWidth.Text.Equals("")))
                 {
-                    if (!(int.TryParse(Txt_CursorLineWidth.Text, out TmpProp.Cursor.Style.LineWidth)))
+                    if (!(float.TryParse(Txt_CursorLineWidth.Text, out TmpProp.Cursor.Style.LineWidth)))
                     {
                         MessageBox.Show("Cursor line width value must be a number !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return (false);
@@ -2220,7 +2220,7 @@ namespace Ctrl_GraphWindow
             	
             	if (!(Txt_RefCursorLineWidth.Text.Equals("")))
                 {
-                    if (!(int.TryParse(Txt_RefCursorLineWidth.Text, out TmpProp.ReferenceCursor.Style.LineWidth)))
+                    if (!(float.TryParse(Txt_RefCursorLineWidth.Text, out TmpProp.ReferenceCursor.Style.LineWidth)))
                     {
                         MessageBox.Show("Reference cursor line width value must be a number !", FORM_NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return (false);
