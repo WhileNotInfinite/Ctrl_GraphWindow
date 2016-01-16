@@ -1218,10 +1218,21 @@ namespace Ctrl_GraphWindow
 
                 if (AbsRange < 100)
                 {
-                    while (AbsRange > 1)
+                    if (AbsRange > 10)
                     {
-                        AbsRange /= 10;
-                        AutoDecNumbers++;
+                        while (AbsRange > 10)
+                        {
+                            AbsRange /= 10;
+                            AutoDecNumbers++;
+                        }
+                    }
+                    else
+                    {
+                        while (AbsRange < 10)
+                        {
+                            AbsRange *= 10;
+                            AutoDecNumbers++;
+                        }
                     }
                 }
             }

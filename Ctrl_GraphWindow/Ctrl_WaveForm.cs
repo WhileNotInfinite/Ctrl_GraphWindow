@@ -3803,9 +3803,6 @@ namespace Ctrl_GraphWindow
 
             #region X Axis options
 
-            //TODO: Debug abs reference lines title and value position drawing
-            //TODO: Debug abs reference lines title drawing with value invisible
-
             XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
 
             DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
@@ -4089,7 +4086,7 @@ namespace Ctrl_GraphWindow
                         if (oSerieData != null)
                         {
                             //TODO: Anything better (faster) than 'IsDoubleValidValue' ??? ... !(Double.IsNaN(oSerieProps.CoordConversion.Gain))
-                            if (IsDoubleValidValue(oSerieProps.CoordConversion.Gain) && IsDoubleValidValue(oSerieProps.CoordConversion.Zero))
+                            if (IsDoubleValidValue(oSerieProps.CoordConversion.Gain) && IsDoubleValidValue(oSerieProps.CoordConversion.Zero) && oSerieData.Values.Count > 2)
                             {
                                 //Sub sampling
                                 if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
