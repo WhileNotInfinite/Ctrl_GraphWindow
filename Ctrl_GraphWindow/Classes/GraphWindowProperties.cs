@@ -1085,18 +1085,21 @@ namespace Ctrl_GraphWindow
         /// <returns>Formatted value</returns>
         public string Get_ValueFormatted(double ValIn)
         {
+            string StrFormat = "";
             string sValFormatted = "";
 
             switch(Format)
             {
                 case GraphSerieLegendFormats.Auto:
 
-                    sValFormatted = (Math.Round(ValIn, AutoDecNumbers)).ToString();
+                    StrFormat = "F" + AutoDecNumbers.ToString();
+                    sValFormatted = ValIn.ToString(StrFormat);
                     break;
 
                 case GraphSerieLegendFormats.Decimal:
 
-                    sValFormatted = (Math.Round(ValIn, Decimals)).ToString();
+                    StrFormat = "F" + Decimals.ToString();
+                    sValFormatted = ValIn.ToString(StrFormat);
                     break;
 
                 case GraphSerieLegendFormats.Hexadecimal:
@@ -1207,37 +1210,20 @@ namespace Ctrl_GraphWindow
 
         private void Set_AutoDecimalsNumber(double ValueRange)
         {
-            if (ValueRange == 0)
+            if (ValueRange != 0)
             {
+                double AbsRange = Math.Abs(ValueRange);
+
                 AutoDecNumbers = 0;
-            }
-            else if (ValueRange < 0.00001)
-            {
-                AutoDecNumbers = 7;
-            }
-            else if (ValueRange < 0.0001)
-            {
-                AutoDecNumbers = 6;
-            }
-            else if (ValueRange < 0.001)
-            {
-                AutoDecNumbers = 5;
-            }
-            else if (ValueRange < 0.01)
-            {
-                AutoDecNumbers = 4;
-            }
-            else if (ValueRange < 0.1)
-            {
-                AutoDecNumbers = 3;
-            }
-            else if (ValueRange < 1)
-            {
-                AutoDecNumbers = 2;
-            }
-            else if (ValueRange < 10)
-            {
-                AutoDecNumbers = 1;
+
+                if (AbsRange < 100)
+                {
+                    while (AbsRange > 1)
+                    {
+                        AbsRange /= 10;
+                        AutoDecNumbers++;
+                    }
+                }
             }
             else
             {

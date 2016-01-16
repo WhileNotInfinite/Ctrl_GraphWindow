@@ -3805,7 +3805,6 @@ namespace Ctrl_GraphWindow
 
             //TODO: Debug abs reference lines title and value position drawing
             //TODO: Debug abs reference lines title drawing with value invisible
-            //TODO: Debug abs reference line value formating (decimals)
 
             XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
 
