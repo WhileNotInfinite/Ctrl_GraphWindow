@@ -271,14 +271,14 @@ namespace Ctrl_GraphWindow
             double DataValue = 0; ;
             int ValCnt = 0;
 
-            if (Value.GetType().Equals(typeof(double)))
+            if (Value.GetType().Equals(typeof(double))) //Single sampling rate data file
             {
                 DataValue = (double)Value;
                 Values.Add(DataValue);
 
                 ValCnt = Values.Count;
             }
-            else if (Value.GetType().Equals(typeof(SerieSample)))
+            else if (Value.GetType().Equals(typeof(SerieSample))) //Multiple sampling rate data file
             {
                 SerieSample sSample = (SerieSample)Value;
 
@@ -319,6 +319,7 @@ namespace Ctrl_GraphWindow
                 return;
             }
 
+            //TODO: Raise an event on Min/Max values change for series conversion coords re-computing and Y axis values updates
             //Serie statistics updating
             if (ValCnt > 1)
             {
@@ -642,6 +643,26 @@ namespace Ctrl_GraphWindow
             StepTimeMax = 0;
         }
 
+        #region Internal methodes
+
+        /// <summary>
+        /// Return the GW_DataChannel item corresponding to the key identifier given as argument
+        /// </summary>
+        /// <param name="KeyId">Key identifier of the channel to retrieve</param>
+        /// <returns>GW_DataChannel item corresponding to the key identifier  given as argument</returns>
+        /// <remarks>Return null if the GW_DataChannel item is not found</remarks>
+        internal GW_DataChannel Get_DataChannelByKeyId(int KeyId)
+        {
+            if (KeyId >= 0 && KeyId < Channels.Count)
+            {
+                return (Channels[KeyId]);
+            }
+
+            return (null);
+        }
+
+        #endregion
+
         #region Public methodes
 
         /// <summary>
@@ -940,26 +961,6 @@ namespace Ctrl_GraphWindow
                     }
                 }
             }
-        }
-
-        #endregion
-
-        #region Internal methodes
-
-        /// <summary>
-        /// Return the GW_DataChannel item corresponding to the key identifier given as argument
-        /// </summary>
-        /// <param name="KeyId">Key identifier of the channel to retrieve</param>
-        /// <returns>GW_DataChannel item corresponding to the key identifier  given as argument</returns>
-        /// <remarks>Return null if the GW_DataChannel item is not found</remarks>
-        internal GW_DataChannel Get_DataChannelByKeyId(int KeyId)
-        {
-            if(KeyId>=0 && KeyId<Channels.Count)
-            {
-                return (Channels[KeyId]);
-            }
-
-            return (null);
         }
 
         #endregion

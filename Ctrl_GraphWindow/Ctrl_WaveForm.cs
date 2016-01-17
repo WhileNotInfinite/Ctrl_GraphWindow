@@ -6317,7 +6317,7 @@ namespace Ctrl_GraphWindow
         					sRefCoordConv = Get_SerieReferenceCoordConversion(oProp.KeyId);
         				}
         				
-        				if (sRefCoordConv.HasValue)//if (!(sRefCoordConv == null))
+        				if (sRefCoordConv.HasValue)
         				{	        					
         					//If serie is within the given ordinates range
         					if ((TopPosition >= sRefCoordConv.Value.Top && TopPosition < sRefCoordConv.Value.Bottom)
