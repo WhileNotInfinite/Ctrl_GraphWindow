@@ -3296,7 +3296,7 @@ namespace Ctrl_GraphWindow
                         //Serie legend item
                         if (Properties.LegendProperties.Visible)
                         {
-                            GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+                            GW_DataChannel oSerieData = DataFile.Get_DataChannelByKeyId(oSerieProps.DataChannelKeyId);
 
                             if (oSerieData != null)
                             {
@@ -3518,7 +3518,7 @@ namespace Ctrl_GraphWindow
                                 case GraphSerieUserGridModes.MinMaxAvg:
 
                                     {
-                                        GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+                                        GW_DataChannel oSerieData = DataFile.Get_DataChannelByKeyId(oSerieProps.DataChannelKeyId);
 
                                         if (oSerieData != null)
                                         {
@@ -3534,7 +3534,7 @@ namespace Ctrl_GraphWindow
                                 case GraphSerieUserGridModes.MinMaxZero:
 
                                     {
-                                        GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+                                        GW_DataChannel oSerieData = DataFile.Get_DataChannelByKeyId(oSerieProps.DataChannelKeyId);
 
                                         if (oSerieData != null)
                                         {
@@ -3592,7 +3592,7 @@ namespace Ctrl_GraphWindow
 
                         if (oSerieProps.ReferenceLines.Count > 0)
                         {
-                            GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+                            GW_DataChannel oSerieData = DataFile.Get_DataChannelByKeyId(oSerieProps.DataChannelKeyId);
 
                             if (oSerieData != null)
                             {
@@ -4086,8 +4086,7 @@ namespace Ctrl_GraphWindow
                 {
                     if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible) && oSerieProps.YAxis.Visible)
                     {
-                        //TODO: Find a way faster than searching by name to get data channel
-                        GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProps.Name);
+                        GW_DataChannel oSerieData = DataFile.Get_DataChannelByKeyId(oSerieProps.DataChannelKeyId);
 
                         if (oSerieData != null)
                         {
@@ -4527,6 +4526,8 @@ namespace Ctrl_GraphWindow
 
                             if (!(oSerieData == null))
                             {
+                                oSerieProps.DataChannelKeyId = oSerieData.KeyId;
+
                             	if (!bYZoom) Set_SerieCoordConversions(oSerieProps, oSerieData, iSeriePloted);
                             	oSerieProps.ValueFormat.Set_ValueRange(oSerieProps.CoordConversion.Max - oSerieProps.CoordConversion.Min);
                                 iSeriePloted++;

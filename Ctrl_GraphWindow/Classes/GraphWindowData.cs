@@ -131,6 +131,11 @@ namespace Ctrl_GraphWindow
         /// <remarks>Applicable only for multiple sampling rate data file</remarks>
         internal double ChannelStepTimeMax;
 
+        /// <summary>
+        /// Data channel key identifier in the GW_DataFile collection of GW_DataChannel
+        /// </summary>
+        internal int KeyId;
+
         #endregion
 
         #region Constructors
@@ -148,6 +153,7 @@ namespace Ctrl_GraphWindow
             Avg = 0;
             ChannelStepTimeMin = 0;
             ChannelStepTimeMax = 0;
+            KeyId = -1;
         }
 
         /// <summary>
@@ -164,6 +170,7 @@ namespace Ctrl_GraphWindow
             Avg = 0;
             ChannelStepTimeMin = 0;
             ChannelStepTimeMax = 0;
+            KeyId = -1;
         }
 
         /// <summary>
@@ -178,6 +185,7 @@ namespace Ctrl_GraphWindow
             Avg = 0;
             ChannelStepTimeMin = 0;
             ChannelStepTimeMax = 0;
+            KeyId = -1;
 
             InitChannelValues(SampleMode);
         }
@@ -195,6 +203,7 @@ namespace Ctrl_GraphWindow
             Avg = 0;
             ChannelStepTimeMin = 0;
             ChannelStepTimeMax = 0;
+            KeyId = -1;
 
             InitChannelValues(SampleMode);
         }
@@ -742,12 +751,17 @@ namespace Ctrl_GraphWindow
         /// <remarks>Return null if the GW_DataChannel item is not found</remarks>
         public GW_DataChannel Get_DataChannel(string Name)
         {
+            int Key = 0;
+
             foreach (GW_DataChannel oChan in Channels)
             {
                 if (oChan.Name.Equals(Name))
                 {
+                    oChan.KeyId = Key;
                     return (oChan);
                 }
+
+                Key++;
             }
 
             return (null);
@@ -926,6 +940,26 @@ namespace Ctrl_GraphWindow
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Internal methodes
+
+        /// <summary>
+        /// Return the GW_DataChannel item corresponding to the key identifier given as argument
+        /// </summary>
+        /// <param name="KeyId">Key identifier of the channel to retrieve</param>
+        /// <returns>GW_DataChannel item corresponding to the key identifier  given as argument</returns>
+        /// <remarks>Return null if the GW_DataChannel item is not found</remarks>
+        internal GW_DataChannel Get_DataChannelByKeyId(int KeyId)
+        {
+            if(KeyId>=0 && KeyId<Channels.Count)
+            {
+                return (Channels[KeyId]);
+            }
+
+            return (null);
         }
 
         #endregion

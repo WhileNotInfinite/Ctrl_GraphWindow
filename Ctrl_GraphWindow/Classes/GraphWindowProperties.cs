@@ -2285,6 +2285,15 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Internal members
+
+        /// <summary>
+        /// Serie key identifier of the data channel in the current data file
+        /// </summary>
+        internal int DataChannelKeyId;
+
+        #endregion
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -2308,6 +2317,7 @@ namespace Ctrl_GraphWindow
             UserGrid = new GraphSerieUserGrid(); //OK
             ReferenceLines = new List<GraphReferenceLine>(); //OK
             CoordConversion = new GW_SampleCoordConversion();
+            DataChannelKeyId = -1;
         }
 
         #region Public methodes
