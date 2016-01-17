@@ -539,7 +539,8 @@ namespace Ctrl_GraphWindow
         private const int LEGEND_REF_GRADIENT_COL   = 9;
 
 #if DEBUG
-        private const string TASK_TIME_LOG_FILE = "..\\..\\..\\GraphControlLogs\\TracingTimeLog_";
+        private const string TASK_TIME_LOG_DIR = "..\\..\\..\\GraphControlLogs";
+        private const string TASK_TIME_LOG_FILE = TASK_TIME_LOG_DIR + "\\TracingTimeLog_";
 #endif
 
         #endregion
@@ -2913,6 +2914,11 @@ namespace Ctrl_GraphWindow
 
             if (TraceTimeLogFile.Equals(""))
             {
+                if(!Directory.Exists(TASK_TIME_LOG_DIR))
+                {
+                    Directory.CreateDirectory(TASK_TIME_LOG_DIR);
+                }
+
                 TraceTimeLogFile = TASK_TIME_LOG_FILE 
                                     + this.Name + "_"
                                     + DateTime.Now.Year.ToString("D4")
@@ -4085,8 +4091,7 @@ namespace Ctrl_GraphWindow
 
                         if (oSerieData != null)
                         {
-                            //TODO: Anything better (faster) than 'IsDoubleValidValue' ??? ... !(Double.IsNaN(oSerieProps.CoordConversion.Gain))
-                            if (IsDoubleValidValue(oSerieProps.CoordConversion.Gain) && IsDoubleValidValue(oSerieProps.CoordConversion.Zero) && oSerieData.Values.Count > 2)
+                            if ((!(double.IsNaN(oSerieProps.CoordConversion.Gain) || double.IsNaN(oSerieProps.CoordConversion.Zero))) && (oSerieData.Values.Count > 2))
                             {
                                 //Sub sampling
                                 if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
@@ -4742,9 +4747,17 @@ namespace Ctrl_GraphWindow
         				break;
         		}
 
-        		oProp.CoordConversion.Gain = (double)((double)(oProp.CoordConversion.Top - oProp.CoordConversion.Bottom) / (oProp.CoordConversion.Max - oProp.CoordConversion.Min));
-        		oProp.CoordConversion.Zero = (double)((double)(oProp.CoordConversion.Top) - oProp.CoordConversion.Gain * oProp.CoordConversion.Max);
-        		        		
+                if (oProp.CoordConversion.Min < oProp.CoordConversion.Max)
+                {
+                    oProp.CoordConversion.Gain = (double)((double)(oProp.CoordConversion.Top - oProp.CoordConversion.Bottom) / (oProp.CoordConversion.Max - oProp.CoordConversion.Min));
+                    oProp.CoordConversion.Zero = (double)((double)(oProp.CoordConversion.Top) - oProp.CoordConversion.Gain * oProp.CoordConversion.Max);
+                }
+                else
+                {
+                    oProp.CoordConversion.Gain = double.NaN;
+                    oProp.CoordConversion.Zero = double.NaN;
+                }
+                       		
         		sRefCoordConv.CoordConversion = oProp.CoordConversion;
         		SeriesReferenceCoordConversion.Add(sRefCoordConv);
         	}
@@ -7747,11 +7760,6 @@ namespace Ctrl_GraphWindow
             }
 
             return (Value);
-        }
-        
-        private bool IsDoubleValidValue(double value)
-        {
-        	return(!(double.IsNaN(value) || double.IsInfinity(value)));       
         }
         
         private double SATURA(double Value, double Min, double Max)
