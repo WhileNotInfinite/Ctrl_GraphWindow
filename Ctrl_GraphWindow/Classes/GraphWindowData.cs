@@ -83,6 +83,35 @@ namespace Ctrl_GraphWindow
     /// </summary>
     public class GW_DataChannel
     {
+        #region Public properties
+
+        /// <summary>
+        /// Number of data item contained within the current GW_DataChannel object whether actual sampling mode is a SingleRate or MultipleRates 
+        /// </summary>
+        public int DataItemsCount
+        {
+            get
+            {
+                if (!(Values == null))
+                {
+                    return (Values.Count);
+                }
+                else if (!(Samples == null))
+                {
+                    return (Samples.Count);
+                }
+
+                return (0);
+            }
+
+            private set
+            {
+
+            }
+        }
+
+        #endregion
+
         #region Public members
 
         /// <summary>

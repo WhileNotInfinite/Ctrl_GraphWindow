@@ -4090,7 +4090,7 @@ namespace Ctrl_GraphWindow
 
                         if (oSerieData != null)
                         {
-                            if ((!(double.IsNaN(oSerieProps.CoordConversion.Gain) || double.IsNaN(oSerieProps.CoordConversion.Zero))) && (oSerieData.Values.Count > 2))
+                            if ((!(double.IsNaN(oSerieProps.CoordConversion.Gain) || double.IsNaN(oSerieProps.CoordConversion.Zero))) && (oSerieData.DataItemsCount > 2))
                             {
                                 //Sub sampling
                                 if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
