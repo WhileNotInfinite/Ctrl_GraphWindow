@@ -7942,6 +7942,27 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Channel list
+
+        /// <summary>
+        /// Clear the channel list of the current Ctrl_WaveForm
+        /// </summary>
+        public void Clear_ChannelList()
+        {
+            Ctrl_ChannelList.Clear_ChannelList();
+        }
+
+        /// <summary>
+        /// Add a channel item to the channel list of the current Ctrl_WaveForm object
+        /// </summary>
+        /// <param name="ChannelName">Name of the channel to be added</param>
+        public void Add_ChannelToChannelList(string ChannelName)
+        {
+            Ctrl_ChannelList.Add_ChannelName(ChannelName);
+        }
+
+        #endregion
+
         #endregion
     }
 }
