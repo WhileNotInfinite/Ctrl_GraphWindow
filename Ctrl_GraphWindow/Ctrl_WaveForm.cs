@@ -955,6 +955,8 @@ namespace Ctrl_GraphWindow
 
         private string TraceTimeLogFile = "";
 
+        private int iStageDbg;
+
 #endif
 
         #endregion
@@ -1145,6 +1147,9 @@ namespace Ctrl_GraphWindow
             //Plot statistics labels displaying
             TSCmb_InitialStage.Visible = true;
             TSB_Replot.Visible = true;
+            TSB_SeeStep.Visible = true;
+            TSB_SeePrevStep.Visible = true;
+            TSB_SeeNextStep.Visible = true;
             TSL_PlotCount.Visible = true;
             TSL_PlotLast.Visible = true;
             TSL_PlotAvg.Visible = true;
@@ -1562,12 +1567,64 @@ namespace Ctrl_GraphWindow
             Stop_RealTimeTrace();
         }
 
+        #region Debug buttons
+
         private void TSB_Replot_Click(object sender, EventArgs e)
         {
 #if DEBUG
             Refresh_Graphic((GraphDrawingStages)TSCmb_InitialStage.SelectedIndex);
 #endif
         }
+
+        private void TSB_SeeStep_Click(object sender, EventArgs e)
+        {
+            if (DrawingStages != null)
+            {
+                iStageDbg = TSCmb_InitialStage.SelectedIndex;
+
+                FrameGraphics.Restore(DrawingStages[iStageDbg].InitialFrameState);
+                GraphGraphics.Restore(DrawingStages[iStageDbg].InitialGraphState);
+
+                Pic_GraphFrame.Image = FrameImage;
+                Pic_Graphic.Image = GraphImage;
+            }
+        }
+
+        private void TSB_SeePrevStep_Click(object sender, EventArgs e)
+        {
+            if (DrawingStages != null)
+            {
+                if (iStageDbg > 0)
+                {
+                    iStageDbg--;
+
+                    FrameGraphics.Restore(DrawingStages[iStageDbg].InitialFrameState);
+                    GraphGraphics.Restore(DrawingStages[iStageDbg].InitialGraphState);
+
+                    Pic_GraphFrame.Image = FrameImage;
+                    Pic_Graphic.Image = GraphImage;
+                }
+            }
+        }
+
+        private void TSB_SeeNextStep_Click(object sender, EventArgs e)
+        {
+            if (DrawingStages != null)
+            {
+                if (iStageDbg < DrawingStages.Length - 1)
+                {
+                    iStageDbg++;
+
+                    FrameGraphics.Restore(DrawingStages[iStageDbg].InitialFrameState);
+                    GraphGraphics.Restore(DrawingStages[iStageDbg].InitialGraphState);
+
+                    Pic_GraphFrame.Image = FrameImage;
+                    Pic_Graphic.Image = GraphImage;
+                }
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -3020,7 +3077,7 @@ namespace Ctrl_GraphWindow
             if (InitialStage != GraphDrawingStages.Scratch)
             {
                 FrameGraphics.Restore(DrawingStages[StageIndex].InitialFrameState);
-                GraphGraphics.Restore(DrawingStages[StageIndex].InitialFrameState);
+                GraphGraphics.Restore(DrawingStages[StageIndex].InitialGraphState);
 
                 switch (InitialStage)
                 {

@@ -213,6 +213,16 @@ namespace Ctrl_GraphWindow {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap eye_previewer_icone_3911 {
+            get {
+                object obj = ResourceManager.GetObject("eye-previewer-icone-3911", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap fileopen_icone_6858 {
             get {
                 object obj = ResourceManager.GetObject("fileopen-icone-6858", resourceCulture);
@@ -293,6 +303,16 @@ namespace Ctrl_GraphWindow {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap precedent_icone_5813 {
+            get {
+                object obj = ResourceManager.GetObject("precedent-icone-5813", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap printer_icone_7966_16 {
             get {
                 object obj = ResourceManager.GetObject("printer-icone-7966-16", resourceCulture);
@@ -336,6 +356,16 @@ namespace Ctrl_GraphWindow {
         internal static System.Drawing.Bitmap stop_icone_5072 {
             get {
                 object obj = ResourceManager.GetObject("stop-icone-5072", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap suivant_icone_9262 {
+            get {
+                object obj = ResourceManager.GetObject("suivant-icone-9262", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

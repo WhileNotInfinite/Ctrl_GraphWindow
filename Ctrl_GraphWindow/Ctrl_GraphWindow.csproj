@@ -218,5 +218,14 @@
   <ItemGroup>
     <None Include="Resources\stop-icone-5072.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eye-previewer-icone-3911.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\precedent-icone-5813.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\suivant-icone-9262.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
