@@ -378,16 +378,16 @@ namespace Ctrl_GraphWindow
             #region Public members
 
             public GraphDrawingStages DrawingStage;
-            public GraphicsState InitialFrameState;
-            public GraphicsState InitialGraphState;
+            public Bitmap InitialFrameImage;
+            public Bitmap InitialGraphImage;
 
             #endregion
 
             public GraphicDrawingStage()
             {
                 DrawingStage = GraphDrawingStages.Scratch;
-                InitialFrameState = null;
-                InitialGraphState = null;
+                InitialFrameImage = null;
+                InitialGraphImage = null;
             }
         }
 
@@ -861,8 +861,6 @@ namespace Ctrl_GraphWindow
         private GraphDrawingStages eCurrentStage;
         private GraphicDrawingStage[] DrawingStages;
 
-        private Graphics FrameGraphics;
-        private Graphics GraphGraphics;
         private Image FrameImage;
         private Image GraphImage;
 
@@ -1582,11 +1580,11 @@ namespace Ctrl_GraphWindow
             {
                 iStageDbg = TSCmb_InitialStage.SelectedIndex;
 
-                FrameGraphics.Restore(DrawingStages[iStageDbg].InitialFrameState);
-                GraphGraphics.Restore(DrawingStages[iStageDbg].InitialGraphState);
-
-                Pic_GraphFrame.Image = FrameImage;
-                Pic_Graphic.Image = GraphImage;
+                if (iStageDbg < DrawingStages.Length)
+                {
+                    Pic_GraphFrame.Image = (Bitmap)DrawingStages[iStageDbg].InitialFrameImage.Clone();
+                    Pic_Graphic.Image = (Bitmap)DrawingStages[iStageDbg].InitialGraphImage.Clone();
+                }
             }
         }
 
@@ -1598,11 +1596,8 @@ namespace Ctrl_GraphWindow
                 {
                     iStageDbg--;
 
-                    FrameGraphics.Restore(DrawingStages[iStageDbg].InitialFrameState);
-                    GraphGraphics.Restore(DrawingStages[iStageDbg].InitialGraphState);
-
-                    Pic_GraphFrame.Image = FrameImage;
-                    Pic_Graphic.Image = GraphImage;
+                    Pic_GraphFrame.Image = (Bitmap)DrawingStages[iStageDbg].InitialFrameImage.Clone();
+                    Pic_Graphic.Image = (Bitmap)DrawingStages[iStageDbg].InitialGraphImage.Clone(); ;
                 }
             }
         }
@@ -1615,11 +1610,8 @@ namespace Ctrl_GraphWindow
                 {
                     iStageDbg++;
 
-                    FrameGraphics.Restore(DrawingStages[iStageDbg].InitialFrameState);
-                    GraphGraphics.Restore(DrawingStages[iStageDbg].InitialGraphState);
-
-                    Pic_GraphFrame.Image = FrameImage;
-                    Pic_Graphic.Image = GraphImage;
+                    Pic_GraphFrame.Image = (Bitmap)DrawingStages[iStageDbg].InitialFrameImage.Clone();
+                    Pic_Graphic.Image = (Bitmap)DrawingStages[iStageDbg].InitialGraphImage.Clone(); ;
                 }
             }
         }
@@ -3063,6 +3055,9 @@ namespace Ctrl_GraphWindow
 
             #region Local variables
 
+            Graphics FrameGraphics;
+            Graphics GraphGraphics;
+
             int StageIndex = (int)InitialStage - 1;
 
             Pen oPen = null;
@@ -3076,8 +3071,12 @@ namespace Ctrl_GraphWindow
 
             if (InitialStage != GraphDrawingStages.Scratch)
             {
-                FrameGraphics.Restore(DrawingStages[StageIndex].InitialFrameState);
-                GraphGraphics.Restore(DrawingStages[StageIndex].InitialGraphState);
+                //TODO: Is Graphics.DrawBitmap faster ?
+                FrameImage = (Bitmap)DrawingStages[StageIndex].InitialFrameImage.Clone();
+                GraphImage = (Bitmap)DrawingStages[StageIndex].InitialGraphImage.Clone();
+
+                FrameGraphics = Graphics.FromImage(FrameImage);
+                GraphGraphics = Graphics.FromImage(GraphImage);
 
                 switch (InitialStage)
                 {
@@ -3143,8 +3142,8 @@ namespace Ctrl_GraphWindow
 
             FrameDrawingStage: //Graphic frmame drawing
 
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             oPen = new Pen(Properties.Frame.BorderColor, (float)Properties.Frame.BorderWidth);
@@ -3163,8 +3162,8 @@ namespace Ctrl_GraphWindow
 
             GridDrawingStage: //Graphic grids drawing
             
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             //Main horizontal grid
@@ -3246,8 +3245,12 @@ namespace Ctrl_GraphWindow
 
             XAxisLinesDrawingStage: //Axis X line and graduations drawing
 
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            //TOOD: Remove old code
+            //DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
+            //DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             if(Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
@@ -3288,8 +3291,8 @@ namespace Ctrl_GraphWindow
 
             YAxisLinesDrawingStage: //Series Y Axis lines and graduations drawing
             
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             //Legend initialisation
@@ -3392,8 +3395,8 @@ namespace Ctrl_GraphWindow
 
             YAxisValuesDrawingStage: //Series Y Axis graduations values drawing
             
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             if (DataFile != null && SeriesVisibleCount > 0)
@@ -3458,8 +3461,8 @@ namespace Ctrl_GraphWindow
 
             SeriesOptionsDrawingStage: //Series options (custom grids, reference lines) drawing
             
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             if (DataFile != null && SeriesVisibleCount > 0)
@@ -3867,9 +3870,9 @@ namespace Ctrl_GraphWindow
             #region X Axis options
 
             XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
-
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             //Abscisse reference lines
@@ -4082,8 +4085,8 @@ namespace Ctrl_GraphWindow
 
             XAxisValuesDrawingStage: //X Axis graduation values drawing
             
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
             if (Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
@@ -4125,8 +4128,8 @@ namespace Ctrl_GraphWindow
 
             SeriesValuesDrawingStage: //Series values (trace and markers) drawing
             
-            DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
-            DrawingStages[StageIndex].InitialGraphState = GraphGraphics.Save();
+            DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
+            DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
             
             if (DataFile != null && SeriesVisibleCount > 0)
