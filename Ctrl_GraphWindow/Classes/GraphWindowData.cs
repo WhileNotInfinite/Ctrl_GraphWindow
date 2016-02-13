@@ -165,6 +165,11 @@ namespace Ctrl_GraphWindow
         /// </summary>
         internal int KeyId;
 
+        /// <summary>
+        /// GW_DataFile instance owning the current GW_DataChannel object
+        /// </summary>
+        internal GW_DataFile ParentDataFile;
+
         #endregion
 
         #region Constructors
@@ -348,12 +353,21 @@ namespace Ctrl_GraphWindow
                 return;
             }
 
-            //TODO: Raise an event on Min/Max values change for series conversion coords re-computing and Y axis values updates
             //Serie statistics updating
             if (ValCnt > 1)
             {
-                if (DataValue < Min) Min = DataValue;
-                if (DataValue > Max) Max = DataValue;
+                if (DataValue < Min)
+                {
+                    Min = DataValue;
+                    ParentDataFile.CoordConversionUpdateRequested = true;
+                }
+
+                if (DataValue > Max)
+                {
+                    Max = DataValue;
+                    ParentDataFile.CoordConversionUpdateRequested = true;
+                }
+
                 Avg = ((Avg * (ValCnt - 1)) + DataValue) / ValCnt;
             }
             else
@@ -361,6 +375,8 @@ namespace Ctrl_GraphWindow
                 Min = DataValue;
                 Max = DataValue;
                 Avg = DataValue;
+
+                ParentDataFile.CoordConversionUpdateRequested = true;
             }
         }
 
@@ -414,9 +430,43 @@ namespace Ctrl_GraphWindow
 
         #endregion
     }
-    
+
+    /// <summary>
+    /// Graph window data channel list class
+    /// </summary>
+    public class GW_DataChannelList : List<GW_DataChannel>
+    {
+        #region Private members
+
+        private GW_DataFile Owner;
+
+        #endregion
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public GW_DataChannelList(GW_DataFile OwnerDataFile)
+        {
+            Owner = OwnerDataFile;
+        }
+
+        #region Public methods
+
+        /// <summary>
+        /// Adds a GW_DataChannel to the end of the GW_DataChannelList
+        /// </summary>
+        /// <param name="item">The GW_DataChannel to be added to the end of the GW_DataChannelList</param>
+        public new void Add(GW_DataChannel item)
+        {
+            item.ParentDataFile = Owner;
+            base.Add(item);
+        }
+
+        #endregion
+    }
+
     #endregion
-    
+
     /// <summary>
     /// Graph window data file class
     /// </summary>
@@ -646,8 +696,17 @@ namespace Ctrl_GraphWindow
         /// <summary>
         /// Data channels collection of the data file
         /// </summary>
-        public List<GW_DataChannel> Channels;
-       
+        public GW_DataChannelList Channels;
+
+        #endregion
+
+        #region Internal members
+
+        /// <summary>
+        /// Data channels coordinates conversion factors updating requested flag
+        /// </summary>
+        internal bool CoordConversionUpdateRequested;
+
         #endregion
 
         #region Private members
@@ -665,11 +724,13 @@ namespace Ctrl_GraphWindow
         {
             DataSamplingMode = SamplingMode.SingleRate;
             Time = new GW_DataChannel("Time");
-            Channels = new List<GW_DataChannel>();
+            Channels = new GW_DataChannelList(this);
             TimeBufferSize = -1;
 
             StepTimeMin = 0;
             StepTimeMax = 0;
+
+            CoordConversionUpdateRequested = false;
         }
 
         #region Internal methodes

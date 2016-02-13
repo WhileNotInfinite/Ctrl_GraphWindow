@@ -4142,6 +4142,8 @@ namespace Ctrl_GraphWindow
 
                 bDataPlotted = true;
 
+                int iSerie = 0;
+
                 foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
                 {
                     if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible) && oSerieProps.YAxis.Visible)
@@ -4493,6 +4495,8 @@ namespace Ctrl_GraphWindow
                             }
                         }
                     }
+
+                    iSerie++;
                 }
             }
 
@@ -7937,14 +7941,23 @@ namespace Ctrl_GraphWindow
         {
             if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
             {
+                eCurrentStage = eInitialStage; 
+
                 if (bDataPlotted)
                 {
                     if (bRealTimeGraphic)
                     {
                         Update_AbscisseCoordsConversion();
-                    }
 
-                    eCurrentStage = eInitialStage;
+                        if (DataFile != null)
+                        {
+                            if (DataFile.CoordConversionUpdateRequested)
+                            {
+                                eCurrentStage = GraphDrawingStages.Scratch;
+                                DataFile.CoordConversionUpdateRequested = false;
+                            }
+                        }
+                    }
                 }
                 else
                 {
