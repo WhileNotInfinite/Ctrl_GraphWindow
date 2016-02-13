@@ -7794,9 +7794,12 @@ namespace Ctrl_GraphWindow
         
         private void Start_RealTimeTrace()
         {
-            if(RTStatus== GraphicRealTimeStatus.Broken)
+            if(RTStatus== GraphicRealTimeStatus.Stopped)
             {
                 Properties = new GraphWindowProperties();
+
+                eCurrentStage = GraphDrawingStages.Scratch;
+                oGraphicUpdateRequest.UpdateRequested = true;
             }
 
             RTStatus = GraphicRealTimeStatus.Running;
