@@ -4530,13 +4530,13 @@ namespace Ctrl_GraphWindow
             Cmd_ZoomXPosition.BackColor = Color.FromArgb(Properties.WindowBackColor.ToArgb() ^ 0xffffff); //Background color inversion
             Cmd_ZoomXPosition.FlatAppearance.MouseDownBackColor = Cmd_ZoomXPosition.BackColor;
             Cmd_ZoomXPosition.FlatAppearance.MouseOverBackColor = Cmd_ZoomXPosition.BackColor;
-            
+
             Cmd_ZoomYPosition.BackColor = Color.FromArgb(Properties.WindowBackColor.ToArgb() ^ 0xffffff); //Background color inversion
             Cmd_ZoomYPosition.FlatAppearance.MouseDownBackColor = Cmd_ZoomYPosition.BackColor;
             Cmd_ZoomYPosition.FlatAppearance.MouseOverBackColor = Cmd_ZoomYPosition.BackColor;
-            
+
             splitContainer2.Panel2Collapsed = !(Properties.LegendProperties.Visible & bLegendEnabled);
-            
+
             //Graphic frame height computation
             FrameHeight = Pic_GraphFrame.Height;  //Pic_Graphic.Height;
 
@@ -4551,7 +4551,7 @@ namespace Ctrl_GraphWindow
             }
 
             FrameHeight = RoundClosest(FrameHeight - GRAPH_FRAME_HEIGHT_OFFSET, SEC_V_GRID_LINES_COUNT + 1);
-            
+
             //Graphic frame corners points definition
             FrameTopPoint = GRAPH_FRAME_HEIGHT_OFFSET;
             FrameBottomPoint = FrameTopPoint + FrameHeight;
@@ -4559,23 +4559,23 @@ namespace Ctrl_GraphWindow
             //Graphic frame width computation
             FrameWidth = Pic_GraphFrame.Width;  //Pic_Graphic.Width;
             oYAxis = new Ctrl_WaveForm.GraphAxisCollection();
-            
+
             SeriesVisibleCount = 0;
 
             if (!(DataFile == null))
             {
-            	SeriesVisibleCount = Get_PlottedChannelCount();
+                SeriesVisibleCount = Get_PlottedChannelCount();
 
                 if (SeriesVisibleCount > 0 && DataFile.MaxSampleCount > 2)
                 {
                     int iSeriePloted = 0;
                     oYAxis.AxisTable = new List<GraphAxisGroup>();
-                    
+
                     if (!bYZoom)
                     {
-                    	RefZoomYUpperBound = 0;
-                    	RefZoomYLowerBound = FrameHeight;
-                    	SeriesReferenceCoordConversion = new List<Ctrl_WaveForm.SerieCoordConversion>();
+                        RefZoomYUpperBound = 0;
+                        RefZoomYLowerBound = FrameHeight;
+                        SeriesReferenceCoordConversion = new List<Ctrl_WaveForm.SerieCoordConversion>();
                     }
 
                     foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
@@ -4588,8 +4588,8 @@ namespace Ctrl_GraphWindow
                             {
                                 oSerieProps.DataChannelKeyId = oSerieData.KeyId;
 
-                            	if (!bYZoom) Set_SerieCoordConversions(oSerieProps, oSerieData, iSeriePloted);
-                            	oSerieProps.ValueFormat.Set_ValueRange(oSerieProps.CoordConversion.Max - oSerieProps.CoordConversion.Min);
+                                if (!bYZoom) Set_SerieCoordConversions(oSerieProps, oSerieData, iSeriePloted);
+                                oSerieProps.ValueFormat.Set_ValueRange(oSerieProps.CoordConversion.Max - oSerieProps.CoordConversion.Min);
                                 iSeriePloted++;
 
                                 if (oSerieProps.YAxis.Visible)
@@ -4614,7 +4614,25 @@ namespace Ctrl_GraphWindow
                                                           FrameTopPoint,
                                                           FrameWidth,
                                                           FrameHeight) });
-            
+            //Abscisse coords definition
+            Update_AbscisseCoordsConversion();
+
+            //Update reference cursor X position
+            if (!(PtRefCursorPos.IsEmpty))
+            {
+                if (Properties.ReferenceCursor.Mode == GraphicCursorMode.VerticalLine)
+                {
+                    PtRefCursorPos.X = (int)(RefCursorCoordinates.Abs * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
+                }
+                else
+                {
+                    PtRefCursorPos.X = 0;
+                }
+            }
+        }
+
+        private void Update_AbscisseCoordsConversion()
+        {
             //Abscisse coords definition
             if (!(DataFile == null))
             {
@@ -4677,21 +4695,8 @@ namespace Ctrl_GraphWindow
                         }
                     }
                 }
-                
+
                 oAbcisseValFormat.Set_ValueRange(Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min);
-                
-                //Update reference cursor X position
-                if (!(PtRefCursorPos.IsEmpty))
-                {
-                    if (Properties.ReferenceCursor.Mode == GraphicCursorMode.VerticalLine)
-                    {
-                        PtRefCursorPos.X = (int)(RefCursorCoordinates.Abs * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
-                    }
-                    else
-                    {
-                        PtRefCursorPos.X = 0;
-                    }
-                }
             }
         }
 
@@ -7934,6 +7939,11 @@ namespace Ctrl_GraphWindow
             {
                 if (bDataPlotted)
                 {
+                    if (bRealTimeGraphic)
+                    {
+                        Update_AbscisseCoordsConversion();
+                    }
+
                     eCurrentStage = eInitialStage;
                 }
                 else
