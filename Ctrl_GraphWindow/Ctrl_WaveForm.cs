@@ -858,6 +858,7 @@ namespace Ctrl_GraphWindow
 
         private bool bDataPlotted;
 
+        private bool bScratchStageForced;
         private GraphDrawingStages eCurrentStage;
         private GraphicDrawingStage[] DrawingStages;
 
@@ -1039,6 +1040,7 @@ namespace Ctrl_GraphWindow
 
             bDataPlotted = false;
 
+            bScratchStageForced = false;
             eCurrentStage = GraphDrawingStages.Scratch;
             Init_DrawingStages();
 
@@ -2861,6 +2863,12 @@ namespace Ctrl_GraphWindow
                         Stopwatch swTaskTime = new Stopwatch();
                         swTaskTime.Start();
 #endif
+                        if (bScratchStageForced)
+                        {
+                            eCurrentStage = GraphDrawingStages.Scratch;
+                            bScratchStageForced = false;
+                        }
+
                         bDataPlotted = false;
                         DrawGraphFromStage(eCurrentStage);
 
@@ -7797,22 +7805,30 @@ namespace Ctrl_GraphWindow
             if(RTStatus== GraphicRealTimeStatus.Stopped)
             {
                 Properties = new GraphWindowProperties();
-
-                eCurrentStage = GraphDrawingStages.Scratch;
-                oGraphicUpdateRequest.UpdateRequested = true;
             }
 
+            CursorEnabled = false;
+            LegendEnabled = false;
+
             RTStatus = GraphicRealTimeStatus.Running;
+
+            bScratchStageForced = true;
         }
 
         private void Break_RealTimeTrace()
         {
             RTStatus = GraphicRealTimeStatus.Broken;
+
+            CursorEnabled = true;
+            LegendEnabled = true;
         }
 
         private void Stop_RealTimeTrace()
         {
             RTStatus = GraphicRealTimeStatus.Stopped;
+
+            CursorEnabled = true;
+            LegendEnabled = true;
         }
 
         #endregion
