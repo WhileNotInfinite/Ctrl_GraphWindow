@@ -1626,7 +1626,7 @@ namespace Ctrl_GraphWindow
 
         private void Pic_GraphFrameSizeChanged(object sender, EventArgs e)
 		{
-            eCurrentStage = GraphDrawingStages.Scratch;
+            bScratchStageForced = true;
             oGraphicUpdateRequest.UpdateRequested = true;
         }
         
@@ -1653,13 +1653,21 @@ namespace Ctrl_GraphWindow
 	        	switch (e.Button)
 	        	{
 	        		case MouseButtons.Left: //Cursor
-	        			
-	        			CursorPosMouseDown = Point.Empty;
-	        			
-	        			if (bCursorEnabled)
-	        			{
-	        				Draw_Cursor(e.Location);
-	        			}
+
+                        if (bRealTimeGraphic && RTStatus == GraphicRealTimeStatus.Running)
+                        {
+                            Break_RealTimeTrace();
+                            Draw_Cursor(e.Location);
+                        }
+                        else
+                        {
+                            CursorPosMouseDown = Point.Empty;
+
+                            if (bCursorEnabled)
+                            {
+                                Draw_Cursor(e.Location);
+                            }
+                        }
 	        			
 	        			break;
 	        			
@@ -1820,7 +1828,15 @@ namespace Ctrl_GraphWindow
 	        	}
         	}
 		}
-        
+
+        private void Pic_Graphic_DoubleClick(object sender, EventArgs e)
+        {
+            if (bRealTimeGraphic && RTStatus == GraphicRealTimeStatus.Broken)
+            {
+                Start_RealTimeTrace();
+            }
+        }
+
         private void Pic_GraphicPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
 		{
         	if (bDataPlotted && bShortcutKeysEnabled)
@@ -1960,7 +1976,7 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Overlay;
-                            eCurrentStage = GraphDrawingStages.Scratch;
+                            bScratchStageForced = true;
                             oGraphicUpdateRequest.UpdateRequested = true;
                         }
         				
@@ -1971,7 +1987,7 @@ namespace Ctrl_GraphWindow
         				if (bEditGraphicConfigurationEnable)
         				{
         					Properties.GraphLayoutMode = GraphicWindowLayoutModes.Parallel;
-                            eCurrentStage = GraphDrawingStages.Scratch;
+                            bScratchStageForced = true;
                             oGraphicUpdateRequest.UpdateRequested = true;
                         }
         				
@@ -2059,6 +2075,11 @@ namespace Ctrl_GraphWindow
 		{
         	Drop_Series(e);
 		}
+
+        private void Pic_Graphic_SizeChanged(object sender, EventArgs e)
+        {
+            bScratchStageForced = true;
+        }
 
         #endregion
 
@@ -5389,14 +5410,17 @@ namespace Ctrl_GraphWindow
         		                                                                         | GraphicLegendInformations.RefCursorDiffValue 
         		                                                                         | GraphicLegendInformations.RefCursorDiffPerc 
         		                                                                         | GraphicLegendInformations.RefCursorGradient);
-        	
-        	if (Properties.LegendProperties.Visible)
+
+            bScratchStageForced = true;
+
+            if (Properties.LegendProperties.Visible)
         	{
 				Resize_Legend(false);        	
     			Init_Legend();
         	}
-        	
-        	Pic_Graphic.Refresh();
+            oGraphicUpdateRequest.UpdateRequested = true;
+
+            //Pic_Graphic.Refresh();
         }
         
         private void Set_RefCursorCoordinates()
@@ -5695,7 +5719,7 @@ namespace Ctrl_GraphWindow
         		
         		if (bPlot)
         		{
-                    eCurrentStage = GraphDrawingStages.Scratch;
+                    bScratchStageForced = true;
                     oGraphicUpdateRequest.UpdateRequested = true;
                 }
         	}
@@ -5734,7 +5758,7 @@ namespace Ctrl_GraphWindow
         	
         	if (bPlot)
         	{
-                eCurrentStage = GraphDrawingStages.Scratch;
+                bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -5889,7 +5913,7 @@ namespace Ctrl_GraphWindow
         	
         	if (bPlot)
         	{
-                eCurrentStage = GraphDrawingStages.Scratch;
+                bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -5899,7 +5923,7 @@ namespace Ctrl_GraphWindow
         	DataFile = WholeDataFile;
         	bXZoom = false;
         	bYZoom = false;
-            eCurrentStage = GraphDrawingStages.Scratch;
+            bScratchStageForced = true;
             oGraphicUpdateRequest.UpdateRequested = true;
 
         }
@@ -6015,7 +6039,7 @@ namespace Ctrl_GraphWindow
         	
         	if (Set_DataFile_BetweenAbsPoint(X1, X2))
         	{
-                eCurrentStage = GraphDrawingStages.Scratch;
+                bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -6029,7 +6053,7 @@ namespace Ctrl_GraphWindow
         	
         	if (Set_DataFileForYZoom(ZoomY1, ZoomY2, false))
         	{
-                eCurrentStage = GraphDrawingStages.Scratch;
+                bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }    
         }
@@ -7636,7 +7660,7 @@ namespace Ctrl_GraphWindow
         private void Change_GraphLayout(GraphicWindowLayoutModes eNewLayoutMode)
         {
         	Properties.GraphLayoutMode = eNewLayoutMode;
-            eCurrentStage = GraphDrawingStages.Scratch;
+            bScratchStageForced = true;
             oGraphicUpdateRequest.UpdateRequested = true;
         }
         
@@ -7687,7 +7711,7 @@ namespace Ctrl_GraphWindow
                     Properties.Create_Serie(ItChannel.Text);
                 }
 
-                eCurrentStage = GraphDrawingStages.Scratch;
+                bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -7807,12 +7831,16 @@ namespace Ctrl_GraphWindow
                 Properties = new GraphWindowProperties();
             }
 
+            Clear_ReferenceCursor();
+            ZoomMin();
+
             CursorEnabled = false;
+            ZoomEnabled = false;
             LegendEnabled = false;
 
-            RTStatus = GraphicRealTimeStatus.Running;
-
             bScratchStageForced = true;
+
+            RTStatus = GraphicRealTimeStatus.Running;
         }
 
         private void Break_RealTimeTrace()
@@ -7820,6 +7848,7 @@ namespace Ctrl_GraphWindow
             RTStatus = GraphicRealTimeStatus.Broken;
 
             CursorEnabled = true;
+            ZoomEnabled = true;
             LegendEnabled = true;
         }
 
@@ -7828,6 +7857,7 @@ namespace Ctrl_GraphWindow
             RTStatus = GraphicRealTimeStatus.Stopped;
 
             CursorEnabled = true;
+            ZoomEnabled = true;
             LegendEnabled = true;
         }
 
@@ -7947,7 +7977,7 @@ namespace Ctrl_GraphWindow
         {
             if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
             {
-                eCurrentStage = GraphDrawingStages.Scratch;
+                bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
@@ -7972,7 +8002,7 @@ namespace Ctrl_GraphWindow
                         {
                             if (DataFile.CoordConversionUpdateRequested)
                             {
-                                eCurrentStage = GraphDrawingStages.Scratch;
+                                bScratchStageForced = true;
                                 DataFile.CoordConversionUpdateRequested = false;
                             }
                         }
@@ -7980,7 +8010,7 @@ namespace Ctrl_GraphWindow
                 }
                 else
                 {
-                    eCurrentStage = GraphDrawingStages.Scratch;
+                    bScratchStageForced = true;
                 }
 
                 oGraphicUpdateRequest.UpdateRequested = true;
@@ -8006,7 +8036,7 @@ namespace Ctrl_GraphWindow
         {
         	WholeDataFile = oNewDataFile;
         	DataFile = WholeDataFile;
-            eCurrentStage = GraphDrawingStages.Scratch;
+            bScratchStageForced = true;
             SeriesReferenceCoordConversion = null;
         	Fill_ChannelList();
         }
@@ -8024,7 +8054,7 @@ namespace Ctrl_GraphWindow
         			Properties.Create_Serie(Name);
         		}
 
-                eCurrentStage = GraphDrawingStages.Scratch;
+                bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }

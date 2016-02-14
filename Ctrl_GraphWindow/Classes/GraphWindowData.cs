@@ -723,7 +723,10 @@ namespace Ctrl_GraphWindow
         public GW_DataFile()
         {
             DataSamplingMode = SamplingMode.SingleRate;
+
             Time = new GW_DataChannel("Time");
+            Time.ParentDataFile = this;
+
             Channels = new GW_DataChannelList(this);
             TimeBufferSize = -1;
 
