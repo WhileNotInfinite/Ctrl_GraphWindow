@@ -39,9 +39,36 @@
         <member name="F:Ctrl_GraphWindow.SerieStatistics.SampleCount">
             <summary>Number of serie sample values between starting and ending points</summary>
         </member>
+        <member name="T:Ctrl_GraphWindow.SerieSample">
+            <summary>
+            Graphic channel data sample structure
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.SerieSample.SampleTime">
+            <summary> Time value of the sample </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.SerieSample.SampleValue">
+            <summary> Data value of the sample </summary>
+        </member>
+        <member name="T:Ctrl_GraphWindow.SamplingMode">
+            <summary>
+            Graph window data sampling mode
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.SamplingMode.SingleRate">
+            <summary> Single sampling rate for all data channels </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.SamplingMode.MultipleRates">
+            <summary> Each data channel has its own sampling rate </summary>
+        </member>
         <member name="T:Ctrl_GraphWindow.GW_DataChannel">
             <summary>
             Graph window data channel class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.DataItemsCount">
+            <summary>
+            Number of data item contained within the current GW_DataChannel object whether actual sampling mode is a SingleRate or MultipleRates 
             </summary>
         </member>
         <member name="F:Ctrl_GraphWindow.GW_DataChannel.Name">
@@ -51,7 +78,12 @@
         </member>
         <member name="F:Ctrl_GraphWindow.GW_DataChannel.Values">
             <summary>
-            Data channel values
+            Data channel values for SingleRate sampling mode
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataChannel.Samples">
+            <summary>
+            Data channel samples for MultipleRates sampling mode
             </summary>
         </member>
         <member name="F:Ctrl_GraphWindow.GW_DataChannel.Min">
@@ -69,6 +101,28 @@
             Average value of the channel
             </summary>
         </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataChannel.ChannelStepTimeMin">
+            <summary>
+            Data channel sample time min
+            </summary>
+            <remarks>Applicable only for multiple sampling rate data file</remarks>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataChannel.ChannelStepTimeMax">
+            <summary>
+            Data channel sample time max
+            </summary>
+            <remarks>Applicable only for multiple sampling rate data file</remarks>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataChannel.KeyId">
+            <summary>
+            Data channel key identifier in the GW_DataFile collection of GW_DataChannel
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataChannel.ParentDataFile">
+            <summary>
+            GW_DataFile instance owning the current GW_DataChannel object
+            </summary>
+        </member>
         <member name="M:Ctrl_GraphWindow.GW_DataChannel.#ctor">
             <summary>
             Default constructor
@@ -80,15 +134,94 @@
             </summary>
             <param name="ChannelName">Channel name</param>
         </member>
-        <member name="M:Ctrl_GraphWindow.GW_DataChannel.Add_ChannelValue(System.Double)">
+        <member name="M:Ctrl_GraphWindow.GW_DataChannel.#ctor(Ctrl_GraphWindow.SamplingMode)">
+            <summary>
+            Constructor including the sampling mode of the data channel to create
+            </summary>
+            <param name="SampleMode">Sampling mode of the data channel</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataChannel.#ctor(System.String,Ctrl_GraphWindow.SamplingMode)">
+            <summary>
+            Constructor including name and  sampling mode of the data channel to create
+            </summary>
+            <param name="ChannelName">Channel name</param>
+            <param name="SampleMode">Sampling mode of the data channel</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataChannel.Add_ChannelValue(System.Object)">
             <summary>
             Add a value into the channel values collection and update min, max and average values
             </summary>
             <param name="Value">Value to add into the values collection</param>
         </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataChannel.Get_SampleTimeIndex(System.Double)">
+            <summary>
+            Return the sample index corresponding to the time value given as argument
+            </summary>
+            <param name="TimeValue">Sample time to search</param>
+            <returns>Index of the sample time</returns>
+            <remarks>Return -1 if the sample time is not found
+            Works only for time sampled data channel (multiple sampling rates data file)</remarks>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataChannel.ProcessChannelStatistic">
+            <summary>
+            Process statistics of the current data channel
+            </summary>
+        </member>
+        <member name="T:Ctrl_GraphWindow.GW_DataChannelList">
+            <summary>
+            Graph window data channel list class
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataChannelList.#ctor(Ctrl_GraphWindow.GW_DataFile)">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataChannelList.Add(Ctrl_GraphWindow.GW_DataChannel)">
+            <summary>
+            Adds a GW_DataChannel to the end of the GW_DataChannelList
+            </summary>
+            <param name="item">The GW_DataChannel to be added to the end of the GW_DataChannelList</param>
+        </member>
         <member name="T:Ctrl_GraphWindow.GW_DataFile">
             <summary>
             Graph window data file class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.TimeBufferSize">
+            <summary>
+            Depth of the time buffer in second for real time graphic
+            </summary>
+            <remarks>Set -1 for infinite time buffer</remarks>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.MaxSampleCount">
+            <summary>
+            Maximum number of samples contained in a data channel
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.SampleTimeMin">
+            <summary>
+            Lowest sample time value of the data file
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.SampleTimeMax">
+            <summary>
+            Highest sample time value of the data file
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.StepTimeMin">
+            <summary>
+            Mininimum step time of the file
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.StepTimeMax">
+            <summary>
+            Maximum step time of the file
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataFile.DataSamplingMode">
+            <summary>
+            Data file sampling mode
             </summary>
         </member>
         <member name="F:Ctrl_GraphWindow.GW_DataFile.Time">
@@ -101,20 +234,23 @@
             Data channels collection of the data file
             </summary>
         </member>
-        <member name="F:Ctrl_GraphWindow.GW_DataFile.StepTimeMin">
+        <member name="F:Ctrl_GraphWindow.GW_DataFile.CoordConversionUpdateRequested">
             <summary>
-            Mininimum step time of the file
-            </summary>
-        </member>
-        <member name="F:Ctrl_GraphWindow.GW_DataFile.StepTimeMax">
-            <summary>
-            Maximum step time of the file
+            Data channels coordinates conversion factors updating requested flag
             </summary>
         </member>
         <member name="M:Ctrl_GraphWindow.GW_DataFile.#ctor">
             <summary>
             Default constructor
             </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataFile.Get_DataChannelByKeyId(System.Int32)">
+            <summary>
+            Return the GW_DataChannel item corresponding to the key identifier given as argument
+            </summary>
+            <param name="KeyId">Key identifier of the channel to retrieve</param>
+            <returns>GW_DataChannel item corresponding to the key identifier  given as argument</returns>
+            <remarks>Return null if the GW_DataChannel item is not found</remarks>
         </member>
         <member name="M:Ctrl_GraphWindow.GW_DataFile.Load_DataFile(System.String)">
             <summary>
@@ -147,16 +283,31 @@
             </summary>
             <param name="TimeVal">Time value to search</param>
             <returns>Index of the time sample corresponding to the time value given as argument</returns>
-            <remarks>Return -1 if the time value is not found</remarks>
+            <remarks>Return -1 if the time value is not found
+            Works only for single sampling rate data file</remarks>
         </member>
         <member name="M:Ctrl_GraphWindow.GW_DataFile.Get_ChannelValueAtIndex(System.String,System.Int32)">
             <summary>
-            Return the sample value at the index given as argument of the channel given as argument
+            Return the sample value of the channel given as argument at the sample index given as argument
             </summary>
             <param name="ChannelName">Name of the channel to search</param>
             <param name="SampleIndex">Index of sample</param>
             <returns>Channel value at the sample index</returns>
             <remarks>Return NaN if the channel is not found or if the sample index doesn't exist</remarks>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataFile.Get_ChannelValueAtTime(System.String,System.Double)">
+            <summary>
+            Return the sample value of the channel given as argument at the time value given as argument 
+            </summary>
+            <param name="ChannelName">Name of the channel to search</param>
+            <param name="TimeValue">Time value to search</param>
+            <returns>Channel value at the time</returns>
+            <remarks>Return NaN if the channel is not found or if the time value doesn't exist</remarks>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataFile.FIFO_TimeBuffer">
+            <summary>
+            Process the FIFO time buffer
+            </summary>
         </member>
         <member name="T:Ctrl_GraphWindow.ScreenPositions">
             <summary>
@@ -297,7 +448,7 @@
         <member name="F:Ctrl_GraphWindow.GraphicWindowLayoutModes.Overlay">
             <summary>Series overlaying each other</summary>
         </member>
-        <member name="F:Ctrl_GraphWindow.GraphicWindowLayoutModes.Paralel">
+        <member name="F:Ctrl_GraphWindow.GraphicWindowLayoutModes.Parallel">
             <summary>Series paralel to each other</summary>
         </member>
         <member name="F:Ctrl_GraphWindow.GraphicWindowLayoutModes.Custom">
@@ -977,6 +1128,11 @@
             Cursor value font
             </summary>
         </member>
+        <member name="F:Ctrl_GraphWindow.GraphCursorProperties.CursorValueForeColor">
+            <summary>
+            Cursor value forecolor
+            </summary>
+        </member>
         <member name="F:Ctrl_GraphWindow.GraphCursorProperties.ShowCursorAbscisseValue">
             <summary>
             Cursor abscisse value displayed flag
@@ -1002,6 +1158,26 @@
             Cursor size
             </summary>
             <remarks>Used only for 'Graticule', 'Square' and 'Circle' modes</remarks>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphCursorProperties.CursorTitle">
+            <summary>
+            Cursor title
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphCursorProperties.CursorTitleFont">
+            <summary>
+            Cursor title font
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphCursorProperties.CursorTitleForeColor">
+            <summary>
+            Cursor title forecolor
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphCursorProperties.CursorTitlePosition">
+            <summary>
+            Cursor title display postion
+            </summary>
         </member>
         <member name="M:Ctrl_GraphWindow.GraphCursorProperties.#ctor">
             <summary>
@@ -1199,6 +1375,11 @@
         <member name="F:Ctrl_GraphWindow.GraphSerieProperties.CoordConversion">
             <summary>
             Serie sample data conversion to screen coordinates components
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphSerieProperties.DataChannelKeyId">
+            <summary>
+            Serie key identifier of the data channel in the current data file
             </summary>
         </member>
         <member name="M:Ctrl_GraphWindow.GraphSerieProperties.#ctor">
@@ -1426,6 +1607,17 @@
             Show the list of channels
             </summary>
         </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.Clear_ChannelList">
+            <summary>
+            Clear contents of the current Ctrl_GW_ChannelList object
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.Add_ChannelName(System.String)">
+            <summary>
+            Add a channel name to the current Ctrl_GW_ChannelList list of channel names
+            </summary>
+            <param name="ChannelName">Name of the channel to add in the list</param>
+        </member>
         <member name="F:Ctrl_GraphWindow.Ctrl_GW_ChannelList.components">
             <summary> 
             Variable nécessaire au concepteur.
@@ -1542,10 +1734,60 @@
             </summary>
             <param name="e">Mouse event argument</param>
         </member>
+        <member name="T:Ctrl_GraphWindow.GraphDrawingStages">
+            <summary>
+            Graphic drawing stages enumeration
+            </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.Scratch">
+            <summary>Nothing exists at this stage</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.Frame">
+            <summary>Frame and graphic pictures size and background color set,
+            start from graphic frame borders drawing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.Grid">
+            <summary>Graphic frame borders are drawn,
+            start from grid drawing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.XAxis_Lines">
+            <summary>Graphic grid drawn,
+            start from graphic X axis lines drawing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.YAxis_Lines">
+            <summary>Graphic X axis lines drawn,
+            start from graphic Y axis lines drawing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.YAxis_Values">
+            <summary>Graphic Y axis lines drawn,
+            start from graphic Y axis values writing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.Series_Options">
+            <summary>Graphic Y axis values written,
+            start from graphic series options drawing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.XAxis_Options">
+            <summary>Graphic series options drawn,
+            start from graphic X axis options drawing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.XAxis_Values">
+            <summary>Graphic X axis options drawn,
+            start from graphic X axis values writing</summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GraphDrawingStages.Series_Values">
+            <summary>Graphic X axis values written,
+            start from graphic series values tracing</summary>
+        </member>
         <member name="T:Ctrl_GraphWindow.Ctrl_WaveForm">
             <summary>
             Description of Ctrl_WaveForm.
             </summary>
+        </member>
+        <member name="E:Ctrl_GraphWindow.Ctrl_WaveForm.ControlPreviewKeyDown">
+            <summary>
+            PreviewKeyDown event to be handled by host application
+            </summary>
+            <remarks>Fired on PreviewKeyDown internal event of the control</remarks>
         </member>
         <member name="P:Ctrl_GraphWindow.Ctrl_WaveForm.ToolBarVisible">
             <summary>
@@ -1555,6 +1797,11 @@
         <member name="P:Ctrl_GraphWindow.Ctrl_WaveForm.OpenFileVisible">
             <summary>
             Load data command visible property
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Ctrl_WaveForm.RealTimeGraphic">
+            <summary>
+            Real time graphic flag
             </summary>
         </member>
         <member name="P:Ctrl_GraphWindow.Ctrl_WaveForm.EditGraphicConfigurationEnable">
@@ -1592,6 +1839,17 @@
             Graphic print enabled properties
             </summary>
         </member>
+        <member name="P:Ctrl_GraphWindow.Ctrl_WaveForm.ShortcutKeysEnabled">
+            <summary>
+            Keyboard shortcuts enabled properties
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Ctrl_WaveForm.MainCursorAbscisse">
+            <summary>
+            Main curor abscisse value
+            </summary>
+            <remarks>Is NaN when cursor is not visible</remarks>
+        </member>
         <member name="F:Ctrl_GraphWindow.Ctrl_WaveForm.Properties">
             <summary>
             Graphical properties of the graph
@@ -1602,10 +1860,22 @@
             Default constructor
             </summary>
         </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.OnControlPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs)">
+            <summary>
+            UserControlKey down event firing method
+            </summary>
+            <param name="e">Key data</param>
+        </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Refresh_Graphic">
             <summary>
-            Refresh the graphic window
+            Redraw the graphic window from scratch
             </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Refresh_Graphic(Ctrl_GraphWindow.GraphDrawingStages)">
+            <summary>
+            Redraw the graphic window from the stage given as argument
+            </summary>
+            <param name="eInitialStage">Drawing stage to start from</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Reset_Properties(Ctrl_GraphWindow.Frm_GraphPropertiesEdtion)">
             <summary>
@@ -1618,13 +1888,30 @@
             <summary>
             Set the GW_DataFile object containing the data to plot
             </summary>
-            <param name="oDataFile">GW_DataFile object containing the data to plot</param>
+            <param name="oNewDataFile">GW_DataFile object containing the data to plot</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Add_Series(System.String[])">
             <summary>
             Add one or more series into the graphic window
             </summary>
             <param name="SerieNames">Names of series to add</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Set_MainCursorAtAbscisse(System.Double)">
+            <summary>
+            Draw the main cursor at abscisse value given as argument
+            </summary>
+            <param name="AbscisseValue">Abscisse value to draw the cursor at</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Clear_ChannelList">
+            <summary>
+            Clear the channel list of the current Ctrl_WaveForm
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Add_ChannelToChannelList(System.String)">
+            <summary>
+            Add a channel item to the channel list of the current Ctrl_WaveForm object
+            </summary>
+            <param name="ChannelName">Name of the channel to be added</param>
         </member>
         <member name="F:Ctrl_GraphWindow.Ctrl_WaveForm.components">
             <summary>
@@ -1826,6 +2113,186 @@
             <summary>
               Overrides the current thread's CurrentUICulture property for all
               resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.accepter_check_ok_oui_icone_4851">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.add_a_tag_blue_icone_6061">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.arreter_icone_6430">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.arrow_down_icone_5325">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.arrow_up_icone_7220">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.block_modules_icone_7434">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.break_icone_9058">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.camera_icone_8948_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.coloriser_icone_5758">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.copy_icone_4776">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.document_enregistrez_icone_7256">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.download_disconnect_icone_5328">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.editdelete_icone_6247">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.editpaste_icone_7191">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.exclamation_icone_7555">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.eye_previewer_icone_3911">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.fileopen_icone_6858">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.fleches_a_gauche_rouge_a_droite_icone_6392_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.font_icone_6304_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.graphic_curve_icone_6410_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.hand_point_finger_icone_6880_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.moc_source_icone_8167">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.nouveau_document_icone_4768">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.play_icone_6427">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.precedent_icone_5813">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.printer_icone_7966_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.refresh_reload_icone_7588">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.remove_a_blue_mark_icone_9732">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.research_zoom_icone_6545_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.stop_icone_5072">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.suivant_icone_9262">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.tack_tack_notes_icone_5500_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.texte_balles_liste_icone_8735_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.zoom_back_icone_7248_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.zoom_icone_6603_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.Icones.ZoomFactor_16">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
     </members>
