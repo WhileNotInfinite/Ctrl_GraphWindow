@@ -390,6 +390,16 @@ namespace Ctrl_GraphWindow {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap break_icone_9058 {
+            get {
+                object obj = ResourceManager.GetObject("break-icone-9058", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap camera_icone_8948_16 {
             get {
                 object obj = ResourceManager.GetObject("camera-icone-8948-16", resourceCulture);
@@ -470,6 +480,16 @@ namespace Ctrl_GraphWindow {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap eye_previewer_icone_3911 {
+            get {
+                object obj = ResourceManager.GetObject("eye-previewer-icone-3911", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap fileopen_icone_6858 {
             get {
                 object obj = ResourceManager.GetObject("fileopen-icone-6858", resourceCulture);
@@ -540,6 +560,26 @@ namespace Ctrl_GraphWindow {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap play_icone_6427 {
+            get {
+                object obj = ResourceManager.GetObject("play-icone-6427", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap precedent_icone_5813 {
+            get {
+                object obj = ResourceManager.GetObject("precedent-icone-5813", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap printer_icone_7966_16 {
             get {
                 object obj = ResourceManager.GetObject("printer-icone-7966-16", resourceCulture);
@@ -573,6 +613,26 @@ namespace Ctrl_GraphWindow {
         internal static System.Drawing.Bitmap research_zoom_icone_6545_16 {
             get {
                 object obj = ResourceManager.GetObject("research-zoom-icone-6545-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stop_icone_5072 {
+            get {
+                object obj = ResourceManager.GetObject("stop-icone-5072", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap suivant_icone_9262 {
+            get {
+                object obj = ResourceManager.GetObject("suivant-icone-9262", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

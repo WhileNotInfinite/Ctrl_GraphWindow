@@ -169,6 +169,37 @@ namespace Ctrl_GraphWindow
             Fill_ChannelList("");
         }
 
+        /// <summary>
+        /// Clear contents of the current Ctrl_GW_ChannelList object
+        /// </summary>
+        public void Clear_ChannelList()
+        {
+            ChannelList = new string[0];
+            Fill_ChannelList("");
+        }
+
+        /// <summary>
+        /// Add a channel name to the current Ctrl_GW_ChannelList list of channel names
+        /// </summary>
+        /// <param name="ChannelName">Name of the channel to add in the list</param>
+        public void Add_ChannelName(string ChannelName)
+        {
+            if(!(ChannelName.Equals("")))
+            {
+                List<string> TmpChanList = new List<string>();
+
+                foreach (string Name in ChannelList)
+                {
+                    TmpChanList.Add(Name);
+                }
+
+                TmpChanList.Add(ChannelName);
+                ChannelList = TmpChanList.ToArray();
+
+                Fill_ChannelList(Cmb_Filter.Text);
+            }
+        }
+
         #endregion
     }
 }

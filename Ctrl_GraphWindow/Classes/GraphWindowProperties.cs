@@ -167,7 +167,7 @@ namespace Ctrl_GraphWindow
         Overlay = 0,
 
         ///<summary>Series paralel to each other</summary>
-        Paralel = 1,
+        Parallel = 1,
 
         ///<summary>Custom serie arrangement into the graphic</summary>
         Custom = 2,
@@ -653,7 +653,7 @@ namespace Ctrl_GraphWindow
         #region Private constants
 
         private const bool DEF_VISIBLE = true;
-        private const int  DEF_WIDTH   = 1;
+        private const float  DEF_WIDTH   = 1;
         private const System.Drawing.Drawing2D.DashStyle DEF_STYLE = System.Drawing.Drawing2D.DashStyle.Solid;
 
         #endregion
@@ -668,7 +668,7 @@ namespace Ctrl_GraphWindow
         /// <summary>
         /// Grid line width
         /// </summary>
-        public int LineWidth;
+        public float LineWidth;
 
         /// <summary>
         /// Grid line color
@@ -1085,18 +1085,21 @@ namespace Ctrl_GraphWindow
         /// <returns>Formatted value</returns>
         public string Get_ValueFormatted(double ValIn)
         {
+            string StrFormat = "";
             string sValFormatted = "";
 
             switch(Format)
             {
                 case GraphSerieLegendFormats.Auto:
 
-                    sValFormatted = (Math.Round(ValIn, AutoDecNumbers)).ToString();
+                    StrFormat = "F" + AutoDecNumbers.ToString();
+                    sValFormatted = ValIn.ToString(StrFormat);
                     break;
 
                 case GraphSerieLegendFormats.Decimal:
 
-                    sValFormatted = (Math.Round(ValIn, Decimals)).ToString();
+                    StrFormat = "F" + Decimals.ToString();
+                    sValFormatted = ValIn.ToString(StrFormat);
                     break;
 
                 case GraphSerieLegendFormats.Hexadecimal:
@@ -1207,37 +1210,31 @@ namespace Ctrl_GraphWindow
 
         private void Set_AutoDecimalsNumber(double ValueRange)
         {
-            if (ValueRange == 0)
+            if (ValueRange != 0)
             {
+                double AbsRange = Math.Abs(ValueRange);
+
                 AutoDecNumbers = 0;
-            }
-            else if (ValueRange < 0.00001)
-            {
-                AutoDecNumbers = 7;
-            }
-            else if (ValueRange < 0.0001)
-            {
-                AutoDecNumbers = 6;
-            }
-            else if (ValueRange < 0.001)
-            {
-                AutoDecNumbers = 5;
-            }
-            else if (ValueRange < 0.01)
-            {
-                AutoDecNumbers = 4;
-            }
-            else if (ValueRange < 0.1)
-            {
-                AutoDecNumbers = 3;
-            }
-            else if (ValueRange < 1)
-            {
-                AutoDecNumbers = 2;
-            }
-            else if (ValueRange < 10)
-            {
-                AutoDecNumbers = 1;
+
+                if (AbsRange < 100)
+                {
+                    if (AbsRange > 10)
+                    {
+                        while (AbsRange > 10)
+                        {
+                            AbsRange /= 10;
+                            AutoDecNumbers++;
+                        }
+                    }
+                    else
+                    {
+                        while (AbsRange < 10)
+                        {
+                            AbsRange *= 10;
+                            AutoDecNumbers++;
+                        }
+                    }
+                }
             }
             else
             {
@@ -1791,7 +1788,12 @@ namespace Ctrl_GraphWindow
     	/// Cursor value font
     	/// </summary>
     	public GW_Font CursorValueFont;
-    	
+
+        /// <summary>
+        /// Cursor value forecolor
+        /// </summary>
+        public Color CursorValueForeColor;
+
     	/// <summary>
     	/// Cursor abscisse value displayed flag
     	/// </summary>
@@ -1817,7 +1819,27 @@ namespace Ctrl_GraphWindow
     	/// </summary>
     	/// <remarks>Used only for 'Graticule', 'Square' and 'Circle' modes</remarks>
     	public int CursorSize;
-    	
+
+        /// <summary>
+        /// Cursor title
+        /// </summary>
+        public string CursorTitle;
+
+        /// <summary>
+        /// Cursor title font
+        /// </summary>
+        public GW_Font CursorTitleFont;
+
+        /// <summary>
+        /// Cursor title forecolor
+        /// </summary>
+        public Color CursorTitleForeColor;
+
+        /// <summary>
+        /// Cursor title display postion
+        /// </summary>
+        public ScreenPositions CursorTitlePosition;
+
     	#endregion
     	
     	/// <summary>
@@ -1834,14 +1856,20 @@ namespace Ctrl_GraphWindow
     		Style.Visible = true;
     		
     		CursorValueFont = new GW_Font("Arial", 8, false, false, true, false, false);
-    		
-    		ShowCursorAbscisseValue = true;
+            CursorValueForeColor = Color.Empty; //Default => Same as serie trace color
+
+            ShowCursorAbscisseValue = true;
             AbscisseValuePostion = ScreenPositions.Top;
     		
     		ShowCursorOrdinatesValue = true;
             OrdinateValuesPosition = ScreenPositions.Right;
     		
     		CursorSize = 2;
+
+            CursorTitle = "";
+            CursorTitleFont = CursorValueFont.Get_Clone();
+            CursorTitleForeColor = Color.White;
+            CursorTitlePosition = ScreenPositions.Bottom;
     	}
     	
     	#region Public methodes
@@ -1857,11 +1885,16 @@ namespace Ctrl_GraphWindow
     		oClone.Mode = Mode;
     		oClone.Style =  Style.Get_Clone();
     		oClone.CursorValueFont =  CursorValueFont.Get_Clone();
+            oClone.CursorValueForeColor = CursorValueForeColor;
     		oClone.ShowCursorAbscisseValue = ShowCursorAbscisseValue;
     		oClone.AbscisseValuePostion = AbscisseValuePostion;
     		oClone.ShowCursorOrdinatesValue = ShowCursorOrdinatesValue;
     		oClone.OrdinateValuesPosition = OrdinateValuesPosition;
     		oClone.CursorSize = CursorSize;
+            oClone.CursorTitle = CursorTitle;
+            oClone.CursorTitleFont = CursorTitleFont.Get_Clone();
+            oClone.CursorTitleForeColor = CursorTitleForeColor;
+            oClone.CursorTitlePosition = CursorTitlePosition;
     		
     		return(oClone);
     	}
@@ -1887,6 +1920,10 @@ namespace Ctrl_GraphWindow
             	xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorValueFont");
             	xCursor.AppendChild(xProp);
             	
+                xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorValueForecolor");
+                xProp.InnerText = CursorValueForeColor.ToArgb().ToString();
+                xCursor.AppendChild(xProp);
+
             	xProp = oXDoc.CreateElement("CursorAbsValVisible");
             	xProp.InnerText = ShowCursorAbscisseValue.ToString();
             	xCursor.AppendChild(xProp);
@@ -1906,8 +1943,23 @@ namespace Ctrl_GraphWindow
             	xProp = oXDoc.CreateElement("CursorSize");
             	xProp.InnerText = CursorSize.ToString();
             	xCursor.AppendChild(xProp);
-            	
-        	return(xCursor);
+
+                xProp = oXDoc.CreateElement("CursorTitle");
+                xProp.InnerText = CursorTitle;
+                xCursor.AppendChild(xProp);
+
+                xProp = CursorTitleFont.Create_FontXmlNode(oXDoc, "CursorTitleFont");
+                xCursor.AppendChild(xProp);
+
+                xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorTitleForecolor");
+                xProp.InnerText = CursorTitleForeColor.ToArgb().ToString();
+                xCursor.AppendChild(xProp);
+
+                xProp = CursorValueFont.Create_FontXmlNode(oXDoc, "CursorTitlePosition");
+                xProp.InnerText = CursorTitlePosition.ToString();
+                xCursor.AppendChild(xProp);
+
+            return (xCursor);
     	}
     	
     	/// <summary>
@@ -1929,8 +1981,27 @@ namespace Ctrl_GraphWindow
     			
     			xProp = xCursor.SelectSingleNode("CursorValueFont");
     			CursorValueFont.Read_FontXmlNode(xProp);
-    			
-    			xProp = xCursor.SelectSingleNode("CursorAbsValVisible");
+
+                xProp = xCursor.SelectSingleNode("CursorValueForecolor");
+                if(!(xProp==null)) //New feature of release 2.0.0.0
+                {
+                    int iColor = int.Parse(xProp.InnerText);
+
+                    if(iColor!=0)
+                    {
+                        CursorValueForeColor = Color.FromArgb(iColor);
+                    }
+                    else
+                    {
+                        CursorValueForeColor = Color.Empty; //Default value
+                    }
+                }
+                else
+                {
+                    CursorValueForeColor = Color.Empty; //Default value
+                }
+
+                xProp = xCursor.SelectSingleNode("CursorAbsValVisible");
     			ShowCursorAbscisseValue = bool.Parse(xProp.InnerText);
     			
     			xProp = xCursor.SelectSingleNode("CursorAbsValPosition");
@@ -1944,8 +2015,24 @@ namespace Ctrl_GraphWindow
     			
     			xProp = xCursor.SelectSingleNode("CursorSize");
     			CursorSize = int.Parse(xProp.InnerText);
-    		}
-    		catch
+
+                xProp = xCursor.SelectSingleNode("CursorTitle");
+
+                if (!(xProp==null)) //New feature of release 2.0.0.0
+                {
+                    CursorTitle = xProp.InnerText;
+
+                    xProp = xCursor.SelectSingleNode("CursorTitleFont");
+                    CursorTitleFont.Read_FontXmlNode(xProp);
+
+                    xProp = xCursor.SelectSingleNode("CursorTitleForecolor");
+                    CursorTitleForeColor = Color.FromArgb(int.Parse(xProp.InnerText));
+
+                    xProp = xCursor.SelectSingleNode("CursorTitlePosition");
+                    CursorTitlePosition = (ScreenPositions)Enum.Parse(typeof(ScreenPositions), xProp.InnerText);
+                }
+            }
+            catch
     		{
     			return(false);
     		}
@@ -2198,6 +2285,15 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Internal members
+
+        /// <summary>
+        /// Serie key identifier of the data channel in the current data file
+        /// </summary>
+        internal int DataChannelKeyId;
+
+        #endregion
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -2221,6 +2317,7 @@ namespace Ctrl_GraphWindow
             UserGrid = new GraphSerieUserGrid(); //OK
             ReferenceLines = new List<GraphReferenceLine>(); //OK
             CoordConversion = new GW_SampleCoordConversion();
+            DataChannelKeyId = -1;
         }
 
         #region Public methodes

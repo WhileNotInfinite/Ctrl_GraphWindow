@@ -77,6 +77,10 @@
     <StartAction>Project</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+<<<<<<< HEAD
+=======
+    <Prefer32Bit>false</Prefer32Bit>
+>>>>>>> Graphics_SaveRestore
     <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Demo_Dbg|AnyCPU'">
@@ -161,7 +165,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Controls\Ctrl_GW_ChannelList.resx">
       <DependentUpon>Ctrl_GW_ChannelList.cs</DependentUpon>
@@ -197,6 +200,24 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play-icone-6427.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\break-icone-9058.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stop-icone-5072.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eye-previewer-icone-3911.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\precedent-icone-5813.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\suivant-icone-9262.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
