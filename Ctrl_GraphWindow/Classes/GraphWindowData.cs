@@ -532,9 +532,12 @@ namespace Ctrl_GraphWindow
 
                         for (int iChan = 1; iChan < Channels.Count; iChan++)
                         {
-                            if (Channels[iChan].Samples[0].SampleTime < TimeMin)
+                            if (Channels[iChan].Samples.Count > 1)
                             {
-                                TimeMin = Channels[iChan].Samples[0].SampleTime;
+                                if (Channels[iChan].Samples[0].SampleTime < TimeMin)
+                                {
+                                    TimeMin = Channels[iChan].Samples[0].SampleTime;
+                                }
                             }
                         }
 
@@ -572,9 +575,12 @@ namespace Ctrl_GraphWindow
 
                         for (int iChan = 1; iChan < Channels.Count; iChan++)
                         {
-                            if (Channels[iChan].Samples[Channels[iChan].Samples.Count - 1].SampleTime > TimeMax)
+                            if (Channels[iChan].Samples.Count > 1)
                             {
-                                TimeMax = Channels[iChan].Samples[Channels[iChan].Samples.Count - 1].SampleTime;
+                                if (Channels[iChan].Samples[Channels[iChan].Samples.Count - 1].SampleTime > TimeMax)
+                                {
+                                    TimeMax = Channels[iChan].Samples[Channels[iChan].Samples.Count - 1].SampleTime;
+                                }
                             }
                         }
 
@@ -1029,27 +1035,33 @@ namespace Ctrl_GraphWindow
             {
                 if (DataSamplingMode == SamplingMode.MultipleRates)
                 {
-                    foreach(GW_DataChannel oChan in Channels)
+                    foreach (GW_DataChannel oChan in Channels)
                     {
-                        SerieSample sLastSample = oChan.Samples[oChan.Samples.Count - 1];
-
-                        while (sLastSample.SampleTime - oChan.Samples[0].SampleTime > TimeBufferSize)
+                        if (oChan.Samples.Count > 1)
                         {
-                            oChan.Samples.RemoveAt(0);
+                            SerieSample sLastSample = oChan.Samples[oChan.Samples.Count - 1];
+
+                            while (sLastSample.SampleTime - oChan.Samples[0].SampleTime > TimeBufferSize)
+                            {
+                                oChan.Samples.RemoveAt(0);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    double LastSampleTime = Time.Values[Time.Values.Count - 1];
-
-                    while (LastSampleTime - Time.Values[0] > TimeBufferSize)
+                    if (Time.Values.Count > 1)
                     {
-                        Time.Values.RemoveAt(0);
+                        double LastSampleTime = Time.Values[Time.Values.Count - 1];
 
-                        foreach(GW_DataChannel oChan in Channels)
+                        while (LastSampleTime - Time.Values[0] > TimeBufferSize)
                         {
-                            oChan.Values.RemoveAt(0);
+                            Time.Values.RemoveAt(0);
+
+                            foreach (GW_DataChannel oChan in Channels)
+                            {
+                                oChan.Values.RemoveAt(0);
+                            }
                         }
                     }
                 }
