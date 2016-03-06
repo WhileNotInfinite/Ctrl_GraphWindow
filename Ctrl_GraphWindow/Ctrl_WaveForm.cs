@@ -1578,6 +1578,7 @@ namespace Ctrl_GraphWindow
 
         private void TSB_SeeStep_Click(object sender, EventArgs e)
         {
+#if DEBUG
             if (DrawingStages != null)
             {
                 iStageDbg = TSCmb_InitialStage.SelectedIndex;
@@ -1588,10 +1589,12 @@ namespace Ctrl_GraphWindow
                     Pic_Graphic.Image = (Bitmap)DrawingStages[iStageDbg].InitialGraphImage.Clone();
                 }
             }
+#endif
         }
 
         private void TSB_SeePrevStep_Click(object sender, EventArgs e)
         {
+#if DEBUG
             if (DrawingStages != null)
             {
                 if (iStageDbg > 0)
@@ -1602,10 +1605,12 @@ namespace Ctrl_GraphWindow
                     Pic_Graphic.Image = (Bitmap)DrawingStages[iStageDbg].InitialGraphImage.Clone(); ;
                 }
             }
+#endif
         }
 
         private void TSB_SeeNextStep_Click(object sender, EventArgs e)
         {
+#if DEBUG
             if (DrawingStages != null)
             {
                 if (iStageDbg < DrawingStages.Length - 1)
@@ -1616,13 +1621,14 @@ namespace Ctrl_GraphWindow
                     Pic_Graphic.Image = (Bitmap)DrawingStages[iStageDbg].InitialGraphImage.Clone(); ;
                 }
             }
+#endif
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
-        #region Pic_GraphFrame
+#region Pic_GraphFrame
 
         private void Pic_GraphFrameSizeChanged(object sender, EventArgs e)
 		{
@@ -1640,9 +1646,9 @@ namespace Ctrl_GraphWindow
         	Drop_Series(e);
 		}
         
-        #endregion
+#endregion
         
-        #region Pic_Graphic
+#region Pic_Graphic
        
         private void Pic_GraphicMouseDown(object sender, MouseEventArgs e)
 		{	
@@ -1738,7 +1744,7 @@ namespace Ctrl_GraphWindow
 	        			
 	        		case MouseButtons.Right:
 	        			
-	        			#region Zoom box drawing
+#region Zoom box drawing
 	        			
 	        			if (bZoomEnabled)
 	        			{
@@ -1822,7 +1828,7 @@ namespace Ctrl_GraphWindow
 	        					g.Dispose();
 	        				}
 	        			}
-	        			#endregion
+#endregion
 	        			
 	        			break;
 	        	}
@@ -2081,9 +2087,9 @@ namespace Ctrl_GraphWindow
             bScratchStageForced = true;
         }
 
-        #endregion
+#endregion
 
-        #region Context_PicGraph_Options
+#region Context_PicGraph_Options
 
         private void RT_PlaytoolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2120,7 +2126,7 @@ namespace Ctrl_GraphWindow
 			ZoomPlus(true);
 		}
         
-        #region Zoom mode
+#region Zoom mode
         
         private void ZoomMode_X_ToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -2158,9 +2164,9 @@ namespace Ctrl_GraphWindow
 			}
 		}
         
-        #endregion
+#endregion
         
-        #region Zoom factor
+#region Zoom factor
         
         private void ZoomFactor_2_ToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -2207,9 +2213,9 @@ namespace Ctrl_GraphWindow
         	}
 		}
         
-        #endregion
+#endregion
         
-        #region Graph Layout
+#region Graph Layout
         
         private void Layout_overlayToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -2235,9 +2241,9 @@ namespace Ctrl_GraphWindow
 			}
 		}
         
-        #endregion
+#endregion
         
-        #region Cursor
+#region Cursor
         
         private void Cursor_noneToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -2295,7 +2301,7 @@ namespace Ctrl_GraphWindow
 			}
 		}
         
-		#region Cursor step
+#region Cursor step
 		
 		private void Cursor_Step_01_ToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -2378,11 +2384,11 @@ namespace Ctrl_GraphWindow
 			}
 		}
 		
-		#endregion
+#endregion
 		
-        #endregion
+#endregion
         
-        #region Reference cursor
+#region Reference cursor
         
         private void RefCursor_Set_TSMIClick(object sender, EventArgs e)
 		{
@@ -2399,7 +2405,7 @@ namespace Ctrl_GraphWindow
 			Clear_ReferenceCursor();
 		}
         
-        #region Mode
+#region Mode
         
         private void RefCursor_Mode_None_TSMIClick(object sender, EventArgs e)
 		{
@@ -2428,9 +2434,9 @@ namespace Ctrl_GraphWindow
 			}
 		}
         
-        #endregion
+#endregion
         
-        #endregion
+#endregion
         
         private void PropertiesToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -2447,9 +2453,9 @@ namespace Ctrl_GraphWindow
 			Print_Graphic();
 		}
         
-        #endregion
+#endregion
         
-        #region Context_PicGraphic_ZoomStats
+#region Context_PicGraphic_ZoomStats
         
         private void ZoomToolStripMenuItemClick(object sender, EventArgs e)
 		{
@@ -2461,9 +2467,9 @@ namespace Ctrl_GraphWindow
 			Show_ZoomBoxStatistics();
 		}
         
-        #endregion
+#endregion
         
-        #region Cmd_ZoomXPosition
+#region Cmd_ZoomXPosition
         
         private void Cmd_ZoomXPositionMouseDown(object sender, MouseEventArgs e)
 		{
@@ -2504,9 +2510,9 @@ namespace Ctrl_GraphWindow
 			Cursor = Cursors.Default;
 		}
         
-        #endregion
+#endregion
         
-        #region Cmd_ZoomYPosition
+#region Cmd_ZoomYPosition
         
         private void Cmd_ZoomYPositionMouseDown(object sender, MouseEventArgs e)
 		{
@@ -2547,9 +2553,9 @@ namespace Ctrl_GraphWindow
 			Cursor = Cursors.Default;
 		}
 
-        #endregion
+#endregion
 
-        #region Grid_Legend
+#region Grid_Legend
 
         private void Grid_Legend_MouseDown(object sender, MouseEventArgs e)
         {
@@ -2643,9 +2649,9 @@ namespace Ctrl_GraphWindow
             }
         }
 
-        #endregion
+#endregion
 
-        #region Context_Legend
+#region Context_Legend
         
         private void TSMI_Ctxt_Legend_EditClick(object sender, EventArgs e)
 		{
@@ -2671,7 +2677,7 @@ namespace Ctrl_GraphWindow
             }
 		}
         
-        #region Legend informations
+#region Legend informations
         
         private void TSMI_Ctxt_Legend_Infos_LabelClick(object sender, EventArgs e)
 		{
@@ -2763,7 +2769,7 @@ namespace Ctrl_GraphWindow
 			}
 		}
 		
-        #region Reference cursor
+#region Reference cursor
         
         private void TSMI_Ctxt_Legend_Infos_RefCursor_ValueClick(object sender, EventArgs e)
 		{
@@ -2825,9 +2831,9 @@ namespace Ctrl_GraphWindow
 			}
 		}
         
-        #endregion
+#endregion
         
-        #endregion
+#endregion
         
         private void TSMI_Ctxt_Legend_ShowTitlesClick(object sender, EventArgs e)
 		{
@@ -2849,11 +2855,11 @@ namespace Ctrl_GraphWindow
             }
 		}
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
-        #region Private classes events
+#region Private classes events
 
         private void GraphicUpdateRequestRaised(object sender, EventArgs e)
         {
@@ -2864,11 +2870,11 @@ namespace Ctrl_GraphWindow
             }
         }
 
-        #endregion
+#endregion
 
-        #region Private methodes
+#region Private methodes
 
-        #region Threaded method and delegates
+#region Threaded method and delegates
 
         private void GraphTracingThreadTask()
         {
@@ -3050,9 +3056,9 @@ namespace Ctrl_GraphWindow
 #endif
         }
 
-        #endregion
+#endregion
 
-        #region Drawing stages
+#region Drawing stages
 
         private void Init_DrawingStages()
         {
@@ -3082,7 +3088,7 @@ namespace Ctrl_GraphWindow
                 return;
             }
 
-            #region Local variables
+#region Local variables
 
             Graphics FrameGraphics;
             Graphics GraphGraphics;
@@ -3092,7 +3098,7 @@ namespace Ctrl_GraphWindow
             Pen oPen = null;
             SolidBrush oBrush = null;
 
-            #endregion
+#endregion
 
 #if DEBUG
             swTimer.Start();
@@ -3147,7 +3153,7 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #region Initialization
+#region Initialization
 
             Init_GraphWindow();
 
@@ -3160,14 +3166,14 @@ namespace Ctrl_GraphWindow
             FrameGraphics = Graphics.FromImage(FrameImage);
             GraphGraphics = Graphics.FromImage(GraphImage);
 
-            #endregion
+#endregion
 
 #if DEBUG
             InitTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region Frame drawing
+#region Frame drawing
 
             FrameDrawingStage: //Graphic frmame drawing
 
@@ -3180,14 +3186,14 @@ namespace Ctrl_GraphWindow
 
             FrameGraphics.DrawRectangle(oPen, FrameLeftPoint, FrameTopPoint, FrameWidth, FrameHeight);
 
-            #endregion
+#endregion
 
 #if DEBUG
             FrameTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region Grid drawing
+#region Grid drawing
 
             GridDrawingStage: //Graphic grids drawing
             
@@ -3263,14 +3269,14 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             GridTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region X Axis lines
+#region X Axis lines
 
             XAxisLinesDrawingStage: //Axis X line and graduations drawing
 
@@ -3309,14 +3315,14 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             XAxisLineTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region Y Axis lines
+#region Y Axis lines
 
             YAxisLinesDrawingStage: //Series Y Axis lines and graduations drawing
             
@@ -3413,14 +3419,14 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             YAxisLineTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region Y Axis values
+#region Y Axis values
 
             YAxisValuesDrawingStage: //Series Y Axis graduations values drawing
             
@@ -3479,14 +3485,14 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             YAxisValueTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region Series Options
+#region Series Options
 
             SeriesOptionsDrawingStage: //Series options (custom grids, reference lines) drawing
             
@@ -3500,9 +3506,9 @@ namespace Ctrl_GraphWindow
                 {
                     if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible))
                     {
-                        #region Serie user grid
+#region Serie user grid
 
-                        #region Vertical grid
+#region Vertical grid
 
                         if (oSerieProps.UserGrid.VerticalLinesStyle.Visible)
                         {
@@ -3572,9 +3578,9 @@ namespace Ctrl_GraphWindow
                             }
                         }
 
-                        #endregion
+#endregion
 
-                        #region Horizontal grid
+#region Horizontal grid
 
                         if (oSerieProps.UserGrid.HorizontalLinesStyle.Visible)
                         {
@@ -3673,11 +3679,11 @@ namespace Ctrl_GraphWindow
                             }
                         }
 
-                        #endregion
+#endregion
 
-                        #endregion
+#endregion
 
-                        #region Serie reference lines
+#region Serie reference lines
 
                         if (oSerieProps.ReferenceLines.Count > 0)
                         {
@@ -3884,19 +3890,19 @@ namespace Ctrl_GraphWindow
                             }
                         }
 
-                        #endregion
+#endregion
                     }
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             SeriesOptionsTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region X Axis options
+#region X Axis options
 
             XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
             
@@ -4103,14 +4109,14 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             XAxisOptionsTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region X Axis values
+#region X Axis values
 
             XAxisValuesDrawingStage: //X Axis graduation values drawing
             
@@ -4146,14 +4152,14 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             XAxisValueTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-            #region Series values
+#region Series values
 
             SeriesValuesDrawingStage: //Series values (trace and markers) drawing
             
@@ -4196,7 +4202,7 @@ namespace Ctrl_GraphWindow
                                 double DblSampleIndex = 0;
 
                                 //Marks objects init
-                                #region Markers init
+#region Markers init
 
                                 List<object> SerieMarksCoords = null;
 
@@ -4209,9 +4215,9 @@ namespace Ctrl_GraphWindow
                                     SerieMarksCoords = new List<object>();
                                 }
 
-                                #endregion
+#endregion
 
-                                #region Graphic points coordinates calculation
+#region Graphic points coordinates calculation
 
                                 for (int iSample = 0; iSample < nSampleCount; iSample++)
                                 {
@@ -4276,7 +4282,7 @@ namespace Ctrl_GraphWindow
                                     }
 
                                     //Marks objects computation
-                                    #region Markers points definition
+#region Markers points definition
 
                                     if (oSerieProps.Markers.Visible)
                                     {
@@ -4355,7 +4361,7 @@ namespace Ctrl_GraphWindow
                                         }
                                     }
 
-                                    #endregion  
+#endregion
                                 }
 
                                 //Add the last (or unique) set of sample points
@@ -4364,14 +4370,14 @@ namespace Ctrl_GraphWindow
                                     SerieCoords.Add(PartialSerieCoords.ToArray());
                                 }
 
-                                #endregion
+#endregion
 
-                                #region Serie trace and sample markers drawing
+#region Serie trace and sample markers drawing
 
                                 if (nVisiblePointCnt > 1)
                                 {
                                     //Trace ploting
-                                    #region Trace ploting
+#region Trace ploting
 
                                     if (oSerieProps.Trace.Visible)
                                     {
@@ -4415,10 +4421,10 @@ namespace Ctrl_GraphWindow
                                         }
                                     }
 
-                                    #endregion
+#endregion
 
                                     //Markers plotting
-                                    #region Markers plotting
+#region Markers plotting
 
                                     if (oSerieProps.Markers.Visible)
                                     {
@@ -4518,9 +4524,9 @@ namespace Ctrl_GraphWindow
                                     }
                                 }
 
-                                #endregion
+#endregion
 
-                                #endregion
+#endregion
                             }
                         }
                     }
@@ -4529,7 +4535,7 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            #endregion
+#endregion
 
 #if DEBUG
             SeriesValuesTime = swTimer.ElapsedMilliseconds;
@@ -4550,9 +4556,9 @@ namespace Ctrl_GraphWindow
 #endif
         }
 
-        #endregion
+#endregion
 
-        #region Graphic plotting functions
+#region Graphic plotting functions
 
         private void Init_GraphWindow()
         {
@@ -4964,9 +4970,9 @@ namespace Ctrl_GraphWindow
             return (Cnt);
         }
         
-        #endregion
+#endregion
         
-        #region Cursor functions
+#region Cursor functions
         
         private void Draw_Cursor(Point MouseLocation)
         {
@@ -5646,9 +5652,9 @@ namespace Ctrl_GraphWindow
         	}
         }
         
-        #endregion
+#endregion
         
-        #region Zoom and stats functions
+#region Zoom and stats functions
         
         private void Plot_ZoomBoxData()
         {
@@ -6610,9 +6616,9 @@ namespace Ctrl_GraphWindow
         	return(null);
         }
         
-        #endregion
+#endregion
          
-        #region Legend
+#region Legend
          
         private void Init_Legend()
         {
@@ -6789,9 +6795,9 @@ namespace Ctrl_GraphWindow
         	}
         }
         
-        #endregion
+#endregion
         
-        #region Data file functions
+#region Data file functions
         
         private void Load_DataFile()
         {
@@ -6812,9 +6818,9 @@ namespace Ctrl_GraphWindow
             }
         }
         
-        #endregion
+#endregion
         
-        #region Graphic properties
+#region Graphic properties
 
         private void Edit_GraphProperties()
         {
@@ -6850,7 +6856,7 @@ namespace Ctrl_GraphWindow
         private void Set_Options_Controls()
         {
         	//Graph layout
-        	#region Graph layout
+#region Graph layout
         	
         	switch (Properties.GraphLayoutMode)
         	{
@@ -6897,10 +6903,10 @@ namespace Ctrl_GraphWindow
         			break;
         	}
         	
-        	#endregion
+#endregion
         	
         	//Cursor
-        	#region Cursor
+#region Cursor
         	
         	switch (Properties.Cursor.Mode)
         	{
@@ -7059,10 +7065,10 @@ namespace Ctrl_GraphWindow
         			break;
         	}
         	
-        	#endregion
+#endregion
         	
         	//Cursor step
-        	#region Cursor step
+#region Cursor step
         	
         	switch (CursorStepIndex)
         	{
@@ -7301,10 +7307,10 @@ namespace Ctrl_GraphWindow
         			break;
         	}
         	
-        	#endregion
+#endregion
         	
         	//Reference cursor
-        	#region Reference cursor
+#region Reference cursor
         	
         	switch (Properties.ReferenceCursor.Mode)
         	{
@@ -7351,10 +7357,10 @@ namespace Ctrl_GraphWindow
         			break;
         	}
         	
-        	#endregion
+#endregion
         	
         	//Zoom mode
-        	#region Zoom mode
+#region Zoom mode
         	
         	if (!(Properties.ZoomMode.Equals(GraphicZoomMode.Disabled)))
         	{
@@ -7461,10 +7467,10 @@ namespace Ctrl_GraphWindow
         		TSB_ZoomMinus.Enabled = false;
         	}
         	
-        	#endregion
+#endregion
         	
         	//Zoom factor
-        	#region Zoom factor
+#region Zoom factor
         	
         	switch (ZoomFactorIndex)
         	{
@@ -7559,10 +7565,10 @@ namespace Ctrl_GraphWindow
         			break;
         	}
         	
-        	#endregion
+#endregion
         	
         	//Legend informations
-        	#region Legend informations
+#region Legend informations
         	
         	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Label))
         	{
@@ -7654,7 +7660,7 @@ namespace Ctrl_GraphWindow
         		TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked = true;
         	}
         	
-        	#endregion
+#endregion
         }
         
         private void Change_GraphLayout(GraphicWindowLayoutModes eNewLayoutMode)
@@ -7716,9 +7722,9 @@ namespace Ctrl_GraphWindow
             }
         }
         
-        #endregion
+#endregion
 
-        #region Channel list
+#region Channel list
 
         private void Fill_ChannelList()
         {
@@ -7741,9 +7747,9 @@ namespace Ctrl_GraphWindow
             splitContainer1.Panel1Collapsed = !splitContainer1.Panel1Collapsed;
         }
 
-        #endregion
+#endregion
 		
-        #region Snapshot and print
+#region Snapshot and print
         
         private void Make_GraphicSnapshot()
         {
@@ -7820,9 +7826,9 @@ namespace Ctrl_GraphWindow
         	//SnapShot.Dispose();
         }
 
-        #endregion
+#endregion
 
-        #region Real time graphic control
+#region Real time graphic control
         
         private void Start_RealTimeTrace()
         {
@@ -7861,9 +7867,9 @@ namespace Ctrl_GraphWindow
             LegendEnabled = true;
         }
 
-        #endregion
+#endregion
 
-        #region Tools
+#region Tools
 
         private int RoundClosest(int Value, int Divider)
         {
@@ -7943,11 +7949,11 @@ namespace Ctrl_GraphWindow
         	}
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
-        #region Events handling methods
+#region Events handling methods
 
         /// <summary>
         /// UserControlKey down event firing method
@@ -7964,11 +7970,11 @@ namespace Ctrl_GraphWindow
 
         }
 
-        #endregion
+#endregion
 
-        #region Public methodes
+#region Public methodes
 
-        #region Graphic methodes
+#region Graphic methodes
 
         /// <summary>
         /// Redraw the graphic window from scratch
@@ -8072,9 +8078,9 @@ namespace Ctrl_GraphWindow
             }
         }
 
-        #endregion
+#endregion
 
-        #region Channel list
+#region Channel list
 
         /// <summary>
         /// Clear the channel list of the current Ctrl_WaveForm
@@ -8093,8 +8099,8 @@ namespace Ctrl_GraphWindow
             Ctrl_ChannelList.Add_ChannelName(ChannelName);
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
     }
 }
