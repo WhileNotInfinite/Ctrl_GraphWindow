@@ -1529,6 +1529,14 @@
             <param name="xGraphProps">XML node to read</param>
             <returns>Node reading error flag: True = No Error / False = Error</returns>
         </member>
+        <member name="M:Ctrl_GraphWindow.GraphWindowProperties.Get_SerieByName(System.String)">
+            <summary>
+            Return the GraphSerieProperties item corresponding to the serie name given as argument
+            </summary>
+            <param name="SerieName">Name of the serie to retrieve</param>
+            <returns>GraphSerieProperties item corresponding to the serie name given as argument</returns>
+            <remarks>Retun null if the GraphSerieProperties item is not found</remarks>
+        </member>
         <member name="M:Ctrl_GraphWindow.GraphWindowProperties.Get_SerieAtKey(System.Int32)">
             <summary>
             Return the GraphSerieProperties item corresponding to the identification key given as argument

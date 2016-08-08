@@ -3286,6 +3286,25 @@ namespace Ctrl_GraphWindow
         #region SeriesProperties management
 
         /// <summary>
+        /// Return the GraphSerieProperties item corresponding to the serie name given as argument
+        /// </summary>
+        /// <param name="SerieName">Name of the serie to retrieve</param>
+        /// <returns>GraphSerieProperties item corresponding to the serie name given as argument</returns>
+        /// <remarks>Retun null if the GraphSerieProperties item is not found</remarks>
+        public GraphSerieProperties Get_SerieByName(string SerieName)
+        {
+            foreach (GraphSerieProperties oSerie in SeriesProperties)
+            {
+                if (oSerie.Name == SerieName)
+                {
+                    return (oSerie);
+                }
+            }
+
+            return (null);
+        }
+
+        /// <summary>
         /// Return the GraphSerieProperties item corresponding to the identification key given as argument
         /// </summary>
         /// <param name="iKey">Identification key of the serie to retrieve</param>
