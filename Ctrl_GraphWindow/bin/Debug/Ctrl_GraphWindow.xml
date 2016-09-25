@@ -71,6 +71,18 @@
             Number of data item contained within the current GW_DataChannel object whether actual sampling mode is a SingleRate or MultipleRates 
             </summary>
         </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.Description">
+            <summary>Description of the data channel</summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.Unit">
+            <summary>Unit of data channel values</summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.GraphicFormat">
+            <summary>Display format of data channel values</summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.ChannelReferenceLines">
+            <summary>Reference lines of data channel</summary>
+        </member>
         <member name="F:Ctrl_GraphWindow.GW_DataChannel.Name">
             <summary>
             Data channel name
@@ -183,6 +195,45 @@
             </summary>
             <param name="item">The GW_DataChannel to be added to the end of the GW_DataChannelList</param>
         </member>
+        <member name="T:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty">
+            <summary>
+            Graph window XML data file custom property class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.Name">
+            <summary>
+            Name of the current custom property
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.PropertyValue">
+            <summary>
+            Value of the current custom property
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.GetPropertyStringValue">
+            <summary>
+            Returns the value of the current custom property into a string value
+            </summary>
+            <returns>Value of the current custom property into a string value</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.GetPropertyType">
+            <summary>
+            Returns the type of the current custom property value
+            </summary>
+            <returns>Type of the current custom property value</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.ParsePropertyStringValue(System.String,System.String)">
+            <summary>
+            Parse the value of the custom property from a string value
+            </summary>
+            <param name="StringValue">String value to parse</param>
+            <param name="StringType">Type of value to parse</param>
+        </member>
         <member name="T:Ctrl_GraphWindow.GW_DataFile">
             <summary>
             Graph window data file class
@@ -219,6 +270,10 @@
             Maximum step time of the file
             </summary>
         </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.DataStartTime">
+            <summary>Data file start timestamp</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Ctrl_GraphWindow.GW_DataFile.UserComment" -->
         <member name="F:Ctrl_GraphWindow.GW_DataFile.DataSamplingMode">
             <summary>
             Data file sampling mode
@@ -233,6 +288,9 @@
             <summary>
             Data channels collection of the data file
             </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataFile.XmlDataFileCustomProperties">
+            <summary>Custom properties of the current data file for XML data file format</summary>
         </member>
         <member name="F:Ctrl_GraphWindow.GW_DataFile.CoordConversionUpdateRequested">
             <summary>
@@ -262,6 +320,15 @@
             CSV file type: comma separtor ';'
             </remarks>
         </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataFile.Load_XmlDataFile(System.String,System.Boolean)">
+            <summary>
+            Read a XML data file
+            </summary>
+            <param name="fPath">Path of the XML file to read</param>
+            <param name="HeaderOnly">Read only data file header flag</param>
+            <returns>Reading error flag: True = No Error / False = Error</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Ctrl_GraphWindow.GW_DataFile.Write_XmlDataFile(System.String)" -->
         <member name="M:Ctrl_GraphWindow.GW_DataFile.Get_DataChannel(System.String)">
             <summary>
             Return the GW_DataChannel item corresponding to the name given as argument
@@ -870,6 +937,21 @@
             Set the value range for decimal number calculation in 'Auto' mode
             </summary>
             <param name="Range">Serie value range</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GraphSerieValueFormat.GetSerieValueFormatXmlNode(System.Xml.XmlDocument)">
+            <summary>
+            Return the XML node of the current GraphSerieValueFormat object
+            </summary>
+            <param name="oXDoc">XML document in which the graph serie value format properties XML node will be created</param>
+            <returns>XML node of the current GraphSerieValueFormat object</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GraphSerieValueFormat.SetSerieValueFormatFromXmlNode(System.Xml.XmlNode)">
+            <summary>
+            Read a GraphSerieValueFormat XML node
+            </summary>
+            <param name="xFormat">XML node to read</param>
+            <returns>>Nothing</returns>
+            <remarks>Throw an exception if XML node parsing fails</remarks>
         </member>
         <member name="T:Ctrl_GraphWindow.GraphSerieMarkProperties">
             <summary>

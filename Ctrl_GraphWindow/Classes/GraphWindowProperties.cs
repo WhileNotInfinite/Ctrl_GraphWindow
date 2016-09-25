@@ -1212,6 +1212,89 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Internal methodes
+
+        /// <summary>
+        /// Return the XML node of the current GraphSerieValueFormat object
+        /// </summary>
+        /// <param name="oXDoc">XML document in which the graph serie value format properties XML node will be created</param>
+        /// <returns>XML node of the current GraphSerieValueFormat object</returns>
+        internal XmlElement GetSerieValueFormatXmlNode(XmlDocument oXDoc)
+        {
+            XmlElement xProp;
+
+            XmlElement xFormat = oXDoc.CreateElement("ValueFormat");
+
+            xProp = oXDoc.CreateElement("Format");
+            xProp.InnerText = Format.ToString();
+            xFormat.AppendChild(xProp);
+
+            xProp = oXDoc.CreateElement("Decimals");
+            xProp.InnerText = Decimals.ToString();
+            xFormat.AppendChild(xProp);
+
+            XmlElement xEnums = oXDoc.CreateElement("Enumerations");
+            xFormat.AppendChild(xEnums);
+
+            foreach (GraphSerieEnumValue sEnum in Enums)
+            {
+                XmlElement xEnumDef = oXDoc.CreateElement("Enum");
+                xEnums.AppendChild(xEnumDef);
+
+                xProp = oXDoc.CreateElement("Value");
+                xProp.InnerText = sEnum.Value.ToString();
+                xEnumDef.AppendChild(xProp);
+
+                xProp = oXDoc.CreateElement("Text");
+                xProp.InnerText = sEnum.Text;
+                xEnumDef.AppendChild(xProp);
+            }
+
+            return (xFormat);
+        }
+
+        /// <summary>
+        /// Read a GraphSerieValueFormat XML node
+        /// </summary>
+        /// <param name="xFormat">XML node to read</param>
+        /// <returns>>Nothing</returns>
+        /// <remarks>Throw an exception if XML node parsing fails</remarks>
+        internal void SetSerieValueFormatFromXmlNode(XmlNode xFormat)
+        {
+            XmlNode xProp;
+
+            try
+            {
+                xProp = xFormat.SelectSingleNode("Format");
+                this.Format = (GraphSerieLegendFormats)Enum.Parse(typeof(GraphSerieLegendFormats), xProp.InnerText);
+
+                xProp = xFormat.SelectSingleNode("Decimals");
+                this.Decimals = int.Parse(xProp.InnerText);
+
+                XmlNode xEnums = xFormat.SelectSingleNode("Enumerations");
+                this.Enums = new List<GraphSerieEnumValue>();
+
+                foreach (XmlNode xEnumDef in xEnums.ChildNodes)
+                {
+                    GraphSerieEnumValue sEnum = new GraphSerieEnumValue();
+
+                    xProp = xEnumDef.SelectSingleNode("Value");
+                    sEnum.Value = int.Parse(xProp.InnerText);
+
+                    xProp = xEnumDef.SelectSingleNode("Text");
+                    sEnum.Text = xProp.InnerText;
+
+                    this.Enums.Add(sEnum);
+                }
+            }
+            catch
+            {
+                throw new Exception("Graphic serie value format XML node parsing error");
+            }
+        }
+
+        #endregion
+
         #region Private methodes
 
         private string Get_EnumText(int Value)
@@ -2438,6 +2521,10 @@ namespace Ctrl_GraphWindow
                 xSerie.AppendChild(xProp);
 
                 //Value format
+                xSerie.AppendChild(this.ValueFormat.GetSerieValueFormatXmlNode(oXDoc));
+
+                //TODO: Remove old code
+                /* Old code
                 XmlElement xFormat = oXDoc.CreateElement("ValueFormat");
                 xSerie.AppendChild(xFormat);
 
@@ -2465,6 +2552,7 @@ namespace Ctrl_GraphWindow
                             xProp.InnerText = sEnum.Text;
                             xEnumDef.AppendChild(xProp);
                     }
+                */
 
                 //Trace line
                 XmlElement xTrace = this.Trace.Create_GraphLineXmlNode(oXDoc, "Trace");
@@ -2655,6 +2743,10 @@ namespace Ctrl_GraphWindow
 
                 //Value format
                 XmlNode xFormat = xSerie.SelectSingleNode("ValueFormat");
+                this.ValueFormat.SetSerieValueFormatFromXmlNode(xFormat);
+
+                //TODO: Remove old code
+                /* Old code
 
                     xProp = xFormat.SelectSingleNode("Format");
                     this.ValueFormat.Format = (GraphSerieLegendFormats)Enum.Parse(typeof(GraphSerieLegendFormats), xProp.InnerText);
@@ -2677,6 +2769,7 @@ namespace Ctrl_GraphWindow
 
                         this.ValueFormat.Enums.Add(sEnum);
                     }
+                */
 
                 //Trace line
                 XmlNode xTrace = xSerie.SelectSingleNode("Trace");

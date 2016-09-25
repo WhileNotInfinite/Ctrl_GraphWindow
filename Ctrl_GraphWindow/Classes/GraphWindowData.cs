@@ -24,6 +24,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Ctrl_GraphWindow
 {
@@ -129,6 +130,22 @@ namespace Ctrl_GraphWindow
             }
         }
 
+        #region XML Data file GW_DataChannel properties
+
+        /// <summary>Description of the data channel</summary>
+        public string Description { get; set; }
+
+        /// <summary>Unit of data channel values</summary>
+        public string Unit { get; set; }
+
+        /// <summary>Display format of data channel values</summary>
+        public GraphSerieValueFormat GraphicFormat { get; set; }
+
+        /// <summary>Reference lines of data channel</summary>
+        public List<GraphReferenceLine> ChannelReferenceLines { get; set; }
+
+        #endregion
+
         #endregion
 
         #region Public members
@@ -207,6 +224,12 @@ namespace Ctrl_GraphWindow
             ChannelStepTimeMin = 0;
             ChannelStepTimeMax = 0;
             KeyId = -1;
+
+            //XML Data file channel properties default values
+            Description = "";
+            Unit = "";
+            GraphicFormat = new GraphSerieValueFormat();
+            ChannelReferenceLines = new List<GraphReferenceLine>();
         }
 
         /// <summary>
@@ -224,6 +247,12 @@ namespace Ctrl_GraphWindow
             ChannelStepTimeMin = 0;
             ChannelStepTimeMax = 0;
             KeyId = -1;
+
+            //XML Data file channel properties default values
+            Description = "";
+            Unit = "";
+            GraphicFormat = new GraphSerieValueFormat();
+            ChannelReferenceLines = new List<GraphReferenceLine>();
         }
 
         /// <summary>
@@ -241,6 +270,12 @@ namespace Ctrl_GraphWindow
             KeyId = -1;
 
             InitChannelValues(SampleMode);
+
+            //XML Data file channel properties default values
+            Description = "";
+            Unit = "";
+            GraphicFormat = new GraphSerieValueFormat();
+            ChannelReferenceLines = new List<GraphReferenceLine>();
         }
 
         /// <summary>
@@ -259,6 +294,12 @@ namespace Ctrl_GraphWindow
             KeyId = -1;
 
             InitChannelValues(SampleMode);
+
+            //XML Data file channel properties default values
+            Description = "";
+            Unit = "";
+            GraphicFormat = new GraphSerieValueFormat();
+            ChannelReferenceLines = new List<GraphReferenceLine>();
         }
 
         #endregion
@@ -484,6 +525,101 @@ namespace Ctrl_GraphWindow
         #endregion
     }
 
+    /// <summary>
+    /// Graph window XML data file custom property class
+    /// </summary>
+    public class GW_XmlDataFileCustomProperty
+    {
+        #region Public properties
+
+        /// <summary>
+        /// Name of the current custom property
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Value of the current custom property
+        /// </summary>
+        public object PropertyValue { get; set; }
+
+        #endregion
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public GW_XmlDataFileCustomProperty()
+        {
+            Name = "";
+            PropertyValue = null;
+        }
+
+        #region Internal methods
+
+        /// <summary>
+        /// Returns the value of the current custom property into a string value
+        /// </summary>
+        /// <returns>Value of the current custom property into a string value</returns>
+        internal string GetPropertyStringValue()
+        {
+            Type ValType = PropertyValue.GetType();
+
+            if (ValType.Equals(typeof(DateTime)))
+            {
+                return (((DateTime)PropertyValue).ToBinary().ToString());
+            }
+            else
+            {
+                return (PropertyValue.ToString());
+            }
+
+        }
+
+        /// <summary>
+        /// Returns the type of the current custom property value
+        /// </summary>
+        /// <returns>Type of the current custom property value</returns>
+        internal string GetPropertyType()
+        {
+            return (PropertyValue.GetType().ToString());
+        }
+
+        /// <summary>
+        /// Parse the value of the custom property from a string value
+        /// </summary>
+        /// <param name="StringValue">String value to parse</param>
+        /// <param name="StringType">Type of value to parse</param>
+        internal void ParsePropertyStringValue(string StringValue,string StringType)
+        {
+            try
+            {
+                if (StringType.Equals("int32"))
+                {
+                    this.PropertyValue = int.Parse(StringValue);
+                }
+                else if (StringType.Equals("double"))
+                {
+                    this.PropertyValue = double.Parse(StringValue);
+                }
+                else if (StringType.Equals("DateTime"))
+                {
+                    this.PropertyValue = DateTime.FromBinary(long.Parse(StringValue));
+                }
+                else
+                {
+                    this.PropertyValue = StringValue;
+                }
+                
+            }
+            catch
+            {
+                throw new Exception("Custom property value parsing error");
+            }
+
+        }
+
+        #endregion
+    }
+
     #endregion
 
     /// <summary>
@@ -704,6 +840,16 @@ namespace Ctrl_GraphWindow
             }
         }
 
+        #region XML Data file properties
+
+        /// <summary>Data file start timestamp</summary>
+        public DateTime DataStartTime { get; set; }
+
+        /// <summary>Data file user comments<summary>
+        public string UserComment { get; set; }
+
+        #endregion
+
         #endregion
 
         #region Public members
@@ -722,6 +868,13 @@ namespace Ctrl_GraphWindow
         /// Data channels collection of the data file
         /// </summary>
         public GW_DataChannelList Channels;
+
+        #region XML Data file public members
+
+        /// <summary>Custom properties of the current data file for XML data file format</summary>
+        public List<GW_XmlDataFileCustomProperty> XmlDataFileCustomProperties;
+
+        #endregion
 
         #endregion
 
@@ -759,6 +912,11 @@ namespace Ctrl_GraphWindow
             StepTimeMax = 0;
 
             CoordConversionUpdateRequested = false;
+
+            //XML Data file default properties
+            DataStartTime = DateTime.Now;
+            UserComment = "";
+            XmlDataFileCustomProperties = new List<GW_XmlDataFileCustomProperty>();
         }
 
         #region Internal methodes
@@ -880,6 +1038,246 @@ namespace Ctrl_GraphWindow
             SR.Close();
             SR = null;
             return (true);
+        }
+
+        /// <summary>
+        /// Read a XML data file
+        /// </summary>
+        /// <param name="fPath">Path of the XML file to read</param>
+        /// <param name="HeaderOnly">Read only data file header flag</param>
+        /// <returns>Reading error flag: True = No Error / False = Error</returns>
+        public bool Load_XmlDataFile(string fPath, bool HeaderOnly)
+        {
+            XmlNode xDataFile, xHeader, xChannels, xSamples;
+            XmlNode xElemParent, xElemChild;
+
+            try
+            {
+                XmlDocument oXDoc = new XmlDocument();
+                oXDoc.Load(fPath);
+
+                xDataFile = oXDoc.SelectSingleNode("XmlGraphDataFile");
+
+                #region XML Data file header
+
+                //Header reading
+                xHeader = xDataFile.SelectSingleNode("DataFileHeader");
+
+                //Data file start time
+                xElemChild = xHeader.SelectSingleNode("DataStartTime");
+                this.DataStartTime = DateTime.FromBinary(long.Parse(xElemChild.InnerText));
+
+                //User comment
+                xElemChild = xHeader.SelectSingleNode("DataUserComment");
+                this.UserComment = xElemChild.InnerText;
+
+                //Data file user properties
+                xElemParent = xHeader.SelectSingleNode("DataCustomProperties");
+
+                foreach(XmlNode xProp in xElemParent.ChildNodes)
+                {
+                    GW_XmlDataFileCustomProperty oProp = new GW_XmlDataFileCustomProperty();
+
+                    oProp.Name = xProp.Attributes["CustomPropertyName"].Value;
+
+                    string PropType= xProp.Attributes["CustomPropertyType"].Value;
+                    oProp.ParsePropertyStringValue(xProp.InnerText, PropType);
+
+                    this.XmlDataFileCustomProperties.Add(oProp);
+                }
+
+                #endregion
+
+                #region XML Data files channels
+
+                //Data reading
+                if (!HeaderOnly)
+                {
+                    xChannels = xDataFile.SelectSingleNode("DataFileChannels");
+
+                    foreach (XmlNode xChan in xChannels.ChildNodes)
+                    {
+                        GW_DataChannel oChan = new GW_DataChannel(SamplingMode.MultipleRates);
+
+                        //Read channel properties
+                        xElemChild = xChan.SelectSingleNode("ChannelName");
+                        oChan.Name = xElemChild.InnerText;
+
+                        xElemChild = xChan.SelectSingleNode("ChannelDescription");
+                        oChan.Description = xElemChild.InnerText;
+
+                        xElemChild = xChan.SelectSingleNode("ChannelUnit");
+                        oChan.Unit = xElemChild.InnerText;
+
+                        xElemChild = xChan.SelectSingleNode("ValueFormat");
+                        oChan.GraphicFormat.SetSerieValueFormatFromXmlNode(xElemChild);
+
+                        xElemParent = xChan.SelectSingleNode("ChannelReferenceLines");
+
+                        if (!(xElemParent==null))
+                        {
+                            foreach (XmlNode xRefLine in xElemParent.ChildNodes)
+                            {
+                                GraphReferenceLine oLine = new GraphReferenceLine();
+
+                                if (oLine.Read_GraphLineXmlNode(xRefLine))
+                                {
+                                    oChan.ChannelReferenceLines.Add(oLine);
+                                }
+                            }
+                        }
+
+                        //Read channel samples
+                        xSamples = xChan.SelectSingleNode("ChannelSamples");
+                        
+                        foreach(XmlNode xSerieSample in xSamples.ChildNodes)
+                        {
+                            SerieSample sSample = new SerieSample();
+
+                            xElemChild = xSerieSample.SelectSingleNode("SampleTime");
+                            sSample.SampleTime = double.Parse(xElemChild.InnerText);
+
+                            xElemChild = xSerieSample.SelectSingleNode("SampleValue");
+                            sSample.SampleValue = double.Parse(xElemChild.InnerText);
+
+                            oChan.Samples.Add(sSample);
+                        }
+
+                        this.Channels.Add(oChan);
+                    }
+                }
+
+                #endregion
+            }
+            catch
+            {
+                return (false);
+            }
+
+            return (true);
+        }
+
+        /// <summary>
+        /// Write the current data file object in XML format
+        /// </summary>
+        /// <param name="fPath">Path of the XML file to write<</param>
+        public void Write_XmlDataFile(string fPath)
+        {
+            XmlElement xDataFile, xHeader, xChannels, xChan, xSamples;
+            XmlElement xElemParent, xElemChild;
+
+            XmlAttribute xAtr;
+
+            if (!(fPath.Equals("")))
+            {
+                XmlDocument oXDoc = new XmlDocument();
+
+                xDataFile = oXDoc.CreateElement("XmlGraphDataFile");
+                oXDoc.AppendChild(xDataFile);
+
+                #region XML Data file header
+
+                //Write XML Data file header
+                xHeader = oXDoc.CreateElement("DataFileHeader");
+                xDataFile.AppendChild(xHeader);
+
+                //Data file start time
+                xElemChild = oXDoc.CreateElement("DataStartTime");
+                xElemChild.InnerText = DataStartTime.ToBinary().ToString();
+                xHeader.AppendChild(xElemChild);
+
+                //User comment
+                xElemChild = oXDoc.CreateElement("DataUserComment");
+                xElemChild.InnerText = UserComment;
+                xHeader.AppendChild(xElemChild);
+
+                //Data file user properties
+                if (XmlDataFileCustomProperties.Count > 0)
+                {
+                    xElemParent = oXDoc.CreateElement("DataCustomProperties");
+                    xHeader.AppendChild(xElemParent);
+
+                    foreach (GW_XmlDataFileCustomProperty oProp in XmlDataFileCustomProperties)
+                    {
+                        xElemChild = oXDoc.CreateElement("CustomProperty");
+
+                        xAtr = oXDoc.CreateAttribute("CustomPropertyName");
+                        xAtr.Value = oProp.Name;
+                        xElemChild.Attributes.Append(xAtr);
+
+                        xAtr = oXDoc.CreateAttribute("CustomPropertyType");
+                        xAtr.Value = oProp.GetPropertyType();
+                        xElemChild.Attributes.Append(xAtr);
+
+                        xElemChild.InnerText = oProp.GetPropertyStringValue();
+
+                        xElemParent.AppendChild(xElemChild);
+                    }
+                }
+
+                #endregion
+
+                #region XML Data files channels
+
+                //Write all data channels
+                xChannels = oXDoc.CreateElement("DataFileChannels");
+                xDataFile.AppendChild(xChannels);
+
+                foreach(GW_DataChannel oChan in Channels)
+                {
+                    //Channel properties
+                    xChan = oXDoc.CreateElement("DataChannel");
+
+                    xElemChild = oXDoc.CreateElement("ChannelName");
+                    xElemChild.InnerText = oChan.Name;
+                    xChan.AppendChild(xElemChild);
+
+                    xElemChild = oXDoc.CreateElement("ChannelDescription");
+                    xElemChild.InnerText = oChan.Description;
+                    xChan.AppendChild(xElemChild);
+
+                    xElemChild = oXDoc.CreateElement("ChannelUnit");
+                    xElemChild.InnerText = oChan.Unit;
+                    xChan.AppendChild(xElemChild);
+
+                    xChan.AppendChild(oChan.GraphicFormat.GetSerieValueFormatXmlNode(oXDoc));
+
+                    if(oChan.ChannelReferenceLines.Count>0)
+                    {
+                        xElemParent = oXDoc.CreateElement("ChannelReferenceLines");
+                        xChan.AppendChild(xElemParent);
+
+                        foreach (GraphReferenceLine oLine in oChan.ChannelReferenceLines)
+                        {
+                            xChan.AppendChild(oLine.Create_ReferenceLineXmlNode(oXDoc, "ReferenceLine"));
+                        }
+                    }
+
+                    //Channel samples
+                    xSamples = oXDoc.CreateElement("ChannelSamples");
+                    xChan.AppendChild(xSamples);
+
+                    foreach (SerieSample sSample in oChan.Samples)
+                    {
+                        xElemParent = oXDoc.CreateElement("ChannelSample");
+                        xSamples.AppendChild(xElemParent);
+
+                        xElemChild = oXDoc.CreateElement("SampleTime");
+                        xElemChild.InnerText = sSample.SampleTime.ToString();
+                        xElemParent.AppendChild(xElemChild);
+
+                        xElemChild = oXDoc.CreateElement("SampleValue");
+                        xElemChild.InnerText = sSample.SampleValue.ToString();
+                        xElemParent.AppendChild(xElemChild);
+                    }
+
+                    xChannels.AppendChild(xChan);
+                }
+
+                #endregion
+
+                oXDoc.Save(fPath);
+            }
         }
 
         /// <summary>
