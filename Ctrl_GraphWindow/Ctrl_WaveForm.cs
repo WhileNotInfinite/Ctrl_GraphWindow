@@ -2866,11 +2866,11 @@ namespace Ctrl_GraphWindow
             }
 		}
 
-#endregion
+        #endregion
 
-#endregion
+        #endregion
 
-#region Private classes events
+        #region Private classes events
 
         private void GraphicUpdateRequestRaised(object sender, EventArgs e)
         {
@@ -2881,11 +2881,11 @@ namespace Ctrl_GraphWindow
             }
         }
 
-#endregion
+        #endregion
 
-#region Private methodes
+        #region Private methodes
 
-#region Threaded method and delegates
+        #region Threaded method and delegates
 
         private void GraphTracingThreadTask()
         {
@@ -2940,7 +2940,7 @@ namespace Ctrl_GraphWindow
             Grid_Legend.Rows.Add();
             DataGridViewRow oRow = Grid_Legend.Rows[Grid_Legend.Rows.Count - 1];
 
-            foreach(DataGridViewCell oCell in oRow.Cells)
+            foreach (DataGridViewCell oCell in oRow.Cells)
             {
                 oCell.Style.BackColor = Properties.WindowBackColor;
                 oCell.Style.ForeColor = LegendData.ItemProperties.Trace.LineColor;
@@ -2948,7 +2948,7 @@ namespace Ctrl_GraphWindow
                 Properties.LegendProperties.LegendFont.Set_FontProperty(GW_Font.FontProperty.Strikeout, !LegendData.ItemProperties.Visible);
                 oCell.Style.Font = Properties.LegendProperties.LegendFont.oFont;
 
-                switch(oCell.ColumnIndex)
+                switch (oCell.ColumnIndex)
                 {
                     case LEGEND_LABEL_COL:
 
@@ -3009,17 +3009,17 @@ namespace Ctrl_GraphWindow
 
             if (TraceTimeLogFile.Equals(""))
             {
-                if(!Directory.Exists(TASK_TIME_LOG_DIR))
+                if (!Directory.Exists(TASK_TIME_LOG_DIR))
                 {
                     Directory.CreateDirectory(TASK_TIME_LOG_DIR);
                 }
 
-                TraceTimeLogFile = TASK_TIME_LOG_FILE 
+                TraceTimeLogFile = TASK_TIME_LOG_FILE
                                     + this.Name + "_"
                                     + DateTime.Now.Year.ToString("D4")
                                     + DateTime.Now.Month.ToString("D2")
                                     + DateTime.Now.Day.ToString("D2")
-                                    + "_" 
+                                    + "_"
                                     + DateTime.Now.Hour.ToString("D2")
                                     + DateTime.Now.Minute.ToString("D2")
                                     + DateTime.Now.Second.ToString("D2") + ".txt";
@@ -3035,18 +3035,18 @@ namespace Ctrl_GraphWindow
                 + " " + DateTime.Now.ToLongTimeString()
                 + " Plot #" + GraphPlotCount.ToString("D4")
                 + " Initial stage: " + eGraphStartingPointLog.ToString()
-                + " Avg time: " + AvgPlotTime.ToString("F3")                         + " ms"
-                + " Total time: " + LastPlotTime.ToString("D3")                      + " ms\n"
-                + "      Init time           : "  + InitTime.ToString("D2")          + " ms\n"
-                + "      Frame time          : "  + FrameTime.ToString("D2")         + " ms\n"
-                + "      Grid time           : "  + GridTime.ToString("D2")          + " ms\n"
-                + "      X Axis line time    : "  + XAxisLineTime.ToString("D2")     + " ms\n"
-                + "      Y Axis line time    : "  + YAxisLineTime.ToString("D2")     + " ms\n"
-                + "      Y Axis values time  : "  + YAxisValueTime.ToString("D2")    + " ms\n"
-                + "      Series options time : "  + SeriesOptionsTime.ToString("D2") + " ms\n"
-                + "      X Axis options time : "  + XAxisOptionsTime.ToString("D2")  + " ms\n"
-                + "      X Axis values time  : "  + XAxisValueTime.ToString("D2")    + " ms\n"
-                + "      Series values time  : "  + SeriesValuesTime.ToString("D2")  + " ms\n");
+                + " Avg time: " + AvgPlotTime.ToString("F3") + " ms"
+                + " Total time: " + LastPlotTime.ToString("D3") + " ms\n"
+                + "      Init time           : " + InitTime.ToString("D2") + " ms\n"
+                + "      Frame time          : " + FrameTime.ToString("D2") + " ms\n"
+                + "      Grid time           : " + GridTime.ToString("D2") + " ms\n"
+                + "      X Axis line time    : " + XAxisLineTime.ToString("D2") + " ms\n"
+                + "      Y Axis line time    : " + YAxisLineTime.ToString("D2") + " ms\n"
+                + "      Y Axis values time  : " + YAxisValueTime.ToString("D2") + " ms\n"
+                + "      Series options time : " + SeriesOptionsTime.ToString("D2") + " ms\n"
+                + "      X Axis options time : " + XAxisOptionsTime.ToString("D2") + " ms\n"
+                + "      X Axis values time  : " + XAxisValueTime.ToString("D2") + " ms\n"
+                + "      Series values time  : " + SeriesValuesTime.ToString("D2") + " ms\n");
 
             SR.WriteLine("");
 
@@ -3067,9 +3067,9 @@ namespace Ctrl_GraphWindow
 #endif
         }
 
-#endregion
+        #endregion
 
-#region Drawing stages
+        #region Drawing stages
 
         private void Init_DrawingStages()
         {
@@ -3099,7 +3099,7 @@ namespace Ctrl_GraphWindow
                 return;
             }
 
-#region Local variables
+            #region Local variables
 
             Graphics FrameGraphics;
             Graphics GraphGraphics;
@@ -3109,7 +3109,7 @@ namespace Ctrl_GraphWindow
             Pen oPen = null;
             SolidBrush oBrush = null;
 
-#endregion
+            #endregion
 
 #if DEBUG
             swTimer.Start();
@@ -3164,7 +3164,7 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#region Initialization
+            #region Initialization
 
             Init_GraphWindow();
 
@@ -3177,16 +3177,16 @@ namespace Ctrl_GraphWindow
             FrameGraphics = Graphics.FromImage(FrameImage);
             GraphGraphics = Graphics.FromImage(GraphImage);
 
-#endregion
+            #endregion
 
 #if DEBUG
             InitTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region Frame drawing
+        #region Frame drawing
 
-            FrameDrawingStage: //Graphic frmame drawing
+        FrameDrawingStage: //Graphic frmame drawing
 
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
@@ -3197,17 +3197,17 @@ namespace Ctrl_GraphWindow
 
             FrameGraphics.DrawRectangle(oPen, FrameLeftPoint, FrameTopPoint, FrameWidth, FrameHeight);
 
-#endregion
+            #endregion
 
 #if DEBUG
             FrameTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region Grid drawing
+        #region Grid drawing
 
-            GridDrawingStage: //Graphic grids drawing
-            
+        GridDrawingStage: //Graphic grids drawing
+
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
@@ -3280,16 +3280,16 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             GridTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region X Axis lines
+        #region X Axis lines
 
-            XAxisLinesDrawingStage: //Axis X line and graduations drawing
+        XAxisLinesDrawingStage: //Axis X line and graduations drawing
 
             //TOOD: Remove old code
             //DrawingStages[StageIndex].InitialFrameState = FrameGraphics.Save();
@@ -3299,7 +3299,7 @@ namespace Ctrl_GraphWindow
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
 
-            if(Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
+            if (Properties.AbscisseAxis.Visible && (Properties.AbscisseAxis.CoordConversion.Min != Properties.AbscisseAxis.CoordConversion.Max))
             {
                 oPen = new Pen(Properties.AbscisseAxis.AxisLineStyle.LineColor, Properties.AbscisseAxis.AxisLineStyle.LineWidth);
                 oPen.DashStyle = Properties.AbscisseAxis.AxisLineStyle.LineStyle;
@@ -3326,17 +3326,17 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             XAxisLineTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region Y Axis lines
+        #region Y Axis lines
 
-            YAxisLinesDrawingStage: //Series Y Axis lines and graduations drawing
-            
+        YAxisLinesDrawingStage: //Series Y Axis lines and graduations drawing
+
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
@@ -3348,7 +3348,7 @@ namespace Ctrl_GraphWindow
             {
                 foreach (GraphSerieProperties oSerieProps in Properties.SeriesProperties)
                 {
-                    if(oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible))
+                    if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible))
                     {
                         //Serie Y Axis
                         if (oSerieProps.YAxis.Visible)
@@ -3430,17 +3430,17 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             YAxisLineTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region Y Axis values
+        #region Y Axis values
 
-            YAxisValuesDrawingStage: //Series Y Axis graduations values drawing
-            
+        YAxisValuesDrawingStage: //Series Y Axis graduations values drawing
+
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
@@ -3496,17 +3496,17 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             YAxisValueTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region Series Options
+        #region Series Options
 
-            SeriesOptionsDrawingStage: //Series options (custom grids, reference lines) drawing
-            
+        SeriesOptionsDrawingStage: //Series options (custom grids, reference lines) drawing
+
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
@@ -3517,9 +3517,9 @@ namespace Ctrl_GraphWindow
                 {
                     if (oSerieProps.Visible && (oSerieProps.Trace.Visible || oSerieProps.Markers.Visible))
                     {
-#region Serie user grid
+                        #region Serie user grid
 
-#region Vertical grid
+                        #region Vertical grid
 
                         if (oSerieProps.UserGrid.VerticalLinesStyle.Visible)
                         {
@@ -3589,9 +3589,9 @@ namespace Ctrl_GraphWindow
                             }
                         }
 
-#endregion
+                        #endregion
 
-#region Horizontal grid
+                        #region Horizontal grid
 
                         if (oSerieProps.UserGrid.HorizontalLinesStyle.Visible)
                         {
@@ -3690,11 +3690,11 @@ namespace Ctrl_GraphWindow
                             }
                         }
 
-#endregion
+                        #endregion
 
-#endregion
+                        #endregion
 
-#region Serie reference lines
+                        #region Serie reference lines
 
                         if (oSerieProps.ReferenceLines.Count > 0)
                         {
@@ -3756,7 +3756,7 @@ namespace Ctrl_GraphWindow
                                             GraphGraphics.DrawLine(oPen, 0, LineOrd, FrameWidth, LineOrd);
 
                                             //Reference line value and title drawing
-                                            if(!(oLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible) && oLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible) && oLine.ReferenceTitle.Equals("")))
+                                            if (!(oLine.ReferenceValuePosition.Equals(ScreenPositions.Invisible) && oLine.ReferenceTitlePosition.Equals(ScreenPositions.Invisible) && oLine.ReferenceTitle.Equals("")))
                                             {
                                                 oBrush = new SolidBrush(oLine.ReferenceStyle.LineColor);
 
@@ -3901,22 +3901,22 @@ namespace Ctrl_GraphWindow
                             }
                         }
 
-#endregion
+                        #endregion
                     }
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             SeriesOptionsTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region X Axis options
+        #region X Axis options
 
-            XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
-            
+        XAxisOptionsDrawingStage: //X Axis options (reference lines) drawing
+
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
@@ -4120,17 +4120,17 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             XAxisOptionsTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region X Axis values
+        #region X Axis values
 
-            XAxisValuesDrawingStage: //X Axis graduation values drawing
-            
+        XAxisValuesDrawingStage: //X Axis graduation values drawing
+
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
@@ -4143,7 +4143,7 @@ namespace Ctrl_GraphWindow
                     oAbscisseAxis.Set_GraduationsValues(Properties.AbscisseAxis.CoordConversion.Min,
                                                         Properties.AbscisseAxis.CoordConversion.Max,
                                                         oAbcisseValFormat, true);
-                                                        
+
 
                     int AxisPos = FrameBottomPoint + AXIS_BASE_POS;
 
@@ -4155,7 +4155,7 @@ namespace Ctrl_GraphWindow
 
                         SizeF sGradTxt = FrameGraphics.MeasureString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont);
 
-                        PointF pGradTxt = new PointF((float)oGrad.Position - sGradTxt.Width/2,
+                        PointF pGradTxt = new PointF((float)oGrad.Position - sGradTxt.Width / 2,
                                                      (float)(GradEndPos + AXIS_TEXT_POS_OFFSET));
 
                         FrameGraphics.DrawString(oGrad.Value, Properties.AbscisseAxis.AxisValuesFont.oFont, oBrush, pGradTxt);
@@ -4163,21 +4163,21 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             XAxisValueTime = swTimer.ElapsedMilliseconds;
             swTimer.Restart();
 #endif
 
-#region Series values
+        #region Series values
 
-            SeriesValuesDrawingStage: //Series values (trace and markers) drawing
-            
+        SeriesValuesDrawingStage: //Series values (trace and markers) drawing
+
             DrawingStages[StageIndex].InitialFrameImage = (Bitmap)FrameImage.Clone();
             DrawingStages[StageIndex].InitialGraphImage = (Bitmap)GraphImage.Clone();
             StageIndex++;
-            
+
             if (DataFile != null && SeriesVisibleCount > 0)
             {
                 //Sub sampling
@@ -4213,7 +4213,7 @@ namespace Ctrl_GraphWindow
                                 double DblSampleIndex = 0;
 
                                 //Marks objects init
-#region Markers init
+                                #region Markers init
 
                                 List<object> SerieMarksCoords = null;
 
@@ -4226,9 +4226,9 @@ namespace Ctrl_GraphWindow
                                     SerieMarksCoords = new List<object>();
                                 }
 
-#endregion
+                                #endregion
 
-#region Graphic points coordinates calculation
+                                #region Graphic points coordinates calculation
 
                                 for (int iSample = 0; iSample < nSampleCount; iSample++)
                                 {
@@ -4293,7 +4293,7 @@ namespace Ctrl_GraphWindow
                                     }
 
                                     //Marks objects computation
-#region Markers points definition
+                                    #region Markers points definition
 
                                     if (oSerieProps.Markers.Visible)
                                     {
@@ -4372,7 +4372,7 @@ namespace Ctrl_GraphWindow
                                         }
                                     }
 
-#endregion
+                                    #endregion
                                 }
 
                                 //Add the last (or unique) set of sample points
@@ -4381,14 +4381,14 @@ namespace Ctrl_GraphWindow
                                     SerieCoords.Add(PartialSerieCoords.ToArray());
                                 }
 
-#endregion
+                                #endregion
 
-#region Serie trace and sample markers drawing
+                                #region Serie trace and sample markers drawing
 
                                 if (nVisiblePointCnt > 1)
                                 {
                                     //Trace ploting
-#region Trace ploting
+                                    #region Trace ploting
 
                                     if (oSerieProps.Trace.Visible)
                                     {
@@ -4432,10 +4432,10 @@ namespace Ctrl_GraphWindow
                                         }
                                     }
 
-#endregion
+                                    #endregion
 
                                     //Markers plotting
-#region Markers plotting
+                                    #region Markers plotting
 
                                     if (oSerieProps.Markers.Visible)
                                     {
@@ -4535,9 +4535,9 @@ namespace Ctrl_GraphWindow
                                     }
                                 }
 
-#endregion
+                                #endregion
 
-#endregion
+                                #endregion
                             }
                         }
                     }
@@ -4546,7 +4546,7 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-#endregion
+            #endregion
 
 #if DEBUG
             SeriesValuesTime = swTimer.ElapsedMilliseconds;
@@ -4567,9 +4567,9 @@ namespace Ctrl_GraphWindow
 #endif
         }
 
-#endregion
+        #endregion
 
-#region Graphic plotting functions
+        #region Graphic plotting functions
 
         private void Init_GraphWindow()
         {
@@ -4661,9 +4661,9 @@ namespace Ctrl_GraphWindow
             //Set Pic_Graphic size and position
             this.BeginInvoke(this.Pic_GraphicSetupDelegate,
                              new object[] { new Rectangle(FrameLeftPoint,
-                                                          FrameTopPoint,
-                                                          FrameWidth,
-                                                          FrameHeight) });
+                                                              FrameTopPoint,
+                                                              FrameWidth,
+                                                              FrameHeight) });
             //Abscisse coords definition
             Update_AbscisseCoordsConversion();
 
@@ -4768,7 +4768,7 @@ namespace Ctrl_GraphWindow
 
         private void Set_AbcisseCordConversion(GW_DataChannel oAbcisse)
         {
-        	Properties.AbscisseAxis.CoordConversion.Gain = (double)((double)(FrameWidth) / (oAbcisse.Max - oAbcisse.Min));
+            Properties.AbscisseAxis.CoordConversion.Gain = (double)((double)(FrameWidth) / (oAbcisse.Max - oAbcisse.Min));
             Properties.AbscisseAxis.CoordConversion.Zero = (double)((double)(FrameWidth) - Properties.AbscisseAxis.CoordConversion.Gain * oAbcisse.Max);
 
             Properties.AbscisseAxis.CoordConversion.Min = oAbcisse.Min;
@@ -4795,73 +4795,73 @@ namespace Ctrl_GraphWindow
                 Properties.AbscisseAxis.CoordConversion.Zero = double.NaN;
             }
         }
-        
+
         private void Set_SerieCoordConversions(GraphSerieProperties oProp, GW_DataChannel oData, int iPlot)
         {
-        	GW_DataChannel oWholeDataChan = WholeDataFile.Get_DataChannel(oData.Name);
-        	
-        	if (!(oWholeDataChan == null))
-        	{
-        		SerieCoordConversion sRefCoordConv = new SerieCoordConversion();
-        		sRefCoordConv.SerieKeyId = oProp.KeyId;
-        		
-        		switch (oProp.ScalingMode)
-        		{
-        			case GraphSerieScaleModes.Auto:
+            GW_DataChannel oWholeDataChan = WholeDataFile.Get_DataChannel(oData.Name);
 
-        				oProp.CoordConversion.Min = oData.Min;
-        				oProp.CoordConversion.Max = oData.Max;
-        				
-        				if (oProp.CoordConversion.Min == oProp.CoordConversion.Max) //To not make a division by zero later on...
-        				{
-        					if (!(oProp.CoordConversion.Min == 0))
-        					{
-        						oProp.CoordConversion.Min -= (Math.Abs(oProp.CoordConversion.Min) / 2);
-        						oProp.CoordConversion.Max += (Math.Abs(oProp.CoordConversion.Max) / 2);
-        					}
-        					else
-        					{
-        						oProp.CoordConversion.Min = -1;
-        						oProp.CoordConversion.Max = 1;
-        					}
-        				}
-        				
-        				break;
+            if (!(oWholeDataChan == null))
+            {
+                SerieCoordConversion sRefCoordConv = new SerieCoordConversion();
+                sRefCoordConv.SerieKeyId = oProp.KeyId;
 
-        			case GraphSerieScaleModes.Custom:
+                switch (oProp.ScalingMode)
+                {
+                    case GraphSerieScaleModes.Auto:
 
-        				oProp.CoordConversion.Min = oProp.Min;
-        				oProp.CoordConversion.Max = oProp.Max;
-        				break;
-        		}
+                        oProp.CoordConversion.Min = oData.Min;
+                        oProp.CoordConversion.Max = oData.Max;
 
-        		//100 % = FrameTopPoint
-        		//0 %   = FrameBottomPoint
-        		switch(Properties.GraphLayoutMode)
-        		{
-        			case GraphicWindowLayoutModes.Overlay:
+                        if (oProp.CoordConversion.Min == oProp.CoordConversion.Max) //To not make a division by zero later on...
+                        {
+                            if (!(oProp.CoordConversion.Min == 0))
+                            {
+                                oProp.CoordConversion.Min -= (Math.Abs(oProp.CoordConversion.Min) / 2);
+                                oProp.CoordConversion.Max += (Math.Abs(oProp.CoordConversion.Max) / 2);
+                            }
+                            else
+                            {
+                                oProp.CoordConversion.Min = -1;
+                                oProp.CoordConversion.Max = 1;
+                            }
+                        }
 
-        				oProp.CoordConversion.Top = 0;
-        				oProp.CoordConversion.Bottom = FrameHeight;
-        				break;
+                        break;
 
-        			case GraphicWindowLayoutModes.Parallel:
+                    case GraphSerieScaleModes.Custom:
 
-        				int SerieSpace = (int)((FrameHeight) / SeriesVisibleCount);
-        				oProp.CoordConversion.Top = (int)(SerieSpace * iPlot);
-        				oProp.CoordConversion.Bottom = oProp.CoordConversion.Top + SerieSpace;
-        				break;
+                        oProp.CoordConversion.Min = oProp.Min;
+                        oProp.CoordConversion.Max = oProp.Max;
+                        break;
+                }
 
-        			case GraphicWindowLayoutModes.Custom:
-        				
-        				double a = ((double)(FrameHeight)) / -100;
-        				double b = 0 - a * 100;
-        				
-        				oProp.CoordConversion.Top = (int)(a * oProp.Top + b);
-        				oProp.CoordConversion.Bottom = (int)(a * oProp.Bottom + b);
-        				
-        				break;
-        		}
+                //100 % = FrameTopPoint
+                //0 %   = FrameBottomPoint
+                switch (Properties.GraphLayoutMode)
+                {
+                    case GraphicWindowLayoutModes.Overlay:
+
+                        oProp.CoordConversion.Top = 0;
+                        oProp.CoordConversion.Bottom = FrameHeight;
+                        break;
+
+                    case GraphicWindowLayoutModes.Parallel:
+
+                        int SerieSpace = (int)((FrameHeight) / SeriesVisibleCount);
+                        oProp.CoordConversion.Top = (int)(SerieSpace * iPlot);
+                        oProp.CoordConversion.Bottom = oProp.CoordConversion.Top + SerieSpace;
+                        break;
+
+                    case GraphicWindowLayoutModes.Custom:
+
+                        double a = ((double)(FrameHeight)) / -100;
+                        double b = 0 - a * 100;
+
+                        oProp.CoordConversion.Top = (int)(a * oProp.Top + b);
+                        oProp.CoordConversion.Bottom = (int)(a * oProp.Bottom + b);
+
+                        break;
+                }
 
                 if (oProp.CoordConversion.Min < oProp.CoordConversion.Max)
                 {
@@ -4873,10 +4873,10 @@ namespace Ctrl_GraphWindow
                     oProp.CoordConversion.Gain = double.NaN;
                     oProp.CoordConversion.Zero = double.NaN;
                 }
-                       		
-        		sRefCoordConv.CoordConversion = oProp.CoordConversion;
-        		SeriesReferenceCoordConversion.Add(sRefCoordConv);
-        	}
+
+                sRefCoordConv.CoordConversion = oProp.CoordConversion;
+                SeriesReferenceCoordConversion.Add(sRefCoordConv);
+            }
         }
 
         private void Add_YAxis(int SerieKey, GraphSerieAxis oAxisProps, GraphSerieValueFormat oFormat, GW_SampleCoordConversion sDataCoord)
@@ -4884,9 +4884,9 @@ namespace Ctrl_GraphWindow
             GraphAxisGroup oAxisGrp = null;
 
             //Ord axis creation
-            GraphAxis oAxis = new GraphAxis(); 
+            GraphAxis oAxis = new GraphAxis();
             oAxis.StartPos = sDataCoord.Top + FrameTopPoint;
-            oAxis.EndPos = sDataCoord.Bottom +  FrameTopPoint;
+            oAxis.EndPos = sDataCoord.Bottom + FrameTopPoint;
             oAxis.SerieKey = SerieKey;
 
             //Search a free slot into the axis table
@@ -4895,10 +4895,10 @@ namespace Ctrl_GraphWindow
                 foreach (GraphAxisGroup oGrp in oYAxis.AxisTable)
                 {
                     bool bFreeSlot = true;
-                	
-                	foreach(GraphAxis goa in oGrp.AxisGroup)
+
+                    foreach (GraphAxis goa in oGrp.AxisGroup)
                     {
-                		if ((oAxis.StartPos >= goa.StartPos && oAxis.StartPos < goa.EndPos) || (oAxis.EndPos >= goa.StartPos && oAxis.EndPos < goa.EndPos))
+                        if ((oAxis.StartPos >= goa.StartPos && oAxis.StartPos < goa.EndPos) || (oAxis.EndPos >= goa.StartPos && oAxis.EndPos < goa.EndPos))
                         {
                             bFreeSlot = false;
                             break;
@@ -4908,7 +4908,7 @@ namespace Ctrl_GraphWindow
                     if (bFreeSlot) //Axis ground found, exit the 1st level loop
                     {
                         oAxisGrp = oGrp; //Axis ground found, exit the 2nd level loop
-                    	break;
+                        break;
                     }
                 }
 
@@ -4928,26 +4928,26 @@ namespace Ctrl_GraphWindow
 
             //Axis group 'width' property update 
             int AxisWidth = (AXIS_BASE_SIZE * (int)oAxisProps.AxisLineStyle.LineWidth) + AXIS_SEPARATION_SPACE;
-            
+
             if (oAxisProps.AxisValuesVisible)
-            {            	
-            	Graphics g = Pic_GraphFrame.CreateGraphics();
-            	
-            	AxisWidth += (int)g.MeasureString(oAxis.Get_LongestGraduationText(FrameHeight, FrameTopPoint, sDataCoord.Min, sDataCoord.Max, oFormat, false),
-            	                                  oAxisProps.AxisValuesFont.oFont, new PointF(0, 0), StringFormat.GenericDefault).Width;
-            	
-            	AxisWidth += AXIS_TEXT_POS_OFFSET;
-            	
-            	g.Dispose();
-            }
-            
-            if (oAxisProps.AxisTitleVisible)
             {
-            	oAxis.TitleLeft = AxisWidth + AXIS_TITLE_POS_OFFSET;
-            	AxisWidth += (int)(oAxisProps.AxisValuesFont.oFont.Size * 2) + AXIS_TITLE_POS_OFFSET;
+                Graphics g = Pic_GraphFrame.CreateGraphics();
+
+                AxisWidth += (int)g.MeasureString(oAxis.Get_LongestGraduationText(FrameHeight, FrameTopPoint, sDataCoord.Min, sDataCoord.Max, oFormat, false),
+                                                  oAxisProps.AxisValuesFont.oFont, new PointF(0, 0), StringFormat.GenericDefault).Width;
+
+                AxisWidth += AXIS_TEXT_POS_OFFSET;
+
+                g.Dispose();
             }
 
-            if(AxisWidth>oAxisGrp.Width) //Axis group has a new width ?
+            if (oAxisProps.AxisTitleVisible)
+            {
+                oAxis.TitleLeft = AxisWidth + AXIS_TITLE_POS_OFFSET;
+                AxisWidth += (int)(oAxisProps.AxisValuesFont.oFont.Size * 2) + AXIS_TITLE_POS_OFFSET;
+            }
+
+            if (AxisWidth > oAxisGrp.Width) //Axis group has a new width ?
             {
                 oAxisGrp.Width = AxisWidth;
 
@@ -4965,14 +4965,14 @@ namespace Ctrl_GraphWindow
                 }
             }
         }
-		
+
         private int Get_PlottedChannelCount()
         {
             int Cnt = 0;
 
             foreach (GraphSerieProperties oProp in Properties.SeriesProperties)
             {
-                if((oProp.Visible && (oProp.Trace.Visible || oProp.Markers.Visible)) && DataFile.DataChannelExists(oProp.Name))
+                if ((oProp.Visible && (oProp.Trace.Visible || oProp.Markers.Visible)) && DataFile.DataChannelExists(oProp.Name))
                 {
                     Cnt++;
                 }
@@ -4980,174 +4980,174 @@ namespace Ctrl_GraphWindow
 
             return (Cnt);
         }
-        
-#endregion
-        
-#region Cursor functions
-        
+
+        #endregion
+
+        #region Cursor functions
+
         private void Draw_Cursor(Point MouseLocation)
         {
-        	Draw_Cursor(MouseLocation, null, null);
+            Draw_Cursor(MouseLocation, null, null);
         }
-        
+
         private void Draw_Cursor(Point MouseLocation, GraphCursorProperties oCursor)
         {
-        	Draw_Cursor(MouseLocation, oCursor, null);
+            Draw_Cursor(MouseLocation, oCursor, null);
         }
-        
+
         private void Draw_Cursor(Point MouseLocation, GraphCursorProperties oCursor, Graphics GraphicsTarget)
-        {	
-        	Pic_Graphic.Refresh();
-        	
-        	if (oCursor == null)
-        	{
-	        	switch (CurrentGraphCursor)
-	        	{
-	        		case GraphicCursorObject.CursorMain:
-	        			
-	        			oCursor = Properties.Cursor;
+        {
+            Pic_Graphic.Refresh();
+
+            if (oCursor == null)
+            {
+                switch (CurrentGraphCursor)
+                {
+                    case GraphicCursorObject.CursorMain:
+
+                        oCursor = Properties.Cursor;
                         mMainCursorAbscisse = double.NaN;
 
                         if (!(PtRefCursorPos.IsEmpty))
-	        			{
-	        				Draw_Cursor(PtRefCursorPos,Properties.ReferenceCursor);
-	        			}
-	        			
-	        			break;
-	        			
-	        		case GraphicCursorObject.CursorReference:
-	        			
-	        			oCursor = Properties.ReferenceCursor;
-	        			break;
-	        			
-	        		default:
-	        			
-	        			return;
-	        	}
-        	}
-        	
-        	PtCursorPos = Point.Empty;
-        	
-        	if (MouseLocation.X >= 0 && MouseLocation.X <= FrameWidth && MouseLocation.Y >= 0 && MouseLocation.Y <= FrameHeight)
-			{
-        		if (oCursor.Equals(Properties.ReferenceCursor))
-        		{
-        			PtRefCursorPos = MouseLocation;
-        		}
-        		else
-        		{
-        			PtCursorPos = MouseLocation;
-        		}
-				
-        		int CursorSize = CURSOR_BASE_SIZE * oCursor.CursorSize;
-    			int CursorX = MouseLocation.X;
-    			int CursorY = MouseLocation.Y;
-    			GraphicCoordinates CursorCoord = GetPointGraphCoordinates(MouseLocation);
+                        {
+                            Draw_Cursor(PtRefCursorPos, Properties.ReferenceCursor);
+                        }
+
+                        break;
+
+                    case GraphicCursorObject.CursorReference:
+
+                        oCursor = Properties.ReferenceCursor;
+                        break;
+
+                    default:
+
+                        return;
+                }
+            }
+
+            PtCursorPos = Point.Empty;
+
+            if (MouseLocation.X >= 0 && MouseLocation.X <= FrameWidth && MouseLocation.Y >= 0 && MouseLocation.Y <= FrameHeight)
+            {
+                if (oCursor.Equals(Properties.ReferenceCursor))
+                {
+                    PtRefCursorPos = MouseLocation;
+                }
+                else
+                {
+                    PtCursorPos = MouseLocation;
+                }
+
+                int CursorSize = CURSOR_BASE_SIZE * oCursor.CursorSize;
+                int CursorX = MouseLocation.X;
+                int CursorY = MouseLocation.Y;
+                GraphicCoordinates CursorCoord = GetPointGraphCoordinates(MouseLocation);
                 if (CurrentGraphCursor == GraphicCursorObject.CursorMain) mMainCursorAbscisse = CursorCoord.Abs;
 
-        		Graphics g = null;
-        		
-        		if (GraphicsTarget == null) //Cursor drawing in the graphic picture box
-        		{
-					g = Pic_Graphic.CreateGraphics();
-        		}
-        		else //Cursor drawing in a graphic snapshot
-        		{
-        			g = GraphicsTarget;
-        		}
-				
-				Pen p = new Pen(oCursor.Style.LineColor, oCursor.Style.LineWidth);
-    			p.DashStyle = oCursor.Style.LineStyle;
-    			
-    			SolidBrush b = null;
-    			
-    			//Cursor drawing
-    			switch (oCursor.Mode)
-    			{
-    				case GraphicCursorMode.VerticalLine:
-    					
-    					g.DrawLine(p, CursorX, 0, CursorX, FrameHeight);
-    					break;
-    					
-    				case GraphicCursorMode.HorizontalLine:
-    					
-    					g.DrawLine(p, 0, CursorY, FrameWidth, CursorY);
-    					break;
-    					
-    				case GraphicCursorMode.Cross:
-    					
-    					g.DrawLine(p, CursorX, 0, CursorX, FrameHeight);
-    					g.DrawLine(p, 0, CursorY, FrameWidth, CursorY);
-    					break;
-    					
-    				case GraphicCursorMode.Graticule:
-    					
-    					g.DrawLine(p, CursorX - (CursorSize / 2), CursorY, CursorX + (CursorSize / 2), CursorY);
-    					g.DrawLine(p, CursorX, CursorY - (CursorSize / 2), CursorX, CursorY + (CursorSize / 2));
-    					break;
-    					
-    				case GraphicCursorMode.Square:
-    					
-    					g.DrawRectangle(p, CursorX - (CursorSize / 2), CursorY - (CursorSize / 2), CursorSize, CursorSize);
-    					break;
-    					
-    				case GraphicCursorMode.Circle:
-    					
-    					g.DrawEllipse(p, CursorX - (CursorSize / 2), CursorY - (CursorSize / 2), CursorSize, CursorSize);
-    					break;
-    					
-    				default:
-    					
-    					break;
-    			}
-    			
-    			//Abscisse cursor value
-    			if ((oCursor.ShowCursorAbscisseValue) && (oCursor.Mode.Equals(GraphicCursorMode.VerticalLine) || oCursor.Mode.Equals(GraphicCursorMode.Cross)))
-				{
-    			    SerieValueAtPoint AbsCursorValue = new Ctrl_WaveForm.SerieValueAtPoint();
-    			    
-    			    AbsCursorValue.SerieName = "X: ";
-    			    AbsCursorValue.SerieValue = Math.Round(CursorCoord.Abs, 3).ToString();
-    			    AbsCursorValue.SerieColor = Properties.AbscisseAxis.AxisLineStyle.LineColor;
-    			    
-    			    PointF PtAbsCursorVal = new PointF();
-    			    
-    			    if (CursorX < FrameWidth / 2)
-    			    {
-    			    	PtAbsCursorVal.X = (float)(CursorX + CURSOR_TEXT_LEFT_OFFSET);
-    			    }
-    			    else
-    			    {
-    			    	PtAbsCursorVal.X = (float)(CursorX - CURSOR_TEXT_LEFT_OFFSET 
-    			    	                           - ((AbsCursorValue.SerieValue.Length 
-    			    	                               + AbsCursorValue.SerieName.Length) 
-    			    	                               * oCursor.CursorValueFont.oFont.Size));
-    			    }
-    			    
-					switch (oCursor.AbscisseValuePostion)
-					{
+                Graphics g = null;
+
+                if (GraphicsTarget == null) //Cursor drawing in the graphic picture box
+                {
+                    g = Pic_Graphic.CreateGraphics();
+                }
+                else //Cursor drawing in a graphic snapshot
+                {
+                    g = GraphicsTarget;
+                }
+
+                Pen p = new Pen(oCursor.Style.LineColor, oCursor.Style.LineWidth);
+                p.DashStyle = oCursor.Style.LineStyle;
+
+                SolidBrush b = null;
+
+                //Cursor drawing
+                switch (oCursor.Mode)
+                {
+                    case GraphicCursorMode.VerticalLine:
+
+                        g.DrawLine(p, CursorX, 0, CursorX, FrameHeight);
+                        break;
+
+                    case GraphicCursorMode.HorizontalLine:
+
+                        g.DrawLine(p, 0, CursorY, FrameWidth, CursorY);
+                        break;
+
+                    case GraphicCursorMode.Cross:
+
+                        g.DrawLine(p, CursorX, 0, CursorX, FrameHeight);
+                        g.DrawLine(p, 0, CursorY, FrameWidth, CursorY);
+                        break;
+
+                    case GraphicCursorMode.Graticule:
+
+                        g.DrawLine(p, CursorX - (CursorSize / 2), CursorY, CursorX + (CursorSize / 2), CursorY);
+                        g.DrawLine(p, CursorX, CursorY - (CursorSize / 2), CursorX, CursorY + (CursorSize / 2));
+                        break;
+
+                    case GraphicCursorMode.Square:
+
+                        g.DrawRectangle(p, CursorX - (CursorSize / 2), CursorY - (CursorSize / 2), CursorSize, CursorSize);
+                        break;
+
+                    case GraphicCursorMode.Circle:
+
+                        g.DrawEllipse(p, CursorX - (CursorSize / 2), CursorY - (CursorSize / 2), CursorSize, CursorSize);
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                //Abscisse cursor value
+                if ((oCursor.ShowCursorAbscisseValue) && (oCursor.Mode.Equals(GraphicCursorMode.VerticalLine) || oCursor.Mode.Equals(GraphicCursorMode.Cross)))
+                {
+                    SerieValueAtPoint AbsCursorValue = new Ctrl_WaveForm.SerieValueAtPoint();
+
+                    AbsCursorValue.SerieName = "X: ";
+                    AbsCursorValue.SerieValue = Math.Round(CursorCoord.Abs, 3).ToString();
+                    AbsCursorValue.SerieColor = Properties.AbscisseAxis.AxisLineStyle.LineColor;
+
+                    PointF PtAbsCursorVal = new PointF();
+
+                    if (CursorX < FrameWidth / 2)
+                    {
+                        PtAbsCursorVal.X = (float)(CursorX + CURSOR_TEXT_LEFT_OFFSET);
+                    }
+                    else
+                    {
+                        PtAbsCursorVal.X = (float)(CursorX - CURSOR_TEXT_LEFT_OFFSET
+                                                   - ((AbsCursorValue.SerieValue.Length
+                                                       + AbsCursorValue.SerieName.Length)
+                                                       * oCursor.CursorValueFont.oFont.Size));
+                    }
+
+                    switch (oCursor.AbscisseValuePostion)
+                    {
                         case ScreenPositions.Top:
-							
-							PtAbsCursorVal.Y = (float)(CURSOR_TEXT_TOP_OFFSET);
-							break;
+
+                            PtAbsCursorVal.Y = (float)(CURSOR_TEXT_TOP_OFFSET);
+                            break;
 
                         case ScreenPositions.Center:
-							
-							PtAbsCursorVal.Y = (float)((FrameHeight / 2) - (oCursor.CursorValueFont.oFont.GetHeight() / 2));
-							break;
+
+                            PtAbsCursorVal.Y = (float)((FrameHeight / 2) - (oCursor.CursorValueFont.oFont.GetHeight() / 2));
+                            break;
 
                         case ScreenPositions.Bottom:
-							
-							PtAbsCursorVal.Y = (float)(FrameHeight - CURSOR_TEXT_TOP_OFFSET - oCursor.CursorValueFont.oFont.GetHeight());
-							break;
-					}
-					
-					if (oCursor.Equals(Properties.ReferenceCursor))
-					{
-						b = new SolidBrush(oCursor.Style.LineColor);
-					}
-					else
-					{
+
+                            PtAbsCursorVal.Y = (float)(FrameHeight - CURSOR_TEXT_TOP_OFFSET - oCursor.CursorValueFont.oFont.GetHeight());
+                            break;
+                    }
+
+                    if (oCursor.Equals(Properties.ReferenceCursor))
+                    {
+                        b = new SolidBrush(oCursor.Style.LineColor);
+                    }
+                    else
+                    {
                         if (oCursor.CursorValueForeColor == Color.Empty)
                         {
                             b = new SolidBrush(AbsCursorValue.SerieColor);
@@ -5156,57 +5156,57 @@ namespace Ctrl_GraphWindow
                         {
                             b = new SolidBrush(oCursor.CursorValueForeColor);
                         }
-					}
-					
-					g.DrawString(AbsCursorValue.SerieName + AbsCursorValue.SerieValue, 
-					             oCursor.CursorValueFont.oFont, b, PtAbsCursorVal);
-					
-				}
-    			
-    			//Ordinate cusor value    			
-    			if ((oCursor.ShowCursorOrdinatesValue) && (oCursor.Mode.Equals(GraphicCursorMode.HorizontalLine) || oCursor.Mode.Equals(GraphicCursorMode.Cross)))
-    			{
-					if (!(CursorCoord == null))
-    				{
-						if (!(CursorCoord.Ords == null))
-						{
-							int TxtLenMax = Get_OrdinateValuesTextLenMax(CursorCoord.Ords);
-							
-							PointF PtOrdCursorVal = new PointF();
-							
-							switch (oCursor.OrdinateValuesPosition)
-							{
+                    }
+
+                    g.DrawString(AbsCursorValue.SerieName + AbsCursorValue.SerieValue,
+                                 oCursor.CursorValueFont.oFont, b, PtAbsCursorVal);
+
+                }
+
+                //Ordinate cusor value    			
+                if ((oCursor.ShowCursorOrdinatesValue) && (oCursor.Mode.Equals(GraphicCursorMode.HorizontalLine) || oCursor.Mode.Equals(GraphicCursorMode.Cross)))
+                {
+                    if (!(CursorCoord == null))
+                    {
+                        if (!(CursorCoord.Ords == null))
+                        {
+                            int TxtLenMax = Get_OrdinateValuesTextLenMax(CursorCoord.Ords);
+
+                            PointF PtOrdCursorVal = new PointF();
+
+                            switch (oCursor.OrdinateValuesPosition)
+                            {
                                 case ScreenPositions.Left:
-									
-									PtOrdCursorVal.X = (float) (CURSOR_TEXT_LEFT_OFFSET);
-									break;
+
+                                    PtOrdCursorVal.X = (float)(CURSOR_TEXT_LEFT_OFFSET);
+                                    break;
 
                                 case ScreenPositions.Center:
-									
-									PtOrdCursorVal.X = (float)((FrameWidth / 2) - (TxtLenMax * oCursor.CursorValueFont.oFont.Size / 2));
-									break;
+
+                                    PtOrdCursorVal.X = (float)((FrameWidth / 2) - (TxtLenMax * oCursor.CursorValueFont.oFont.Size / 2));
+                                    break;
 
                                 case ScreenPositions.Right:
-									
-									PtOrdCursorVal.X = (float) (FrameWidth - CURSOR_TEXT_LEFT_OFFSET - (TxtLenMax * oCursor.CursorValueFont.oFont.Size));
-									break;
-							}
-							
-							float PtOrdCursorValInc = 0;
-							
-							if (CursorY < FrameTopPoint + FrameHeight / 2)
-							{
-								PtOrdCursorVal.Y = (float)(CursorY + CURSOR_TEXT_TOP_OFFSET);
-								PtOrdCursorValInc = oCursor.CursorValueFont.oFont.GetHeight() + 1;
-							}
-							else
-							{
-								PtOrdCursorVal.Y = (float)(CursorY - CURSOR_TEXT_TOP_OFFSET - (CursorCoord.Ords.Length * oCursor.CursorValueFont.oFont.GetHeight()) - CursorCoord.Ords.Length);
-								PtOrdCursorValInc = (oCursor.CursorValueFont.oFont.GetHeight() + 1) * -1;
-							}
-							
-							foreach (SerieValueAtPoint sCursorVal in CursorCoord.Ords)
-							{
+
+                                    PtOrdCursorVal.X = (float)(FrameWidth - CURSOR_TEXT_LEFT_OFFSET - (TxtLenMax * oCursor.CursorValueFont.oFont.Size));
+                                    break;
+                            }
+
+                            float PtOrdCursorValInc = 0;
+
+                            if (CursorY < FrameTopPoint + FrameHeight / 2)
+                            {
+                                PtOrdCursorVal.Y = (float)(CursorY + CURSOR_TEXT_TOP_OFFSET);
+                                PtOrdCursorValInc = oCursor.CursorValueFont.oFont.GetHeight() + 1;
+                            }
+                            else
+                            {
+                                PtOrdCursorVal.Y = (float)(CursorY - CURSOR_TEXT_TOP_OFFSET - (CursorCoord.Ords.Length * oCursor.CursorValueFont.oFont.GetHeight()) - CursorCoord.Ords.Length);
+                                PtOrdCursorValInc = (oCursor.CursorValueFont.oFont.GetHeight() + 1) * -1;
+                            }
+
+                            foreach (SerieValueAtPoint sCursorVal in CursorCoord.Ords)
+                            {
                                 if (oCursor.CursorValueForeColor == Color.Empty)
                                 {
                                     b = new SolidBrush(sCursorVal.SerieColor);
@@ -5217,16 +5217,16 @@ namespace Ctrl_GraphWindow
                                 }
 
                                 g.DrawString(sCursorVal.SerieName + ": " + sCursorVal.SerieValue, oCursor.CursorValueFont.oFont, b, PtOrdCursorVal);
-								PtOrdCursorVal.Y += PtOrdCursorValInc;
-							}
-						}
-    				}
-    			}
+                                PtOrdCursorVal.Y += PtOrdCursorValInc;
+                            }
+                        }
+                    }
+                }
 
                 //Cursor title
                 if (oCursor.Equals(Properties.Cursor))
                 {
-                    if ((!(oCursor.CursorTitle.Equals("") || oCursor.CursorTitlePosition== ScreenPositions.Invisible)) 
+                    if ((!(oCursor.CursorTitle.Equals("") || oCursor.CursorTitlePosition == ScreenPositions.Invisible))
                         && (oCursor.Mode == GraphicCursorMode.Cross || oCursor.Mode == GraphicCursorMode.VerticalLine || oCursor.Mode == GraphicCursorMode.HorizontalLine))
                     {
                         PointF PtTitle = new PointF();
@@ -5244,11 +5244,11 @@ namespace Ctrl_GraphWindow
                             }
 
                             ScreenPositions eTitleLocation;
-                            if(oCursor.CursorTitlePosition== ScreenPositions.Top)
+                            if (oCursor.CursorTitlePosition == ScreenPositions.Top)
                             {
                                 eTitleLocation = ScreenPositions.Left;
                             }
-                            else if (oCursor.CursorTitlePosition== ScreenPositions.Bottom)
+                            else if (oCursor.CursorTitlePosition == ScreenPositions.Bottom)
                             {
                                 eTitleLocation = ScreenPositions.Right;
                             }
@@ -5257,7 +5257,7 @@ namespace Ctrl_GraphWindow
                                 eTitleLocation = oCursor.CursorTitlePosition;
                             }
 
-                            switch(eTitleLocation)
+                            switch (eTitleLocation)
                             {
                                 case ScreenPositions.Left:
 
@@ -5300,7 +5300,7 @@ namespace Ctrl_GraphWindow
                                 eTitleLocation = oCursor.CursorTitlePosition;
                             }
 
-                            switch(eTitleLocation)
+                            switch (eTitleLocation)
                             {
                                 case ScreenPositions.Top:
 
@@ -5324,132 +5324,132 @@ namespace Ctrl_GraphWindow
                     }
                 }
 
-    			p.Dispose();
-				if (GraphicsTarget == null) g.Dispose(); //Do not dispose of g is the target isn't the default target (Pic_Graphic), otherwise target becomes null for the function caller as well...
-				if (!(b == null)) b.Dispose();
-    			
-    			//Legend update
-    			if (Properties.LegendProperties.Visible)
-    			{
-    				if (Properties.AbscisseAxis.TimeMode && (!(oCursor.Mode.Equals(GraphicCursorMode.HorizontalLine))))
-    				{
-    					UpDate_LegendValues(CursorCoord.Abs);
-    				}
-    				else
-    				{
-    					UpDate_LegendValues_XY(CursorCoord);
-    				}
-    			}
-			}	
+                p.Dispose();
+                if (GraphicsTarget == null) g.Dispose(); //Do not dispose of g is the target isn't the default target (Pic_Graphic), otherwise target becomes null for the function caller as well...
+                if (!(b == null)) b.Dispose();
+
+                //Legend update
+                if (Properties.LegendProperties.Visible)
+                {
+                    if (Properties.AbscisseAxis.TimeMode && (!(oCursor.Mode.Equals(GraphicCursorMode.HorizontalLine))))
+                    {
+                        UpDate_LegendValues(CursorCoord.Abs);
+                    }
+                    else
+                    {
+                        UpDate_LegendValues_XY(CursorCoord);
+                    }
+                }
+            }
         }
-        
+
         private int Get_OrdinateValuesTextLenMax(SerieValueAtPoint[] Values)
         {
-        	int LenMax = 0;
-        	
-        	if (!(Values == null))
-        	{
-        		for (int i=0; i < Values.Length; i++)
-        		{
-        			string s = Values[i].SerieName + ": " + Values[i].SerieValue;
-        			
-        			if (i != 0)
-        			{
-        				if (LenMax < s.Length)
-        				{
-        					LenMax = s.Length;
-        				}
-        			}
-        			else
-        			{
-        				LenMax = s.Length;
-        			}
-        		}
-        	}
-        	
-        	return(LenMax);
+            int LenMax = 0;
+
+            if (!(Values == null))
+            {
+                for (int i = 0; i < Values.Length; i++)
+                {
+                    string s = Values[i].SerieName + ": " + Values[i].SerieValue;
+
+                    if (i != 0)
+                    {
+                        if (LenMax < s.Length)
+                        {
+                            LenMax = s.Length;
+                        }
+                    }
+                    else
+                    {
+                        LenMax = s.Length;
+                    }
+                }
+            }
+
+            return (LenMax);
         }
-        
+
         private void Set_ReferenceCursor()
         {
-        	if (CurrentGraphCursor.Equals(GraphicCursorObject.CursorMain))
-        	{
-        		CurrentGraphCursor = GraphicCursorObject.CursorReference;
-        		
-        		TSDB_RefCursor_Set.Visible = false;
-        		TSDB_RefCursor_Lock.Visible = true;
-        		TSDB_RefCursor_Mode.Enabled = true;
-        		
-        		RefCursor_Set_TSMI.Visible = false;
-        		RefCursor_Lock_TSMI.Visible = true;
-        		RefCursor_Mode_TSMI.Enabled = true;
-        	}
+            if (CurrentGraphCursor.Equals(GraphicCursorObject.CursorMain))
+            {
+                CurrentGraphCursor = GraphicCursorObject.CursorReference;
+
+                TSDB_RefCursor_Set.Visible = false;
+                TSDB_RefCursor_Lock.Visible = true;
+                TSDB_RefCursor_Mode.Enabled = true;
+
+                RefCursor_Set_TSMI.Visible = false;
+                RefCursor_Lock_TSMI.Visible = true;
+                RefCursor_Mode_TSMI.Enabled = true;
+            }
         }
-        
+
         private void Lock_ReferenceCursor()
         {
-        	if (CurrentGraphCursor.Equals(GraphicCursorObject.CursorReference))
-        	{
-        		CurrentGraphCursor = GraphicCursorObject.CursorMain;
-        		
-        		TSDB_RefCursor_Set.Visible = true;
-        		TSDB_RefCursor_Lock.Visible = false;
-        		TSDB_RefCursor_Mode.Enabled = false;
-        		
-        		RefCursor_Set_TSMI.Visible = true;
-        		RefCursor_Lock_TSMI.Visible = false;
-        		RefCursor_Mode_TSMI.Enabled = false;
-        		
-        		Set_RefCursorCoordinates();
-        		
-        		Properties.LegendProperties.Informations |= (GraphicLegendInformations) (GraphicLegendInformations.RefCursorValue 
-        		                                                                         | GraphicLegendInformations.RefCursorDiffValue 
-        		                                                                         | GraphicLegendInformations.RefCursorDiffPerc 
-        		                                                                         | GraphicLegendInformations.RefCursorGradient);
-        		if (Properties.LegendProperties.Visible)
-        		{
-	        		Resize_Legend(true);
-	        		Init_Legend();
-        		}
-        	}
+            if (CurrentGraphCursor.Equals(GraphicCursorObject.CursorReference))
+            {
+                CurrentGraphCursor = GraphicCursorObject.CursorMain;
+
+                TSDB_RefCursor_Set.Visible = true;
+                TSDB_RefCursor_Lock.Visible = false;
+                TSDB_RefCursor_Mode.Enabled = false;
+
+                RefCursor_Set_TSMI.Visible = true;
+                RefCursor_Lock_TSMI.Visible = false;
+                RefCursor_Mode_TSMI.Enabled = false;
+
+                Set_RefCursorCoordinates();
+
+                Properties.LegendProperties.Informations |= (GraphicLegendInformations)(GraphicLegendInformations.RefCursorValue
+                                                                                         | GraphicLegendInformations.RefCursorDiffValue
+                                                                                         | GraphicLegendInformations.RefCursorDiffPerc
+                                                                                         | GraphicLegendInformations.RefCursorGradient);
+                if (Properties.LegendProperties.Visible)
+                {
+                    Resize_Legend(true);
+                    Init_Legend();
+                }
+            }
         }
-        
+
         private void Clear_ReferenceCursor()
         {
-        	CurrentGraphCursor = GraphicCursorObject.CursorMain;
-        	PtRefCursorPos = Point.Empty;
-        	RefCursorCoordinates = null;
-        	
-        	TSDB_RefCursor_Mode.Enabled = true;
-        	RefCursor_Mode_TSMI.Enabled = true;
-        	
-        	Properties.LegendProperties.Informations -= (GraphicLegendInformations) (GraphicLegendInformations.RefCursorValue 
-        		                                                                         | GraphicLegendInformations.RefCursorDiffValue 
-        		                                                                         | GraphicLegendInformations.RefCursorDiffPerc 
-        		                                                                         | GraphicLegendInformations.RefCursorGradient);
+            CurrentGraphCursor = GraphicCursorObject.CursorMain;
+            PtRefCursorPos = Point.Empty;
+            RefCursorCoordinates = null;
+
+            TSDB_RefCursor_Mode.Enabled = true;
+            RefCursor_Mode_TSMI.Enabled = true;
+
+            Properties.LegendProperties.Informations -= (GraphicLegendInformations)(GraphicLegendInformations.RefCursorValue
+                                                                                         | GraphicLegendInformations.RefCursorDiffValue
+                                                                                         | GraphicLegendInformations.RefCursorDiffPerc
+                                                                                         | GraphicLegendInformations.RefCursorGradient);
 
             bScratchStageForced = true;
 
             if (Properties.LegendProperties.Visible)
-        	{
-				Resize_Legend(false);        	
-    			Init_Legend();
-        	}
+            {
+                Resize_Legend(false);
+                Init_Legend();
+            }
             oGraphicUpdateRequest.UpdateRequested = true;
 
             //Pic_Graphic.Refresh();
         }
-        
+
         private void Set_RefCursorCoordinates()
         {
-        	if (!(PtRefCursorPos.IsEmpty))
-        	{
-        		RefCursorCoordinates = new Ctrl_WaveForm.GraphicCoordinates();
-        		
-        		if (!(Properties.ReferenceCursor.Mode.Equals(GraphicCursorMode.HorizontalLine)))
-        		{
-        			//Abscisse value
-        			RefCursorCoordinates.Abs = Get_AbscisseValueAtPostion(PtRefCursorPos.X);
+            if (!(PtRefCursorPos.IsEmpty))
+            {
+                RefCursorCoordinates = new Ctrl_WaveForm.GraphicCoordinates();
+
+                if (!(Properties.ReferenceCursor.Mode.Equals(GraphicCursorMode.HorizontalLine)))
+                {
+                    //Abscisse value
+                    RefCursorCoordinates.Abs = Get_AbscisseValueAtPostion(PtRefCursorPos.X);
 
                     //Ordinate values
                     List<SerieValueAtPoint> TmpOrds = new List<Ctrl_WaveForm.SerieValueAtPoint>();
@@ -5496,7 +5496,7 @@ namespace Ctrl_GraphWindow
                                     {
                                         double SerieValue = DataFile.Get_ChannelValueAtTime(oSerieProp.Name, RefCursorCoordinates.Abs);
 
-                                        if(!(double.IsNaN(SerieValue)))
+                                        if (!(double.IsNaN(SerieValue)))
                                         {
                                             SerieValueAtPoint Ord = new Ctrl_WaveForm.SerieValueAtPoint();
 
@@ -5522,287 +5522,287 @@ namespace Ctrl_GraphWindow
                     {
                         RefCursorCoordinates.Ords = null;
                     }
-        		}
-        		else
-        		{
-        			//Abscisse value
-        			RefCursorCoordinates.Abs = double.NaN;
-        			
-        			//Ordinate values
-        			RefCursorCoordinates.Ords = Get_OrdinateValuesAtPosition(PtRefCursorPos.Y);
-        			
-        			for (int iVal = 0; iVal < RefCursorCoordinates.Ords.Length; iVal++)
-        			{
-        				RefCursorCoordinates.Ords[iVal].SerieDblValue = double.Parse(RefCursorCoordinates.Ords[iVal].SerieValue);
-        			}
-        		}
-        	}
+                }
+                else
+                {
+                    //Abscisse value
+                    RefCursorCoordinates.Abs = double.NaN;
+
+                    //Ordinate values
+                    RefCursorCoordinates.Ords = Get_OrdinateValuesAtPosition(PtRefCursorPos.Y);
+
+                    for (int iVal = 0; iVal < RefCursorCoordinates.Ords.Length; iVal++)
+                    {
+                        RefCursorCoordinates.Ords[iVal].SerieDblValue = double.Parse(RefCursorCoordinates.Ords[iVal].SerieValue);
+                    }
+                }
+            }
         }
-        
+
         private void Move_Cursor(GraphicCursorMovingDirection eDirection)
         {
-        	if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.None)))
-        	{
-        		int Step = 0;
-        		Point PtCursor = new Point(PtCursorPos.X, PtCursorPos.Y);
-        		
-        		switch (eDirection)
-        		{
-        			case GraphicCursorMovingDirection.Left:
-        				
-        				if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine)))
-        				{
-        					Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameWidth / 100);
-        					
-        					if (!((PtCursorPos.X - Step) < 0))
-        					{
-        						PtCursorPos.X -= Step;
-        						Draw_Cursor(PtCursorPos);
-        					}
-        					else
-        					{
-        						if (bXZoom)
-        						{
-        							if ((Cmd_ZoomXPosition.Left - Step) > FrameLeftPoint)
-        							{
-        								Cmd_ZoomXPosition.Left -= Step;
-        								Plot_DataAtXZoomBarPosition();
-        								PtCursorPos = PtCursor;
-        								Draw_Cursor(PtCursorPos);
-        							}
-        						}
-        					}
-        				}
-        				
-        				break;
-        				
-        			case GraphicCursorMovingDirection.Right:
-        				
-        				if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine)))
-        				{
-        					Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameWidth / 100);
-        					
-        					if (!((PtCursorPos.X + Step) > FrameWidth))
-        					{
-        						PtCursorPos.X += Step;
-        						Draw_Cursor(PtCursorPos);
-        					}
-        					else
-        					{
-        						if (bXZoom)
-        						{
-        							if ((Cmd_ZoomXPosition.Left + Cmd_ZoomXPosition.Width + Step) < FrameRightPoint)
-        							{
-        								Cmd_ZoomXPosition.Left += Step;
-        								Plot_DataAtXZoomBarPosition();
-        								PtCursorPos = PtCursor;
-        								Draw_Cursor(PtCursorPos);
-        							}
-        						}
-        					}
-        				}
-        				
-        				break;
-        				
-        			case GraphicCursorMovingDirection.Up:
-        				
-        				if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine)))
-        				{
-        					Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameHeight / 100);
-        					
-        					if (!((PtCursorPos.Y - Step) < 0))
-        					{
-        						PtCursorPos.Y -= Step;
-        						Draw_Cursor(PtCursorPos);
-        					}
-        					else
-        					{
-        						if (bYZoom)
-        						{
-        							if ((Cmd_ZoomYPosition.Top - Step) > FrameTopPoint)
-        							{
-        								Cmd_ZoomYPosition.Top -= Step;
-        								Plot_DataAtYZoomBarPosition();
-        								PtCursorPos = PtCursor;
-        								Draw_Cursor(PtCursorPos);
-        							}
-        						}
-        					}
-        				}
-        				
-        				break;
-        				
-        			case GraphicCursorMovingDirection.Down:
-        				
-        				if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine)))
-        				{
-        					Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameHeight / 100);
-        					
-        					if (!((PtCursorPos.Y + Step) > FrameHeight))
-        					{
-        						PtCursorPos.Y += Step;
-        						Draw_Cursor(PtCursorPos);
-        					}
-        					else
-        					{
-        						if (bYZoom)
-        						{
-        							if ((Cmd_ZoomYPosition.Top + Cmd_ZoomYPosition.Height + Step) < FrameBottomPoint)
-        							{
-        								Cmd_ZoomYPosition.Top += Step;
-        								Plot_DataAtYZoomBarPosition();
-        								PtCursorPos = PtCursor;
-        								Draw_Cursor(PtCursorPos);
-        							}
-        						}
-        					}
-        				}
-        				
-        				break;
-        		}
-        	}
+            if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.None)))
+            {
+                int Step = 0;
+                Point PtCursor = new Point(PtCursorPos.X, PtCursorPos.Y);
+
+                switch (eDirection)
+                {
+                    case GraphicCursorMovingDirection.Left:
+
+                        if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine)))
+                        {
+                            Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameWidth / 100);
+
+                            if (!((PtCursorPos.X - Step) < 0))
+                            {
+                                PtCursorPos.X -= Step;
+                                Draw_Cursor(PtCursorPos);
+                            }
+                            else
+                            {
+                                if (bXZoom)
+                                {
+                                    if ((Cmd_ZoomXPosition.Left - Step) > FrameLeftPoint)
+                                    {
+                                        Cmd_ZoomXPosition.Left -= Step;
+                                        Plot_DataAtXZoomBarPosition();
+                                        PtCursorPos = PtCursor;
+                                        Draw_Cursor(PtCursorPos);
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case GraphicCursorMovingDirection.Right:
+
+                        if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine)))
+                        {
+                            Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameWidth / 100);
+
+                            if (!((PtCursorPos.X + Step) > FrameWidth))
+                            {
+                                PtCursorPos.X += Step;
+                                Draw_Cursor(PtCursorPos);
+                            }
+                            else
+                            {
+                                if (bXZoom)
+                                {
+                                    if ((Cmd_ZoomXPosition.Left + Cmd_ZoomXPosition.Width + Step) < FrameRightPoint)
+                                    {
+                                        Cmd_ZoomXPosition.Left += Step;
+                                        Plot_DataAtXZoomBarPosition();
+                                        PtCursorPos = PtCursor;
+                                        Draw_Cursor(PtCursorPos);
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case GraphicCursorMovingDirection.Up:
+
+                        if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine)))
+                        {
+                            Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameHeight / 100);
+
+                            if (!((PtCursorPos.Y - Step) < 0))
+                            {
+                                PtCursorPos.Y -= Step;
+                                Draw_Cursor(PtCursorPos);
+                            }
+                            else
+                            {
+                                if (bYZoom)
+                                {
+                                    if ((Cmd_ZoomYPosition.Top - Step) > FrameTopPoint)
+                                    {
+                                        Cmd_ZoomYPosition.Top -= Step;
+                                        Plot_DataAtYZoomBarPosition();
+                                        PtCursorPos = PtCursor;
+                                        Draw_Cursor(PtCursorPos);
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case GraphicCursorMovingDirection.Down:
+
+                        if (!(Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine)))
+                        {
+                            Step = (int)(CursorSteps[CursorStepIndex] * (double)FrameHeight / 100);
+
+                            if (!((PtCursorPos.Y + Step) > FrameHeight))
+                            {
+                                PtCursorPos.Y += Step;
+                                Draw_Cursor(PtCursorPos);
+                            }
+                            else
+                            {
+                                if (bYZoom)
+                                {
+                                    if ((Cmd_ZoomYPosition.Top + Cmd_ZoomYPosition.Height + Step) < FrameBottomPoint)
+                                    {
+                                        Cmd_ZoomYPosition.Top += Step;
+                                        Plot_DataAtYZoomBarPosition();
+                                        PtCursorPos = PtCursor;
+                                        Draw_Cursor(PtCursorPos);
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                }
+            }
         }
-        
-#endregion
-        
-#region Zoom and stats functions
-        
+
+        #endregion
+
+        #region Zoom and stats functions
+
         private void Plot_ZoomBoxData()
         {
-        	GraphicCoordinates[] ZoomBoxCoords = GetZoomBoxGraphCoordinates();
-        	bool bPlot = false;
-        	
-        	if (!(ZoomBoxCoords == null))
-        	{
-        		switch (Properties.ZoomMode)
-        		{
-        			case GraphicZoomMode.ZoomX:
-        				
-        				if (ZoomBoxCoords[0].Abs < ZoomBoxCoords[1].Abs)
-        				{
-        					bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[0].Abs, ZoomBoxCoords[1].Abs);
-        				} 
-        				else
-        				{
-        					bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[1].Abs, ZoomBoxCoords[0].Abs);
-        				}
-        				
-        				break;
-        				
-         			case GraphicZoomMode.ZoomY:
-        				
-        				if (CursorPosMouseUp.Y > CursorPosMouseDown.Y)
-        				{
-        					bPlot = Set_DataFileForYZoom(CursorPosMouseDown.Y, CursorPosMouseUp.Y, true);
-        				}
-        				else
-        				{
-        					bPlot = Set_DataFileForYZoom(CursorPosMouseUp.Y, CursorPosMouseDown.Y, true);
-        				}
-        				
-        				break;
-        				
-        			case GraphicZoomMode.ZoomXY:
-        				
-        				//Zoom Y
-        				if (CursorPosMouseUp.Y > CursorPosMouseDown.Y)
-        				{
-        					bPlot = Set_DataFileForYZoom(CursorPosMouseDown.Y, CursorPosMouseUp.Y, true);
-        				}
-        				else
-        				{
-        					bPlot = Set_DataFileForYZoom(CursorPosMouseUp.Y, CursorPosMouseDown.Y, true);
-        				}
-        				
-        				//Zoom X
-        				if (bPlot)
-        				{
-        					if (ZoomBoxCoords[0].Abs < ZoomBoxCoords[1].Abs)
-	        				{
-	        					bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[0].Abs, ZoomBoxCoords[1].Abs);
-	        				} 
-	        				else
-	        				{
-	        					bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[1].Abs, ZoomBoxCoords[0].Abs);
-	        				}
-        				}
-        				
-        				break;
-        				
-        			default:
-        				
-        				return;
-        		}
-        		
-        		if (bPlot)
-        		{
+            GraphicCoordinates[] ZoomBoxCoords = GetZoomBoxGraphCoordinates();
+            bool bPlot = false;
+
+            if (!(ZoomBoxCoords == null))
+            {
+                switch (Properties.ZoomMode)
+                {
+                    case GraphicZoomMode.ZoomX:
+
+                        if (ZoomBoxCoords[0].Abs < ZoomBoxCoords[1].Abs)
+                        {
+                            bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[0].Abs, ZoomBoxCoords[1].Abs);
+                        }
+                        else
+                        {
+                            bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[1].Abs, ZoomBoxCoords[0].Abs);
+                        }
+
+                        break;
+
+                    case GraphicZoomMode.ZoomY:
+
+                        if (CursorPosMouseUp.Y > CursorPosMouseDown.Y)
+                        {
+                            bPlot = Set_DataFileForYZoom(CursorPosMouseDown.Y, CursorPosMouseUp.Y, true);
+                        }
+                        else
+                        {
+                            bPlot = Set_DataFileForYZoom(CursorPosMouseUp.Y, CursorPosMouseDown.Y, true);
+                        }
+
+                        break;
+
+                    case GraphicZoomMode.ZoomXY:
+
+                        //Zoom Y
+                        if (CursorPosMouseUp.Y > CursorPosMouseDown.Y)
+                        {
+                            bPlot = Set_DataFileForYZoom(CursorPosMouseDown.Y, CursorPosMouseUp.Y, true);
+                        }
+                        else
+                        {
+                            bPlot = Set_DataFileForYZoom(CursorPosMouseUp.Y, CursorPosMouseDown.Y, true);
+                        }
+
+                        //Zoom X
+                        if (bPlot)
+                        {
+                            if (ZoomBoxCoords[0].Abs < ZoomBoxCoords[1].Abs)
+                            {
+                                bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[0].Abs, ZoomBoxCoords[1].Abs);
+                            }
+                            else
+                            {
+                                bPlot = Set_DataFile_BetweenAbsPoint(ZoomBoxCoords[1].Abs, ZoomBoxCoords[0].Abs);
+                            }
+                        }
+
+                        break;
+
+                    default:
+
+                        return;
+                }
+
+                if (bPlot)
+                {
                     bScratchStageForced = true;
                     oGraphicUpdateRequest.UpdateRequested = true;
                 }
-        	}
+            }
         }
-        
+
         private void ZoomPlus()
         {
-        	ZoomPlus(false);
+            ZoomPlus(false);
         }
-        	
+
         private void ZoomPlus(bool ZoomMax)
         {
-        	bool bPlot = false;
-        	
-        	switch (Properties.ZoomMode)
-        	{
-        		case GraphicZoomMode.ZoomX:
-        			
-		        	bPlot = Zoom_X_Plus(ZoomMax);
-		        	break;
-		        	
-		        case GraphicZoomMode.ZoomY:
-		        	
-		        	bPlot = Zoom_Y_Plus(ZoomMax);
-		        	break;
-		        	
-		        case GraphicZoomMode.ZoomXY:
-		        	
-		        	if (Zoom_Y_Plus(ZoomMax))
-		        	{
-		        		bPlot = Zoom_X_Plus(ZoomMax);
-		        	}
-		        	
-		        	break;
-        	}
-        	
-        	if (bPlot)
-        	{
+            bool bPlot = false;
+
+            switch (Properties.ZoomMode)
+            {
+                case GraphicZoomMode.ZoomX:
+
+                    bPlot = Zoom_X_Plus(ZoomMax);
+                    break;
+
+                case GraphicZoomMode.ZoomY:
+
+                    bPlot = Zoom_Y_Plus(ZoomMax);
+                    break;
+
+                case GraphicZoomMode.ZoomXY:
+
+                    if (Zoom_Y_Plus(ZoomMax))
+                    {
+                        bPlot = Zoom_X_Plus(ZoomMax);
+                    }
+
+                    break;
+            }
+
+            if (bPlot)
+            {
                 bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
-        
+
         private bool Zoom_X_Plus(bool ZoomMax)
         {
-        	GraphicCoordinates ZoomCenter = null;
-        	double XZoomRange, ZoomX1, ZoomX2;
-        	
-        	if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine))) //Main cursor visible
-        	{
-        		ZoomCenter = GetPointGraphCoordinates(PtCursorPos);
-        	}
-        	else //Main cursor unvisible
-        	{
-        		ZoomCenter = new Ctrl_WaveForm.GraphicCoordinates();
-        		ZoomCenter.Abs = Properties.AbscisseAxis.CoordConversion.Min + ((Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 2);
-        	}
-        	
-        	if (!(ZoomCenter == null))
-        	{
-        		XZoomRange = 0;
-        		
-        		if (ZoomMax)
-        		{
-        			if (Properties.AbscisseAxis.TimeMode)
-        			{
+            GraphicCoordinates ZoomCenter = null;
+            double XZoomRange, ZoomX1, ZoomX2;
+
+            if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine))) //Main cursor visible
+            {
+                ZoomCenter = GetPointGraphCoordinates(PtCursorPos);
+            }
+            else //Main cursor unvisible
+            {
+                ZoomCenter = new Ctrl_WaveForm.GraphicCoordinates();
+                ZoomCenter.Abs = Properties.AbscisseAxis.CoordConversion.Min + ((Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 2);
+            }
+
+            if (!(ZoomCenter == null))
+            {
+                XZoomRange = 0;
+
+                if (ZoomMax)
+                {
+                    if (Properties.AbscisseAxis.TimeMode)
+                    {
                         if (WholeDataFile.StepTimeMin > 0)
                         {
                             XZoomRange = WholeDataFile.StepTimeMin * 3; //Show at least 3 samples
@@ -5811,346 +5811,346 @@ namespace Ctrl_GraphWindow
                         {
                             return (false);
                         }
-        			}
-        			else
-        			{
-        				XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 100; //1% of the full value range
-        			}
-        		}
-        		else
-        		{
-        			XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / ((double) ZoomFactors[ZoomFactorIndex]);
-        		}
-        		
-        		if (XZoomRange > 0)
-        		{
-        			ZoomX1 = ZoomCenter.Abs - (XZoomRange / 2);
-        			if (ZoomX1 < Properties.AbscisseAxis.CoordConversion.Min)
-        			{
-        				ZoomX1 = Properties.AbscisseAxis.CoordConversion.Min;
-        			}
-        			
-        			ZoomX2 = ZoomX1 + XZoomRange;
-        			if (ZoomX2 > Properties.AbscisseAxis.CoordConversion.Max)
-        			{
-        				ZoomX2 = Properties.AbscisseAxis.CoordConversion.Max;
-        			}
-        			
-        			if (!(ZoomX1 == ZoomX2))
-        			{
-        				if (Set_DataFile_BetweenAbsPoint (ZoomX1, ZoomX2))
-        				{
-        					return(true);
-        				}
-        			}
-        		}
-        	}
-        	
-        	return(false);
+                    }
+                    else
+                    {
+                        XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 100; //1% of the full value range
+                    }
+                }
+                else
+                {
+                    XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / ((double)ZoomFactors[ZoomFactorIndex]);
+                }
+
+                if (XZoomRange > 0)
+                {
+                    ZoomX1 = ZoomCenter.Abs - (XZoomRange / 2);
+                    if (ZoomX1 < Properties.AbscisseAxis.CoordConversion.Min)
+                    {
+                        ZoomX1 = Properties.AbscisseAxis.CoordConversion.Min;
+                    }
+
+                    ZoomX2 = ZoomX1 + XZoomRange;
+                    if (ZoomX2 > Properties.AbscisseAxis.CoordConversion.Max)
+                    {
+                        ZoomX2 = Properties.AbscisseAxis.CoordConversion.Max;
+                    }
+
+                    if (!(ZoomX1 == ZoomX2))
+                    {
+                        if (Set_DataFile_BetweenAbsPoint(ZoomX1, ZoomX2))
+                        {
+                            return (true);
+                        }
+                    }
+                }
+            }
+
+            return (false);
         }
-        
+
         private bool Zoom_Y_Plus(bool ZoomMax)
         {
-        	int ZoomCenter = -1;
-        	double ZoomRange = 0;
-        	int ZoomY1, ZoomY2;
-        	
-        	if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine))) //Main cursor visible
-        	{
-        		ZoomCenter = PtCursorPos.Y;
-        	}
-        	else
-        	{
-        		ZoomCenter = FrameHeight / 2;
-        	}
-        	
-        	if (ZoomCenter > 0 && ZoomCenter < FrameHeight)
-        	{
-        		if (ZoomMax) //1% of the whole graph height
-        		{
-        			ZoomRange = ((double)FrameHeight / 100);
-        		}
-        		else
-        		{
-        			ZoomRange = ((double)FrameHeight / (double)ZoomFactors[ZoomFactorIndex]);
-        		}
-        		
-        		if (ZoomRange > 0)
-        		{
-        			ZoomY1 = (int)((double)ZoomCenter - (ZoomRange / 2));
-        			if (ZoomY1 < 0)
-        			{
-        				ZoomY1 = 0;
-        			}
-        			
-        			ZoomY2 = ZoomY1 + (int)ZoomRange;
-        			if (ZoomY2 > FrameHeight)
-        			{
-        				ZoomY2 = FrameHeight;
-        			}
-        			
-        			if (!(ZoomY1 == ZoomY2))
-        			{
-        				if (Set_DataFileForYZoom(ZoomY1, ZoomY2, true))
-        				{
-        					return(true);
-        				}
-        			}
-        		}
-        	}
-        	
-        	return(false);
+            int ZoomCenter = -1;
+            double ZoomRange = 0;
+            int ZoomY1, ZoomY2;
+
+            if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine))) //Main cursor visible
+            {
+                ZoomCenter = PtCursorPos.Y;
+            }
+            else
+            {
+                ZoomCenter = FrameHeight / 2;
+            }
+
+            if (ZoomCenter > 0 && ZoomCenter < FrameHeight)
+            {
+                if (ZoomMax) //1% of the whole graph height
+                {
+                    ZoomRange = ((double)FrameHeight / 100);
+                }
+                else
+                {
+                    ZoomRange = ((double)FrameHeight / (double)ZoomFactors[ZoomFactorIndex]);
+                }
+
+                if (ZoomRange > 0)
+                {
+                    ZoomY1 = (int)((double)ZoomCenter - (ZoomRange / 2));
+                    if (ZoomY1 < 0)
+                    {
+                        ZoomY1 = 0;
+                    }
+
+                    ZoomY2 = ZoomY1 + (int)ZoomRange;
+                    if (ZoomY2 > FrameHeight)
+                    {
+                        ZoomY2 = FrameHeight;
+                    }
+
+                    if (!(ZoomY1 == ZoomY2))
+                    {
+                        if (Set_DataFileForYZoom(ZoomY1, ZoomY2, true))
+                        {
+                            return (true);
+                        }
+                    }
+                }
+            }
+
+            return (false);
         }
-        
+
         private void ZoomMinus()
         {
-        	bool bPlot = false;
-        	
-        	switch (Properties.ZoomMode)
-        	{
-        		case GraphicZoomMode.ZoomX:
-        			
-		        	bPlot = Zoom_X_Minus();
-		        	break;
-		        	
-		        case GraphicZoomMode.ZoomY:
-		        	
-		        	bPlot = Zoom_Y_Minus();
-		        	break;
-		        	
-		        case GraphicZoomMode.ZoomXY:
-		        	
-		        	if (Zoom_Y_Minus())
-		        	{
-		        		bPlot = Zoom_X_Minus();
-		        	}
-		        	
-		        	break;
-        	}
-        	
-        	if (bPlot)
-        	{
+            bool bPlot = false;
+
+            switch (Properties.ZoomMode)
+            {
+                case GraphicZoomMode.ZoomX:
+
+                    bPlot = Zoom_X_Minus();
+                    break;
+
+                case GraphicZoomMode.ZoomY:
+
+                    bPlot = Zoom_Y_Minus();
+                    break;
+
+                case GraphicZoomMode.ZoomXY:
+
+                    if (Zoom_Y_Minus())
+                    {
+                        bPlot = Zoom_X_Minus();
+                    }
+
+                    break;
+            }
+
+            if (bPlot)
+            {
                 bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
-        
+
         private void ZoomMin()
         {
-        	DataFile = WholeDataFile;
-        	bXZoom = false;
-        	bYZoom = false;
+            DataFile = WholeDataFile;
+            bXZoom = false;
+            bYZoom = false;
             bScratchStageForced = true;
             oGraphicUpdateRequest.UpdateRequested = true;
 
         }
-        
+
         private bool Zoom_X_Minus()
         {
             if (!(Properties.AbscisseAxis.CoordConversion.Min == WholeDataFile.SampleTimeMin && Properties.AbscisseAxis.CoordConversion.Max == WholeDataFile.SampleTimeMax))
-        	{
-        		GraphicCoordinates ZoomCenter = null;
-        		double XZoomRange, ZoomX1, ZoomX2;
-        		
-        		if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine))) //Main cursor visible
-        		{
-        			ZoomCenter = GetPointGraphCoordinates(PtCursorPos);
-        		}
-        		else //Main cursor unvisible
-        		{
-        			ZoomCenter = new Ctrl_WaveForm.GraphicCoordinates();
-        			ZoomCenter.Abs = Properties.AbscisseAxis.CoordConversion.Min + ((Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 2);
-        		}
-        		
-        		if (!(ZoomCenter == null))
-        		{
-        			XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) * ((double) ZoomFactors[ZoomFactorIndex]);
-        			
-        			ZoomX1 = ZoomCenter.Abs - (XZoomRange / 2);
-        			if (ZoomX1 < WholeDataFile.SampleTimeMin)
-        			{
-        				ZoomX1 = WholeDataFile.SampleTimeMin;
-        			}
-        			
-        			ZoomX2 = ZoomX1 + XZoomRange;
-        			if (ZoomX2 > WholeDataFile.SampleTimeMax)
-        			{
-        				ZoomX2 = WholeDataFile.SampleTimeMax;
-        			}
-        			
-        			if (Set_DataFile_BetweenAbsPoint (ZoomX1, ZoomX2))
-        			{
-        				if (ZoomX1 == WholeDataFile.SampleTimeMin && ZoomX2 == WholeDataFile.SampleTimeMax)
-	        			{
-	        				bXZoom = false;
-	        			}
-        				
-        				return(true);
-        			}
-        		}
-        	}
-        	
-        	return(false);
+            {
+                GraphicCoordinates ZoomCenter = null;
+                double XZoomRange, ZoomX1, ZoomX2;
+
+                if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.HorizontalLine))) //Main cursor visible
+                {
+                    ZoomCenter = GetPointGraphCoordinates(PtCursorPos);
+                }
+                else //Main cursor unvisible
+                {
+                    ZoomCenter = new Ctrl_WaveForm.GraphicCoordinates();
+                    ZoomCenter.Abs = Properties.AbscisseAxis.CoordConversion.Min + ((Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / 2);
+                }
+
+                if (!(ZoomCenter == null))
+                {
+                    XZoomRange = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) * ((double)ZoomFactors[ZoomFactorIndex]);
+
+                    ZoomX1 = ZoomCenter.Abs - (XZoomRange / 2);
+                    if (ZoomX1 < WholeDataFile.SampleTimeMin)
+                    {
+                        ZoomX1 = WholeDataFile.SampleTimeMin;
+                    }
+
+                    ZoomX2 = ZoomX1 + XZoomRange;
+                    if (ZoomX2 > WholeDataFile.SampleTimeMax)
+                    {
+                        ZoomX2 = WholeDataFile.SampleTimeMax;
+                    }
+
+                    if (Set_DataFile_BetweenAbsPoint(ZoomX1, ZoomX2))
+                    {
+                        if (ZoomX1 == WholeDataFile.SampleTimeMin && ZoomX2 == WholeDataFile.SampleTimeMax)
+                        {
+                            bXZoom = false;
+                        }
+
+                        return (true);
+                    }
+                }
+            }
+
+            return (false);
         }
-        
+
         private bool Zoom_Y_Minus()
         {
-        	if (!(RefZoomYUpperBound == 0 && RefZoomYLowerBound == FrameHeight))
-        	{
-        		
-        		int ZoomCenter = -1;
-        		int ZoomY1, ZoomY2;
-        		double ZoomRange = 0;
-        		
-        		if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine))) //Main cursor visible
-        		{
-        			double a = (double)(RefZoomYLowerBound - RefZoomYUpperBound) / (double)(FrameHeight);
-        			double b = (double)RefZoomYLowerBound - a * (double)FrameHeight;
-        			
-        			ZoomCenter =  (int)((double)PtCursorPos.Y *a + b);
-        		}
-        		else
-        		{
-        			ZoomCenter = RefZoomYUpperBound + ((RefZoomYLowerBound -  RefZoomYUpperBound) / 2);
-        		}
-        		
-        		if (ZoomCenter >= 0 && ZoomCenter <= FrameHeight)
-        		{
-        			ZoomRange = (double)(RefZoomYLowerBound - RefZoomYUpperBound) * (double)ZoomFactors[ZoomFactorIndex];
-        			
-        			if (ZoomRange > 0)
-        			{
-        				ZoomY1 = (int)((double)ZoomCenter - (ZoomRange / 2));
-        				if (ZoomY1 < 0)
-        				{
-        					ZoomY1 = 0;
-        				}
-        				
-        				ZoomY2 = ZoomY1 + (int)ZoomRange;
-        				if (ZoomY2 > FrameHeight)
-        				{
-        					ZoomY2 = FrameHeight;
-        				}
-        				
-        				if (!(ZoomY1 == ZoomY2))
-        				{
-        					if (Set_DataFileForYZoom(ZoomY1, ZoomY2, false))
-        					{
-        						return(true);
-        					}
-        				}
-        			}
-        		}
-        	}
-        	
-        	return(false);
+            if (!(RefZoomYUpperBound == 0 && RefZoomYLowerBound == FrameHeight))
+            {
+
+                int ZoomCenter = -1;
+                int ZoomY1, ZoomY2;
+                double ZoomRange = 0;
+
+                if (!(PtCursorPos.Equals(Point.Empty) || Properties.Cursor.Mode.Equals(GraphicCursorMode.VerticalLine))) //Main cursor visible
+                {
+                    double a = (double)(RefZoomYLowerBound - RefZoomYUpperBound) / (double)(FrameHeight);
+                    double b = (double)RefZoomYLowerBound - a * (double)FrameHeight;
+
+                    ZoomCenter = (int)((double)PtCursorPos.Y * a + b);
+                }
+                else
+                {
+                    ZoomCenter = RefZoomYUpperBound + ((RefZoomYLowerBound - RefZoomYUpperBound) / 2);
+                }
+
+                if (ZoomCenter >= 0 && ZoomCenter <= FrameHeight)
+                {
+                    ZoomRange = (double)(RefZoomYLowerBound - RefZoomYUpperBound) * (double)ZoomFactors[ZoomFactorIndex];
+
+                    if (ZoomRange > 0)
+                    {
+                        ZoomY1 = (int)((double)ZoomCenter - (ZoomRange / 2));
+                        if (ZoomY1 < 0)
+                        {
+                            ZoomY1 = 0;
+                        }
+
+                        ZoomY2 = ZoomY1 + (int)ZoomRange;
+                        if (ZoomY2 > FrameHeight)
+                        {
+                            ZoomY2 = FrameHeight;
+                        }
+
+                        if (!(ZoomY1 == ZoomY2))
+                        {
+                            if (Set_DataFileForYZoom(ZoomY1, ZoomY2, false))
+                            {
+                                return (true);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (false);
         }
-        
+
         private void Plot_DataAtXZoomBarPosition()
         {
             double StartRangeRatio = (double)(Cmd_ZoomXPosition.Left - FrameLeftPoint) / (double)FrameWidth;
-        	double X1 = WholeDataFile.SampleTimeMin + ((WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) * StartRangeRatio);
-        	
-        	double VisibleRangeRatio = (double)Cmd_ZoomXPosition.Width / (double)FrameWidth;
-        	double X2 = X1 + ((WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) * VisibleRangeRatio);
-        	
-        	if (Set_DataFile_BetweenAbsPoint(X1, X2))
-        	{
+            double X1 = WholeDataFile.SampleTimeMin + ((WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) * StartRangeRatio);
+
+            double VisibleRangeRatio = (double)Cmd_ZoomXPosition.Width / (double)FrameWidth;
+            double X2 = X1 + ((WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) * VisibleRangeRatio);
+
+            if (Set_DataFile_BetweenAbsPoint(X1, X2))
+            {
                 bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
-        
+
         private void Plot_DataAtYZoomBarPosition()
         {
-        	int ZoomY1, ZoomY2;
-        	
-        	ZoomY1 = Cmd_ZoomYPosition.Top - FrameTopPoint;
-        	ZoomY2 = ZoomY1 + Cmd_ZoomYPosition.Height;
-        	
-        	if (Set_DataFileForYZoom(ZoomY1, ZoomY2, false))
-        	{
+            int ZoomY1, ZoomY2;
+
+            ZoomY1 = Cmd_ZoomYPosition.Top - FrameTopPoint;
+            ZoomY2 = ZoomY1 + Cmd_ZoomYPosition.Height;
+
+            if (Set_DataFileForYZoom(ZoomY1, ZoomY2, false))
+            {
                 bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
-            }    
+            }
         }
-        
+
         private void Show_ZoomBoxStatistics()
         {
-        	GraphicCoordinates[] ZoomBoxCoords = GetZoomBoxGraphCoordinates();
-        	
-        	if (!(ZoomBoxCoords == null))
-        	{
-        		SerieStatistics[] Stats = null;
-        		
-        		if (ZoomBoxCoords[0].Abs < ZoomBoxCoords[1].Abs)
-        		{
-        			Stats = Get_SeriesStatisticsBetweenPoints(ZoomBoxCoords[0].Abs, ZoomBoxCoords[1].Abs);
-        		}
-        		else
-        		{
-        			Stats = Get_SeriesStatisticsBetweenPoints(ZoomBoxCoords[1].Abs, ZoomBoxCoords[0].Abs);
-        		}
-        		
-        		if (!(Stats == null))
-        		{
-        			Frm_GraphSeriesStatistics Frm = new Frm_GraphSeriesStatistics(Stats, Properties.WindowBackColor);
-        			Frm.Show();
-        		}
-        	}
+            GraphicCoordinates[] ZoomBoxCoords = GetZoomBoxGraphCoordinates();
+
+            if (!(ZoomBoxCoords == null))
+            {
+                SerieStatistics[] Stats = null;
+
+                if (ZoomBoxCoords[0].Abs < ZoomBoxCoords[1].Abs)
+                {
+                    Stats = Get_SeriesStatisticsBetweenPoints(ZoomBoxCoords[0].Abs, ZoomBoxCoords[1].Abs);
+                }
+                else
+                {
+                    Stats = Get_SeriesStatisticsBetweenPoints(ZoomBoxCoords[1].Abs, ZoomBoxCoords[0].Abs);
+                }
+
+                if (!(Stats == null))
+                {
+                    Frm_GraphSeriesStatistics Frm = new Frm_GraphSeriesStatistics(Stats, Properties.WindowBackColor);
+                    Frm.Show();
+                }
+            }
         }
-        
+
         private GraphicCoordinates[] GetZoomBoxGraphCoordinates()
         {
-        	if (!(CursorPosMouseDown.Equals(Point.Empty) || CursorPosMouseUp.Equals(Point.Empty)))
-        	{
-        		GraphicCoordinates[] Coords = new Ctrl_WaveForm.GraphicCoordinates[2];
-        		
-        		Coords[0] = GetPointGraphCoordinates(CursorPosMouseDown);
-        		Coords[1] = GetPointGraphCoordinates(CursorPosMouseUp);
-        		
-        		if (!(Coords[0].Abs == double.NaN || Coords[1].Abs == double.NaN))
-        		{
-        			return(Coords);
-        		}
-        	}
-        	
-        	return(null);
+            if (!(CursorPosMouseDown.Equals(Point.Empty) || CursorPosMouseUp.Equals(Point.Empty)))
+            {
+                GraphicCoordinates[] Coords = new Ctrl_WaveForm.GraphicCoordinates[2];
+
+                Coords[0] = GetPointGraphCoordinates(CursorPosMouseDown);
+                Coords[1] = GetPointGraphCoordinates(CursorPosMouseUp);
+
+                if (!(Coords[0].Abs == double.NaN || Coords[1].Abs == double.NaN))
+                {
+                    return (Coords);
+                }
+            }
+
+            return (null);
         }
-        
+
         private GraphicCoordinates GetPointGraphCoordinates(Point Pt)
         {
-        	GraphicCoordinates Coord = new Ctrl_WaveForm.GraphicCoordinates();
-        	
-        	Coord.Abs = Get_AbscisseValueAtPostion(Pt.X);
-        	Coord.Ords = Get_OrdinateValuesAtPosition(Pt.Y);
-        	
-        	return(Coord);
+            GraphicCoordinates Coord = new Ctrl_WaveForm.GraphicCoordinates();
+
+            Coord.Abs = Get_AbscisseValueAtPostion(Pt.X);
+            Coord.Ords = Get_OrdinateValuesAtPosition(Pt.Y);
+
+            return (Coord);
         }
-        
+
         private SerieStatistics[] Get_SeriesStatisticsBetweenPoints(double X1, double X2)
         {
-        	List<SerieStatistics> Stats = new List<SerieStatistics>();
-        	
-        	foreach (GraphSerieProperties oSerieProp in Properties.SeriesProperties)
-        	{
-        		if (oSerieProp.Visible && (oSerieProp.Trace.Visible || oSerieProp.Markers.Visible))
-        		{
-        			GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProp.Name);
-        			
-        			if (!(oSerieData == null))
-        			{
-        				SerieStatistics sSerieStats = new SerieStatistics();
-        				
-        				sSerieStats.Title = oSerieProp.Label;
-        				sSerieStats.SerieColor = oSerieProp.Trace.LineColor;
+            List<SerieStatistics> Stats = new List<SerieStatistics>();
+
+            foreach (GraphSerieProperties oSerieProp in Properties.SeriesProperties)
+            {
+                if (oSerieProp.Visible && (oSerieProp.Trace.Visible || oSerieProp.Markers.Visible))
+                {
+                    GW_DataChannel oSerieData = DataFile.Get_DataChannel(oSerieProp.Name);
+
+                    if (!(oSerieData == null))
+                    {
+                        SerieStatistics sSerieStats = new SerieStatistics();
+
+                        sSerieStats.Title = oSerieProp.Label;
+                        sSerieStats.SerieColor = oSerieProp.Trace.LineColor;
 
                         if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
                         {
                             int iSampleX1 = oSerieData.Get_SampleTimeIndex(X1);
                             int iSampleX2 = oSerieData.Get_SampleTimeIndex(X2) + 1;
 
-                            if(iSampleX2==0)
+                            if (iSampleX2 == 0)
                             {
                                 iSampleX2 = oSerieData.Samples.Count;
                             }
@@ -6162,7 +6162,7 @@ namespace Ctrl_GraphWindow
                                     //Min & max
                                     if (iSample != iSampleX1)
                                     {
-                                        if(oSerieData.Samples[iSample].SampleValue<sSerieStats.Min)
+                                        if (oSerieData.Samples[iSample].SampleValue < sSerieStats.Min)
                                         {
                                             sSerieStats.Min = oSerieData.Samples[iSample].SampleValue;
                                             sSerieStats.MinX = oSerieData.Samples[iSample].SampleTime;
@@ -6262,19 +6262,19 @@ namespace Ctrl_GraphWindow
 
                             sSerieStats.StdDev = Math.Sqrt(SumSquare / sSerieStats.SampleCount);
                         }
-        				
-        				//Add serie statitics into the list
-        				Stats.Add(sSerieStats);
-        			}
-        		}
-        	}
-        	
-        	return(Stats.ToArray());
+
+                        //Add serie statitics into the list
+                        Stats.Add(sSerieStats);
+                    }
+                }
+            }
+
+            return (Stats.ToArray());
         }
 
         private bool Set_DataFile_BetweenAbsPoint(double X1, double X2)
         {
-            switch(DataFile.DataSamplingMode)
+            switch (DataFile.DataSamplingMode)
             {
                 case SamplingMode.SingleRate:
 
@@ -6298,7 +6298,7 @@ namespace Ctrl_GraphWindow
                 int iSampleX1 = oWholeDataChan.Get_SampleTimeIndex(X1);
                 int iSampleX2 = oWholeDataChan.Get_SampleTimeIndex(X2);
 
-                if(iSampleX2==-1)
+                if (iSampleX2 == -1)
                 {
                     iSampleX2 = oWholeDataChan.Samples.Count - 1;
                 }
@@ -6316,7 +6316,7 @@ namespace Ctrl_GraphWindow
                 }
             }
 
-            if(TmpDataFile.Channels.Count>0)
+            if (TmpDataFile.Channels.Count > 0)
             {
                 bXZoom = true;
                 DataFile = TmpDataFile;
@@ -6328,120 +6328,120 @@ namespace Ctrl_GraphWindow
 
         private bool Set_DataFile_BetweenAbsPoint_SingleRateSampling(double X1, double X2)
         {
-        	GW_DataFile TmpDataFile = new GW_DataFile();
-        	
-        	for (int iSample = 0; iSample < oWholeAbcsisseChannel.Values.Count; iSample++)
-        	{
-        		if (oWholeAbcsisseChannel.Values[iSample] >= X1 && oWholeAbcsisseChannel.Values[iSample] <= X2)
-        		{
-        			TmpDataFile.Time.Add_ChannelValue(WholeDataFile.Time.Values[iSample]);
-        			
-        			foreach (GW_DataChannel oDataChan in DataFile.Channels)
-        			{
-        				GW_DataChannel oChan = null;
-        				GW_DataChannel oWholeChan = WholeDataFile.Get_DataChannel(oDataChan.Name);
-        				
-        				if (!(oWholeChan == null))
-        				{
-	        				if (TmpDataFile.DataChannelExists(oDataChan.Name))
-	        				{
-	        					oChan = TmpDataFile.Get_DataChannel(oDataChan.Name);
-	        				}
-	        				else
-	        				{
-	        					oChan = new GW_DataChannel();
-	        					oChan.Name = oDataChan.Name;
-	        					TmpDataFile.Channels.Add(oChan);
-	        				}
-	        				
-	        				if (!(oChan == null))
-	        				{
-	        					oChan.Add_ChannelValue(oWholeChan.Values[iSample]);
-	        				}
-        				}
-        			}
-        		}
-        	}
-        	
-        	if (TmpDataFile.Channels.Count > 0)
-        	{
-        		if (TmpDataFile.Channels[0].Values.Count > 1)
-        		{
-        			//In case of uneven values repartition zoom magnitude may be lost
-        			//X = [00, 10, 11, 12, 25, 26, 30]
-        			//Y = [01, 05, 26, 32, 54, 22, 56]  
-        			//Then zoom magnitude is forced
-        			if (Properties.AbscisseAxis.TimeMode)
-        			{
-        				TmpDataFile.Time.Min = X1;
-        				TmpDataFile.Time.Max = X2;
-        			}
-        			else
-        			{
-        				GW_DataChannel oAbsTmp = TmpDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
-        				
-        				if (!(oAbsTmp == null))
-        				{
-        					oAbsTmp.Min = X1;
-        					oAbsTmp.Max = X2;
-        				}
-        			}
-        			
-        			bXZoom = true;
-        			DataFile = TmpDataFile;
-        			return(true);
-        		}
-        	}
-        	
-        	return(false);
+            GW_DataFile TmpDataFile = new GW_DataFile();
+
+            for (int iSample = 0; iSample < oWholeAbcsisseChannel.Values.Count; iSample++)
+            {
+                if (oWholeAbcsisseChannel.Values[iSample] >= X1 && oWholeAbcsisseChannel.Values[iSample] <= X2)
+                {
+                    TmpDataFile.Time.Add_ChannelValue(WholeDataFile.Time.Values[iSample]);
+
+                    foreach (GW_DataChannel oDataChan in DataFile.Channels)
+                    {
+                        GW_DataChannel oChan = null;
+                        GW_DataChannel oWholeChan = WholeDataFile.Get_DataChannel(oDataChan.Name);
+
+                        if (!(oWholeChan == null))
+                        {
+                            if (TmpDataFile.DataChannelExists(oDataChan.Name))
+                            {
+                                oChan = TmpDataFile.Get_DataChannel(oDataChan.Name);
+                            }
+                            else
+                            {
+                                oChan = new GW_DataChannel();
+                                oChan.Name = oDataChan.Name;
+                                TmpDataFile.Channels.Add(oChan);
+                            }
+
+                            if (!(oChan == null))
+                            {
+                                oChan.Add_ChannelValue(oWholeChan.Values[iSample]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (TmpDataFile.Channels.Count > 0)
+            {
+                if (TmpDataFile.Channels[0].Values.Count > 1)
+                {
+                    //In case of uneven values repartition zoom magnitude may be lost
+                    //X = [00, 10, 11, 12, 25, 26, 30]
+                    //Y = [01, 05, 26, 32, 54, 22, 56]  
+                    //Then zoom magnitude is forced
+                    if (Properties.AbscisseAxis.TimeMode)
+                    {
+                        TmpDataFile.Time.Min = X1;
+                        TmpDataFile.Time.Max = X2;
+                    }
+                    else
+                    {
+                        GW_DataChannel oAbsTmp = TmpDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
+
+                        if (!(oAbsTmp == null))
+                        {
+                            oAbsTmp.Min = X1;
+                            oAbsTmp.Max = X2;
+                        }
+                    }
+
+                    bXZoom = true;
+                    DataFile = TmpDataFile;
+                    return (true);
+                }
+            }
+
+            return (false);
         }
-        
+
         private bool Set_DataFileForYZoom(int TopPosition, int BottomPosition, bool bZoomIn)
-        {        	
-        	int tmpi = 0;
-        	
-        	GW_DataFile ReferenceDataFile = null;
-        	
-        	if (bZoomIn) //Zoom In
-        	{
-        		ReferenceDataFile = DataFile;
-        	}
-        	else //Zoom Out
-        	{
-        		ReferenceDataFile = WholeDataFile;
-        	}
-        	
-        	GW_DataFile TmpDataFile = new GW_DataFile();
+        {
+            int tmpi = 0;
+
+            GW_DataFile ReferenceDataFile = null;
+
+            if (bZoomIn) //Zoom In
+            {
+                ReferenceDataFile = DataFile;
+            }
+            else //Zoom Out
+            {
+                ReferenceDataFile = WholeDataFile;
+            }
+
+            GW_DataFile TmpDataFile = new GW_DataFile();
             TmpDataFile.DataSamplingMode = ReferenceDataFile.DataSamplingMode;
 
             if (ReferenceDataFile.DataSamplingMode == SamplingMode.SingleRate) TmpDataFile.Time = ReferenceDataFile.Time;
-        	
-        	foreach (GraphSerieProperties oProp in Properties.SeriesProperties)
-        	{	
-        		if((oProp.Visible && (oProp.Trace.Visible || oProp.Markers.Visible)) && ReferenceDataFile.DataChannelExists(oProp.Name))
-        		{
-        			GW_DataChannel oRefChanData = ReferenceDataFile.Get_DataChannel(oProp.Name);
-        			
-        			if (!(oRefChanData == null))
-        			{        				
-        				Nullable<GW_SampleCoordConversion> sRefCoordConv = null;
-        				
-        				if (bZoomIn)
-        				{
-        					sRefCoordConv = oProp.CoordConversion;
-        				}
-        				else
-        				{
-        					sRefCoordConv = Get_SerieReferenceCoordConversion(oProp.KeyId);
-        				}
-        				
-        				if (sRefCoordConv.HasValue)
-        				{	        					
-        					//If serie is within the given ordinates range
-        					if ((TopPosition >= sRefCoordConv.Value.Top && TopPosition < sRefCoordConv.Value.Bottom)
-        					    || (BottomPosition > sRefCoordConv.Value.Top && BottomPosition <= sRefCoordConv.Value.Bottom)
-        					    || (TopPosition < sRefCoordConv.Value.Top && BottomPosition > sRefCoordConv.Value.Bottom))
-        					{
+
+            foreach (GraphSerieProperties oProp in Properties.SeriesProperties)
+            {
+                if ((oProp.Visible && (oProp.Trace.Visible || oProp.Markers.Visible)) && ReferenceDataFile.DataChannelExists(oProp.Name))
+                {
+                    GW_DataChannel oRefChanData = ReferenceDataFile.Get_DataChannel(oProp.Name);
+
+                    if (!(oRefChanData == null))
+                    {
+                        Nullable<GW_SampleCoordConversion> sRefCoordConv = null;
+
+                        if (bZoomIn)
+                        {
+                            sRefCoordConv = oProp.CoordConversion;
+                        }
+                        else
+                        {
+                            sRefCoordConv = Get_SerieReferenceCoordConversion(oProp.KeyId);
+                        }
+
+                        if (sRefCoordConv.HasValue)
+                        {
+                            //If serie is within the given ordinates range
+                            if ((TopPosition >= sRefCoordConv.Value.Top && TopPosition < sRefCoordConv.Value.Bottom)
+                                || (BottomPosition > sRefCoordConv.Value.Top && BottomPosition <= sRefCoordConv.Value.Bottom)
+                                || (TopPosition < sRefCoordConv.Value.Top && BottomPosition > sRefCoordConv.Value.Bottom))
+                            {
 
                                 GW_DataChannel oChanData = null;
 
@@ -6465,57 +6465,57 @@ namespace Ctrl_GraphWindow
                                     oChanData.Min = oRefChanData.Min;
                                     oChanData.Max = oRefChanData.Max;
                                 }
-        						
-        						double ValGain = (sRefCoordConv.Value.Max - sRefCoordConv.Value.Min) / (sRefCoordConv.Value.Top - sRefCoordConv.Value.Bottom);
-        						double ValOffset = sRefCoordConv.Value.Max - ValGain * sRefCoordConv.Value.Top;
-        						
-        						double PosGain = (double)(FrameHeight) / (double)(BottomPosition - TopPosition);
-        						double PosOffset = 0 - PosGain * (double)TopPosition;
-        						
-        						if (sRefCoordConv.Value.Top < TopPosition)
-        						{        							
-        							oProp.CoordConversion.Top =  0;
-        							oProp.CoordConversion.Max = (double)TopPosition * ValGain + ValOffset;
-        						}
-        						else
-        						{
-        							tmpi = (int)(sRefCoordConv.Value.Top * PosGain + PosOffset);
-        							
-        							oProp.CoordConversion.Top = tmpi;
-        							oProp.CoordConversion.Max = sRefCoordConv.Value.Max;
-        						}
-        						
-        						if (sRefCoordConv.Value.Bottom > BottomPosition)
-        						{        							
-        							oProp.CoordConversion.Bottom = FrameHeight;
-        							oProp.CoordConversion.Min = (double)BottomPosition * ValGain + ValOffset;
-        						}
-        						else
-        						{
-        							tmpi = (int)(sRefCoordConv.Value.Bottom * PosGain + PosOffset);
-        							
-        							oProp.CoordConversion.Bottom = tmpi;
-        							oProp.CoordConversion.Min = sRefCoordConv.Value.Min;
-        						}
-        						
-        						if (!((oProp.CoordConversion.Top == oProp.CoordConversion.Bottom) || (oProp.CoordConversion.Min == oProp.CoordConversion.Max)))
-        						{        							
-        							oProp.CoordConversion.Gain = (double)((double)(oProp.CoordConversion.Top - oProp.CoordConversion.Bottom) / (oProp.CoordConversion.Max - oProp.CoordConversion.Min));
-        							oProp.CoordConversion.Zero = (double)((double)(oProp.CoordConversion.Top) - oProp.CoordConversion.Gain * oProp.CoordConversion.Max);
-        							
-        							TmpDataFile.Channels.Add(oChanData);
-        						}
-        					}
-        				}
-        			}
-        		}
-        	}
-        	
-        	if (TmpDataFile.Channels.Count > 0)
-        	{
+
+                                double ValGain = (sRefCoordConv.Value.Max - sRefCoordConv.Value.Min) / (sRefCoordConv.Value.Top - sRefCoordConv.Value.Bottom);
+                                double ValOffset = sRefCoordConv.Value.Max - ValGain * sRefCoordConv.Value.Top;
+
+                                double PosGain = (double)(FrameHeight) / (double)(BottomPosition - TopPosition);
+                                double PosOffset = 0 - PosGain * (double)TopPosition;
+
+                                if (sRefCoordConv.Value.Top < TopPosition)
+                                {
+                                    oProp.CoordConversion.Top = 0;
+                                    oProp.CoordConversion.Max = (double)TopPosition * ValGain + ValOffset;
+                                }
+                                else
+                                {
+                                    tmpi = (int)(sRefCoordConv.Value.Top * PosGain + PosOffset);
+
+                                    oProp.CoordConversion.Top = tmpi;
+                                    oProp.CoordConversion.Max = sRefCoordConv.Value.Max;
+                                }
+
+                                if (sRefCoordConv.Value.Bottom > BottomPosition)
+                                {
+                                    oProp.CoordConversion.Bottom = FrameHeight;
+                                    oProp.CoordConversion.Min = (double)BottomPosition * ValGain + ValOffset;
+                                }
+                                else
+                                {
+                                    tmpi = (int)(sRefCoordConv.Value.Bottom * PosGain + PosOffset);
+
+                                    oProp.CoordConversion.Bottom = tmpi;
+                                    oProp.CoordConversion.Min = sRefCoordConv.Value.Min;
+                                }
+
+                                if (!((oProp.CoordConversion.Top == oProp.CoordConversion.Bottom) || (oProp.CoordConversion.Min == oProp.CoordConversion.Max)))
+                                {
+                                    oProp.CoordConversion.Gain = (double)((double)(oProp.CoordConversion.Top - oProp.CoordConversion.Bottom) / (oProp.CoordConversion.Max - oProp.CoordConversion.Min));
+                                    oProp.CoordConversion.Zero = (double)((double)(oProp.CoordConversion.Top) - oProp.CoordConversion.Gain * oProp.CoordConversion.Max);
+
+                                    TmpDataFile.Channels.Add(oChanData);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (TmpDataFile.Channels.Count > 0)
+            {
                 bool bDataPresent = false;
 
-                if(TmpDataFile.DataSamplingMode == SamplingMode.MultipleRates)
+                if (TmpDataFile.DataSamplingMode == SamplingMode.MultipleRates)
                 {
                     bDataPresent = (TmpDataFile.MaxSampleCount > 1);
                 }
@@ -6525,60 +6525,60 @@ namespace Ctrl_GraphWindow
                 }
 
                 if (bDataPresent)
-        		{
-        			if (!Properties.AbscisseAxis.TimeMode)
-        			{
-        				GW_DataChannel oAbs = ReferenceDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
-        				if (oAbs == null) return(false);
-        				TmpDataFile.Channels.Add(oAbs);
-        			}
-        			
-        			bYZoom = true;
-        			DataFile = TmpDataFile;
-        			
-        			if (bXZoom && !bZoomIn)
-        			{
-        				if (!Set_DataFile_BetweenAbsPoint(Properties.AbscisseAxis.CoordConversion.Min, Properties.AbscisseAxis.CoordConversion.Max))
-        				{
-        					return(false);
-        				}
-        			}
-        			
-        			//Zoom Y reference bounds update
-        			if ((RefZoomYUpperBound == 0 && RefZoomYLowerBound == FrameHeight) || (!bZoomIn)) //No Y zoom yet OR Zoom out
-        			{
-        				RefZoomYUpperBound = TopPosition;
-        				RefZoomYLowerBound = BottomPosition;
-        			}
-        			else //Already Y zooming
-        			{
-        				double a = (double)(RefZoomYLowerBound - RefZoomYUpperBound) / (double)(FrameHeight);
-        				double b = (double)RefZoomYLowerBound - a * (double)FrameHeight;
-        				
-        				RefZoomYUpperBound = (int)((double)TopPosition * a + b);
-        				RefZoomYLowerBound = (int)((double)BottomPosition * a + b);
-        			}
-        			
-        			if (RefZoomYUpperBound == 0 && RefZoomYLowerBound == FrameHeight)
-        			{
-        				bYZoom = false;
-        			}
-        			
-        			return(true);
-        		}
-        	}
-        	
-        	return(false);
+                {
+                    if (!Properties.AbscisseAxis.TimeMode)
+                    {
+                        GW_DataChannel oAbs = ReferenceDataFile.Get_DataChannel(Properties.AbscisseAxis.AbscisseChannelName);
+                        if (oAbs == null) return (false);
+                        TmpDataFile.Channels.Add(oAbs);
+                    }
+
+                    bYZoom = true;
+                    DataFile = TmpDataFile;
+
+                    if (bXZoom && !bZoomIn)
+                    {
+                        if (!Set_DataFile_BetweenAbsPoint(Properties.AbscisseAxis.CoordConversion.Min, Properties.AbscisseAxis.CoordConversion.Max))
+                        {
+                            return (false);
+                        }
+                    }
+
+                    //Zoom Y reference bounds update
+                    if ((RefZoomYUpperBound == 0 && RefZoomYLowerBound == FrameHeight) || (!bZoomIn)) //No Y zoom yet OR Zoom out
+                    {
+                        RefZoomYUpperBound = TopPosition;
+                        RefZoomYLowerBound = BottomPosition;
+                    }
+                    else //Already Y zooming
+                    {
+                        double a = (double)(RefZoomYLowerBound - RefZoomYUpperBound) / (double)(FrameHeight);
+                        double b = (double)RefZoomYLowerBound - a * (double)FrameHeight;
+
+                        RefZoomYUpperBound = (int)((double)TopPosition * a + b);
+                        RefZoomYLowerBound = (int)((double)BottomPosition * a + b);
+                    }
+
+                    if (RefZoomYUpperBound == 0 && RefZoomYLowerBound == FrameHeight)
+                    {
+                        bYZoom = false;
+                    }
+
+                    return (true);
+                }
+            }
+
+            return (false);
         }
-        
+
         private void Set_ZoomBars()
         {
-        	if (bXZoom)
-        	{
+            if (bXZoom)
+            {
                 double VisibleRangeRatio = 0;
                 double StartRangeRatio = 0;
 
-                if (DataFile.DataSamplingMode== SamplingMode.MultipleRates)
+                if (DataFile.DataSamplingMode == SamplingMode.MultipleRates)
                 {
                     VisibleRangeRatio = (WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin) / (DataFile.SampleTimeMax - DataFile.SampleTimeMin);
                     StartRangeRatio = DataFile.SampleTimeMin / (WholeDataFile.SampleTimeMax - WholeDataFile.SampleTimeMin);
@@ -6589,54 +6589,54 @@ namespace Ctrl_GraphWindow
                     StartRangeRatio = oAbcsisseChannel.Min / (oWholeAbcsisseChannel.Max - oWholeAbcsisseChannel.Min);
                 }
 
-        		Cmd_ZoomXPosition.Width = (int)(FrameWidth / VisibleRangeRatio);
-        		Cmd_ZoomXPosition.Left = FrameLeftPoint + (int)(FrameWidth * StartRangeRatio);
-        		Cmd_ZoomXPosition.Visible = true;
-        	}
-        	else
-        	{
-        		Cmd_ZoomXPosition.Visible = false;
-        	}
-        	
-        	if (bYZoom)
-        	{
-        		double VisibleRangeRatio = (double)FrameHeight / (double)(RefZoomYLowerBound -  RefZoomYUpperBound);
-        		Cmd_ZoomYPosition.Height = (int)(FrameHeight / VisibleRangeRatio);
-        		
-        		Cmd_ZoomYPosition.Left = FrameRightPoint + 6;
-        		Cmd_ZoomYPosition.Top = RefZoomYUpperBound + FrameTopPoint;
-        		
-        		Cmd_ZoomYPosition.Visible = true;
-        	}
-        	else
-        	{
-        		Cmd_ZoomYPosition.Visible = false;
-        	}
+                Cmd_ZoomXPosition.Width = (int)(FrameWidth / VisibleRangeRatio);
+                Cmd_ZoomXPosition.Left = FrameLeftPoint + (int)(FrameWidth * StartRangeRatio);
+                Cmd_ZoomXPosition.Visible = true;
+            }
+            else
+            {
+                Cmd_ZoomXPosition.Visible = false;
+            }
+
+            if (bYZoom)
+            {
+                double VisibleRangeRatio = (double)FrameHeight / (double)(RefZoomYLowerBound - RefZoomYUpperBound);
+                Cmd_ZoomYPosition.Height = (int)(FrameHeight / VisibleRangeRatio);
+
+                Cmd_ZoomYPosition.Left = FrameRightPoint + 6;
+                Cmd_ZoomYPosition.Top = RefZoomYUpperBound + FrameTopPoint;
+
+                Cmd_ZoomYPosition.Visible = true;
+            }
+            else
+            {
+                Cmd_ZoomYPosition.Visible = false;
+            }
         }
-        
+
         private Nullable<GW_SampleCoordConversion> Get_SerieReferenceCoordConversion(int SerieKeyId)
         {
-        	foreach (SerieCoordConversion sSCC in SeriesReferenceCoordConversion)
-        	{
-        		if (sSCC.SerieKeyId == SerieKeyId)
-        		{
-        			return (sSCC.CoordConversion);
-        		}
-        	}
-        	
-        	return(null);
+            foreach (SerieCoordConversion sSCC in SeriesReferenceCoordConversion)
+            {
+                if (sSCC.SerieKeyId == SerieKeyId)
+                {
+                    return (sSCC.CoordConversion);
+                }
+            }
+
+            return (null);
         }
-        
-#endregion
-         
-#region Legend
-         
+
+        #endregion
+
+        #region Legend
+
         private void Init_Legend()
         {
             Grid_Legend.Rows.Clear();
             Grid_Legend.BackgroundColor = Properties.WindowBackColor;
-            
-            if(Properties.LegendProperties.LegendGridLinesVisible)
+
+            if (Properties.LegendProperties.LegendGridLinesVisible)
             {
                 Grid_Legend.CellBorderStyle = DataGridViewCellBorderStyle.Single;
             }
@@ -6647,26 +6647,26 @@ namespace Ctrl_GraphWindow
 
             Grid_Legend.ColumnHeadersVisible = Properties.LegendProperties.LegendHeaderVisible;
 
-            if(Properties.LegendProperties.Visible)
+            if (Properties.LegendProperties.Visible)
             {
                 Grid_Legend.GridColor = Properties.Frame.BorderColor;
 
-                Grid_Legend.Columns[LEGEND_LABEL_COL].Visible         = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Label);
-                Grid_Legend.Columns[LEGEND_VALUE_COL].Visible         = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue);
-                Grid_Legend.Columns[LEGEND_UNIT_COL].Visible          = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit);
-                Grid_Legend.Columns[LEGEND_MIN_COL].Visible           = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin);
-                Grid_Legend.Columns[LEGEND_MAX_COL].Visible           = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax);
-                Grid_Legend.Columns[LEGEND_AVG_COL].Visible           = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg);
-                Grid_Legend.Columns[LEGEND_REF_VAL_COL].Visible       = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue);
-                Grid_Legend.Columns[LEGEND_REF_DIFF_COL].Visible      = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue);
+                Grid_Legend.Columns[LEGEND_LABEL_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Label);
+                Grid_Legend.Columns[LEGEND_VALUE_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue);
+                Grid_Legend.Columns[LEGEND_UNIT_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit);
+                Grid_Legend.Columns[LEGEND_MIN_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin);
+                Grid_Legend.Columns[LEGEND_MAX_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax);
+                Grid_Legend.Columns[LEGEND_AVG_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg);
+                Grid_Legend.Columns[LEGEND_REF_VAL_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue);
+                Grid_Legend.Columns[LEGEND_REF_DIFF_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue);
                 Grid_Legend.Columns[LEGEND_REF_DIFF_PERC_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc);
-                Grid_Legend.Columns[LEGEND_REF_GRADIENT_COL].Visible  = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient);
+                Grid_Legend.Columns[LEGEND_REF_GRADIENT_COL].Visible = Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient);
             }
         }
 
         private void UpDate_LegendValues(double AbscisseValue)
         {
-            switch(DataFile.DataSamplingMode)
+            switch (DataFile.DataSamplingMode)
             {
                 case SamplingMode.SingleRate:
 
@@ -6682,7 +6682,7 @@ namespace Ctrl_GraphWindow
 
         private void UpDate_LegendValues_MultipleRatesSampling(double AbscisseValue)
         {
-            foreach(DataGridViewRow oLegRow in Grid_Legend.Rows)
+            foreach (DataGridViewRow oLegRow in Grid_Legend.Rows)
             {
                 GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey((int)oLegRow.Cells[LEGEND_LABEL_COL].Tag);
 
@@ -6700,10 +6700,10 @@ namespace Ctrl_GraphWindow
 
         private void UpDate_LegendValues_SingleRateSampling(double AbscisseValue)
         {
-        	int TimeSampleIndex = DataFile.Get_SampleIndexAtTime(AbscisseValue);
-        	
-        	if (!(TimeSampleIndex == -1))
-        	{
+            int TimeSampleIndex = DataFile.Get_SampleIndexAtTime(AbscisseValue);
+
+            if (!(TimeSampleIndex == -1))
+            {
                 foreach (DataGridViewRow oLegRow in Grid_Legend.Rows)
                 {
                     GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey((int)oLegRow.Cells[LEGEND_LABEL_COL].Tag);
@@ -6718,9 +6718,9 @@ namespace Ctrl_GraphWindow
                         }
                     }
                 }
-        	}
+            }
         }
-        
+
         private void Set_LegendItemValues(DataGridViewRow LegendRow, double ItemValue, double AbscisseValue, GraphSerieProperties oSerieProp)
         {
             //Main cursor value
@@ -6743,8 +6743,8 @@ namespace Ctrl_GraphWindow
 
         private void UpDate_LegendValues_XY(GraphicCoordinates LegendValue)
         {
-        	if (!(LegendValue == null))
-        	{
+            if (!(LegendValue == null))
+            {
                 foreach (DataGridViewRow oRow in Grid_Legend.Rows)
                 {
                     SerieValueAtPoint Val = new Ctrl_WaveForm.SerieValueAtPoint();
@@ -6777,39 +6777,39 @@ namespace Ctrl_GraphWindow
                         }
                     }
                 }
-        	}
+            }
         }
-        
+
         private void ShowHide_Legend()
         {
-        	Properties.LegendProperties.Visible = splitContainer2.Panel2Collapsed;
-        	splitContainer2.Panel2Collapsed = !splitContainer2.Panel2Collapsed;
-        	
+            Properties.LegendProperties.Visible = splitContainer2.Panel2Collapsed;
+            splitContainer2.Panel2Collapsed = !splitContainer2.Panel2Collapsed;
+
         }
-        
+
         private void Resize_Legend(bool RefCursorVisible)
         {
-        	int SizeOffset = 250 - BaseLegendWidth;;
-        	
-        	if (RefCursorVisible)
-        	{
-        		splitContainer2.SplitterDistance -= SizeOffset;
-        		Grid_Legend.Width += SizeOffset;
-        	}
-        	else
-        	{
-        		if (Grid_Legend.Width >= 250)
-        		{
-        			splitContainer2.SplitterDistance += SizeOffset;
+            int SizeOffset = 250 - BaseLegendWidth; ;
+
+            if (RefCursorVisible)
+            {
+                splitContainer2.SplitterDistance -= SizeOffset;
+                Grid_Legend.Width += SizeOffset;
+            }
+            else
+            {
+                if (Grid_Legend.Width >= 250)
+                {
+                    splitContainer2.SplitterDistance += SizeOffset;
                     Grid_Legend.Width -= SizeOffset;
-        		}
-        	}
+                }
+            }
         }
-        
-#endregion
-        
-#region Data file functions
-        
+
+        #endregion
+
+        #region Data file functions
+
         private void Load_DataFile()
         {
             if (Dlg_OpenData.ShowDialog().Equals(DialogResult.OK))
@@ -6818,7 +6818,7 @@ namespace Ctrl_GraphWindow
 
                 if (oNewData.Load_DataFile(Dlg_OpenData.FileName))
                 {
-                	Set_DataFile(oNewData);
+                    Set_DataFile(oNewData);
                     oGraphicUpdateRequest.UpdateRequested = true;
                 }
                 else
@@ -6828,902 +6828,902 @@ namespace Ctrl_GraphWindow
                 }
             }
         }
-        
-#endregion
-        
-#region Graphic properties
+
+        #endregion
+
+        #region Graphic properties
 
         private void Edit_GraphProperties()
         {
             string[] ChannelNames = null;
 
-            if(!(WholeDataFile==null))
+            if (!(WholeDataFile == null))
             {
-            	if (WholeDataFile.Channels.Count > 0)
-            	{
-	            	ChannelNames = new string[WholeDataFile.Channels.Count];
-	                for (int i=0; i<WholeDataFile.Channels.Count; i++)
-	                {
-	                    ChannelNames[i] = WholeDataFile.Channels[i].Name;
-	                }
-            	}
+                if (WholeDataFile.Channels.Count > 0)
+                {
+                    ChannelNames = new string[WholeDataFile.Channels.Count];
+                    for (int i = 0; i < WholeDataFile.Channels.Count; i++)
+                    {
+                        ChannelNames[i] = WholeDataFile.Channels[i].Name;
+                    }
+                }
             }
 
             Frm_GraphPropertiesEdtion Frm = new Frm_GraphPropertiesEdtion(this, ChannelNames);
             Frm.Show();
         }
-        
+
         private void Edit_SerieProperties(int SerieKey)
         {
-        	GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey(SerieKey);
-        	
-        	if (!(oSerieProp == null))
-        	{
-        		Frm_GraphSerieDetailedProperties Frm = new Frm_GraphSerieDetailedProperties(oSerieProp, this, "General");
-        		Frm.Show();
-        	}
+            GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey(SerieKey);
+
+            if (!(oSerieProp == null))
+            {
+                Frm_GraphSerieDetailedProperties Frm = new Frm_GraphSerieDetailedProperties(oSerieProp, this, "General");
+                Frm.Show();
+            }
         }
-        
+
         private void Set_Options_Controls()
         {
-        	//Graph layout
-#region Graph layout
-        	
-        	switch (Properties.GraphLayoutMode)
-        	{
-        		case GraphicWindowLayoutModes.Overlay:
-        			
-        			//Context_PicGraph_Options items update
-        			Layout_overlayToolStripMenuItem.Checked = true;
-        			Layout_parallelToolStripMenuItem.Checked = false;
-        			Layout_customToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_overlayToolStripMenuItem.Checked = true;
-        			TSDdB_parallelToolStripMenuItem.Checked = false;
-        			TSDdB_customToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicWindowLayoutModes.Parallel:
-        			
-        			//Context_PicGraph_Options items update
-        			Layout_overlayToolStripMenuItem.Checked = false;
-        			Layout_parallelToolStripMenuItem.Checked = true;
-        			Layout_customToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_overlayToolStripMenuItem.Checked = false;
-        			TSDdB_parallelToolStripMenuItem.Checked = true;
-        			TSDdB_customToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicWindowLayoutModes.Custom:
-        			
-        			//Context_PicGraph_Options items update
-        			Layout_overlayToolStripMenuItem.Checked = false;
-        			Layout_parallelToolStripMenuItem.Checked = false;
-        			Layout_customToolStripMenuItem.Checked = true;
-        			
-        			//ToolBar items update
-        			TSDdB_overlayToolStripMenuItem.Checked = false;
-        			TSDdB_parallelToolStripMenuItem.Checked = false;
-        			TSDdB_customToolStripMenuItem.Checked = true;
-        			
-        			break;
-        	}
-        	
-#endregion
-        	
-        	//Cursor
-#region Cursor
-        	
-        	switch (Properties.Cursor.Mode)
-        	{
-        		case GraphicCursorMode.None:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_noneToolStripMenuItem.Checked = true;
-        			Cursor_verticalLineToolStripMenuItem.Checked = false;
-        			Cursor_horizontalLineToolStripMenuItem.Checked = false;
-        			Cursor_crossToolStripMenuItem.Checked = false;
-        			Cursor_graticuleToolStripMenuItem.Checked = false;
-        			Cursor_squareToolStripMenuItem.Checked = false;
-        			Cursor_circleToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_noneToolStripMenuItem.Checked = true;
-        			TSDdB_verticalLineToolStripMenuItem.Checked = false;
-        			TSDdB_horizontalLineToolStripMenuItem.Checked = false;
-        			TSDdB_crossToolStripMenuItem.Checked = false;
-        			TSDdB_graticuleToolStripMenuItem.Checked = false;
-        			TSDdB_squareToolStripMenuItem.Checked = false;
-        			TSDdB_circleToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicCursorMode.VerticalLine:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_noneToolStripMenuItem.Checked = false;
-        			Cursor_verticalLineToolStripMenuItem.Checked = true;
-        			Cursor_horizontalLineToolStripMenuItem.Checked = false;
-        			Cursor_crossToolStripMenuItem.Checked = false;
-        			Cursor_graticuleToolStripMenuItem.Checked = false;
-        			Cursor_squareToolStripMenuItem.Checked = false;
-        			Cursor_circleToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_noneToolStripMenuItem.Checked = false;
-        			TSDdB_verticalLineToolStripMenuItem.Checked = true;
-        			TSDdB_horizontalLineToolStripMenuItem.Checked = false;
-        			TSDdB_crossToolStripMenuItem.Checked = false;
-        			TSDdB_graticuleToolStripMenuItem.Checked = false;
-        			TSDdB_squareToolStripMenuItem.Checked = false;
-        			TSDdB_circleToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicCursorMode.HorizontalLine:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_noneToolStripMenuItem.Checked = false;
-        			Cursor_verticalLineToolStripMenuItem.Checked = false;
-        			Cursor_horizontalLineToolStripMenuItem.Checked = true;
-        			Cursor_crossToolStripMenuItem.Checked = false;
-        			Cursor_graticuleToolStripMenuItem.Checked = false;
-        			Cursor_squareToolStripMenuItem.Checked = false;
-        			Cursor_circleToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_noneToolStripMenuItem.Checked = false;
-        			TSDdB_verticalLineToolStripMenuItem.Checked = false;
-        			TSDdB_horizontalLineToolStripMenuItem.Checked = true;
-        			TSDdB_crossToolStripMenuItem.Checked = false;
-        			TSDdB_graticuleToolStripMenuItem.Checked = false;
-        			TSDdB_squareToolStripMenuItem.Checked = false;
-        			TSDdB_circleToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicCursorMode.Cross:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_noneToolStripMenuItem.Checked = false;
-        			Cursor_verticalLineToolStripMenuItem.Checked = false;
-        			Cursor_horizontalLineToolStripMenuItem.Checked = false;
-        			Cursor_crossToolStripMenuItem.Checked = true;
-        			Cursor_graticuleToolStripMenuItem.Checked = false;
-        			Cursor_squareToolStripMenuItem.Checked = false;
-        			Cursor_circleToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_noneToolStripMenuItem.Checked = false;
-        			TSDdB_verticalLineToolStripMenuItem.Checked = false;
-        			TSDdB_horizontalLineToolStripMenuItem.Checked = false;
-        			TSDdB_crossToolStripMenuItem.Checked = true;
-        			TSDdB_graticuleToolStripMenuItem.Checked = false;
-        			TSDdB_squareToolStripMenuItem.Checked = false;
-        			TSDdB_circleToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicCursorMode.Graticule:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_noneToolStripMenuItem.Checked = false;
-        			Cursor_verticalLineToolStripMenuItem.Checked = false;
-        			Cursor_horizontalLineToolStripMenuItem.Checked = false;
-        			Cursor_crossToolStripMenuItem.Checked = false;
-        			Cursor_graticuleToolStripMenuItem.Checked = true;
-        			Cursor_squareToolStripMenuItem.Checked = false;
-        			Cursor_circleToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_noneToolStripMenuItem.Checked = false;
-        			TSDdB_verticalLineToolStripMenuItem.Checked = false;
-        			TSDdB_horizontalLineToolStripMenuItem.Checked = false;
-        			TSDdB_crossToolStripMenuItem.Checked = false;
-        			TSDdB_graticuleToolStripMenuItem.Checked = true;
-        			TSDdB_squareToolStripMenuItem.Checked = false;
-        			TSDdB_circleToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicCursorMode.Square:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_noneToolStripMenuItem.Checked = false;
-        			Cursor_verticalLineToolStripMenuItem.Checked = false;
-        			Cursor_horizontalLineToolStripMenuItem.Checked = false;
-        			Cursor_crossToolStripMenuItem.Checked = false;
-        			Cursor_graticuleToolStripMenuItem.Checked = false;
-        			Cursor_squareToolStripMenuItem.Checked = true;
-        			Cursor_circleToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_noneToolStripMenuItem.Checked = false;
-        			TSDdB_verticalLineToolStripMenuItem.Checked = false;
-        			TSDdB_horizontalLineToolStripMenuItem.Checked = false;
-        			TSDdB_crossToolStripMenuItem.Checked = false;
-        			TSDdB_graticuleToolStripMenuItem.Checked = false;
-        			TSDdB_squareToolStripMenuItem.Checked = true;
-        			TSDdB_circleToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicCursorMode.Circle:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_noneToolStripMenuItem.Checked = false;
-        			Cursor_verticalLineToolStripMenuItem.Checked = false;
-        			Cursor_horizontalLineToolStripMenuItem.Checked = false;
-        			Cursor_crossToolStripMenuItem.Checked = false;
-        			Cursor_graticuleToolStripMenuItem.Checked = false;
-        			Cursor_squareToolStripMenuItem.Checked = false;
-        			Cursor_circleToolStripMenuItem.Checked = true;
-        			
-        			//ToolBar items update
-        			TSDdB_noneToolStripMenuItem.Checked = false;
-        			TSDdB_verticalLineToolStripMenuItem.Checked = false;
-        			TSDdB_horizontalLineToolStripMenuItem.Checked = false;
-        			TSDdB_crossToolStripMenuItem.Checked = false;
-        			TSDdB_graticuleToolStripMenuItem.Checked = false;
-        			TSDdB_squareToolStripMenuItem.Checked = false;
-        			TSDdB_circleToolStripMenuItem.Checked = true;
-        			
-        			break;
-        	}
-        	
-#endregion
-        	
-        	//Cursor step
-#region Cursor step
-        	
-        	switch (CursorStepIndex)
-        	{
-        		case 0:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 1:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 2:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 3:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 4:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 5:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 6:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 7:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = true;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = false;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = true;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
-        			
-        			break;
-        			
-        		case 8:
-        			
-        			//Context_PicGraph_Options items update
-        			Cursor_Step_01_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_02_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_05_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_1_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_2_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_5_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_10_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_20_ToolStripMenuItem.Checked = false;
-        			Cursor_Step_50_ToolStripMenuItem.Checked = true;
-        				
-        			//ToolBar items update
-        			TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
-        			TSDdB_CurStep_50_ToolStripMenuItem.Checked = true;
-        			
-        			break;
-        	}
-        	
-#endregion
-        	
-        	//Reference cursor
-#region Reference cursor
-        	
-        	switch (Properties.ReferenceCursor.Mode)
-        	{
-        		case GraphicCursorMode.VerticalLine:
-        			
-        			//Context_PicGraph_Options items update
-        			RefCursor_Mode_None_TSMI.Checked = false;
-        			RefCursor_Mode_Vertical_TSMI.Checked = true;
-        			RefCursor_Mode_Horizontal_TSMI.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDB_RefCursor_Mode_None.Checked = false;
-        			TSDB_RefCursor_Mode_Vertical.Checked = true;
-        			TSDB_RefCursor_Mode_Horizontal.Checked = false;
-        			
-        			break;
-        			
-        		case GraphicCursorMode.HorizontalLine:
-        			
-        			//Context_PicGraph_Options items update
-        			RefCursor_Mode_None_TSMI.Checked = false;
-        			RefCursor_Mode_Vertical_TSMI.Checked = false;
-        			RefCursor_Mode_Horizontal_TSMI.Checked = true;
-        			
-        			//ToolBar items update
-        			TSDB_RefCursor_Mode_None.Checked = false;
-        			TSDB_RefCursor_Mode_Vertical.Checked = false;
-        			TSDB_RefCursor_Mode_Horizontal.Checked = true;
-        			
-        			break;
-        			
-        		default:
-        			
-        			//Context_PicGraph_Options items update
-        			RefCursor_Mode_None_TSMI.Checked = true;
-        			RefCursor_Mode_Vertical_TSMI.Checked = false;
-        			RefCursor_Mode_Horizontal_TSMI.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDB_RefCursor_Mode_None.Checked = true;
-        			TSDB_RefCursor_Mode_Vertical.Checked = false;
-        			TSDB_RefCursor_Mode_Horizontal.Checked = false;
-        			
-        			break;
-        	}
-        	
-#endregion
-        	
-        	//Zoom mode
-#region Zoom mode
-        	
-        	if (!(Properties.ZoomMode.Equals(GraphicZoomMode.Disabled)))
-        	{
-	        	
-        		//Context_PicGraph_Options items update
-	        	ZoomPlustoolStripMenuItem.Enabled = true;
-	        	ZoomMinustoolStripMenuItem.Enabled = true;
-	        	ZoomMintoolStripMenuItem.Enabled = true;
-	        	ZoomMaxtoolStripMenuItem.Enabled = true;
-	        	ZoomFactortoolStripMenuItem.Enabled = true;
-	        	ZoomMode_X_ToolStripMenuItem.Enabled = true;
-	        	ZoomMode_Y_ToolStripMenuItem.Enabled = true;
-	        	ZoomMode_XY_ToolStripMenuItem.Enabled = true;
-	        	ZoomMode_Disabled_ToolStripMenuItem.Checked=false;
-	        	
-	        	//ToolBar items update
-	        	TSDdB_ZoomFactor.Enabled = true;
-	        	TSDdB_zoomXToolStripMenuItem.Enabled = true;
-	        	TSDdB_zoomYToolStripMenuItem.Enabled = true;
-        		TSDdB_zoomXYToolStripMenuItem.Enabled = true;
-        		TSDdB_zoomDisabledToolStripMenuItem.Checked = false;
-        		TSB_ZoomPlus.Enabled = true;
-        		TSB_ZoomMinus.Enabled = true;
-        		
-        		switch (Properties.ZoomMode)
-	        	{
-	        		case GraphicZoomMode.ZoomX:
-	        			
-	        			//Context_PicGraph_Options items update
-	        			ZoomMode_X_ToolStripMenuItem.Checked = true;
-	        			ZoomMode_Y_ToolStripMenuItem.Checked = false;
-	        			ZoomMode_XY_ToolStripMenuItem.Checked = false;
-	        			
-	        			//ToolBar items update
-	        			TSDdB_zoomXToolStripMenuItem.Checked = true;
-	        			TSDdB_zoomYToolStripMenuItem.Checked = false;
-	        			TSDdB_zoomXYToolStripMenuItem.Checked = false;
-	        			
-	        			break;
-	        			
-	        		case GraphicZoomMode.ZoomY:
-	        			
-	        			//Context_PicGraph_Options items update
-	        			ZoomMode_X_ToolStripMenuItem.Checked = false;
-	        			ZoomMode_Y_ToolStripMenuItem.Checked = true;
-	        			ZoomMode_XY_ToolStripMenuItem.Checked = false;
-	        			
-	        			//ToolBar items update
-	        			TSDdB_zoomXToolStripMenuItem.Checked = false;
-	        			TSDdB_zoomYToolStripMenuItem.Checked = true;
-	        			TSDdB_zoomXYToolStripMenuItem.Checked = false;
-	        			
-	        			break;
-	        			
-	        		case GraphicZoomMode.ZoomXY:
-	        			
-	        			//Context_PicGraph_Options items update
-	        			ZoomMode_X_ToolStripMenuItem.Checked = false;
-	        			ZoomMode_Y_ToolStripMenuItem.Checked = false;
-	        			ZoomMode_XY_ToolStripMenuItem.Checked = true;
-	        			
-	        			//ToolBar items update
-	        			TSDdB_zoomXToolStripMenuItem.Checked = false;
-	        			TSDdB_zoomYToolStripMenuItem.Checked = false;
-	        			TSDdB_zoomXYToolStripMenuItem.Checked = true;
-	        			
-	        			break;
-	        	}
-        	}
-        	else
-        	{
-        		//Context_PicGraph_Options items update
-	        	ZoomPlustoolStripMenuItem.Enabled = false;
-	        	ZoomMinustoolStripMenuItem.Enabled = false;
-	        	ZoomMintoolStripMenuItem.Enabled = false;
-	        	ZoomMaxtoolStripMenuItem.Enabled = false;
-	        	ZoomFactortoolStripMenuItem.Enabled = false;
-	        	ZoomMode_Disabled_ToolStripMenuItem.Checked=true;
-	        	
-	        	ZoomMode_X_ToolStripMenuItem.Enabled = false;
-	        	ZoomMode_X_ToolStripMenuItem.Checked = false;
-	        	
-	        	ZoomMode_Y_ToolStripMenuItem.Enabled = false;
-	        	ZoomMode_Y_ToolStripMenuItem.Checked = false;
-	        	
-	        	ZoomMode_XY_ToolStripMenuItem.Enabled = false;
-	        	ZoomMode_XY_ToolStripMenuItem.Checked =false;
-	        	
-	        	//ToolBar items update
-	        	TSDdB_zoomDisabledToolStripMenuItem.Checked = true;
-	        	
-	        	TSDdB_ZoomFactor.Enabled = false;
-	        	
-	        	TSDdB_zoomXToolStripMenuItem.Enabled = false;
-	        	TSDdB_zoomXToolStripMenuItem.Checked = false;
-	        	
-	        	TSDdB_zoomYToolStripMenuItem.Enabled = false;
-	        	TSDdB_zoomYToolStripMenuItem.Checked = false;
-	        	
-        		TSDdB_zoomXYToolStripMenuItem.Enabled = false;
-        		TSDdB_zoomXYToolStripMenuItem.Checked = false;
-        		
-        		TSB_ZoomPlus.Enabled = false;
-        		TSB_ZoomMinus.Enabled = false;
-        	}
-        	
-#endregion
-        	
-        	//Zoom factor
-#region Zoom factor
-        	
-        	switch (ZoomFactorIndex)
-        	{
-        		case 0:
-        			
-        			//Context_PicGraph_Options items update
-        			ZoomFactor_2_ToolStripMenuItem.Checked = true;
-        			ZoomFactor_4_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_8_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_16_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_32_ToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_ZoomFactor_2.Checked = true;
-        			TSDdB_ZoomFactor_4.Checked = false;
-        			TSDdB_ZoomFactor_8.Checked = false;
-        			TSDdB_ZoomFactor_16.Checked = false;
-        			TSDdB_ZoomFactor_32.Checked = false;
-        			
-        			break;
-        			
-        		case 1:
-        			
-        			//Context_PicGraph_Options items update
-        			ZoomFactor_2_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_4_ToolStripMenuItem.Checked = true;
-        			ZoomFactor_8_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_16_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_32_ToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_ZoomFactor_2.Checked = false;
-        			TSDdB_ZoomFactor_4.Checked = true;
-        			TSDdB_ZoomFactor_8.Checked = false;
-        			TSDdB_ZoomFactor_16.Checked = false;
-        			TSDdB_ZoomFactor_32.Checked = false;
-        			
-        			break;
-        			
-        		case 2:
-        			
-        			//Context_PicGraph_Options items update
-        			ZoomFactor_2_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_4_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_8_ToolStripMenuItem.Checked = true;
-        			ZoomFactor_16_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_32_ToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_ZoomFactor_2.Checked = false;
-        			TSDdB_ZoomFactor_4.Checked = false;
-        			TSDdB_ZoomFactor_8.Checked = true;
-        			TSDdB_ZoomFactor_16.Checked = false;
-        			TSDdB_ZoomFactor_32.Checked = false;
-        			
-        			break;
-        			
-        		case 3:
-        			
-        			//Context_PicGraph_Options items update
-        			ZoomFactor_2_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_4_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_8_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_16_ToolStripMenuItem.Checked = true;
-        			ZoomFactor_32_ToolStripMenuItem.Checked = false;
-        			
-        			//ToolBar items update
-        			TSDdB_ZoomFactor_2.Checked = false;
-        			TSDdB_ZoomFactor_4.Checked = false;
-        			TSDdB_ZoomFactor_8.Checked = false;
-        			TSDdB_ZoomFactor_16.Checked = true;
-        			TSDdB_ZoomFactor_32.Checked = false;
-        			
-        			break;
-        			
-        		case 4:
-        			
-        			//Context_PicGraph_Options items update
-        			ZoomFactor_2_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_4_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_8_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_16_ToolStripMenuItem.Checked = false;
-        			ZoomFactor_32_ToolStripMenuItem.Checked = true;
-        			
-        			//ToolBar items update
-        			TSDdB_ZoomFactor_2.Checked = false;
-        			TSDdB_ZoomFactor_4.Checked = false;
-        			TSDdB_ZoomFactor_8.Checked = false;
-        			TSDdB_ZoomFactor_16.Checked = false;
-        			TSDdB_ZoomFactor_32.Checked = true;
-        			
-        			break;
-        	}
-        	
-#endregion
-        	
-        	//Legend informations
-#region Legend informations
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Label))
-        	{
-        		TSMI_Ctxt_Legend_Infos_Label.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_Label.Checked = false;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
-        	{
-        		TSMI_Ctxt_Legend_Infos_Value.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_Value.Checked = false;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
-        	{
-        		TSMI_Ctxt_Legend_Infos_Unit.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_Unit.Checked = false;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
-        	{
-        		TSMI_Ctxt_Legend_Infos_Min.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_Min.Checked = false;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
-        	{
-        		TSMI_Ctxt_Legend_Infos_Max.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_Max.Checked = false;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
-        	{
-        		TSMI_Ctxt_Legend_Infos_Avg.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_Avg.Checked = false;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked = true;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked = true;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked = true;
-        	}
-        	
-        	if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked = true;
-        	}
-        	else
-        	{
-        		TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked = true;
-        	}
-        	
-#endregion
+            //Graph layout
+            #region Graph layout
+
+            switch (Properties.GraphLayoutMode)
+            {
+                case GraphicWindowLayoutModes.Overlay:
+
+                    //Context_PicGraph_Options items update
+                    Layout_overlayToolStripMenuItem.Checked = true;
+                    Layout_parallelToolStripMenuItem.Checked = false;
+                    Layout_customToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_overlayToolStripMenuItem.Checked = true;
+                    TSDdB_parallelToolStripMenuItem.Checked = false;
+                    TSDdB_customToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicWindowLayoutModes.Parallel:
+
+                    //Context_PicGraph_Options items update
+                    Layout_overlayToolStripMenuItem.Checked = false;
+                    Layout_parallelToolStripMenuItem.Checked = true;
+                    Layout_customToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_overlayToolStripMenuItem.Checked = false;
+                    TSDdB_parallelToolStripMenuItem.Checked = true;
+                    TSDdB_customToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicWindowLayoutModes.Custom:
+
+                    //Context_PicGraph_Options items update
+                    Layout_overlayToolStripMenuItem.Checked = false;
+                    Layout_parallelToolStripMenuItem.Checked = false;
+                    Layout_customToolStripMenuItem.Checked = true;
+
+                    //ToolBar items update
+                    TSDdB_overlayToolStripMenuItem.Checked = false;
+                    TSDdB_parallelToolStripMenuItem.Checked = false;
+                    TSDdB_customToolStripMenuItem.Checked = true;
+
+                    break;
+            }
+
+            #endregion
+
+            //Cursor
+            #region Cursor
+
+            switch (Properties.Cursor.Mode)
+            {
+                case GraphicCursorMode.None:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_noneToolStripMenuItem.Checked = true;
+                    Cursor_verticalLineToolStripMenuItem.Checked = false;
+                    Cursor_horizontalLineToolStripMenuItem.Checked = false;
+                    Cursor_crossToolStripMenuItem.Checked = false;
+                    Cursor_graticuleToolStripMenuItem.Checked = false;
+                    Cursor_squareToolStripMenuItem.Checked = false;
+                    Cursor_circleToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_noneToolStripMenuItem.Checked = true;
+                    TSDdB_verticalLineToolStripMenuItem.Checked = false;
+                    TSDdB_horizontalLineToolStripMenuItem.Checked = false;
+                    TSDdB_crossToolStripMenuItem.Checked = false;
+                    TSDdB_graticuleToolStripMenuItem.Checked = false;
+                    TSDdB_squareToolStripMenuItem.Checked = false;
+                    TSDdB_circleToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicCursorMode.VerticalLine:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_noneToolStripMenuItem.Checked = false;
+                    Cursor_verticalLineToolStripMenuItem.Checked = true;
+                    Cursor_horizontalLineToolStripMenuItem.Checked = false;
+                    Cursor_crossToolStripMenuItem.Checked = false;
+                    Cursor_graticuleToolStripMenuItem.Checked = false;
+                    Cursor_squareToolStripMenuItem.Checked = false;
+                    Cursor_circleToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_noneToolStripMenuItem.Checked = false;
+                    TSDdB_verticalLineToolStripMenuItem.Checked = true;
+                    TSDdB_horizontalLineToolStripMenuItem.Checked = false;
+                    TSDdB_crossToolStripMenuItem.Checked = false;
+                    TSDdB_graticuleToolStripMenuItem.Checked = false;
+                    TSDdB_squareToolStripMenuItem.Checked = false;
+                    TSDdB_circleToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicCursorMode.HorizontalLine:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_noneToolStripMenuItem.Checked = false;
+                    Cursor_verticalLineToolStripMenuItem.Checked = false;
+                    Cursor_horizontalLineToolStripMenuItem.Checked = true;
+                    Cursor_crossToolStripMenuItem.Checked = false;
+                    Cursor_graticuleToolStripMenuItem.Checked = false;
+                    Cursor_squareToolStripMenuItem.Checked = false;
+                    Cursor_circleToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_noneToolStripMenuItem.Checked = false;
+                    TSDdB_verticalLineToolStripMenuItem.Checked = false;
+                    TSDdB_horizontalLineToolStripMenuItem.Checked = true;
+                    TSDdB_crossToolStripMenuItem.Checked = false;
+                    TSDdB_graticuleToolStripMenuItem.Checked = false;
+                    TSDdB_squareToolStripMenuItem.Checked = false;
+                    TSDdB_circleToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicCursorMode.Cross:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_noneToolStripMenuItem.Checked = false;
+                    Cursor_verticalLineToolStripMenuItem.Checked = false;
+                    Cursor_horizontalLineToolStripMenuItem.Checked = false;
+                    Cursor_crossToolStripMenuItem.Checked = true;
+                    Cursor_graticuleToolStripMenuItem.Checked = false;
+                    Cursor_squareToolStripMenuItem.Checked = false;
+                    Cursor_circleToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_noneToolStripMenuItem.Checked = false;
+                    TSDdB_verticalLineToolStripMenuItem.Checked = false;
+                    TSDdB_horizontalLineToolStripMenuItem.Checked = false;
+                    TSDdB_crossToolStripMenuItem.Checked = true;
+                    TSDdB_graticuleToolStripMenuItem.Checked = false;
+                    TSDdB_squareToolStripMenuItem.Checked = false;
+                    TSDdB_circleToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicCursorMode.Graticule:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_noneToolStripMenuItem.Checked = false;
+                    Cursor_verticalLineToolStripMenuItem.Checked = false;
+                    Cursor_horizontalLineToolStripMenuItem.Checked = false;
+                    Cursor_crossToolStripMenuItem.Checked = false;
+                    Cursor_graticuleToolStripMenuItem.Checked = true;
+                    Cursor_squareToolStripMenuItem.Checked = false;
+                    Cursor_circleToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_noneToolStripMenuItem.Checked = false;
+                    TSDdB_verticalLineToolStripMenuItem.Checked = false;
+                    TSDdB_horizontalLineToolStripMenuItem.Checked = false;
+                    TSDdB_crossToolStripMenuItem.Checked = false;
+                    TSDdB_graticuleToolStripMenuItem.Checked = true;
+                    TSDdB_squareToolStripMenuItem.Checked = false;
+                    TSDdB_circleToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicCursorMode.Square:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_noneToolStripMenuItem.Checked = false;
+                    Cursor_verticalLineToolStripMenuItem.Checked = false;
+                    Cursor_horizontalLineToolStripMenuItem.Checked = false;
+                    Cursor_crossToolStripMenuItem.Checked = false;
+                    Cursor_graticuleToolStripMenuItem.Checked = false;
+                    Cursor_squareToolStripMenuItem.Checked = true;
+                    Cursor_circleToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_noneToolStripMenuItem.Checked = false;
+                    TSDdB_verticalLineToolStripMenuItem.Checked = false;
+                    TSDdB_horizontalLineToolStripMenuItem.Checked = false;
+                    TSDdB_crossToolStripMenuItem.Checked = false;
+                    TSDdB_graticuleToolStripMenuItem.Checked = false;
+                    TSDdB_squareToolStripMenuItem.Checked = true;
+                    TSDdB_circleToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case GraphicCursorMode.Circle:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_noneToolStripMenuItem.Checked = false;
+                    Cursor_verticalLineToolStripMenuItem.Checked = false;
+                    Cursor_horizontalLineToolStripMenuItem.Checked = false;
+                    Cursor_crossToolStripMenuItem.Checked = false;
+                    Cursor_graticuleToolStripMenuItem.Checked = false;
+                    Cursor_squareToolStripMenuItem.Checked = false;
+                    Cursor_circleToolStripMenuItem.Checked = true;
+
+                    //ToolBar items update
+                    TSDdB_noneToolStripMenuItem.Checked = false;
+                    TSDdB_verticalLineToolStripMenuItem.Checked = false;
+                    TSDdB_horizontalLineToolStripMenuItem.Checked = false;
+                    TSDdB_crossToolStripMenuItem.Checked = false;
+                    TSDdB_graticuleToolStripMenuItem.Checked = false;
+                    TSDdB_squareToolStripMenuItem.Checked = false;
+                    TSDdB_circleToolStripMenuItem.Checked = true;
+
+                    break;
+            }
+
+            #endregion
+
+            //Cursor step
+            #region Cursor step
+
+            switch (CursorStepIndex)
+            {
+                case 0:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 1:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 2:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 3:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 4:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 5:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 6:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 7:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = true;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = true;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = false;
+
+                    break;
+
+                case 8:
+
+                    //Context_PicGraph_Options items update
+                    Cursor_Step_01_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_02_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_05_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_1_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_2_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_5_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_10_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_20_ToolStripMenuItem.Checked = false;
+                    Cursor_Step_50_ToolStripMenuItem.Checked = true;
+
+                    //ToolBar items update
+                    TSDdB_CurStep_01_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_02_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_05_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_1_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_2_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_5_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_10_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_20_ToolStripMenuItem.Checked = false;
+                    TSDdB_CurStep_50_ToolStripMenuItem.Checked = true;
+
+                    break;
+            }
+
+            #endregion
+
+            //Reference cursor
+            #region Reference cursor
+
+            switch (Properties.ReferenceCursor.Mode)
+            {
+                case GraphicCursorMode.VerticalLine:
+
+                    //Context_PicGraph_Options items update
+                    RefCursor_Mode_None_TSMI.Checked = false;
+                    RefCursor_Mode_Vertical_TSMI.Checked = true;
+                    RefCursor_Mode_Horizontal_TSMI.Checked = false;
+
+                    //ToolBar items update
+                    TSDB_RefCursor_Mode_None.Checked = false;
+                    TSDB_RefCursor_Mode_Vertical.Checked = true;
+                    TSDB_RefCursor_Mode_Horizontal.Checked = false;
+
+                    break;
+
+                case GraphicCursorMode.HorizontalLine:
+
+                    //Context_PicGraph_Options items update
+                    RefCursor_Mode_None_TSMI.Checked = false;
+                    RefCursor_Mode_Vertical_TSMI.Checked = false;
+                    RefCursor_Mode_Horizontal_TSMI.Checked = true;
+
+                    //ToolBar items update
+                    TSDB_RefCursor_Mode_None.Checked = false;
+                    TSDB_RefCursor_Mode_Vertical.Checked = false;
+                    TSDB_RefCursor_Mode_Horizontal.Checked = true;
+
+                    break;
+
+                default:
+
+                    //Context_PicGraph_Options items update
+                    RefCursor_Mode_None_TSMI.Checked = true;
+                    RefCursor_Mode_Vertical_TSMI.Checked = false;
+                    RefCursor_Mode_Horizontal_TSMI.Checked = false;
+
+                    //ToolBar items update
+                    TSDB_RefCursor_Mode_None.Checked = true;
+                    TSDB_RefCursor_Mode_Vertical.Checked = false;
+                    TSDB_RefCursor_Mode_Horizontal.Checked = false;
+
+                    break;
+            }
+
+            #endregion
+
+            //Zoom mode
+            #region Zoom mode
+
+            if (!(Properties.ZoomMode.Equals(GraphicZoomMode.Disabled)))
+            {
+
+                //Context_PicGraph_Options items update
+                ZoomPlustoolStripMenuItem.Enabled = true;
+                ZoomMinustoolStripMenuItem.Enabled = true;
+                ZoomMintoolStripMenuItem.Enabled = true;
+                ZoomMaxtoolStripMenuItem.Enabled = true;
+                ZoomFactortoolStripMenuItem.Enabled = true;
+                ZoomMode_X_ToolStripMenuItem.Enabled = true;
+                ZoomMode_Y_ToolStripMenuItem.Enabled = true;
+                ZoomMode_XY_ToolStripMenuItem.Enabled = true;
+                ZoomMode_Disabled_ToolStripMenuItem.Checked = false;
+
+                //ToolBar items update
+                TSDdB_ZoomFactor.Enabled = true;
+                TSDdB_zoomXToolStripMenuItem.Enabled = true;
+                TSDdB_zoomYToolStripMenuItem.Enabled = true;
+                TSDdB_zoomXYToolStripMenuItem.Enabled = true;
+                TSDdB_zoomDisabledToolStripMenuItem.Checked = false;
+                TSB_ZoomPlus.Enabled = true;
+                TSB_ZoomMinus.Enabled = true;
+
+                switch (Properties.ZoomMode)
+                {
+                    case GraphicZoomMode.ZoomX:
+
+                        //Context_PicGraph_Options items update
+                        ZoomMode_X_ToolStripMenuItem.Checked = true;
+                        ZoomMode_Y_ToolStripMenuItem.Checked = false;
+                        ZoomMode_XY_ToolStripMenuItem.Checked = false;
+
+                        //ToolBar items update
+                        TSDdB_zoomXToolStripMenuItem.Checked = true;
+                        TSDdB_zoomYToolStripMenuItem.Checked = false;
+                        TSDdB_zoomXYToolStripMenuItem.Checked = false;
+
+                        break;
+
+                    case GraphicZoomMode.ZoomY:
+
+                        //Context_PicGraph_Options items update
+                        ZoomMode_X_ToolStripMenuItem.Checked = false;
+                        ZoomMode_Y_ToolStripMenuItem.Checked = true;
+                        ZoomMode_XY_ToolStripMenuItem.Checked = false;
+
+                        //ToolBar items update
+                        TSDdB_zoomXToolStripMenuItem.Checked = false;
+                        TSDdB_zoomYToolStripMenuItem.Checked = true;
+                        TSDdB_zoomXYToolStripMenuItem.Checked = false;
+
+                        break;
+
+                    case GraphicZoomMode.ZoomXY:
+
+                        //Context_PicGraph_Options items update
+                        ZoomMode_X_ToolStripMenuItem.Checked = false;
+                        ZoomMode_Y_ToolStripMenuItem.Checked = false;
+                        ZoomMode_XY_ToolStripMenuItem.Checked = true;
+
+                        //ToolBar items update
+                        TSDdB_zoomXToolStripMenuItem.Checked = false;
+                        TSDdB_zoomYToolStripMenuItem.Checked = false;
+                        TSDdB_zoomXYToolStripMenuItem.Checked = true;
+
+                        break;
+                }
+            }
+            else
+            {
+                //Context_PicGraph_Options items update
+                ZoomPlustoolStripMenuItem.Enabled = false;
+                ZoomMinustoolStripMenuItem.Enabled = false;
+                ZoomMintoolStripMenuItem.Enabled = false;
+                ZoomMaxtoolStripMenuItem.Enabled = false;
+                ZoomFactortoolStripMenuItem.Enabled = false;
+                ZoomMode_Disabled_ToolStripMenuItem.Checked = true;
+
+                ZoomMode_X_ToolStripMenuItem.Enabled = false;
+                ZoomMode_X_ToolStripMenuItem.Checked = false;
+
+                ZoomMode_Y_ToolStripMenuItem.Enabled = false;
+                ZoomMode_Y_ToolStripMenuItem.Checked = false;
+
+                ZoomMode_XY_ToolStripMenuItem.Enabled = false;
+                ZoomMode_XY_ToolStripMenuItem.Checked = false;
+
+                //ToolBar items update
+                TSDdB_zoomDisabledToolStripMenuItem.Checked = true;
+
+                TSDdB_ZoomFactor.Enabled = false;
+
+                TSDdB_zoomXToolStripMenuItem.Enabled = false;
+                TSDdB_zoomXToolStripMenuItem.Checked = false;
+
+                TSDdB_zoomYToolStripMenuItem.Enabled = false;
+                TSDdB_zoomYToolStripMenuItem.Checked = false;
+
+                TSDdB_zoomXYToolStripMenuItem.Enabled = false;
+                TSDdB_zoomXYToolStripMenuItem.Checked = false;
+
+                TSB_ZoomPlus.Enabled = false;
+                TSB_ZoomMinus.Enabled = false;
+            }
+
+            #endregion
+
+            //Zoom factor
+            #region Zoom factor
+
+            switch (ZoomFactorIndex)
+            {
+                case 0:
+
+                    //Context_PicGraph_Options items update
+                    ZoomFactor_2_ToolStripMenuItem.Checked = true;
+                    ZoomFactor_4_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_8_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_16_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_32_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_ZoomFactor_2.Checked = true;
+                    TSDdB_ZoomFactor_4.Checked = false;
+                    TSDdB_ZoomFactor_8.Checked = false;
+                    TSDdB_ZoomFactor_16.Checked = false;
+                    TSDdB_ZoomFactor_32.Checked = false;
+
+                    break;
+
+                case 1:
+
+                    //Context_PicGraph_Options items update
+                    ZoomFactor_2_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_4_ToolStripMenuItem.Checked = true;
+                    ZoomFactor_8_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_16_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_32_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_ZoomFactor_2.Checked = false;
+                    TSDdB_ZoomFactor_4.Checked = true;
+                    TSDdB_ZoomFactor_8.Checked = false;
+                    TSDdB_ZoomFactor_16.Checked = false;
+                    TSDdB_ZoomFactor_32.Checked = false;
+
+                    break;
+
+                case 2:
+
+                    //Context_PicGraph_Options items update
+                    ZoomFactor_2_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_4_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_8_ToolStripMenuItem.Checked = true;
+                    ZoomFactor_16_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_32_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_ZoomFactor_2.Checked = false;
+                    TSDdB_ZoomFactor_4.Checked = false;
+                    TSDdB_ZoomFactor_8.Checked = true;
+                    TSDdB_ZoomFactor_16.Checked = false;
+                    TSDdB_ZoomFactor_32.Checked = false;
+
+                    break;
+
+                case 3:
+
+                    //Context_PicGraph_Options items update
+                    ZoomFactor_2_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_4_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_8_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_16_ToolStripMenuItem.Checked = true;
+                    ZoomFactor_32_ToolStripMenuItem.Checked = false;
+
+                    //ToolBar items update
+                    TSDdB_ZoomFactor_2.Checked = false;
+                    TSDdB_ZoomFactor_4.Checked = false;
+                    TSDdB_ZoomFactor_8.Checked = false;
+                    TSDdB_ZoomFactor_16.Checked = true;
+                    TSDdB_ZoomFactor_32.Checked = false;
+
+                    break;
+
+                case 4:
+
+                    //Context_PicGraph_Options items update
+                    ZoomFactor_2_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_4_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_8_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_16_ToolStripMenuItem.Checked = false;
+                    ZoomFactor_32_ToolStripMenuItem.Checked = true;
+
+                    //ToolBar items update
+                    TSDdB_ZoomFactor_2.Checked = false;
+                    TSDdB_ZoomFactor_4.Checked = false;
+                    TSDdB_ZoomFactor_8.Checked = false;
+                    TSDdB_ZoomFactor_16.Checked = false;
+                    TSDdB_ZoomFactor_32.Checked = true;
+
+                    break;
+            }
+
+            #endregion
+
+            //Legend informations
+            #region Legend informations
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Label))
+            {
+                TSMI_Ctxt_Legend_Infos_Label.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_Label.Checked = false;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.CurrentValue))
+            {
+                TSMI_Ctxt_Legend_Infos_Value.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_Value.Checked = false;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.Unit))
+            {
+                TSMI_Ctxt_Legend_Infos_Unit.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_Unit.Checked = false;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMin))
+            {
+                TSMI_Ctxt_Legend_Infos_Min.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_Min.Checked = false;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphMax))
+            {
+                TSMI_Ctxt_Legend_Infos_Max.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_Max.Checked = false;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.GraphAvg))
+            {
+                TSMI_Ctxt_Legend_Infos_Avg.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_Avg.Checked = false;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorValue))
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_Value.Checked = true;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffValue))
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_Diff.Checked = true;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorDiffPerc))
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_DiffPerc.Checked = true;
+            }
+
+            if (Properties.LegendProperties.Informations.HasFlag(GraphicLegendInformations.RefCursorGradient))
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked = true;
+            }
+            else
+            {
+                TSMI_Ctxt_Legend_Infos_RefCursor_Gradient.Checked = true;
+            }
+
+            #endregion
         }
-        
+
         private void Change_GraphLayout(GraphicWindowLayoutModes eNewLayoutMode)
         {
-        	Properties.GraphLayoutMode = eNewLayoutMode;
+            Properties.GraphLayoutMode = eNewLayoutMode;
             bScratchStageForced = true;
             oGraphicUpdateRequest.UpdateRequested = true;
         }
-        
+
         private void Change_MainCursorMode(GraphicCursorMode eNewCursorMode)
         {
-        	Pic_Graphic.Refresh();
-        	Properties.Cursor.Mode = eNewCursorMode;
-        	Set_Options_Controls();
+            Pic_Graphic.Refresh();
+            Properties.Cursor.Mode = eNewCursorMode;
+            Set_Options_Controls();
         }
-        
+
         private void Change_ZoomMode(GraphicZoomMode eNewZoomMode)
         {
-        	Pic_Graphic.Refresh();
-        	Properties.ZoomMode = eNewZoomMode;
-        	Set_Options_Controls();
+            Pic_Graphic.Refresh();
+            Properties.ZoomMode = eNewZoomMode;
+            Set_Options_Controls();
         }
-        
+
         private void Change_SerieVisibility(int SerieKey)
         {
-        	GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey(SerieKey);
-        	
-        	if (!(oSerieProp == null))
-        	{
-        		oSerieProp.Visible = !oSerieProp.Visible;
-        		Refresh_Graphic(GraphDrawingStages.YAxis_Lines);
-        	}
+            GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey(SerieKey);
+
+            if (!(oSerieProp == null))
+            {
+                oSerieProp.Visible = !oSerieProp.Visible;
+                Refresh_Graphic(GraphDrawingStages.YAxis_Lines);
+            }
         }
-        
+
         private void Remove_Serie(int SerieKey)
         {
-        	GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey(SerieKey);
-        	
-        	if (!(oSerieProp == null))
-        	{
-        		Properties.SeriesProperties.Remove(oSerieProp);
-        		Refresh_Graphic();
-        	}
+            GraphSerieProperties oSerieProp = Properties.Get_SerieAtKey(SerieKey);
+
+            if (!(oSerieProp == null))
+            {
+                Properties.SeriesProperties.Remove(oSerieProp);
+                Refresh_Graphic();
+            }
         }
-        
+
         private void Drop_Series(DragEventArgs DropItems)
         {
-        	ListView.SelectedListViewItemCollection Items = (ListView.SelectedListViewItemCollection)DropItems.Data.GetData(typeof(ListView.SelectedListViewItemCollection));
+            ListView.SelectedListViewItemCollection Items = (ListView.SelectedListViewItemCollection)DropItems.Data.GetData(typeof(ListView.SelectedListViewItemCollection));
 
-            if(!(Items==null))
+            if (!(Items == null))
             {
-                foreach(ListViewItem ItChannel in Items)
+                foreach (ListViewItem ItChannel in Items)
                 {
                     Properties.Create_Serie(ItChannel.Text);
                 }
@@ -7732,10 +7732,10 @@ namespace Ctrl_GraphWindow
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
-        
-#endregion
 
-#region Channel list
+        #endregion
+
+        #region Channel list
 
         private void Fill_ChannelList()
         {
@@ -7758,92 +7758,92 @@ namespace Ctrl_GraphWindow
             splitContainer1.Panel1Collapsed = !splitContainer1.Panel1Collapsed;
         }
 
-#endregion
-		
-#region Snapshot and print
-        
+        #endregion
+
+        #region Snapshot and print
+
         private void Make_GraphicSnapshot()
         {
-        	if (Dlg_Save_Snapshot.ShowDialog().Equals(DialogResult.OK))
-        	{        		
-        		Image SnapShot = Get_SnapshotImage();
-        		SnapShot.Save(Dlg_Save_Snapshot.FileName);
-        		SnapShot.Dispose();
-        	}
+            if (Dlg_Save_Snapshot.ShowDialog().Equals(DialogResult.OK))
+            {
+                Image SnapShot = Get_SnapshotImage();
+                SnapShot.Save(Dlg_Save_Snapshot.FileName);
+                SnapShot.Dispose();
+            }
         }
-        
+
         private void Print_Graphic()
         {
-        	Image GraphImage = Get_SnapshotImage();
-        	
-        	if (!(GraphImage == null))
-        	{
-        		Frm_GraphPrinting Frm = new Frm_GraphPrinting(GraphImage);
-        		Frm.Show();
-        	}
+            Image GraphImage = Get_SnapshotImage();
+
+            if (!(GraphImage == null))
+            {
+                Frm_GraphPrinting Frm = new Frm_GraphPrinting(GraphImage);
+                Frm.Show();
+            }
         }
-        
+
         private Image Get_SnapshotImage()
         {
-        	System.Threading.Thread.Sleep(50); //To not catch the save as window...
-        	
-        	Image SnapShot = null;
-        	Graphics SnapGraphics = null;
-        	
-        	if (!(splitContainer2.Panel2Collapsed)) //Legend visible
-        	{
-        		SnapShot = new Bitmap(splitContainer2.Width, splitContainer2.Height);
-        		SnapGraphics = Graphics.FromImage(SnapShot);
-        		
-        		SnapGraphics.Clear(Properties.WindowBackColor);
-        		
-        		Point PtSrc = Grid_Legend.PointToScreen(Grid_Legend.Location);        		
-        		Point PtDest = new Point (FrameRightPoint + GRAPH_FRAME_WIDTH_OFFSET, FrameTopPoint);
-        		
-        		SnapGraphics.CopyFromScreen(PtSrc, PtDest, Grid_Legend.Size);
-        	}
-        	else //Legend hidden
-        	{
-        		SnapShot = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
-        		SnapGraphics = Graphics.FromImage(SnapShot);
-        	}
-        	
-        	PointF PtImage = new PointF(0, 0);
-        	SnapGraphics.DrawImage(Pic_GraphFrame.Image, PtImage);
-        	
-        	Image GraphImage = (Image)Pic_Graphic.Image.Clone();
-        	Graphics GraphImgGraphics = Graphics.FromImage(GraphImage);
-        	
-        	//Cursor drawing
-        	if (!(PtCursorPos.IsEmpty))
-        	{
-        		Draw_Cursor(PtCursorPos, Properties.Cursor, GraphImgGraphics);
-        	}
-        	
-        	if (!(PtRefCursorPos.IsEmpty))
-        	{
-        		Draw_Cursor(PtRefCursorPos, Properties.ReferenceCursor, GraphImgGraphics);
-        	}
-        	
-        	PtImage = new PointF(FrameLeftPoint, FrameTopPoint);
-        	SnapGraphics.DrawImage(GraphImage, PtImage);
-        	
-        	GraphImgGraphics.Dispose();
-        	SnapGraphics.Dispose();
-        	
-        	return(SnapShot);
-        	
-        	//SnapShot.Save(Dlg_Save_Snapshot.FileName);
-        	//SnapShot.Dispose();
+            System.Threading.Thread.Sleep(50); //To not catch the save as window...
+
+            Image SnapShot = null;
+            Graphics SnapGraphics = null;
+
+            if (!(splitContainer2.Panel2Collapsed)) //Legend visible
+            {
+                SnapShot = new Bitmap(splitContainer2.Width, splitContainer2.Height);
+                SnapGraphics = Graphics.FromImage(SnapShot);
+
+                SnapGraphics.Clear(Properties.WindowBackColor);
+
+                Point PtSrc = Grid_Legend.PointToScreen(Grid_Legend.Location);
+                Point PtDest = new Point(FrameRightPoint + GRAPH_FRAME_WIDTH_OFFSET, FrameTopPoint);
+
+                SnapGraphics.CopyFromScreen(PtSrc, PtDest, Grid_Legend.Size);
+            }
+            else //Legend hidden
+            {
+                SnapShot = new Bitmap(Pic_GraphFrame.Width, Pic_GraphFrame.Height);
+                SnapGraphics = Graphics.FromImage(SnapShot);
+            }
+
+            PointF PtImage = new PointF(0, 0);
+            SnapGraphics.DrawImage(Pic_GraphFrame.Image, PtImage);
+
+            Image GraphImage = (Image)Pic_Graphic.Image.Clone();
+            Graphics GraphImgGraphics = Graphics.FromImage(GraphImage);
+
+            //Cursor drawing
+            if (!(PtCursorPos.IsEmpty))
+            {
+                Draw_Cursor(PtCursorPos, Properties.Cursor, GraphImgGraphics);
+            }
+
+            if (!(PtRefCursorPos.IsEmpty))
+            {
+                Draw_Cursor(PtRefCursorPos, Properties.ReferenceCursor, GraphImgGraphics);
+            }
+
+            PtImage = new PointF(FrameLeftPoint, FrameTopPoint);
+            SnapGraphics.DrawImage(GraphImage, PtImage);
+
+            GraphImgGraphics.Dispose();
+            SnapGraphics.Dispose();
+
+            return (SnapShot);
+
+            //SnapShot.Save(Dlg_Save_Snapshot.FileName);
+            //SnapShot.Dispose();
         }
 
-#endregion
+        #endregion
 
-#region Real time graphic control
-        
+        #region Real time graphic control
+
         private void Start_RealTimeTrace()
         {
-            if(RTStatus== GraphicRealTimeStatus.Stopped)
+            if (RTStatus == GraphicRealTimeStatus.Stopped)
             {
                 Properties = new GraphWindowProperties();
             }
@@ -7878,15 +7878,15 @@ namespace Ctrl_GraphWindow
             LegendEnabled = true;
         }
 
-#endregion
+        #endregion
 
-#region Tools
+        #region Tools
 
         private int RoundClosest(int Value, int Divider)
         {
             //Return argument 'Value' rounded to the closest value dividable by 'Divider'
-        	
-        	int Rem = 1;
+
+            int Rem = 1;
             Value++;
 
             while (Rem != 0)
@@ -7897,74 +7897,74 @@ namespace Ctrl_GraphWindow
 
             return (Value);
         }
-        
+
         private double SATURA(double Value, double Min, double Max)
         {
-        	if (Value > Max)
-        	{
-        		return(Max);
-        	}
-        	else if (Value < Min)
-        	{
-        		return(Min);
-        	}
-        	
-        	return(Value);
+            if (Value > Max)
+            {
+                return (Max);
+            }
+            else if (Value < Min)
+            {
+                return (Min);
+            }
+
+            return (Value);
         }
-		
+
         private double Get_AbscisseValueAtPostion(int Position)
         {
             double a = (Properties.AbscisseAxis.CoordConversion.Max - Properties.AbscisseAxis.CoordConversion.Min) / (FrameWidth);
-    		double b = Properties.AbscisseAxis.CoordConversion.Max - a * FrameWidth;
-    		
-    		return((double)Position * a + b);
+            double b = Properties.AbscisseAxis.CoordConversion.Max - a * FrameWidth;
+
+            return ((double)Position * a + b);
         }
-        
+
         private SerieValueAtPoint[] Get_OrdinateValuesAtPosition(int Position)
         {
-        	List<SerieValueAtPoint> CursorValues = new List<Ctrl_WaveForm.SerieValueAtPoint>();
-        	
-        	foreach (GraphSerieProperties oProp in Properties.SeriesProperties)
+            List<SerieValueAtPoint> CursorValues = new List<Ctrl_WaveForm.SerieValueAtPoint>();
+
+            foreach (GraphSerieProperties oProp in Properties.SeriesProperties)
             {
-                if((oProp.Visible && (oProp.Trace.Visible || oProp.Markers.Visible)) && DataFile.DataChannelExists(oProp.Name))
+                if ((oProp.Visible && (oProp.Trace.Visible || oProp.Markers.Visible)) && DataFile.DataChannelExists(oProp.Name))
                 {
-                	GW_DataChannel oChanData = DataFile.Get_DataChannel(oProp.Name);
-                	
-                	if (!(oChanData == null))
-                	{
-                		if (Position >= oProp.CoordConversion.Top && Position <= oProp.CoordConversion.Bottom)
-                		{
-	                		SerieValueAtPoint sCursorVal = new Ctrl_WaveForm.SerieValueAtPoint();
-	                		
-	                		double a = (oProp.CoordConversion.Max - oProp.CoordConversion.Min) / (oProp.CoordConversion.Top - oProp.CoordConversion.Bottom);
-	                		double b = oProp.CoordConversion.Max - a * oProp.CoordConversion.Top;
-	                		
-	                		sCursorVal.SerieColor = oProp.Trace.LineColor;
-	                		sCursorVal.SerieName = oProp.Label;
-	                		sCursorVal.SerieValue = oProp.ValueFormat.Get_ValueFormatted((double)Position * a + b);
-	                		sCursorVal.SerieKeyId = oProp.KeyId;
-	                		
-	                		CursorValues.Add(sCursorVal);
-                		}
-                	}
+                    GW_DataChannel oChanData = DataFile.Get_DataChannel(oProp.Name);
+
+                    if (!(oChanData == null))
+                    {
+                        if (Position >= oProp.CoordConversion.Top && Position <= oProp.CoordConversion.Bottom)
+                        {
+                            SerieValueAtPoint sCursorVal = new Ctrl_WaveForm.SerieValueAtPoint();
+
+                            double a = (oProp.CoordConversion.Max - oProp.CoordConversion.Min) / (oProp.CoordConversion.Top - oProp.CoordConversion.Bottom);
+                            double b = oProp.CoordConversion.Max - a * oProp.CoordConversion.Top;
+
+                            sCursorVal.SerieColor = oProp.Trace.LineColor;
+                            sCursorVal.SerieName = oProp.Label;
+                            sCursorVal.SerieValue = oProp.ValueFormat.Get_ValueFormatted((double)Position * a + b);
+                            sCursorVal.SerieKeyId = oProp.KeyId;
+
+                            CursorValues.Add(sCursorVal);
+                        }
+                    }
                 }
             }
-        	
-        	if (CursorValues.Count > 0)
-        	{
-        		return(CursorValues.ToArray());
-        	}
-        	else
-        	{
-        		return(null);
-        	}
+
+            if (CursorValues.Count > 0)
+            {
+                return (CursorValues.ToArray());
+            }
+            else
+            {
+                return (null);
+            }
         }
 
-#endregion
+        #endregion
 
-#endregion
+        #endregion
 
-#region Events handling methods
+        #region Events handling methods
 
         /// <summary>
         /// UserControlKey down event firing method
@@ -7974,18 +7974,18 @@ namespace Ctrl_GraphWindow
         {
             EventHandler<PreviewKeyDownEventArgs> Handler = ControlPreviewKeyDown;
 
-            if(Handler != null)
+            if (Handler != null)
             {
                 Handler(this, e);
             }
 
         }
 
-#endregion
+        #endregion
 
-#region Public methodes
+        #region Public methodes
 
-#region Graphic methodes
+        #region Graphic methodes
 
         /// <summary>
         /// Redraw the graphic window from scratch
@@ -8007,7 +8007,7 @@ namespace Ctrl_GraphWindow
         {
             if (!bRealTimeGraphic || mRTStatus == GraphicRealTimeStatus.Running)
             {
-                eCurrentStage = eInitialStage; 
+                eCurrentStage = eInitialStage;
 
                 if (bDataPlotted)
                 {
@@ -8044,54 +8044,54 @@ namespace Ctrl_GraphWindow
             Properties = new GraphWindowProperties();
             Caller.UpDate_Properties(Properties);
         }
-		
+
         /// <summary>
         /// Set the GW_DataFile object containing the data to plot
         /// </summary>
         /// <param name="oNewDataFile">GW_DataFile object containing the data to plot</param>
         public void Set_DataFile(GW_DataFile oNewDataFile)
         {
-        	WholeDataFile = oNewDataFile;
-        	DataFile = WholeDataFile;
+            WholeDataFile = oNewDataFile;
+            DataFile = WholeDataFile;
             bScratchStageForced = true;
             SeriesReferenceCoordConversion = null;
-        	Fill_ChannelList();
+            Fill_ChannelList();
         }
-        
+
         /// <summary>
         /// Add one or more series into the graphic window
         /// </summary>
         /// <param name="SerieNames">Names of series to add</param>
         public void Add_Series(string[] SerieNames)
         {
-        	if (!(SerieNames == null))
-        	{
-        		foreach (string Name in SerieNames)
-        		{
-        			Properties.Create_Serie(Name);
-        		}
+            if (!(SerieNames == null))
+            {
+                foreach (string Name in SerieNames)
+                {
+                    Properties.Create_Serie(Name);
+                }
 
                 bScratchStageForced = true;
                 oGraphicUpdateRequest.UpdateRequested = true;
             }
         }
-        
+
         /// <summary>
         /// Draw the main cursor at abscisse value given as argument
         /// </summary>
         /// <param name="AbscisseValue">Abscisse value to draw the cursor at</param>
         public void Set_MainCursorAtAbscisse(double AbscisseValue)
         {
-            if(bDataPlotted)
+            if (bDataPlotted)
             {
                 int PtX = (int)(AbscisseValue * Properties.AbscisseAxis.CoordConversion.Gain + Properties.AbscisseAxis.CoordConversion.Zero);
                 Draw_Cursor(new Point(PtX, 0));
             }
         }
 
-#endregion
+        #endregion
 
-#region Channel list
+        #region Channel list
 
         /// <summary>
         /// Clear the channel list of the current Ctrl_WaveForm
@@ -8110,8 +8110,8 @@ namespace Ctrl_GraphWindow
             Ctrl_ChannelList.Add_ChannelName(ChannelName);
         }
 
-#endregion
+        #endregion
 
-#endregion
+        #endregion
     }
 }

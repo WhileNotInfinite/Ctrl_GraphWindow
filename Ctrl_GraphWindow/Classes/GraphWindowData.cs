@@ -1051,6 +1051,8 @@ namespace Ctrl_GraphWindow
             XmlNode xDataFile, xHeader, xChannels, xSamples;
             XmlNode xElemParent, xElemChild;
 
+            this.DataSamplingMode = SamplingMode.MultipleRates;
+
             try
             {
                 XmlDocument oXDoc = new XmlDocument();
@@ -1141,6 +1143,17 @@ namespace Ctrl_GraphWindow
                             sSample.SampleValue = double.Parse(xElemChild.InnerText);
 
                             oChan.Samples.Add(sSample);
+
+                            if (oChan.Samples.Count==1)
+                            {
+                                oChan.Min = sSample.SampleValue;
+                                oChan.Max = sSample.SampleValue;
+                            }
+                            else
+                            {
+                                if (sSample.SampleValue < oChan.Min) oChan.Min = sSample.SampleValue;
+                                if (sSample.SampleValue > oChan.Max) oChan.Max = sSample.SampleValue;
+                            }
                         }
 
                         this.Channels.Add(oChan);
@@ -1249,7 +1262,7 @@ namespace Ctrl_GraphWindow
 
                         foreach (GraphReferenceLine oLine in oChan.ChannelReferenceLines)
                         {
-                            xChan.AppendChild(oLine.Create_ReferenceLineXmlNode(oXDoc, "ReferenceLine"));
+                            xElemParent.AppendChild(oLine.Create_ReferenceLineXmlNode(oXDoc, "ReferenceLine"));
                         }
                     }
 

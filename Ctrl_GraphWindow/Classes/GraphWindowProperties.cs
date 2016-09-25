@@ -2412,7 +2412,7 @@ namespace Ctrl_GraphWindow
             Max = 0; //OK
             ValueFormat = new GraphSerieValueFormat();
             ScalingMode = GraphSerieScaleModes.Auto; //OK
-            DrawingMode = GraphSerieDrawingModes.Line; //OK
+            DrawingMode = GraphSerieDrawingModes.Step; //OK
             Trace = new GraphLineProperties(); //OK
             Markers = new GraphSerieMarkProperties(); //OK
             YAxis = new GraphSerieAxis(); //OK
