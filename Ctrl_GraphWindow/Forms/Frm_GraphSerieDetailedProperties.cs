@@ -664,6 +664,7 @@ namespace Ctrl_GraphWindow
             Txt_ChannelName.Text = oSerieProperties.Name;
             Txt_Label.Text = oSerieProperties.Label;
             Txt_Unit.Text = oSerieProperties.Unit;
+            Txt_Description.Text = oSerieProperties.Description;
             Chk_SerieVisible.Checked = oSerieProperties.Visible;
 
             Txt_Top.Text = oSerieProperties.Top.ToString();
@@ -845,6 +846,7 @@ namespace Ctrl_GraphWindow
             }
 
             oTmpProps.Unit = Txt_Unit.Text;
+            oTmpProps.Description = Txt_Description.Text;
             oTmpProps.Visible = Chk_SerieVisible.Checked;
 
             //Pos & scale
@@ -1315,6 +1317,7 @@ namespace Ctrl_GraphWindow
 
                 oSerieProperties.Label = oTmpProps.Label;
                 oSerieProperties.Unit = oTmpProps.Unit;
+                oSerieProperties.Description = oTmpProps.Description;
                 oSerieProperties.Visible = oTmpProps.Visible;
                 oSerieProperties.Top = oTmpProps.Top;
                 oSerieProperties.Bottom = oTmpProps.Bottom;

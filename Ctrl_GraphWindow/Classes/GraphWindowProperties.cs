@@ -2316,6 +2316,11 @@ namespace Ctrl_GraphWindow
         public string Unit;
 
         /// <summary>
+        /// Serie description comment
+        /// </summary>
+        public string Description;
+
+        /// <summary>
         /// Serie visibility flag
         /// </summary>
         public bool Visible;
@@ -2401,23 +2406,24 @@ namespace Ctrl_GraphWindow
         /// </summary>
         public GraphSerieProperties()
         {
-            KeyId = -1; //OK
-            Name = "";  //OK
+            KeyId = -1;
+            Name = "";
             Label = "";
             Unit = "";
-            Visible = true; //OK
-            Top = 100; //OK
-            Bottom = 0; //OK
-            Min = 0; //OK
-            Max = 0; //OK
+            Description = ""; //TODO: use it in the control
+            Visible = true;
+            Top = 100;
+            Bottom = 0;
+            Min = 0;
+            Max = 0;
             ValueFormat = new GraphSerieValueFormat();
-            ScalingMode = GraphSerieScaleModes.Auto; //OK
-            DrawingMode = GraphSerieDrawingModes.Step; //OK
-            Trace = new GraphLineProperties(); //OK
-            Markers = new GraphSerieMarkProperties(); //OK
-            YAxis = new GraphSerieAxis(); //OK
-            UserGrid = new GraphSerieUserGrid(); //OK
-            ReferenceLines = new List<GraphReferenceLine>(); //OK
+            ScalingMode = GraphSerieScaleModes.Auto;
+            DrawingMode = GraphSerieDrawingModes.Step;
+            Trace = new GraphLineProperties();
+            Markers = new GraphSerieMarkProperties();
+            YAxis = new GraphSerieAxis();
+            UserGrid = new GraphSerieUserGrid();
+            ReferenceLines = new List<GraphReferenceLine>();
             CoordConversion = new GW_SampleCoordConversion();
             DataChannelKeyId = -1;
         }
@@ -2492,6 +2498,10 @@ namespace Ctrl_GraphWindow
                 xProp.InnerText = this.Unit;
                 xSerie.AppendChild(xProp);
 
+                xProp = oXDoc.CreateElement("Description");
+                xProp.InnerText = this.Description;
+                xSerie.AppendChild(xProp);
+
                 xProp = oXDoc.CreateElement("Visible");
                 xProp.InnerText = this.Visible.ToString();
                 xSerie.AppendChild(xProp);
@@ -2522,37 +2532,6 @@ namespace Ctrl_GraphWindow
 
                 //Value format
                 xSerie.AppendChild(this.ValueFormat.GetSerieValueFormatXmlNode(oXDoc));
-
-                //TODO: Remove old code
-                /* Old code
-                XmlElement xFormat = oXDoc.CreateElement("ValueFormat");
-                xSerie.AppendChild(xFormat);
-
-                    xProp = oXDoc.CreateElement("Format");
-                    xProp.InnerText = this.ValueFormat.Format.ToString();
-                    xFormat.AppendChild(xProp);
-
-                    xProp = oXDoc.CreateElement("Decimals");
-                    xProp.InnerText = this.ValueFormat.Decimals.ToString();
-                    xFormat.AppendChild(xProp);
-
-                    XmlElement xEnums = oXDoc.CreateElement("Enumerations");
-                    xFormat.AppendChild(xEnums);
-
-                    foreach (GraphSerieEnumValue sEnum in this.ValueFormat.Enums)
-                    {
-                        XmlElement xEnumDef = oXDoc.CreateElement("Enum");
-                        xEnums.AppendChild(xEnumDef);
-
-                            xProp = oXDoc.CreateElement("Value");
-                            xProp.InnerText = sEnum.Value.ToString();
-                            xEnumDef.AppendChild(xProp);
-
-                            xProp = oXDoc.CreateElement("Text");
-                            xProp.InnerText = sEnum.Text;
-                            xEnumDef.AppendChild(xProp);
-                    }
-                */
 
                 //Trace line
                 XmlElement xTrace = this.Trace.Create_GraphLineXmlNode(oXDoc, "Trace");
@@ -2719,6 +2698,9 @@ namespace Ctrl_GraphWindow
 
                 xProp = xSerie.SelectSingleNode("Unit");
                 this.Unit = xProp.InnerText;
+
+                xProp = xSerie.SelectSingleNode("Description");
+                this.Description = xProp.InnerText;
 
                 xProp = xSerie.SelectSingleNode("Visible");
                 this.Visible = bool.Parse(xProp.InnerText);

@@ -1389,6 +1389,11 @@
             Serie unit
             </summary>
         </member>
+        <member name="F:Ctrl_GraphWindow.GraphSerieProperties.Description">
+            <summary>
+            Serie description comment
+            </summary>
+        </member>
         <member name="F:Ctrl_GraphWindow.GraphSerieProperties.Visible">
             <summary>
             Serie visibility flag

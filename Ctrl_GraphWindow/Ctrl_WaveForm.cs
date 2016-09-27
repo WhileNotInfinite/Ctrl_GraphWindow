@@ -8069,6 +8069,25 @@ namespace Ctrl_GraphWindow
                 foreach (string Name in SerieNames)
                 {
                     Properties.Create_Serie(Name);
+
+                    //Get default properties from data file
+                    GW_DataChannel oChanData = WholeDataFile.Get_DataChannel(Name);
+                    GraphSerieProperties oChanProps = Properties.Get_SerieByName(Name);
+
+                    if(oChanData!=null && oChanProps!=null)
+                    {
+                        if (oChanProps.Unit.Equals("")) oChanProps.Unit = oChanData.Unit;
+                        if (oChanProps.Description.Equals("")) oChanProps.Description = oChanData.Description;
+                        if (oChanProps.ValueFormat.Format.Equals(GraphSerieLegendFormats.Auto)) oChanProps.ValueFormat = oChanData.GraphicFormat.Get_Clone();
+
+                        if (oChanProps.ReferenceLines.Count == 0)
+                        {
+                            foreach (GraphReferenceLine oRefLine in oChanData.ChannelReferenceLines)
+                            {
+                                oChanProps.ReferenceLines.Add(oRefLine.Get_Clone());
+                            }
+                        }
+                    }
                 }
 
                 bScratchStageForced = true;

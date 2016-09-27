@@ -84,6 +84,8 @@ namespace Ctrl_GraphWindow
             this.Cmb_TraceStyle = new System.Windows.Forms.ComboBox();
             this.Lbl_TraceStyle = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Txt_Description = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.Chk_SerieVisible = new System.Windows.Forms.CheckBox();
             this.Txt_Unit = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -94,6 +96,8 @@ namespace Ctrl_GraphWindow
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.Grp_Enum = new System.Windows.Forms.GroupBox();
             this.Grid_Enums = new System.Windows.Forms.DataGridView();
+            this.ColEnumValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColEnumText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TS_Enums = new System.Windows.Forms.ToolStrip();
             this.TSB_AddEnum = new System.Windows.Forms.ToolStripButton();
             this.TSB_DelEnum = new System.Windows.Forms.ToolStripButton();
@@ -129,6 +133,7 @@ namespace Ctrl_GraphWindow
             this.label7 = new System.Windows.Forms.Label();
             this.Grp_VertGridCustomValues = new System.Windows.Forms.GroupBox();
             this.Grid_VertGridCustomValues = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TS_VertGridCustomValues = new System.Windows.Forms.ToolStrip();
             this.TSB_VertGrid_AddValue = new System.Windows.Forms.ToolStripButton();
             this.TSB_VertGrid_DelValue = new System.Windows.Forms.ToolStripButton();
@@ -155,6 +160,7 @@ namespace Ctrl_GraphWindow
             this.label4 = new System.Windows.Forms.Label();
             this.Grp_HorzGridCustomValues = new System.Windows.Forms.GroupBox();
             this.Grid_HorzGridCustomValues = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TS_HorzGridCustomValues = new System.Windows.Forms.ToolStrip();
             this.TSB_HorzGrid_AddValue = new System.Windows.Forms.ToolStripButton();
             this.TSB_HorzGrid_DelValue = new System.Windows.Forms.ToolStripButton();
@@ -177,10 +183,6 @@ namespace Ctrl_GraphWindow
             this.Ctrl_RefLines = new Ctrl_GraphWindow.Ctrl_ReferenceLines();
             this.Dlg_Color = new System.Windows.Forms.ColorDialog();
             this.Dlg_Font = new System.Windows.Forms.FontDialog();
-            this.ColEnumValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColEnumText = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TS_Main.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -294,7 +296,7 @@ namespace Ctrl_GraphWindow
             this.Grp_PosScale.Controls.Add(this.Txt_Top);
             this.Grp_PosScale.Controls.Add(this.label11);
             this.Grp_PosScale.Enabled = false;
-            this.Grp_PosScale.Location = new System.Drawing.Point(11, 118);
+            this.Grp_PosScale.Location = new System.Drawing.Point(11, 150);
             this.Grp_PosScale.Name = "Grp_PosScale";
             this.Grp_PosScale.Size = new System.Drawing.Size(563, 84);
             this.Grp_PosScale.TabIndex = 5;
@@ -303,7 +305,7 @@ namespace Ctrl_GraphWindow
             // 
             // Txt_ScaleMax
             // 
-            this.Txt_ScaleMax.Location = new System.Drawing.Point(283, 55);
+            this.Txt_ScaleMax.Location = new System.Drawing.Point(306, 55);
             this.Txt_ScaleMax.Name = "Txt_ScaleMax";
             this.Txt_ScaleMax.Size = new System.Drawing.Size(60, 20);
             this.Txt_ScaleMax.TabIndex = 13;
@@ -311,7 +313,7 @@ namespace Ctrl_GraphWindow
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(250, 57);
+            this.label15.Location = new System.Drawing.Point(273, 57);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(27, 13);
             this.label15.TabIndex = 12;
@@ -319,7 +321,7 @@ namespace Ctrl_GraphWindow
             // 
             // Txt_ScaleMin
             // 
-            this.Txt_ScaleMin.Location = new System.Drawing.Point(184, 54);
+            this.Txt_ScaleMin.Location = new System.Drawing.Point(207, 54);
             this.Txt_ScaleMin.Name = "Txt_ScaleMin";
             this.Txt_ScaleMin.Size = new System.Drawing.Size(60, 20);
             this.Txt_ScaleMin.TabIndex = 11;
@@ -327,7 +329,7 @@ namespace Ctrl_GraphWindow
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(143, 57);
+            this.label14.Location = new System.Drawing.Point(166, 57);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(24, 13);
             this.label14.TabIndex = 10;
@@ -336,7 +338,7 @@ namespace Ctrl_GraphWindow
             // Cmb_ScaleMode
             // 
             this.Cmb_ScaleMode.FormattingEnabled = true;
-            this.Cmb_ScaleMode.Location = new System.Drawing.Point(49, 54);
+            this.Cmb_ScaleMode.Location = new System.Drawing.Point(72, 54);
             this.Cmb_ScaleMode.Name = "Cmb_ScaleMode";
             this.Cmb_ScaleMode.Size = new System.Drawing.Size(88, 21);
             this.Cmb_ScaleMode.TabIndex = 9;
@@ -352,7 +354,7 @@ namespace Ctrl_GraphWindow
             // 
             // Txt_Bottom
             // 
-            this.Txt_Bottom.Location = new System.Drawing.Point(184, 28);
+            this.Txt_Bottom.Location = new System.Drawing.Point(207, 28);
             this.Txt_Bottom.Name = "Txt_Bottom";
             this.Txt_Bottom.Size = new System.Drawing.Size(60, 20);
             this.Txt_Bottom.TabIndex = 7;
@@ -360,7 +362,7 @@ namespace Ctrl_GraphWindow
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(143, 31);
+            this.label12.Location = new System.Drawing.Point(166, 31);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(40, 13);
             this.label12.TabIndex = 6;
@@ -368,7 +370,7 @@ namespace Ctrl_GraphWindow
             // 
             // Txt_Top
             // 
-            this.Txt_Top.Location = new System.Drawing.Point(49, 28);
+            this.Txt_Top.Location = new System.Drawing.Point(72, 28);
             this.Txt_Top.Name = "Txt_Top";
             this.Txt_Top.Size = new System.Drawing.Size(60, 20);
             this.Txt_Top.TabIndex = 5;
@@ -393,7 +395,7 @@ namespace Ctrl_GraphWindow
             this.Grp_Markers.Controls.Add(this.Cmb_MarkerStyle);
             this.Grp_Markers.Controls.Add(this.Lbl_MarkerStyle);
             this.Grp_Markers.Enabled = false;
-            this.Grp_Markers.Location = new System.Drawing.Point(11, 293);
+            this.Grp_Markers.Location = new System.Drawing.Point(11, 325);
             this.Grp_Markers.Name = "Grp_Markers";
             this.Grp_Markers.Size = new System.Drawing.Size(563, 76);
             this.Grp_Markers.TabIndex = 4;
@@ -492,7 +494,7 @@ namespace Ctrl_GraphWindow
             this.Grp_Trace.Controls.Add(this.Cmb_TraceStyle);
             this.Grp_Trace.Controls.Add(this.Lbl_TraceStyle);
             this.Grp_Trace.Enabled = false;
-            this.Grp_Trace.Location = new System.Drawing.Point(13, 208);
+            this.Grp_Trace.Location = new System.Drawing.Point(11, 240);
             this.Grp_Trace.Name = "Grp_Trace";
             this.Grp_Trace.Size = new System.Drawing.Size(561, 79);
             this.Grp_Trace.TabIndex = 3;
@@ -502,7 +504,7 @@ namespace Ctrl_GraphWindow
             // Chk_TraceVisible
             // 
             this.Chk_TraceVisible.AutoSize = true;
-            this.Chk_TraceVisible.Location = new System.Drawing.Point(211, 51);
+            this.Chk_TraceVisible.Location = new System.Drawing.Point(218, 51);
             this.Chk_TraceVisible.Name = "Chk_TraceVisible";
             this.Chk_TraceVisible.Size = new System.Drawing.Size(56, 17);
             this.Chk_TraceVisible.TabIndex = 8;
@@ -514,7 +516,7 @@ namespace Ctrl_GraphWindow
             // 
             this.Pic_TraceColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Pic_TraceColor.Enabled = false;
-            this.Pic_TraceColor.Location = new System.Drawing.Point(174, 49);
+            this.Pic_TraceColor.Location = new System.Drawing.Point(181, 49);
             this.Pic_TraceColor.Name = "Pic_TraceColor";
             this.Pic_TraceColor.Size = new System.Drawing.Size(20, 20);
             this.Pic_TraceColor.TabIndex = 7;
@@ -525,7 +527,7 @@ namespace Ctrl_GraphWindow
             // 
             this.Lbl_TraceColor.AutoSize = true;
             this.Lbl_TraceColor.Enabled = false;
-            this.Lbl_TraceColor.Location = new System.Drawing.Point(115, 52);
+            this.Lbl_TraceColor.Location = new System.Drawing.Point(122, 52);
             this.Lbl_TraceColor.Name = "Lbl_TraceColor";
             this.Lbl_TraceColor.Size = new System.Drawing.Size(53, 13);
             this.Lbl_TraceColor.TabIndex = 6;
@@ -534,7 +536,7 @@ namespace Ctrl_GraphWindow
             // Txt_TraceWidth
             // 
             this.Txt_TraceWidth.Enabled = false;
-            this.Txt_TraceWidth.Location = new System.Drawing.Point(65, 49);
+            this.Txt_TraceWidth.Location = new System.Drawing.Point(72, 49);
             this.Txt_TraceWidth.Name = "Txt_TraceWidth";
             this.Txt_TraceWidth.Size = new System.Drawing.Size(44, 20);
             this.Txt_TraceWidth.TabIndex = 5;
@@ -553,7 +555,7 @@ namespace Ctrl_GraphWindow
             // 
             this.Cmb_DrawingMode.Enabled = false;
             this.Cmb_DrawingMode.FormattingEnabled = true;
-            this.Cmb_DrawingMode.Location = new System.Drawing.Point(258, 22);
+            this.Cmb_DrawingMode.Location = new System.Drawing.Point(265, 22);
             this.Cmb_DrawingMode.Name = "Cmb_DrawingMode";
             this.Cmb_DrawingMode.Size = new System.Drawing.Size(97, 21);
             this.Cmb_DrawingMode.TabIndex = 3;
@@ -562,7 +564,7 @@ namespace Ctrl_GraphWindow
             // 
             this.Lbl_DrawingMode.AutoSize = true;
             this.Lbl_DrawingMode.Enabled = false;
-            this.Lbl_DrawingMode.Location = new System.Drawing.Point(177, 25);
+            this.Lbl_DrawingMode.Location = new System.Drawing.Point(184, 25);
             this.Lbl_DrawingMode.Name = "Lbl_DrawingMode";
             this.Lbl_DrawingMode.Size = new System.Drawing.Size(75, 13);
             this.Lbl_DrawingMode.TabIndex = 2;
@@ -572,7 +574,7 @@ namespace Ctrl_GraphWindow
             // 
             this.Cmb_TraceStyle.Enabled = false;
             this.Cmb_TraceStyle.FormattingEnabled = true;
-            this.Cmb_TraceStyle.Location = new System.Drawing.Point(65, 22);
+            this.Cmb_TraceStyle.Location = new System.Drawing.Point(72, 22);
             this.Cmb_TraceStyle.Name = "Cmb_TraceStyle";
             this.Cmb_TraceStyle.Size = new System.Drawing.Size(106, 21);
             this.Cmb_TraceStyle.TabIndex = 1;
@@ -589,6 +591,8 @@ namespace Ctrl_GraphWindow
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.Txt_Description);
+            this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.Chk_SerieVisible);
             this.groupBox1.Controls.Add(this.Txt_Unit);
             this.groupBox1.Controls.Add(this.label3);
@@ -596,15 +600,31 @@ namespace Ctrl_GraphWindow
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(11, 36);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(563, 76);
+            this.groupBox1.Size = new System.Drawing.Size(563, 108);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Title";
             // 
+            // Txt_Description
+            // 
+            this.Txt_Description.Location = new System.Drawing.Point(72, 74);
+            this.Txt_Description.Name = "Txt_Description";
+            this.Txt_Description.Size = new System.Drawing.Size(485, 20);
+            this.Txt_Description.TabIndex = 6;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 77);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(60, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Description";
+            // 
             // Chk_SerieVisible
             // 
             this.Chk_SerieVisible.AutoSize = true;
-            this.Chk_SerieVisible.Location = new System.Drawing.Point(115, 50);
+            this.Chk_SerieVisible.Location = new System.Drawing.Point(138, 50);
             this.Chk_SerieVisible.Name = "Chk_SerieVisible";
             this.Chk_SerieVisible.Size = new System.Drawing.Size(56, 17);
             this.Chk_SerieVisible.TabIndex = 4;
@@ -614,7 +634,7 @@ namespace Ctrl_GraphWindow
             // 
             // Txt_Unit
             // 
-            this.Txt_Unit.Location = new System.Drawing.Point(49, 48);
+            this.Txt_Unit.Location = new System.Drawing.Point(72, 48);
             this.Txt_Unit.Name = "Txt_Unit";
             this.Txt_Unit.Size = new System.Drawing.Size(60, 20);
             this.Txt_Unit.TabIndex = 3;
@@ -630,9 +650,9 @@ namespace Ctrl_GraphWindow
             // 
             // Txt_Label
             // 
-            this.Txt_Label.Location = new System.Drawing.Point(49, 22);
+            this.Txt_Label.Location = new System.Drawing.Point(72, 22);
             this.Txt_Label.Name = "Txt_Label";
-            this.Txt_Label.Size = new System.Drawing.Size(508, 20);
+            this.Txt_Label.Size = new System.Drawing.Size(485, 20);
             this.Txt_Label.TabIndex = 1;
             // 
             // label2
@@ -702,6 +722,18 @@ namespace Ctrl_GraphWindow
             this.Grid_Enums.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.Grid_Enums.Size = new System.Drawing.Size(562, 457);
             this.Grid_Enums.TabIndex = 1;
+            // 
+            // ColEnumValue
+            // 
+            this.ColEnumValue.HeaderText = "Value";
+            this.ColEnumValue.Name = "ColEnumValue";
+            this.ColEnumValue.Width = 155;
+            // 
+            // ColEnumText
+            // 
+            this.ColEnumText.HeaderText = "Text";
+            this.ColEnumText.Name = "ColEnumText";
+            this.ColEnumText.Width = 400;
             // 
             // TS_Enums
             // 
@@ -1086,6 +1118,12 @@ namespace Ctrl_GraphWindow
             this.Grid_VertGridCustomValues.Size = new System.Drawing.Size(197, 152);
             this.Grid_VertGridCustomValues.TabIndex = 1;
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Value";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 170;
+            // 
             // TS_VertGridCustomValues
             // 
             this.TS_VertGridCustomValues.Dock = System.Windows.Forms.DockStyle.Left;
@@ -1366,6 +1404,12 @@ namespace Ctrl_GraphWindow
             this.Grid_HorzGridCustomValues.Size = new System.Drawing.Size(197, 151);
             this.Grid_HorzGridCustomValues.TabIndex = 1;
             // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Value";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 170;
+            // 
             // TS_HorzGridCustomValues
             // 
             this.TS_HorzGridCustomValues.Dock = System.Windows.Forms.DockStyle.Left;
@@ -1568,30 +1612,6 @@ namespace Ctrl_GraphWindow
             this.Ctrl_RefLines.Name = "Ctrl_RefLines";
             this.Ctrl_RefLines.Size = new System.Drawing.Size(581, 568);
             this.Ctrl_RefLines.TabIndex = 0;
-            // 
-            // ColEnumValue
-            // 
-            this.ColEnumValue.HeaderText = "Value";
-            this.ColEnumValue.Name = "ColEnumValue";
-            this.ColEnumValue.Width = 155;
-            // 
-            // ColEnumText
-            // 
-            this.ColEnumText.HeaderText = "Text";
-            this.ColEnumText.Name = "ColEnumText";
-            this.ColEnumText.Width = 400;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Value";
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 170;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "Value";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 170;
             // 
             // Frm_GraphSerieDetailedProperties
             // 
@@ -1801,5 +1821,7 @@ namespace Ctrl_GraphWindow
         private System.Windows.Forms.DataGridViewTextBoxColumn ColEnumText;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.TextBox Txt_Description;
+        private System.Windows.Forms.Label label8;
     }
 }
