@@ -1102,6 +1102,8 @@ namespace Ctrl_GraphWindow
                         GW_DataChannel oChan = new GW_DataChannel(SamplingMode.MultipleRates);
 
                         //Read channel properties
+                        oChan.KeyId = int.Parse(xChan.Attributes["ChanId"].Value);
+
                         xElemChild = xChan.SelectSingleNode("ChannelName");
                         oChan.Name = xElemChild.InnerText;
 
@@ -1136,11 +1138,8 @@ namespace Ctrl_GraphWindow
                         {
                             SerieSample sSample = new SerieSample();
 
-                            xElemChild = xSerieSample.SelectSingleNode("SampleTime");
-                            sSample.SampleTime = double.Parse(xElemChild.InnerText);
-
-                            xElemChild = xSerieSample.SelectSingleNode("SampleValue");
-                            sSample.SampleValue = double.Parse(xElemChild.InnerText);
+                            sSample.SampleTime = double.Parse(xSerieSample.Attributes["ST"].Value);
+                            sSample.SampleValue = double.Parse(xSerieSample.InnerText);
 
                             oChan.Samples.Add(sSample);
 
@@ -1230,17 +1229,26 @@ namespace Ctrl_GraphWindow
 
                 #endregion
 
-                #region XML Data files channels
+                #region XML Data files channels properties
 
                 //Write all data channels
                 xChannels = oXDoc.CreateElement("DataFileChannels");
                 xDataFile.AppendChild(xChannels);
+
+                int ChanId = 0;
 
                 foreach(GW_DataChannel oChan in Channels)
                 {
                     //Channel properties
                     xChan = oXDoc.CreateElement("DataChannel");
 
+                    oChan.KeyId = ChanId;
+                    ChanId++;
+
+                    xAtr = oXDoc.CreateAttribute("ChanId");
+                    xAtr.Value = ChanId.ToString();
+                    xChan.Attributes.Append(xAtr);
+                    
                     xElemChild = oXDoc.CreateElement("ChannelName");
                     xElemChild.InnerText = oChan.Name;
                     xChan.AppendChild(xElemChild);
@@ -1272,18 +1280,17 @@ namespace Ctrl_GraphWindow
 
                     foreach (SerieSample sSample in oChan.Samples)
                     {
-                        xElemParent = oXDoc.CreateElement("ChannelSample");
-                        xSamples.AppendChild(xElemParent);
+                        xElemChild = oXDoc.CreateElement("Sample");
 
-                        xElemChild = oXDoc.CreateElement("SampleTime");
-                        xElemChild.InnerText = sSample.SampleTime.ToString();
-                        xElemParent.AppendChild(xElemChild);
+                        xAtr = oXDoc.CreateAttribute("ST");
+                        xAtr.Value = sSample.SampleTime.ToString("F3");
+                        xElemChild.Attributes.Append(xAtr);
 
-                        xElemChild = oXDoc.CreateElement("SampleValue");
                         xElemChild.InnerText = sSample.SampleValue.ToString();
-                        xElemParent.AppendChild(xElemChild);
-                    }
 
+                        xSamples.AppendChild(xElemChild);
+                    }
+                   
                     xChannels.AppendChild(xChan);
                 }
 
