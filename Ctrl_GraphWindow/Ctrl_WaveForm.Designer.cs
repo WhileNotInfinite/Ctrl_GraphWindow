@@ -127,9 +127,12 @@ namespace Ctrl_GraphWindow
             this.TSL_PlotLast = new System.Windows.Forms.ToolStripLabel();
             this.TSL_PlotAvg = new System.Windows.Forms.ToolStripLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.Ctrl_ChannelList = new Ctrl_GraphWindow.Ctrl_GW_ChannelList();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.Cmd_ZoomYPosition = new System.Windows.Forms.Button();
             this.Cmd_ZoomXPosition = new System.Windows.Forms.Button();
+            this.Pic_Graphic = new Ctrl_GraphWindow.GW_SelectablePictureBox();
+            this.Pic_GraphFrame = new Ctrl_GraphWindow.GW_SelectablePictureBox();
             this.Grid_Legend = new System.Windows.Forms.DataGridView();
             this.Legend_Col_Label = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Legend_Col_Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -223,9 +226,6 @@ namespace Ctrl_GraphWindow
             this.TSMI_Ctxt_Legend_ShowTitles = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_Ctxt_Legend_ShowGridLines = new System.Windows.Forms.ToolStripMenuItem();
             this.Dlg_Save_Snapshot = new System.Windows.Forms.SaveFileDialog();
-            this.Ctrl_ChannelList = new Ctrl_GraphWindow.Ctrl_GW_ChannelList();
-            this.Pic_Graphic = new Ctrl_GraphWindow.GW_SelectablePictureBox();
-            this.Pic_GraphFrame = new Ctrl_GraphWindow.GW_SelectablePictureBox();
             this.TB_Graph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -235,12 +235,12 @@ namespace Ctrl_GraphWindow
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Grid_Legend)).BeginInit();
             this.Context_PicGraphic_ZoomStats.SuspendLayout();
             this.Context_PicGraph_Options.SuspendLayout();
             this.Context_Legend.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).BeginInit();
             this.SuspendLayout();
             // 
             // TB_Graph
@@ -883,6 +883,16 @@ namespace Ctrl_GraphWindow
             this.splitContainer1.SplitterDistance = 89;
             this.splitContainer1.TabIndex = 1;
             // 
+            // Ctrl_ChannelList
+            // 
+            this.Ctrl_ChannelList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Ctrl_ChannelList.Location = new System.Drawing.Point(2, 3);
+            this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
+            this.Ctrl_ChannelList.Size = new System.Drawing.Size(84, 368);
+            this.Ctrl_ChannelList.TabIndex = 0;
+            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -938,6 +948,41 @@ namespace Ctrl_GraphWindow
             this.Cmd_ZoomXPosition.MouseLeave += new System.EventHandler(this.Cmd_ZoomXPositionMouseLeave);
             this.Cmd_ZoomXPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseMove);
             this.Cmd_ZoomXPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cmd_ZoomXPositionMouseUp);
+            // 
+            // Pic_Graphic
+            // 
+            this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.Pic_Graphic.Location = new System.Drawing.Point(110, 41);
+            this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
+            this.Pic_Graphic.Name = "Pic_Graphic";
+            this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
+            this.Pic_Graphic.TabIndex = 4;
+            this.Pic_Graphic.TabStop = false;
+            this.Pic_Graphic.SizeChanged += new System.EventHandler(this.Pic_Graphic_SizeChanged);
+            this.Pic_Graphic.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragDrop);
+            this.Pic_Graphic.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragEnter);
+            this.Pic_Graphic.DoubleClick += new System.EventHandler(this.Pic_Graphic_DoubleClick);
+            this.Pic_Graphic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseDown);
+            this.Pic_Graphic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseMove);
+            this.Pic_Graphic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseUp);
+            this.Pic_Graphic.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Pic_GraphicPreviewKeyDown);
+            // 
+            // Pic_GraphFrame
+            // 
+            this.Pic_GraphFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Pic_GraphFrame.BackColor = System.Drawing.Color.Black;
+            this.Pic_GraphFrame.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
+            this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
+            this.Pic_GraphFrame.Name = "Pic_GraphFrame";
+            this.Pic_GraphFrame.Size = new System.Drawing.Size(590, 373);
+            this.Pic_GraphFrame.TabIndex = 3;
+            this.Pic_GraphFrame.TabStop = false;
+            this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
+            this.Pic_GraphFrame.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragDrop);
+            this.Pic_GraphFrame.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragEnter);
             // 
             // Grid_Legend
             // 
@@ -1046,7 +1091,6 @@ namespace Ctrl_GraphWindow
             this.Legend_Col_RefValue.ReadOnly = true;
             this.Legend_Col_RefValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Legend_Col_RefValue.Visible = false;
-            this.Legend_Col_RefValue.Width = 5;
             // 
             // Legend_Col_RefDiff
             // 
@@ -1058,7 +1102,6 @@ namespace Ctrl_GraphWindow
             this.Legend_Col_RefDiff.ReadOnly = true;
             this.Legend_Col_RefDiff.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Legend_Col_RefDiff.Visible = false;
-            this.Legend_Col_RefDiff.Width = 5;
             // 
             // Legend_Col_RefDiffPerc
             // 
@@ -1070,7 +1113,6 @@ namespace Ctrl_GraphWindow
             this.Legend_Col_RefDiffPerc.ReadOnly = true;
             this.Legend_Col_RefDiffPerc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Legend_Col_RefDiffPerc.Visible = false;
-            this.Legend_Col_RefDiffPerc.Width = 5;
             // 
             // Legend_Col_RefGradient
             // 
@@ -1082,7 +1124,6 @@ namespace Ctrl_GraphWindow
             this.Legend_Col_RefGradient.ReadOnly = true;
             this.Legend_Col_RefGradient.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Legend_Col_RefGradient.Visible = false;
-            this.Legend_Col_RefGradient.Width = 5;
             // 
             // Dlg_OpenData
             // 
@@ -1728,51 +1769,6 @@ namespace Ctrl_GraphWindow
             // 
             this.Dlg_Save_Snapshot.Filter = "Bitmap image|*.bmp";
             // 
-            // Ctrl_ChannelList
-            // 
-            this.Ctrl_ChannelList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Ctrl_ChannelList.Location = new System.Drawing.Point(2, 3);
-            this.Ctrl_ChannelList.Name = "Ctrl_ChannelList";
-            this.Ctrl_ChannelList.Size = new System.Drawing.Size(84, 368);
-            this.Ctrl_ChannelList.TabIndex = 0;
-            // 
-            // Pic_Graphic
-            // 
-            this.Pic_Graphic.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Pic_Graphic.Location = new System.Drawing.Point(110, 41);
-            this.Pic_Graphic.Margin = new System.Windows.Forms.Padding(0);
-            this.Pic_Graphic.Name = "Pic_Graphic";
-            this.Pic_Graphic.Size = new System.Drawing.Size(379, 255);
-            this.Pic_Graphic.TabIndex = 4;
-            this.Pic_Graphic.TabStop = false;
-            this.Pic_Graphic.SizeChanged += new System.EventHandler(this.Pic_Graphic_SizeChanged);
-            this.Pic_Graphic.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragDrop);
-            this.Pic_Graphic.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphicDragEnter);
-            this.Pic_Graphic.DoubleClick += new System.EventHandler(this.Pic_Graphic_DoubleClick);
-            this.Pic_Graphic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseDown);
-            this.Pic_Graphic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseMove);
-            this.Pic_Graphic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Pic_GraphicMouseUp);
-            this.Pic_Graphic.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Pic_GraphicPreviewKeyDown);
-            // 
-            // Pic_GraphFrame
-            // 
-            this.Pic_GraphFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Pic_GraphFrame.BackColor = System.Drawing.Color.Black;
-            this.Pic_GraphFrame.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Pic_GraphFrame.Location = new System.Drawing.Point(1, 1);
-            this.Pic_GraphFrame.Margin = new System.Windows.Forms.Padding(1);
-            this.Pic_GraphFrame.Name = "Pic_GraphFrame";
-            this.Pic_GraphFrame.Size = new System.Drawing.Size(590, 373);
-            this.Pic_GraphFrame.TabIndex = 3;
-            this.Pic_GraphFrame.TabStop = false;
-            this.Pic_GraphFrame.SizeChanged += new System.EventHandler(this.Pic_GraphFrameSizeChanged);
-            this.Pic_GraphFrame.DragDrop += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragDrop);
-            this.Pic_GraphFrame.DragEnter += new System.Windows.Forms.DragEventHandler(this.Pic_GraphFrameDragEnter);
-            // 
             // Ctrl_WaveForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1792,12 +1788,12 @@ namespace Ctrl_GraphWindow
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Grid_Legend)).EndInit();
             this.Context_PicGraphic_ZoomStats.ResumeLayout(false);
             this.Context_PicGraph_Options.ResumeLayout(false);
             this.Context_Legend.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_Graphic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Pic_GraphFrame)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

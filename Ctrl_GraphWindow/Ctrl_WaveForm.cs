@@ -449,6 +449,8 @@ namespace Ctrl_GraphWindow
             public double Max;
             public double Avg;
 
+            public string Description;
+
             #endregion
 
             public LegendItemData()
@@ -2954,6 +2956,12 @@ namespace Ctrl_GraphWindow
 
                         oCell.Tag = LegendData.ItemProperties.KeyId;
                         oCell.Value = LegendData.ItemProperties.Name;
+
+                        if (!(LegendData.Description.Equals("")))
+                        {
+                            oCell.ToolTipText = LegendData.Description;
+                        }
+
                         break;
 
                     case LEGEND_VALUE_COL:
@@ -3422,6 +3430,7 @@ namespace Ctrl_GraphWindow
                                 oLegendData.Min = oSerieData.Min;
                                 oLegendData.Max = oSerieData.Max;
                                 oLegendData.Avg = oSerieData.Avg;
+                                oLegendData.Description = oSerieProps.Description;
 
                                 this.BeginInvoke(this.AddLegendItemDelegate, new object[] { oLegendData });
                             }
