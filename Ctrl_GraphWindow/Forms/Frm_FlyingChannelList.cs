@@ -44,13 +44,17 @@ namespace Ctrl_GraphWindow
         /// Default constructor
         /// </summary>
         /// <param name="Channels">List of channels</param>
+        /// <param name="Descriptions">List of channels descriptions</param>
         /// <param name="Caller">Reference to the Frm_GraphPropertiesEdtion calling the Frm_FlyingChannelList</param>
-        public Frm_FlyingChannelList(string[] Channels, Frm_GraphPropertiesEdtion Caller)
+        public Frm_FlyingChannelList(string[] Channels, string[] Descriptions, Frm_GraphPropertiesEdtion Caller)
         {
             InitializeComponent();
 
             FrmCaller = Caller;
+
             Ctrl_ChanList.ChannelList = Channels;
+            Ctrl_ChanList.ChannelDescriptions = Descriptions;
+
             Ctrl_ChanList.Show_ChannelList();
         }
 

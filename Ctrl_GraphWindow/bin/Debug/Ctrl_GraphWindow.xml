@@ -1692,6 +1692,11 @@
             List of channels
             </summary>
         </member>
+        <member name="F:Ctrl_GraphWindow.Ctrl_GW_ChannelList.ChannelDescriptions">
+            <summary>
+            Descriptions of channels contained in the channel list
+            </summary>
+        </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.#ctor">
             <summary>
             Default constructor
@@ -1712,6 +1717,13 @@
             Add a channel name to the current Ctrl_GW_ChannelList list of channel names
             </summary>
             <param name="ChannelName">Name of the channel to add in the list</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.Add_ChannelNameWithDescription(System.String,System.String)">
+            <summary>
+            Add a channel name and its description to the current Ctrl_GW_ChannelList list of channel names
+            </summary>
+            <param name="ChannelName">Name of the channel to add in the list</param>
+            <param name="ChannelDescription">Description of the channel to add in the list</param>
         </member>
         <member name="F:Ctrl_GraphWindow.Ctrl_GW_ChannelList.components">
             <summary> 
@@ -2002,11 +2014,12 @@
             Clear the channel list of the current Ctrl_WaveForm
             </summary>
         </member>
-        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Add_ChannelToChannelList(System.String)">
+        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Add_ChannelToChannelList(System.String,System.String)">
             <summary>
             Add a channel item to the channel list of the current Ctrl_WaveForm object
             </summary>
             <param name="ChannelName">Name of the channel to be added</param>
+            <param name="ChannelDescription">Description of the channel to add in the list</param>
         </member>
         <member name="F:Ctrl_GraphWindow.Ctrl_WaveForm.components">
             <summary>
@@ -2031,11 +2044,12 @@
             Flying channel list form for the graph properties edition form
             </summary>
         </member>
-        <member name="M:Ctrl_GraphWindow.Frm_FlyingChannelList.#ctor(System.String[],Ctrl_GraphWindow.Frm_GraphPropertiesEdtion)">
+        <member name="M:Ctrl_GraphWindow.Frm_FlyingChannelList.#ctor(System.String[],System.String[],Ctrl_GraphWindow.Frm_GraphPropertiesEdtion)">
             <summary>
             Default constructor
             </summary>
             <param name="Channels">List of channels</param>
+            <param name="Descriptions">List of channels descriptions</param>
             <param name="Caller">Reference to the Frm_GraphPropertiesEdtion calling the Frm_FlyingChannelList</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Frm_FlyingChannelList.Send_NameListToPropertiesForm(System.String[])">
@@ -2095,12 +2109,13 @@
             Graphic properties edition form
             </summary>
         </member>
-        <member name="M:Ctrl_GraphWindow.Frm_GraphPropertiesEdtion.#ctor(Ctrl_GraphWindow.Ctrl_WaveForm,System.String[])">
+        <member name="M:Ctrl_GraphWindow.Frm_GraphPropertiesEdtion.#ctor(Ctrl_GraphWindow.Ctrl_WaveForm,System.String[],System.String[])">
             <summary>
             Default constructor
             </summary>
             <param name="Caller">Form calling the Frm_GraphPropertiesEdtion</param>
             <param name="DataChannelList">List of channels of the data loaded</param>
+            <param name="DataChannelDescriptions">Descriptions of channels of the channel list</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Frm_GraphPropertiesEdtion.Add_SerieItems(System.String[])">
             <summary>

@@ -79,7 +79,8 @@ namespace Ctrl_GraphWindow
         /// </summary>
         /// <param name="Caller">Form calling the Frm_GraphPropertiesEdtion</param>
         /// <param name="DataChannelList">List of channels of the data loaded</param>
-        public Frm_GraphPropertiesEdtion(Ctrl_WaveForm Caller, string[] DataChannelList)
+        /// <param name="DataChannelDescriptions">Descriptions of channels of the channel list</param>
+        public Frm_GraphPropertiesEdtion(Ctrl_WaveForm Caller, string[] DataChannelList, string[] DataChannelDescriptions)
         {
             InitializeComponent();
 
@@ -94,7 +95,7 @@ namespace Ctrl_GraphWindow
             SerieClipBoard = null;
 
             //Flying and contextual channel list init
-            FlyingChannelList = new Frm_FlyingChannelList(DataChannelList, this);
+            FlyingChannelList = new Frm_FlyingChannelList(DataChannelList, DataChannelDescriptions, this);
 			oContextChanList = null;
             
             Ctrl_AbcisseRefLines.FORM_TITLE = FORM_NAME;

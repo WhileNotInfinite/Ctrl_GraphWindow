@@ -39,7 +39,12 @@ namespace Ctrl_GraphWindow
         /// <summary>
         /// List of channels
         /// </summary>
-        public  string[] ChannelList;
+        public string[] ChannelList;
+
+        /// <summary>
+        /// Descriptions of channels contained in the channel list
+        /// </summary>
+        public string[] ChannelDescriptions;
 
         #endregion
 
@@ -129,12 +134,21 @@ namespace Ctrl_GraphWindow
 
             if (!(ChannelList == null))
             {
+                int i = 0;
+
                 foreach (string sItem in ChannelList)
                 {
                     if ((sItem.ToLower().Contains(Filter.ToLower())) || (Filter.Equals("")))
                     {
-                        LV_Channels.Items.Add(sItem, 0);
+                        ListViewItem It = LV_Channels.Items.Add(sItem, 0);
+
+                        if(!(ChannelDescriptions[i].Equals("")))
+                        {
+                            It.ToolTipText = ChannelDescriptions[i];
+                        }
                     }
+
+                    i++;
                 }
 
                 if(LV_Channels.Items.Count>0)
@@ -176,6 +190,22 @@ namespace Ctrl_GraphWindow
             }
         }
 
+        private string Get_ChannelDescription(string ChannelName)
+        {
+            if (!(ChannelList == null))
+            {
+                for(int i=0;i< ChannelList.Length;i++)
+                {
+                    if(ChannelList[i].Equals(ChannelName))
+                    {
+                        return (ChannelDescriptions[i]);
+                    }
+                }
+            }
+
+            return ("");
+        }
+
         #endregion
 
         #region Public methodes
@@ -206,16 +236,38 @@ namespace Ctrl_GraphWindow
             if(!(ChannelName.Equals("")))
             {
                 List<string> TmpChanList = new List<string>();
+                List<string> TmpChanDesc = new List<string>();
 
-                foreach (string Name in ChannelList)
-                {
-                    TmpChanList.Add(Name);
-                }
+                //TODO: Remove old code
+                //foreach (string Name in ChannelList)
+                //{
+                //    TmpChanList.Add(Name);
+                //}
+
+                TmpChanList.AddRange(ChannelList);
+                TmpChanDesc.AddRange(ChannelDescriptions);
 
                 TmpChanList.Add(ChannelName);
+                TmpChanDesc.Add("");
+
                 ChannelList = TmpChanList.ToArray();
+                ChannelDescriptions = TmpChanDesc.ToArray();
 
                 Fill_ChannelList(Cmb_Filter.Text);
+            }
+        }
+
+        /// <summary>
+        /// Add a channel name and its description to the current Ctrl_GW_ChannelList list of channel names
+        /// </summary>
+        /// <param name="ChannelName">Name of the channel to add in the list</param>
+        /// <param name="ChannelDescription">Description of the channel to add in the list</param>
+        public void Add_ChannelNameWithDescription(string ChannelName, string ChannelDescription)
+        {
+            if (!(ChannelName.Equals("")))
+            {
+                Add_ChannelName(ChannelName);
+                ChannelDescriptions[ChannelDescriptions.Length - 1] = ChannelDescription;
             }
         }
 

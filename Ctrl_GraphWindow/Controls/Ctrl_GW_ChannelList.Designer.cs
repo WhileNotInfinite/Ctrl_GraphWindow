@@ -68,6 +68,7 @@ namespace Ctrl_GraphWindow
             this.LV_Channels.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.LV_Channels.Location = new System.Drawing.Point(3, 3);
             this.LV_Channels.Name = "LV_Channels";
+            this.LV_Channels.ShowItemToolTips = true;
             this.LV_Channels.Size = new System.Drawing.Size(168, 318);
             this.LV_Channels.SmallImageList = this.Img_LV_Channel;
             this.LV_Channels.Sorting = System.Windows.Forms.SortOrder.Ascending;

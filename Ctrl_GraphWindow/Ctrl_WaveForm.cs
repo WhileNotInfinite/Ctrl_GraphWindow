@@ -6836,20 +6836,24 @@ namespace Ctrl_GraphWindow
         private void Edit_GraphProperties()
         {
             string[] ChannelNames = null;
+            string[] ChannelDesc = null;
 
             if (!(WholeDataFile == null))
             {
                 if (WholeDataFile.Channels.Count > 0)
                 {
                     ChannelNames = new string[WholeDataFile.Channels.Count];
+                    ChannelDesc = new string[WholeDataFile.Channels.Count];
+
                     for (int i = 0; i < WholeDataFile.Channels.Count; i++)
                     {
                         ChannelNames[i] = WholeDataFile.Channels[i].Name;
+                        ChannelDesc[i] = WholeDataFile.Channels[i].Description;
                     }
                 }
             }
 
-            Frm_GraphPropertiesEdtion Frm = new Frm_GraphPropertiesEdtion(this, ChannelNames);
+            Frm_GraphPropertiesEdtion Frm = new Frm_GraphPropertiesEdtion(this, ChannelNames, ChannelDesc);
             Frm.Show();
         }
 
@@ -7742,13 +7746,17 @@ namespace Ctrl_GraphWindow
             if (!(WholeDataFile == null))
             {
                 string[] ChanList = new string[WholeDataFile.Channels.Count];
+                string[] ChanDesc = new string[WholeDataFile.Channels.Count];
 
                 for (int i = 0; i < WholeDataFile.Channels.Count; i++)
                 {
                     ChanList[i] = WholeDataFile.Channels[i].Name;
+                    ChanDesc[i] = WholeDataFile.Channels[i].Description;
                 }
 
                 Ctrl_ChannelList.ChannelList = ChanList;
+                Ctrl_ChannelList.ChannelDescriptions = ChanDesc;
+
                 Ctrl_ChannelList.Show_ChannelList();
             }
         }
@@ -8124,9 +8132,13 @@ namespace Ctrl_GraphWindow
         /// Add a channel item to the channel list of the current Ctrl_WaveForm object
         /// </summary>
         /// <param name="ChannelName">Name of the channel to be added</param>
-        public void Add_ChannelToChannelList(string ChannelName)
+        /// <param name="ChannelDescription">Description of the channel to add in the list</param>
+        public void Add_ChannelToChannelList(string ChannelName, string ChannelDescription)
         {
-            Ctrl_ChannelList.Add_ChannelName(ChannelName);
+            //TODO:Remove old code
+            //Ctrl_ChannelList.Add_ChannelName(ChannelName);
+
+            Ctrl_ChannelList.Add_ChannelNameWithDescription(ChannelName, ChannelDescription);
         }
 
         #endregion
