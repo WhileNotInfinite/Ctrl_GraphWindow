@@ -273,7 +273,9 @@
         <member name="P:Ctrl_GraphWindow.GW_DataFile.DataStartTime">
             <summary>Data file start timestamp</summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:Ctrl_GraphWindow.GW_DataFile.UserComment" -->
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.UserComment">
+            <summary>Data file user comments</summary>
+        </member>
         <member name="F:Ctrl_GraphWindow.GW_DataFile.DataSamplingMode">
             <summary>
             Data file sampling mode
@@ -328,7 +330,12 @@
             <param name="HeaderOnly">Read only data file header flag</param>
             <returns>Reading error flag: True = No Error / False = Error</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Ctrl_GraphWindow.GW_DataFile.Write_XmlDataFile(System.String)" -->
+        <member name="M:Ctrl_GraphWindow.GW_DataFile.Write_XmlDataFile(System.String)">
+            <summary>
+            Write the current data file object in XML format
+            </summary>
+            <param name="fPath">Path of the XML file to write</param>
+        </member>
         <member name="M:Ctrl_GraphWindow.GW_DataFile.Get_DataChannel(System.String)">
             <summary>
             Return the GW_DataChannel item corresponding to the name given as argument

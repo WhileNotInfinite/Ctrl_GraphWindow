@@ -845,7 +845,7 @@ namespace Ctrl_GraphWindow
         /// <summary>Data file start timestamp</summary>
         public DateTime DataStartTime { get; set; }
 
-        /// <summary>Data file user comments<summary>
+        /// <summary>Data file user comments</summary>
         public string UserComment { get; set; }
 
         #endregion
@@ -1172,7 +1172,7 @@ namespace Ctrl_GraphWindow
         /// <summary>
         /// Write the current data file object in XML format
         /// </summary>
-        /// <param name="fPath">Path of the XML file to write<</param>
+        /// <param name="fPath">Path of the XML file to write</param>
         public void Write_XmlDataFile(string fPath)
         {
             XmlElement xDataFile, xHeader, xChannels, xChan, xSamples;

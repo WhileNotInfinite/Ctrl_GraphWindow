@@ -139,7 +139,6 @@ C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctr
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\bin\Debug\Ctrl_GraphWindow.xml
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\bin\Debug\Ctrl_GraphWindow.dll
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\bin\Debug\Ctrl_GraphWindow.pdb
-C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.csprojResolveAssemblyReference.cache
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.Ctrl_GW_ChannelList.resources
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.Ctrl_ReferenceLines.resources
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.Ctrl_WaveForm.resources
@@ -152,3 +151,4 @@ C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctr
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.csproj.GenerateResource.Cache
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.dll
 C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.pdb
+C:\Users\Marti\Documents\Visual Studio 2015\Projects\GitHub\Ctrl_GraphWindow\Ctrl_GraphWindow\obj\Debug\Ctrl_GraphWindow.csprojResolveAssemblyReference.cache
