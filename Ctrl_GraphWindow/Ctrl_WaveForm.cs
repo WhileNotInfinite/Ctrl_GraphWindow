@@ -8144,9 +8144,6 @@ namespace Ctrl_GraphWindow
         /// <param name="ChannelDescription">Description of the channel to add in the list</param>
         public void Add_ChannelToChannelList(string ChannelName, string ChannelDescription)
         {
-            //TODO:Remove old code
-            //Ctrl_ChannelList.Add_ChannelName(ChannelName);
-
             Ctrl_ChannelList.Add_ChannelNameWithDescription(ChannelName, ChannelDescription);
         }
 
