@@ -76,8 +76,10 @@ namespace Ctrl_GraphWindow
             this.LV_Channels.UseCompatibleStateImageBehavior = false;
             this.LV_Channels.View = System.Windows.Forms.View.Details;
             this.LV_Channels.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.LV_Channels_ItemDrag);
+            this.LV_Channels.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.LV_Channels_ItemSelectionChanged);
             this.LV_Channels.DragOver += new System.Windows.Forms.DragEventHandler(this.LV_Channels_DragOver);
             this.LV_Channels.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_Channels_KeyDown);
+            this.LV_Channels.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LV_Channels_MouseClick);
             this.LV_Channels.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LV_Channels_MouseDoubleClick);
             // 
             // columnHeader1

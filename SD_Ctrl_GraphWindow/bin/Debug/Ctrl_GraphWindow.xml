@@ -71,6 +71,18 @@
             Number of data item contained within the current GW_DataChannel object whether actual sampling mode is a SingleRate or MultipleRates 
             </summary>
         </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.Description">
+            <summary>Description of the data channel</summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.Unit">
+            <summary>Unit of data channel values</summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.GraphicFormat">
+            <summary>Display format of data channel values</summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataChannel.ChannelReferenceLines">
+            <summary>Reference lines of data channel</summary>
+        </member>
         <member name="F:Ctrl_GraphWindow.GW_DataChannel.Name">
             <summary>
             Data channel name
@@ -183,6 +195,45 @@
             </summary>
             <param name="item">The GW_DataChannel to be added to the end of the GW_DataChannelList</param>
         </member>
+        <member name="T:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty">
+            <summary>
+            Graph window XML data file custom property class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.Name">
+            <summary>
+            Name of the current custom property
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.PropertyValue">
+            <summary>
+            Value of the current custom property
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.GetPropertyStringValue">
+            <summary>
+            Returns the value of the current custom property into a string value
+            </summary>
+            <returns>Value of the current custom property into a string value</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.GetPropertyType">
+            <summary>
+            Returns the type of the current custom property value
+            </summary>
+            <returns>Type of the current custom property value</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_XmlDataFileCustomProperty.ParsePropertyStringValue(System.String,System.String)">
+            <summary>
+            Parse the value of the custom property from a string value
+            </summary>
+            <param name="StringValue">String value to parse</param>
+            <param name="StringType">Type of value to parse</param>
+        </member>
         <member name="T:Ctrl_GraphWindow.GW_DataFile">
             <summary>
             Graph window data file class
@@ -219,6 +270,12 @@
             Maximum step time of the file
             </summary>
         </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.DataStartTime">
+            <summary>Data file start timestamp</summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.GW_DataFile.UserComment">
+            <summary>Data file user comments</summary>
+        </member>
         <member name="F:Ctrl_GraphWindow.GW_DataFile.DataSamplingMode">
             <summary>
             Data file sampling mode
@@ -233,6 +290,9 @@
             <summary>
             Data channels collection of the data file
             </summary>
+        </member>
+        <member name="F:Ctrl_GraphWindow.GW_DataFile.XmlDataFileCustomProperties">
+            <summary>Custom properties of the current data file for XML data file format</summary>
         </member>
         <member name="F:Ctrl_GraphWindow.GW_DataFile.CoordConversionUpdateRequested">
             <summary>
@@ -261,6 +321,20 @@
             <remarks>
             CSV file type: comma separtor ';'
             </remarks>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataFile.Load_XmlDataFile(System.String,System.Boolean)">
+            <summary>
+            Read a XML data file
+            </summary>
+            <param name="fPath">Path of the XML file to read</param>
+            <param name="HeaderOnly">Read only data file header flag</param>
+            <returns>Reading error flag: True = No Error / False = Error</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GW_DataFile.Write_XmlDataFile(System.String)">
+            <summary>
+            Write the current data file object in XML format
+            </summary>
+            <param name="fPath">Path of the XML file to write</param>
         </member>
         <member name="M:Ctrl_GraphWindow.GW_DataFile.Get_DataChannel(System.String)">
             <summary>
@@ -871,6 +945,27 @@
             </summary>
             <param name="Range">Serie value range</param>
         </member>
+        <member name="M:Ctrl_GraphWindow.GraphSerieValueFormat.Get_StringValueFormat">
+            <summary>
+            Returns a string description of the current object
+            </summary>
+            <returns>String description of the current object</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GraphSerieValueFormat.GetSerieValueFormatXmlNode(System.Xml.XmlDocument)">
+            <summary>
+            Return the XML node of the current GraphSerieValueFormat object
+            </summary>
+            <param name="oXDoc">XML document in which the graph serie value format properties XML node will be created</param>
+            <returns>XML node of the current GraphSerieValueFormat object</returns>
+        </member>
+        <member name="M:Ctrl_GraphWindow.GraphSerieValueFormat.SetSerieValueFormatFromXmlNode(System.Xml.XmlNode)">
+            <summary>
+            Read a GraphSerieValueFormat XML node
+            </summary>
+            <param name="xFormat">XML node to read</param>
+            <returns>>Nothing</returns>
+            <remarks>Throw an exception if XML node parsing fails</remarks>
+        </member>
         <member name="T:Ctrl_GraphWindow.GraphSerieMarkProperties">
             <summary>
             Grahic serie marker properties class
@@ -1307,6 +1402,11 @@
             Serie unit
             </summary>
         </member>
+        <member name="F:Ctrl_GraphWindow.GraphSerieProperties.Description">
+            <summary>
+            Serie description comment
+            </summary>
+        </member>
         <member name="F:Ctrl_GraphWindow.GraphSerieProperties.Visible">
             <summary>
             Serie visibility flag
@@ -1529,6 +1629,14 @@
             <param name="xGraphProps">XML node to read</param>
             <returns>Node reading error flag: True = No Error / False = Error</returns>
         </member>
+        <member name="M:Ctrl_GraphWindow.GraphWindowProperties.Get_SerieByName(System.String)">
+            <summary>
+            Return the GraphSerieProperties item corresponding to the serie name given as argument
+            </summary>
+            <param name="SerieName">Name of the serie to retrieve</param>
+            <returns>GraphSerieProperties item corresponding to the serie name given as argument</returns>
+            <remarks>Retun null if the GraphSerieProperties item is not found</remarks>
+        </member>
         <member name="M:Ctrl_GraphWindow.GraphWindowProperties.Get_SerieAtKey(System.Int32)">
             <summary>
             Return the GraphSerieProperties item corresponding to the identification key given as argument
@@ -1597,10 +1705,48 @@
             List of channels
             </summary>
         </member>
+        <member name="F:Ctrl_GraphWindow.Ctrl_GW_ChannelList.ChannelDescriptions">
+            <summary>
+            Descriptions of channels contained in the channel list
+            </summary>
+        </member>
+        <member name="E:Ctrl_GraphWindow.Ctrl_GW_ChannelList.DataChannelClicked">
+            <summary>
+            Data channel clicked event
+            </summary>
+        </member>
+        <member name="E:Ctrl_GraphWindow.Ctrl_GW_ChannelList.DataChannelDoubleClicked">
+            <summary>
+            Data channel double clicked event
+            </summary>
+        </member>
+        <member name="E:Ctrl_GraphWindow.Ctrl_GW_ChannelList.DataChannelSelectionChanged">
+            <summary>
+            Data channel selection changed event
+            </summary>
+        </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.#ctor">
             <summary>
             Default constructor
             </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.OnDataChannelClicked(Ctrl_GraphWindow.ChannelClickEventArgs)">
+            <summary>
+            DataChannelClicked event handler
+            </summary>
+            <param name="e">ChannelClickEventArgs event argument</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.OnDataChannelDoubleClicked(Ctrl_GraphWindow.ChannelClickEventArgs)">
+            <summary>
+            DataChannelDoubleClicked event handler
+            </summary>
+            <param name="e">ChannelClickEventArgs event argument</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.OnDataChannelSelectionChanged(Ctrl_GraphWindow.ChannelSelectionChangedEventArgs)">
+            <summary>
+            DataChannelSelectionChanged event handler
+            </summary>
+            <param name="e">ChannelSelectionChangedEventArgs event argument</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.Show_ChannelList">
             <summary>
@@ -1618,6 +1764,13 @@
             </summary>
             <param name="ChannelName">Name of the channel to add in the list</param>
         </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.Add_ChannelNameWithDescription(System.String,System.String)">
+            <summary>
+            Add a channel name and its description to the current Ctrl_GW_ChannelList list of channel names
+            </summary>
+            <param name="ChannelName">Name of the channel to add in the list</param>
+            <param name="ChannelDescription">Description of the channel to add in the list</param>
+        </member>
         <member name="F:Ctrl_GraphWindow.Ctrl_GW_ChannelList.components">
             <summary> 
             Variable nécessaire au concepteur.
@@ -1633,6 +1786,26 @@
             <summary> 
             Méthode requise pour la prise en charge du concepteur - ne modifiez pas 
             le contenu de cette méthode avec l'éditeur de code.
+            </summary>
+        </member>
+        <member name="T:Ctrl_GraphWindow.ChannelClickEventArgs">
+            <summary>
+            Data channnel click event argument class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.ChannelClickEventArgs.ChannelName">
+            <summary>
+            Name of the data channel that has been clicked
+            </summary>
+        </member>
+        <member name="T:Ctrl_GraphWindow.ChannelSelectionChangedEventArgs">
+            <summary>
+            Data channnel selection changed event argument class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.ChannelSelectionChangedEventArgs.ChannelName">
+            <summary>
+            Name of the data channel that has been clicked
             </summary>
         </member>
         <member name="T:Ctrl_GraphWindow.Ctrl_GW_ContextualChannelList">
@@ -1907,11 +2080,12 @@
             Clear the channel list of the current Ctrl_WaveForm
             </summary>
         </member>
-        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Add_ChannelToChannelList(System.String)">
+        <member name="M:Ctrl_GraphWindow.Ctrl_WaveForm.Add_ChannelToChannelList(System.String,System.String)">
             <summary>
             Add a channel item to the channel list of the current Ctrl_WaveForm object
             </summary>
             <param name="ChannelName">Name of the channel to be added</param>
+            <param name="ChannelDescription">Description of the channel to add in the list</param>
         </member>
         <member name="F:Ctrl_GraphWindow.Ctrl_WaveForm.components">
             <summary>
@@ -1936,11 +2110,12 @@
             Flying channel list form for the graph properties edition form
             </summary>
         </member>
-        <member name="M:Ctrl_GraphWindow.Frm_FlyingChannelList.#ctor(System.String[],Ctrl_GraphWindow.Frm_GraphPropertiesEdtion)">
+        <member name="M:Ctrl_GraphWindow.Frm_FlyingChannelList.#ctor(System.String[],System.String[],Ctrl_GraphWindow.Frm_GraphPropertiesEdtion)">
             <summary>
             Default constructor
             </summary>
             <param name="Channels">List of channels</param>
+            <param name="Descriptions">List of channels descriptions</param>
             <param name="Caller">Reference to the Frm_GraphPropertiesEdtion calling the Frm_FlyingChannelList</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Frm_FlyingChannelList.Send_NameListToPropertiesForm(System.String[])">
@@ -2000,12 +2175,13 @@
             Graphic properties edition form
             </summary>
         </member>
-        <member name="M:Ctrl_GraphWindow.Frm_GraphPropertiesEdtion.#ctor(Ctrl_GraphWindow.Ctrl_WaveForm,System.String[])">
+        <member name="M:Ctrl_GraphWindow.Frm_GraphPropertiesEdtion.#ctor(Ctrl_GraphWindow.Ctrl_WaveForm,System.String[],System.String[])">
             <summary>
             Default constructor
             </summary>
             <param name="Caller">Form calling the Frm_GraphPropertiesEdtion</param>
             <param name="DataChannelList">List of channels of the data loaded</param>
+            <param name="DataChannelDescriptions">Descriptions of channels of the channel list</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Frm_GraphPropertiesEdtion.Add_SerieItems(System.String[])">
             <summary>

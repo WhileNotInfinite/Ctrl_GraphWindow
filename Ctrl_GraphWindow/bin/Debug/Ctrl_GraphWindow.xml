@@ -945,6 +945,12 @@
             </summary>
             <param name="Range">Serie value range</param>
         </member>
+        <member name="M:Ctrl_GraphWindow.GraphSerieValueFormat.Get_StringValueFormat">
+            <summary>
+            Returns a string description of the current object
+            </summary>
+            <returns>String description of the current object</returns>
+        </member>
         <member name="M:Ctrl_GraphWindow.GraphSerieValueFormat.GetSerieValueFormatXmlNode(System.Xml.XmlDocument)">
             <summary>
             Return the XML node of the current GraphSerieValueFormat object
@@ -1704,10 +1710,43 @@
             Descriptions of channels contained in the channel list
             </summary>
         </member>
+        <member name="E:Ctrl_GraphWindow.Ctrl_GW_ChannelList.DataChannelClicked">
+            <summary>
+            Data channel clicked event
+            </summary>
+        </member>
+        <member name="E:Ctrl_GraphWindow.Ctrl_GW_ChannelList.DataChannelDoubleClicked">
+            <summary>
+            Data channel double clicked event
+            </summary>
+        </member>
+        <member name="E:Ctrl_GraphWindow.Ctrl_GW_ChannelList.DataChannelSelectionChanged">
+            <summary>
+            Data channel selection changed event
+            </summary>
+        </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.#ctor">
             <summary>
             Default constructor
             </summary>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.OnDataChannelClicked(Ctrl_GraphWindow.ChannelClickEventArgs)">
+            <summary>
+            DataChannelClicked event handler
+            </summary>
+            <param name="e">ChannelClickEventArgs event argument</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.OnDataChannelDoubleClicked(Ctrl_GraphWindow.ChannelClickEventArgs)">
+            <summary>
+            DataChannelDoubleClicked event handler
+            </summary>
+            <param name="e">ChannelClickEventArgs event argument</param>
+        </member>
+        <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.OnDataChannelSelectionChanged(Ctrl_GraphWindow.ChannelSelectionChangedEventArgs)">
+            <summary>
+            DataChannelSelectionChanged event handler
+            </summary>
+            <param name="e">ChannelSelectionChangedEventArgs event argument</param>
         </member>
         <member name="M:Ctrl_GraphWindow.Ctrl_GW_ChannelList.Show_ChannelList">
             <summary>
@@ -1747,6 +1786,26 @@
             <summary> 
             Méthode requise pour la prise en charge du concepteur - ne modifiez pas 
             le contenu de cette méthode avec l'éditeur de code.
+            </summary>
+        </member>
+        <member name="T:Ctrl_GraphWindow.ChannelClickEventArgs">
+            <summary>
+            Data channnel click event argument class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.ChannelClickEventArgs.ChannelName">
+            <summary>
+            Name of the data channel that has been clicked
+            </summary>
+        </member>
+        <member name="T:Ctrl_GraphWindow.ChannelSelectionChangedEventArgs">
+            <summary>
+            Data channnel selection changed event argument class
+            </summary>
+        </member>
+        <member name="P:Ctrl_GraphWindow.ChannelSelectionChangedEventArgs.ChannelName">
+            <summary>
+            Name of the data channel that has been clicked
             </summary>
         </member>
         <member name="T:Ctrl_GraphWindow.Ctrl_GW_ContextualChannelList">

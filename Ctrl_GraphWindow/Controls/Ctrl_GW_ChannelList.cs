@@ -48,12 +48,34 @@ namespace Ctrl_GraphWindow
 
         #endregion
 
+        #region Public Events
+
+        /// <summary>
+        /// Data channel clicked event
+        /// </summary>
+        public event EventHandler<ChannelClickEventArgs> DataChannelClicked;
+
+        /// <summary>
+        /// Data channel double clicked event
+        /// </summary>
+        public event EventHandler<ChannelClickEventArgs> DataChannelDoubleClicked;
+
+        /// <summary>
+        /// Data channel selection changed event
+        /// </summary>
+        public event EventHandler<ChannelSelectionChangedEventArgs> DataChannelSelectionChanged;
+
+        #endregion
+
         /// <summary>
         /// Default constructor
         /// </summary>
         public Ctrl_GW_ChannelList()
         {
             InitializeComponent();
+
+            ChannelList = new string[0];
+            ChannelDescriptions = new string[0];
         }
 
         #region Control events
@@ -80,6 +102,31 @@ namespace Ctrl_GraphWindow
             if (e.KeyCode.Equals(Keys.Enter))
             {
                 Send_NameListToForm();
+            }
+        }
+
+        private void LV_Channels_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.IsSelected)
+            {
+                ChannelSelectionChangedEventArgs Arg = new ChannelSelectionChangedEventArgs();
+                Arg.ChannelName = e.Item.Text;
+
+                OnDataChannelSelectionChanged(Arg);
+            }
+        }
+
+        private void LV_Channels_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (LV_Channels.SelectedItems != null)
+                {
+                    ChannelClickEventArgs Arg = new ChannelClickEventArgs();
+                    Arg.ChannelName = LV_Channels.SelectedItems[0].Text;
+
+                    OnDataChannelClicked(Arg);
+                }
             }
         }
 
@@ -188,6 +235,16 @@ namespace Ctrl_GraphWindow
             {
             	((Ctrl_WaveForm)this.Parent.Parent.Parent).Add_Series(Create_SelectedItemsNameList());
             }
+            else //Unknown control parent type, generate a data channel double click event
+            {
+                if (!(LV_Channels.SelectedItems == null))
+                {
+                    ChannelClickEventArgs Arg = new ChannelClickEventArgs();
+                    Arg.ChannelName = LV_Channels.SelectedItems[0].Text;
+
+                    OnDataChannelDoubleClicked(Arg);
+                }
+            }
         }
 
         private string Get_ChannelDescription(string ChannelName)
@@ -204,6 +261,49 @@ namespace Ctrl_GraphWindow
             }
 
             return ("");
+        }
+
+        #endregion
+
+        #region Event handling methodes
+
+        /// <summary>
+        /// DataChannelClicked event handler
+        /// </summary>
+        /// <param name="e">ChannelClickEventArgs event argument</param>
+        protected virtual void OnDataChannelClicked(ChannelClickEventArgs e)
+        {
+            EventHandler<ChannelClickEventArgs> handler = DataChannelClicked;
+            if(handler!=null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// DataChannelDoubleClicked event handler
+        /// </summary>
+        /// <param name="e">ChannelClickEventArgs event argument</param>
+        protected virtual void OnDataChannelDoubleClicked(ChannelClickEventArgs e)
+        {
+            EventHandler<ChannelClickEventArgs> handler = DataChannelDoubleClicked;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// DataChannelSelectionChanged event handler
+        /// </summary>
+        /// <param name="e">ChannelSelectionChangedEventArgs event argument</param>
+        protected virtual void OnDataChannelSelectionChanged(ChannelSelectionChangedEventArgs e)
+        {
+            EventHandler<ChannelSelectionChangedEventArgs> handler = DataChannelSelectionChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         #endregion
@@ -273,4 +373,30 @@ namespace Ctrl_GraphWindow
 
         #endregion
     }
+
+    #region Custom event argument classes
+
+    /// <summary>
+    /// Data channnel click event argument class
+    /// </summary>
+    public class ChannelClickEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Name of the data channel that has been clicked
+        /// </summary>
+        public string ChannelName { get; set; }
+    }
+
+    /// <summary>
+    /// Data channnel selection changed event argument class
+    /// </summary>
+    public class ChannelSelectionChangedEventArgs:EventArgs
+    {
+        /// <summary>
+        /// Name of the data channel that has been clicked
+        /// </summary>
+        public string ChannelName { get; set; }
+    }
+
+    #endregion
 }

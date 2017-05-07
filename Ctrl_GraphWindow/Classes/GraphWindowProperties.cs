@@ -1210,6 +1210,40 @@ namespace Ctrl_GraphWindow
             Set_AutoDecimalsNumber(Range);
         }
 
+        /// <summary>
+        /// Returns a string description of the current object
+        /// </summary>
+        /// <returns>String description of the current object</returns>
+        public string Get_StringValueFormat()
+        {
+            string sFormat = "";
+
+            switch(Format)
+            {
+                case GraphSerieLegendFormats.Binary:
+
+                    sFormat = "Binary";
+                    break;
+
+                case GraphSerieLegendFormats.Enum:
+
+                    sFormat = "Enumeration";
+                    break;
+
+                case GraphSerieLegendFormats.Hexadecimal:
+
+                    sFormat = "Hexadecimal";
+                    break;
+
+                default: //GraphSerieLegendFormats.Auto, GraphSerieLegendFormats.Decimal
+
+                    sFormat = "Decimal " + Decimals.ToString() + " decimal digits";
+                    break;
+            }
+
+            return (sFormat);
+        }
+
         #endregion
 
         #region Internal methodes
